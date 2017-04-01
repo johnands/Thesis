@@ -1,0 +1,78 @@
+\documentclass[twoside,english]{uiofysmaster}
+
+%\bibliography{references}
+
+\author{John-Anders Stende}
+\title{Neural networks in molecular dynamics}
+\date{May 2017}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This is an abstract text.
+\end{abstract}
+
+\begin{dedication}
+  To someone
+  \\\vspace{12pt}
+  This is a dedication to my cat.
+\end{dedication}
+
+\begin{acknowledgements}
+  I acknowledge my acknowledgements.
+\end{acknowledgements}
+
+\tableofcontents
+
+\chapter{Introduction}
+***Motivate the reader, outline structure of report and what we have done***
+
+\chapter{Theory}
+***Theory needed to understand the results and implementations***
+
+\section{TensorFlow}
+TensorFlow is an open source software library for numerical computation using data flow graphs (DFG). 
+A DFG describe mathematical computations with a directed graph of nodes and egdes. Nodes typically represent mathematical
+operations, while the graph edges describe the input/output relationship between nodes. In TensorFlow, these edges
+carry dynamically-sized tensors, i.e. there is a flow of tensors between nodes in the graph. 
+
+We train a neural network by introducing different variables at the nodes. We want to minimize the cross-entropy (error)
+with respect to these variables. The derivatives of the output w.r.t. these are calculated using bacpropagation. These derivatives
+are then used to minimize the cross-entropy using the gradient descent method or other optimization algorithms. 
+
+TensorFlow uses ReLU neurons, i.e. the activation function is
+\begin{equation}
+ f(x) = \max(0,x)
+\end{equation}
+where $x$ is the input to the neuron. This is also known as a ramp function, or a rectifier (in analogy to half-wave
+rectification in electrical engineering). 
+The above function has lately been argued to be more biologically plausible (REFERENCE)
+than the widely used sigmoid function and hyperbolic tangent. A smooth approximation to the rectifier is the analytic function
+\begin{equation}
+ f(x) = \ln(1 + e^x)
+\end{equation}
+which is called the softplus function. Using this kind of activation function prevents «dead neurons».
+In practice we give initialize the neurons with a sligthly positive initial bias. 
+
+\subsection{Backpropagation}
+We can set up a computational graph for a certain calculation which shows what input and output we have, along with the intermediate 
+steps needed to produce the output. We can then find out how one specific input affects the output or vice versa by differentiating 
+the edges. To do this we utilize the chain rule. One can use forward-mode or reverse-mode differentiation. The former
+tracks how one input affects every node, while the latter tracks how every node affects one output. 
+Reverse-mode differentiation, or backpropagation, is thus very useful if we are looking at a system with many inputs and only
+a few outputs. 
+
+\subsection{Convolution}
+ANNs are supposed to mimic biological systems. We know that neurons in the visual cortex of animals have
+localized receptive fields, i.e. they respond only to stimuli in a certain location of the visual field. 
+These regions are overlapping and covers the entire visual field. This can be exploited in ANNs by making the hidden layers
+only connect to a small contigous region of the input layer. This also speeds up computations. These are called
+locally connected networks, unlike fully connected networks, where all the hidden layers are connected to the complete
+input layer. 
+
+
+
+
+\end{document}

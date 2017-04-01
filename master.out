@@ -1,0 +1,21 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Goals}{chapter.1}% 2
+\BOOKMARK [0][-]{chapter.2}{Theory}{}% 3
+\BOOKMARK [1][-]{section.2.1}{Molecular dynamics}{chapter.2}% 4
+\BOOKMARK [2][-]{subsection.2.1.1}{Potential energy surfaces}{section.2.1}% 5
+\BOOKMARK [2][-]{subsection.2.1.2}{LAMMPS}{section.2.1}% 6
+\BOOKMARK [1][-]{section.2.2}{Machine learning}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.3}{Artificial Neural Networks}{chapter.2}% 8
+\BOOKMARK [2][-]{subsection.2.3.1}{Training}{section.2.3}% 9
+\BOOKMARK [1][-]{section.2.4}{Neural networks in molecular dynamics}{chapter.2}% 10
+\BOOKMARK [2][-]{subsection.2.4.1}{High-dimensional NNPs}{section.2.4}% 11
+\BOOKMARK [2][-]{subsection.2.4.2}{Symmetry functions}{section.2.4}% 12
+\BOOKMARK [2][-]{subsection.2.4.3}{Symmetry functions and forces}{section.2.4}% 13
+\BOOKMARK [1][-]{section.2.5}{TensorFlow}{chapter.2}% 14
+\BOOKMARK [2][-]{subsection.2.5.1}{Convolution}{section.2.5}% 15
+\BOOKMARK [0][-]{chapter.3}{Verifications and tests}{}% 16
+\BOOKMARK [1][-]{section.3.1}{Time usage}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.2}{Training Lennard-Jones potential}{chapter.3}% 18
+\BOOKMARK [2][-]{subsection.3.2.1}{Many-neighbour Lennard-Jones}{section.3.2}% 19
+\BOOKMARK [1][-]{section.Alph0.1}{Appendix}{chapter.3}% 20
+\BOOKMARK [2][-]{subsection.Alph0.1.1}{Symmetry functions derivatives}{section.Alph0.1}% 21
