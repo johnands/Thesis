@@ -181,7 +181,174 @@ like Stillinger-Weber and Vashishta.
 
 \subsubsection{LAMMPS input script}
 LAMMPS is run by providing an input script as 
-argument to the excecutable. 
+argument to the excecutable. This input script
+is read line by line and has its own syntax. 
+A good way to show the basics an input file
+is to look at a simple example of a script
+to measure diffusion in liquid argon 
+(CHANGE LC VALUE LATER):
+\begin{lstlisting}
+### initialization ###
+units 		metal		
+dimension 	3
+boundary	p p p		
+atom_style	atomic		
+
+### create geometry and atoms ###
+lattice 	fcc 1.08506
+variable	Nc equal 10
+region 		myRegion block 0 ${Nc} 0 ${Nc} 0 ${Nc}
+create_box	1 myRegion
+create_atoms	1 box
+
+### set mass and initial temperature ###
+mass		1 1.0
+variable	temp equal 300
+velocity	all create ${temp} 87287 mom yes 
+
+### compute diffusion ###
+compute 	displacement all displace/atom
+
+### potential ###
+pair_style	lj/cut 2.5
+pair_coeff	1 1 1.0 1.0 2.5
+neighbor	0.5 bin
+neigh_modify	every 20 delay 0 check no
+
+### integration ###
+timestep 	0.01
+run_		style verlet
+fix 		integration all nve
+
+### output ###
+thermo		50
+thermo_style custom step temp density press ke pe etotal 
+thermo_modify norm yes
+
+### run simulation ###
+run		5000
+dump diffusion all custom 100 diffusion*.dat c_displacement[4]
+run_		10000
+\end{lstlisting}
+We will in the following briefly explain what
+processes that are evoked in LAMMPS when the 
+above commands are read. 
+\begin{lstlisting}
+ units metal
+\end{lstlisting}
+This command defines the units that are used 
+in the simulation and the output. LAMMPS have eight
+different unit sets. The \textit{metal} set measures
+distance in Ångstrøm, energy in eV and temperature
+in Kelvin. The choice of units depend on the system
+that is investigated and the scale we are looking at.
+\begin{lstlisting}
+ boundary p p p
+\end{lstlisting}
+We want to measure diffusion in a bulk
+Argon liquid, thus we want to have periodic 
+boundary conditions in all three dimensions, 
+annotated by a $p$. LAMMPS can also handle stiff ($f$)
+and adaptive ($s$) non-periodic boundaries. Adaptive
+means that the position of the face is set so as to
+encompass the atoms in that dimension. 
+\begin{lstlisting}
+ atom_style atomic
+\end{lstlisting}
+Different systems need different information
+to be stored for each atom. For style $atomic$, only
+the default attributes are associated with each atom, 
+namely coordinates, velocities, atom IDs and types. 
+This is sufficient for pair-interacting, non-bonded
+systems like Argon.
+\begin{lstlisting}
+lattice 	fcc 5.720
+\end{lstlisting}
+Next, we set the initial configuration of the atoms. 
+Here, a ffc lattice with a lattice constant of
+5.720 is used. Other types of lattices based on
+cubic or squared unit cells are also available. 
+\begin{lstlisting}
+variable	Nc equal 10
+region 		simBox block 0 ${Nc} 0 ${Nc} 0 ${Nc}
+\end{lstlisting}
+The system's geometry is defined with the $region$
+command. The $block$ style is simply a 3-dimensional
+straight-faced box with a size of $N_c = 10$ unit
+cells in each dimension. We have labelled the 
+region $simBox$. 
+The number of unit cells
+$N_c$ is defined as a LAMMPS $variable$. Variables
+can be referenced elsewhere in the script by
+writing $\${variable}$ to become part of a new input
+command like above. LAMMPS enables many styles
+of variables to be defined. 
+\begin{lstlisting}
+create_box	1 simBox
+create_atoms	1 box
+\end{lstlisting}
+The command $create_box$ creates a simulation box 
+based on the specified region, in our case the 
+$block$ region defined above. The argument specifies
+the number of atom types that will be used in the
+simulation. Next, $create_atoms$ with the argument
+$box$ fills the simulation
+domain with atoms of type 1 on the lattice. 
+LAMMPS also lets you create a random collection
+of atoms or single atoms at specified coordinates.
+\begin{lstlisting}
+mass		1 28
+variable	temp equal 300
+velocity	all create ${temp} 87287 
+\end{lstlisting}
+We need to assign mass to the atoms. For metal units, 
+mass is measured in grams/mole. The atoms are also
+given an initial velocity that corresponds to 
+the given initial temperature. 
+\begin{lstlisting}
+### potential ###
+pair_style	lj/cut 2.5
+pair_coeff	1 1 1.0 1.0 2.5
+\end{lstlisting}
+The choice of potential is made with the 
+$pair_style$ command. We want to simulate
+interactions using the cutoff Lennard-Jones potential
+with a global cutoff of 2.5 Å. The LJ parameters
+are set with $pair_coeff$, the way this is done
+depends on the potential being used. For our
+choice of potential the arguments is as follows:
+$atom-type-1 atom-type-2 sigma epsilon cutoff$. 
+The parameters and cutoff can thus be set seperately 
+for each pair of atom types.
+\begin{lstlisting}
+neighbor	0.5 bin
+neigh_modify	every 20 check yes
+\end{lstlisting}
+These commands sets parameters that affect the 
+building of neighbor lists. The first argument
+to $neighbor$ is the skin size, while the 
+second selects what algorithm is used
+to build the lists. The $bin$ style creates 
+the lists by binning, which in most cases
+(including ours) is the fastest method. 
+Further, we can control how often the lists
+are built with $neigh_modify$. The above arguments
+specifies that new neighbour lists are built 
+every 20 steps, but every step LAMMPS checks
+if any atom has moved more than half the skin distance.
+If that is the case, new lists are built. 
+\begin{lstlisting}
+timestep 	0.01
+run_style 	verlet
+fix 		integration all nve
+\end{lstlisting}
+LAMMPS integrates Newtons' equations of motion
+with the velocity-Verlet algorithm by defualt. 
+This is the integrator of choice for most MD
+applications due to its simplicity and 
+symplectic nature (REF TO SECTION). The 
+rRESPA integrator (REF) is also available. 
+
 
 
 
