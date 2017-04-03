@@ -130,6 +130,9 @@ There exist a lot of different interpolation teqhniques; in this theses we will 
 
 
 \subsection{LAMMPS}
+(HAVE TO REFER TO THE MANUAL HERE OR SOMETHING.
+DOES THAT COUNT AS AN ORDINARY REFERENCE, 
+OR SHOULD IT BE A FOOTNOTE?)
 LAMMPS (Large-scale Atomic/Molecular Massively Parallel Simulator)
 is a classical molecular dynamics simulation package 
 developed at Sandia National Laboratories. It is written
@@ -346,7 +349,114 @@ LAMMPS integrates Newtons' equations of motion
 with the velocity-Verlet algorithm by defualt. 
 This is the integrator of choice for most MD
 applications due to its simplicity and 
-symplectic nature (REF TO SECTION).
+symplectic nature (REF TO SECTION). The 
+rRESPA integrator \cite{ref11} scheme is also available.
+LAMMPS does however not integrate and update
+the positions and velocities of the particles
+if not explicitly told so. This is done with
+a $fix$, which is any operation that is applied to the 
+system during timestepping. The above fix 
+tells LAMMPS to integrate all atoms in the system 
+so that they follow trajectories consistent with 
+the microcanonical ensemble. 
+\begin{lstlisting}
+thermo		50
+thermo_style custom step temp press ke pe etotal 
+thermo_modify norm yes
+\end{lstlisting}
+We can control what thermodynamic properties 
+to calculate and output with $thermo_style$, while 
+$thermo$ decides how often they should be computed. 
+We want to output the time step, temperature, 
+pressure, kinetic energy, potential energy and total
+energy. Also, we want to normalize the extensive
+quantities (the energies) by the number of atoms. 
+\begin{lstlisting}
+ compute displacement all displace/atom
+ dump diffusion all custom 100 diffusion*.dat c_displacement[4]
+\end{lstlisting}
+To measure diffusion in the 
+Argon liquid, we need to calculate the net
+displacement of all atoms. This can be done with a 
+$compute$, which defines a computation that is 
+performed on a group of atoms, in this case all atoms.
+The $displace/atom$ compute calculates the current
+displacement of each atom from its original
+coordinates, including all effects due to atoms
+passing through periodic boundaries.
+For the compute to actually be performed, it needs
+to be evoked by other LAMMPS commands, like $dump$, 
+which writes a snapshot of atom quantities to one 
+or more files every N timesteps. Computes are 
+referenced via the following notation $c_ID$, where
+ID is the ID of the compute. 
+\begin{lstlisting}
+run		5000
+\end{lstlisting}
+Lastly, we run the simulation for 5000 timesteps. 
+LAMMPS allowes several run commands to be issued
+after one another. This comes in handy if we want
+to thermalize the system before measuring diffusion.
+This can be achieved by writing the following commands:
+\begin{lstlisting}
+ run 5000
+ dump diffusion all custom 100 diffusion*.dat c_displacement[4]
+ run 10000
+\end{lstlisting}
+When parsing the second run command, LAMMPS will
+continue the dynamics while computing eventual
+new fixes, computes, dumps etc. defined since
+the last run command. 
+
+This section has illuminated some of the basic
+funcionality of LAMMPS through several comments
+on a simple input script. Now we move on to
+how class hierarchy of LAMMPS is structured. 
+
+\subsubsection{LAMMPS structure}
+LAMMPS is written in C++ in an object-oriented
+fashion. The class hierarchy is shown schematically
+in figure (MAKE MY OWN FIGURE IN INKSCAPE). 
+The blue classes are the core classes, these
+are visible anywhere in LAMMPS.
+Most of these have subclasses, of which the red ones
+are called style classes. We recognize many 
+of the input script commands among the style
+classes; a rule of thumb is that every input script
+command has a corresponding class and a
+corresponding file name in the source directory. 
+For instance, the cutoff Lennard-Jones potential
+used in our input script is a subclass of Pair,
+and is evoked by the command
+$pair_style lj/cut$ and the source file is named
+\textit{pair_lj_cut.cpp}. 
+
+We will not go into detail about the functionality
+and communication of these classes. The class
+that is the most relevant for this work is the Pair class, 
+as we have implemented our own NN potential pair_style. 
+In the following section we will describe how 
+LAMMPS can be extended with a new pair potential
+through example. 
+
+\subsubsection{Extending LAMMPS}
+To extend LAMMPS with a new potential, we 
+simply add a new *.cpp and *.h file to the 
+source directory and re-compile. The new class
+will in theory work with all other LAMMPS 
+classes without breaking any functionality. 
+A good strategy is to start with an existing potential
+source file that is somewhat similar to the one 
+we want to make, instead of programming from scratch.
+We aim to 
+
+ 
+
+
+
+
+
+
 
 
 
@@ -1450,7 +1560,12 @@ and
 \bibitem{ref10}
  J. Behler
  \textit{Neural network potential-energy surfaces in chemistry: a tool for large-scale simulations}
- Phys. Chem. Chem. Phys. {13}, 17930–17955 (2011)
+ Phys. Chem. Chem. Phys. {\bf 13}, 17930–17955 (2011)
+ 
+\bibitem{ref11}
+ Tuckerman, Berne and Martyna 
+ \textit{Reversible multiscale molecular dynamics}
+ J. Chem Phys, {\bf 97}, 1990 (1992).
  
 
 \end{thebibliography}
