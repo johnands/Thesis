@@ -4,7 +4,7 @@
 %\usepackage{caption}
 \usepackage{verbatim}	% \begin{comment}
 \usepackage{subcaption}
-%\usepackage{siunitx}
+\usepackage{siunitx}
 
 
 
@@ -428,13 +428,13 @@ corresponding file name in the source directory.
 For instance, the cutoff Lennard-Jones potential
 used in our input script is a subclass of Pair,
 and is evoked by the command
-$pair_style lj/cut$ and the source file is named
-\textit{pair_lj_cut.cpp}. 
+$pair\_style lj/cut$ and the source file is named
+$pair\_lj\_cut$. 
 
 We will not go into detail about the functionality
 and communication of these classes. The class
 that is the most relevant for this work is the Pair class, 
-as we have implemented our own NN potential pair_style. 
+as we have implemented our own NN potential pair\_style. 
 In the following section we will describe how 
 LAMMPS can be extended with a new pair potential
 through example. 
@@ -450,23 +450,7 @@ source file that is somewhat similar to the one
 we want to make, instead of programming from scratch.
 We aim to construct a many-body potential, and 
 have chosen to base our implementation on the 
-Stillinger-Weber potential file, pair_sw.cpp and -.h.
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
+Stillinger-Weber potential file, pair\_sw.cpp and -.h.
 
 
 
