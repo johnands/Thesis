@@ -4,14 +4,14 @@
 %\usepackage{caption}
 \usepackage{verbatim}	% \begin{comment}
 \usepackage{subcaption}
-%\usepackage{siunitx}
+\usepackage{siunitx}
 
 
 
 %\bibliography{references}
 
 \author{John-Anders Stende}
-\title{Neural networks in molecular dynamics}
+\title{Constructing high-dimensional neural network potentials for molecular dynamics}
 \date{May 2017}
 
 \begin{document}
@@ -55,10 +55,10 @@ This goal can be split into the following intermediate objecives:
 \end{itemize}
 
 
-\chapter{Theory}
+\part{Theory}
 ***Theory needed to understand the results and implementations***
 
-\section{Molecular dynamics}
+\chapter{Molecular dynamics}
 Molecular dynamics (MD) is a method to simulate the physical movements of atoms and molecules in gases, liquids and solids. 
 It is thus a type of N-body simulation. The atoms are modelled as point-like particles with interactions described
 by classical force fields. Their time-evolution is governed by Newton's equations of motion. MD allows one to study the microscopic
@@ -77,7 +77,7 @@ calculate the energies and forces for each time step in the MD simulation using 
 Different quantum mechanical methods like Hartree-Fock (HF) and Density Functional Theory (DFT) are used for this purpose. 
 These approahces to MD are called quantum-classical molecular dynamics (QCMD). 
 
-\subsection{Potential energy surfaces}
+\section{Potential energy surfaces}
 The dynamics of an ensemble of particles is governed by their interactions. 
 In classical MD, the interactions are described
 by a classical force field $\vec{F}$, which is defined as the negative gradient of a potential energy surface (PES) $E$,
@@ -129,7 +129,7 @@ There exist a lot of different interpolation teqhniques; in this theses we will 
 (SKRIVE OM ANDRE INTERPOLASJONSTEKNIKKER?)
 
 
-\subsection{LAMMPS}
+\section{LAMMPS}
 (HAVE TO REFER TO THE MANUAL HERE OR SOMETHING.
 DOES THAT COUNT AS AN ORDINARY REFERENCE, 
 OR SHOULD IT BE A FOOTNOTE?)
@@ -156,7 +156,7 @@ a walkthrough of an example input script. We also describe its
 class hierarchy and how we can add our own functionality
 to the package.
 
-\subsubsection{Installing LAMMPS}
+\subsection{Installing LAMMPS}
 We have chosen to install LAMMPS by cloning
 the Github repository (LINK) and compile the source
 code by running $make$ in the source directory. 
@@ -182,7 +182,7 @@ can be installed. This can be done by running
 e.g. $manybody$ to install many-body potentials
 like Stillinger-Weber and Vashishta. 
 
-\subsubsection{LAMMPS input script}
+\subsection{LAMMPS input script}
 LAMMPS is run by providing an input script as 
 argument to the excecutable. This input script
 is read line by line and has its own syntax. 
@@ -413,7 +413,7 @@ funcionality of LAMMPS through several comments
 on a simple input script. Now we move on to
 how class hierarchy of LAMMPS is structured. 
 
-\subsubsection{LAMMPS structure}
+\subsection{LAMMPS structure}
 LAMMPS is written in C++ in an object-oriented
 fashion. The class hierarchy is shown schematically
 in figure (MAKE MY OWN FIGURE IN INKSCAPE). 
@@ -428,47 +428,35 @@ corresponding file name in the source directory.
 For instance, the cutoff Lennard-Jones potential
 used in our input script is a subclass of Pair,
 and is evoked by the command
-$pair_style lj/cut$ and the source file is named
-\textit{pair_lj_cut.cpp}. 
+$pair\_style lj/cut$ and the source file is named
+$pair\_lj\_cut$. 
 
 We will not go into detail about the functionality
 and communication of these classes. The class
 that is the most relevant for this work is the Pair class, 
-as we have implemented our own NN potential pair_style. 
+as we have implemented our own NN potential pair\_style. 
 In the following section we will describe how 
 LAMMPS can be extended with a new pair potential
 through example. 
 
-\subsubsection{Extending LAMMPS}
+\subsection{Extending LAMMPS}
 To extend LAMMPS with a new potential, we 
 simply add a new *.cpp and *.h file to the 
 source directory and re-compile. The new class
-will in theory work with all other LAMMPS 
+will (in theory) work with all other LAMMPS 
 classes without breaking any functionality. 
 A good strategy is to start with an existing potential
 source file that is somewhat similar to the one 
 we want to make, instead of programming from scratch.
-We aim to 
-
- 
-
-
+We aim to construct a many-body potential, and 
+have chosen to base our implementation on the 
+Stillinger-Weber potential file, pair\_sw.cpp and -.h.
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-\section{Machine learning}
+\chapter{Machine learning}
 Machine learning is the science of giving computers the ability to learn without being explicitly programmed. 
 The idea is that there exist generic algorithms which can be used to find patterns in a broad class of data sets without 
 having to write code specifically for each problem. The algorithm will build its own logic based on the data. 
@@ -594,7 +582,7 @@ As shown in \eqref{completeNN}, the NN consists of several nested terms of the f
 where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
 can be shifted up and down or left and right, change slope or be rescaled, thus making the NN more flexible.
 
-\subsection{Training}
+\section{Training}
 The ability of the NN to represent a function accurately depends on the values of the weights. 
 The weights are typically initialized as random numbers, and then optimized iteratively to minimize the error
 to a set of expected output values. The expected output values are in our case known energies of a set of atomic
@@ -610,7 +598,7 @@ The constant $1/2$ are there to cancel out the exponent when we differentiate la
 Other cost functions are used for other ML tasks (SKRIVE OM DISSE. KANSKJE HELE DENNE SEKSJONEN BØR 
 SKRIVES MER GENERELL OG IKKE KUN FOR TILFELLET PES?)
 
-\subsubsection{Backpropagation}
+\subsection{Backpropagation}
 From: https://www.willamette.edu/~gorr/classes/cs449/backprop.html and \newline
 http://neuralnetworksanddeeplearning.com/chap2.html. 
 Mainly from the first one, but argument for error of neuron from second.
@@ -793,7 +781,7 @@ The complete backpropagation algorithm including forward activation then looks a
 \end{enumerate}
 
 
-\section{Neural networks in molecular dynamics}
+\chapter{Neural networks in molecular dynamics}
 Following \cite{ref9} and \cite{ref10}.
 All the dynamics of a molecular system is determined by the multidimensional potential-energy surface (PES), which
 in general is a real-valued function depending on all atomic coordinates in the system. Using the Born-Oppenheimer approximation
@@ -842,7 +830,7 @@ Still, there are disadvantages one should be aware of:
  different chemical elements (but many atoms)
 \end{itemize}
 
-\subsection{High-dimensional NNPs}
+\section{High-dimensional NNPs}
 The use of a single FFNN to represent complicated systems containing many atoms of different types is not possible for several reasons.
 First of all, the deegrees of freedom (the number of weight parameters) will be very many, making the training and evaluation
 of the network slow. Secondly, the NN has a symmetry problem. It does not take into account that exchanging two or more atoms
@@ -1096,7 +1084,7 @@ input layer.
 
 Using this approach, we can aggregate statistics of these features at various locations. This is called pooling. 
 
-\chapter{Verifications and tests}
+\part{Implementation and validation}
 
 \section{Time usage}
 The workflow when training a NN and using it in MD is as follows: 
@@ -1373,6 +1361,11 @@ Each component $\alpha$ can be calculated by
 \begin{equation}
  \frac{\partial R}{\partial \alpha} = \frac{\alpha}{R}
 \end{equation}
+The following notation applies in the following,
+\begin{equation}
+ R_{ij} = \Bigr(x_{ij}^2 + y_{ij}^2 + z_{ij}^2\Bigr)^{1/2} =
+ \Bigr((x_j - x_i)^2 + (y_j - y_i)^2 + (z_j - z_i)^2\Bigr)^{1/2}
+\end{equation}
 Cutoff function \eqref{cutoffFunction}:
 \begin{equation}
  \frac{\partial f_c(R)}{\partial R} = -\frac{1}{2}\frac{\pi}{R_c} \sin\left(\frac{\pi R}{R_c}\right) = M(R)
@@ -1397,13 +1390,13 @@ while
 because atom $i$ is always in origo, which means we can do the substitutions $x_{ij} \rightarrow x_{j}$ and 
 $x_{ik} \rightarrow x_{k}$. SHOULD I DO THIS CONSEQUENTLY BELOW????. Also, 
 \begin{equation}
- \frac{\partial f_c(R_{jk})}{\partial x_{ij}} = M(R_{jk})
+ \frac{\partial f_c(R_{jk})}{\partial x_{ij}} = -M(R_{jk})
  \frac{x_{jk}}{R_{jk}}
  \label{cutOffFunctionDerivative1}
 \end{equation}
 and 
 \begin{equation}
- \frac{\partial f_c(R_{jk})}{\partial x_{ij}} = -M(R_{jk})
+ \frac{\partial f_c(R_{jk})}{\partial x_{ij}} = M(R_{jk})
  \frac{x_{jk}}{R_{jk}}
  \label{cutOffFunctionDerivative1}
 \end{equation}
@@ -1416,11 +1409,11 @@ $G_i^2$ \eqref{G2}:
 $G_i^3$ has not been used in this theses. \\
 $G_i^4$ \eqref{G4}:
 \begin{equation}
- G_i^4 = 2^{1-\zeta}F_1(\theta)F_2(R_{ij},R_{ik},R_{jk})F_3(R_{ij},R_{ij},R_{jk})
+ G_i^4 = F_1(\theta)F_2(R_{ij},R_{ik},R_{jk})F_3(R_{ij},R_{ij},R_{jk})
 \end{equation}
 where
 \begin{align}
- F_1(\theta) &= (1 + \lambda \cos\theta_{ijk})^\zeta \\
+ F_1(\theta) &= 2^{1-\zeta}(1 + \lambda \cos\theta_{ijk})^\zeta \\
  F_2(R_{ij},R_{ik},R_{jk}) &= \exp[-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)] \\
  F_3(R_{ij},R_{ij},R_{jk}) &= f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})
 \end{align}
@@ -1454,51 +1447,115 @@ To get the corresponding expression for $x_{ik}$, simply substitute $x_{ij} \lef
 $r_{ij} \leftrightarrow r_{ik}$. Further, 
 \begin{align}
  \frac{\partial F_2}{\partial x_{ij}} &= \frac{\partial F_2}{\partial r_{ij}}\frac{\partial r_{ij}}{\partial x_{ij}}  = 
- -2\eta r_{ij}\exp[-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)] \frac{x_{ij}}{r_{ij}} \\
- &= -2\eta \exp[-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)] x_{ij} = Lx_{ij}
+ (-2\eta r_{ij}\frac{x_{ij}}{r_{ij}} - 2\eta r_{jk}\frac{x_{jk}}{r_{jk}})\exp[-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)] \\
+ &= -2\eta F_2 x_{ij} - 2\eta F_2 x_{jk}
 \end{align}
-The corresponding expression for $x_{ik}$ is obtained by substituing $x_{ij} \rightarrow x_{ik}$. 
+The corresponding expression for $x_{ik}$ is
+\begin{equation}
+ \frac{\partial F_2}{\partial x_{ik}} = 
+ -2\eta F_2 x_{ik} + 2\eta F_2 x_{jk}
+\end{equation}
 Lastly, 
 \begin{align}
  \frac{\partial F_3}{\partial x_{ij}} &=  \frac{\partial f_c(r_{ij})}{\partial x_{ij}}
  f_c(r_{ik}) f_c(r_{jk}) + f_c(r_{ij})f_c(r_{ik})\frac{\partial f_c(r_{jk})}{\partial x_{ij}} \\
- &= f_c(r_{ik})\Biggr(M(r_{ij})\frac{x_{ij}}{r_{ij}}f_c(r_{jk}) + 
+ &= f_c(r_{ik})\Biggr(M(r_{ij})\frac{x_{ij}}{r_{ij}}f_c(r_{jk}) - 
  f_c(r_{ij}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
 \end{align}
 The corresponding expression for $x_{ik}$ is
 \begin{align}
  \frac{\partial F_3}{\partial x_{ik}} &= f_c(r_{ij})\Biggr(\frac{\partial f_c(r_{ik})}{\partial x_{ik}}f_c(r_{jk}) + 
  f_c(r_{ik}) \frac{\partial f_c(r_{jk})}{\partial x_{ik}} \Biggr) \\
- &= f_c(r_{ij})\Biggr(M(r_{ik})\frac{x_{ik}}{r_{ik}}f_c(r_{jk}) - 
+ &= f_c(r_{ij})\Biggr(M(r_{ik})\frac{x_{ik}}{r_{ik}}f_c(r_{jk}) + 
  f_c(r_{ik}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr) \\
 \end{align}
-
 Then, taking \eqref{G4Derivative} into account:
 \begin{align}
- \frac{\partial G_i^4}{\partial x_{ij}} &= \biggr(\frac{x_{ik}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ij}^2}
- \biggr)KF_2F_3 + x_{ij}F_1LF_3 \\
- &+ F_1F_2 f_c(r_{ik})\Biggr(M(r_{ij})\frac{x_{ij}}{r_{ij}}f_c(r_{jk}) + 
+ \frac{\partial G_i^4}{\partial x_{ij}} = &\biggr(\frac{x_{ik}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ij}^2}
+ \biggr)KF_2F_3 \, - \\ &2\eta F_1F_2F_3 x_{jk} - 2\eta F_1F_2F_3 x_{ij} \, + \\
+ &F_1F_2 f_c(r_{ik})\Biggr(M(r_{ij})\frac{x_{ij}}{r_{ij}}f_c(r_{jk}) +
  f_c(r_{ij}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
 \end{align}
 and for $x_{ik}$:
 \begin{align}
- \frac{\partial G_i^4}{\partial x_{ik}} &= \biggr(\frac{x_{ij}}{r_{ij}r_{ik}} - \frac{x_{ik}\cos\theta}{r_{ik}^2}
- \biggr)KF_2F_3 + x_{ik}F_1LF_3 \\
- &+ F_1F_2 f_c(r_{ij})\Biggr(M(r_{ik})\frac{x_{ik}}{r_{ik}}f_c(r_{jk}) - 
+ \frac{\partial G_i^4}{\partial x_{ik}} = &\biggr(\frac{x_{ij}}{r_{ij}r_{ik}} - \frac{x_{ik}\cos\theta}{r_{ik}^2}
+ \biggr)KF_2F_3 \, + \\ &2\eta F_1F_2F_3 x_{jk} - 2\eta F_1F_2F_3 x_{ik} \, + \\
+ &F_1F_2 f_c(r_{ij})\Biggr(M(r_{ik})\frac{x_{ik}}{r_{ik}}f_c(r_{jk}) - 
  f_c(r_{ik}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
 \end{align}
 or in terms of $x_{ij}$ and $x_{ik}$ and $x_{jk}$:
 \begin{align}
  \frac{\partial G_i^4}{\partial x_{ij}} = &x_{ij} \biggr(-\frac{\cos\theta}{r_{ij}^2}K
- F_2F_3 + F_1LF_3 + F_1F_2M(r_{ij})f_c(r_{ik})f_c(r_{jk})\frac{1}{r_{ij}}\biggr) + \\
- &x_{ik}\frac{KF_2F_3}{r_{ij}r_{ik}} + x_{jk}F_1F_2M(r_{jk})f_c(r_{ik})f_c(r_{ij})\frac{1}{r_{jk}}
+ F_2F_3 + -2\eta F_1F_2F_3 \, + \\ 
+ &F_1F_2M(r_{ij})f_c(r_{ik})f_c(r_{jk})\frac{1}{r_{ij}}\biggr) \, + \\
+ &x_{ik}\frac{KF_2F_3}{r_{ij}r_{ik}} + x_{jk}\Bigr(F_1F_2M(r_{jk})f_c(r_{ik})f_c(r_{ij}) - 2\eta F_1F_2F_3\Bigr)\frac{1}{r_{jk}}
 \end{align}
 and 
 \begin{align}
- \frac{\partial G_i^4}{\partial x_{ik}} = &x_{ik} \biggr(-\frac{\cos\theta}{r_{ik}^2}K
- F_2F_3 + F_1LF_3 + F_1F_2M(r_{ik})f_c(r_{ij})f_c(r_{jk})\frac{1}{r_{ik}}\biggr) + \\
- &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}} - x_{jk}F_1F_2M(r_{jk})f_c(r_{ij})f_c(r_{ik})\frac{1}{r_{jk}}
+ \frac{\partial G_i^4}{\partial x_{ik}} = &\frac{x_{ik}}{r_{ik}} \biggr(-\frac{\cos\theta}{r_{ik}^2}K
+ F_2F_3 - 2\eta F_1F_2F_3 \, + \, \\
+ &F_1F_2M(r_{ik})f_c(r_{ij})f_c(r_{jk})\frac{1}{r_{ik}}\biggr) + \, \\
+ &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}} - x_{jk}\Bigr(F_1F_2M(r_{jk})f_c(r_{ij})f_c(r_{ik}) + 2\eta F_1F_2F_3\Bigr)\frac{1}{r_{jk}}
 \end{align}
+The derivative of $G_i^5$ \eqref{G5} is found in a similar way,
+\begin{equation}
+ G_i^5 = F_1(\theta)F_2(R_{ij},R_{ik})F_3(R_{ij},R_{ij})
+\end{equation}
+where 
+\begin{align}
+ F_1(\theta) &= 2^{1-\zeta}(1 + \lambda \cos\theta_{ijk})^\zeta \\
+ F_2(R_{ij},R_{ik}) &= \exp[-\eta (R_{ij}^2 + R_{ik}^2)] \\
+ F_3(R_{ij},R_{ij}) &= f_c(R_{ij}) f_c(R_{ik})
+\end{align}
+The derivative of $F_1$ is the same, while for $F_2$ we obtain
+\begin{equation}
+ \frac{\partial F_2}{\partial x_{ij}} = -2\eta F_2 x_{ij}
+\end{equation}
+and
+\begin{equation}
+ \frac{\partial F_2}{\partial x_{ik}} = -2\eta F_2 x_{ik}
+\end{equation}
+For $F_3$, 
+\begin{equation}
+ \frac{\partial F_3}{\partial x_{ij}} = \frac{\partial f_c(r_{ij})}{\partial x_{ij}}\frac{x_{ij}}{r_{ij}}
+ f_c(r_{ik}) = M(r_{ij})f_c(r_{ik})\frac{x_{ij}}{r_{ij}}
+\end{equation}
+and
+\begin{equation}
+  \frac{\partial F_3}{\partial x_{ik}} = f_c(r_{ij})
+ \frac{\partial f_c(r_{ik})}{\partial x_{ij}}\frac{x_{ik}}{r_{ik}} = 
+ f_c(r_{ij})M(r_{ik})\frac{x_{ik}}{r_{ik}}
+\end{equation}
+so that
+\begin{align}
+ \frac{\partial G_i^5}{\partial x_{ij}} = &\biggr(\frac{x_{ik}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ij}^2}
+ \biggr)KF_2F_3 -
+ 2\eta F_1 F_2F_3 x_{ij} \, + \\
+ &F_1F_2 M(r_{ij})f_c(r_{ik})\frac{x_{ij}}{r_{ij}}
+\end{align}
+and 
+\begin{align}
+ \frac{\partial G_i^5}{\partial x_{ik}} = &\biggr(\frac{x_{ij}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ik}^2}
+ \biggr)KF_2F_3 -
+ 2\eta F_1 F_2F_3 x_{ik} \, + \\
+ &F_1F_2 M(r_{ik})f_c(r_{ij})\frac{x_{ik}}{r_{ik}}
+\end{align}
+In terms of $x_{ij}$ and $x_{ik}$:
+\begin{align}
+ \frac{\partial G_i^5}{\partial x_{ij}} = \, &x_{ij} \biggr(-\frac{\cos\theta}{r_{ij}^2}K
+ F_2F_3 - 2\eta F_1F_2F_3 + M(r_{ij})f_c(r_{ik})\frac{1}{r_{ij}} \biggr) \, + \\
+ &x_{ik}\frac{KF_2F_3}{r_{ij}r_{ik}}
+\end{align}
+
+
+
+
+
+
+
+
+
+
 
 
 
