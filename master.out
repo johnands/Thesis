@@ -3,24 +3,28 @@
 \BOOKMARK [-1][-]{part.1}{I Theory}{}% 3
 \BOOKMARK [0][-]{chapter.2}{Molecular dynamics}{part.1}% 4
 \BOOKMARK [1][-]{section.2.1}{Potential energy surfaces}{chapter.2}% 5
-\BOOKMARK [1][-]{section.2.2}{LAMMPS}{chapter.2}% 6
-\BOOKMARK [2][-]{subsection.2.2.1}{Installing LAMMPS}{section.2.2}% 7
-\BOOKMARK [2][-]{subsection.2.2.2}{LAMMPS input script}{section.2.2}% 8
-\BOOKMARK [2][-]{subsection.2.2.3}{LAMMPS structure}{section.2.2}% 9
-\BOOKMARK [2][-]{subsection.2.2.4}{Extending LAMMPS}{section.2.2}% 10
-\BOOKMARK [0][-]{chapter.3}{Machine learning}{part.1}% 11
-\BOOKMARK [1][-]{section.3.1}{Artificial Neural Networks}{chapter.3}% 12
-\BOOKMARK [1][-]{section.3.2}{Training}{chapter.3}% 13
-\BOOKMARK [2][-]{subsection.3.2.1}{Backpropagation}{section.3.2}% 14
-\BOOKMARK [0][-]{chapter.4}{Neural networks in molecular dynamics}{part.1}% 15
-\BOOKMARK [1][-]{section.4.1}{High-dimensional NNPs}{chapter.4}% 16
-\BOOKMARK [2][-]{subsection.4.1.1}{Symmetry functions}{section.4.1}% 17
-\BOOKMARK [2][-]{subsection.4.1.2}{Symmetry functions and forces}{section.4.1}% 18
-\BOOKMARK [1][-]{section.4.2}{TensorFlow}{chapter.4}% 19
-\BOOKMARK [2][-]{subsection.4.2.1}{Convolution}{section.4.2}% 20
-\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 21
-\BOOKMARK [0][-]{section.4.3}{Time usage}{part.2}% 22
-\BOOKMARK [1][-]{section.4.4}{Training Lennard-Jones potential}{section.4.3}% 23
-\BOOKMARK [2][-]{subsection.4.4.1}{Many-neighbour Lennard-Jones}{section.4.4}% 24
-\BOOKMARK [1][-]{section.Alph0.1}{Appendix}{section.4.3}% 25
-\BOOKMARK [2][-]{subsection.Alph0.1.1}{Symmetry functions derivatives}{section.Alph0.1}% 26
+\BOOKMARK [0][-]{chapter.3}{Machine learning}{part.1}% 6
+\BOOKMARK [1][-]{section.3.1}{Artificial Neural Networks}{chapter.3}% 7
+\BOOKMARK [1][-]{section.3.2}{Training}{chapter.3}% 8
+\BOOKMARK [2][-]{subsection.3.2.1}{Backpropagation}{section.3.2}% 9
+\BOOKMARK [0][-]{chapter.4}{Neural networks in molecular dynamics}{part.1}% 10
+\BOOKMARK [1][-]{section.4.1}{High-dimensional NNPs}{chapter.4}% 11
+\BOOKMARK [2][-]{subsection.4.1.1}{Symmetry functions}{section.4.1}% 12
+\BOOKMARK [2][-]{subsection.4.1.2}{Symmetry functions and forces}{section.4.1}% 13
+\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 14
+\BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 15
+\BOOKMARK [1][-]{subsection.5.0.1}{Installing LAMMPS}{chapter.5}% 16
+\BOOKMARK [2][-]{subsection.5.0.2}{LAMMPS input script}{subsection.5.0.1}% 17
+\BOOKMARK [2][-]{subsection.5.0.3}{LAMMPS structure}{subsection.5.0.1}% 18
+\BOOKMARK [2][-]{subsection.5.0.4}{Extending LAMMPS}{subsection.5.0.1}% 19
+\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 20
+\BOOKMARK [1][-]{subsection.6.0.1}{Convolution}{chapter.6}% 21
+\BOOKMARK [0][-]{chapter.7}{Validation}{part.2}% 22
+\BOOKMARK [1][-]{section.7.1}{Time usage}{chapter.7}% 23
+\BOOKMARK [1][-]{section.7.2}{Training Lennard-Jones potential}{chapter.7}% 24
+\BOOKMARK [2][-]{subsection.7.2.1}{Many-neighbour Lennard-Jones}{section.7.2}% 25
+\BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 26
+\BOOKMARK [0][-]{section.7.3}{NN potential for Si}{part.3}% 27
+\BOOKMARK [1][-]{section.7.4}{NN potential for SiO2}{section.7.3}% 28
+\BOOKMARK [-1][-]{part.4}{IV Appendix}{}% 29
+\BOOKMARK [0][-]{appendix.A}{Symmetry functions derivatives}{part.4}% 30

@@ -77,7 +77,7 @@ calculate the energies and forces for each time step in the MD simulation using 
 Different quantum mechanical methods like Hartree-Fock (HF) and Density Functional Theory (DFT) are used for this purpose. 
 These approahces to MD are called quantum-classical molecular dynamics (QCMD). 
 
-\section{Potential energy surfaces}
+\section{Potential energy surfaces} \label{sec:potentialEnergySurfaces}
 The dynamics of an ensemble of particles is governed by their interactions. 
 In classical MD, the interactions are described
 by a classical force field $\vec{F}$, which is defined as the negative gradient of a potential energy surface (PES) $E$,
@@ -129,7 +129,624 @@ There exist a lot of different interpolation teqhniques; in this theses we will 
 (SKRIVE OM ANDRE INTERPOLASJONSTEKNIKKER?)
 
 
-\section{LAMMPS}
+
+
+\chapter{Machine learning}
+Machine learning is the science of giving computers the ability to learn without being explicitly programmed. 
+The idea is that there exist generic algorithms which can be used to find patterns in a broad class of data sets without 
+having to write code specifically for each problem. The algorithm will build its own logic based on the data. 
+
+There are two main machine learning methods, supervised learning and unsupervised learning. For the former method, 
+you know the answer to a problem and let the computer deduce the logic behind it. When doing the latter, you do not
+know the answer and are just trying to find patterns and relationship in the data. 
+
+Another way to categorize machine learning tasks is to consider the desired output of a system.
+Some of the most common tasks are:
+\begin{itemize}
+ \item Classification: Outputs are divided into two or more classes. The goal is to 
+ produce a model that assigns inputs into one of these classes. An example is to identify
+ digits based on pictures of hand-written ones. Typically supervised. 
+ \item Regression: Find a functional relationship between variables, the outputs are thus continous. 
+ \item Clustering: Inputs are divided into groups without knowing the different groups, i.e. a form of unsupervised classification.  
+\end{itemize}
+In this thesis we will use machine learning to do regression, i.e. to find the PES of interacting molecules.
+One approach to machine learning regression is artificial neural networks. 
+
+\section{Artificial Neural Networks}
+An Artificial Neural Network (ANN) consists of layers of connected nodes, or neurons. 
+It is supposed to mimic a biological nervous system by letting each neuron interact with other neurons
+by sending signals between layers. The accumulated signals received by a neuron is used as input to its 
+\textit{activation function}, which is used to to send new signals to following layers. This function is supposed to mimic that 
+a biological neuron is activated if the input is above a certain threshold. We will here follow 
+Behler \cite{ref1} and Dragly \cite{ref2}.
+
+There are many types of ANNs made for different purposes. The most widely used are feed-forward and recurrent ANNs. 
+The feedforward network was the first and arguably the most simple type of ANN. In this network the information or signals
+only move forward through the layers - from the input layer, through each successive hidden layer and finally to the output layer. 
+On the other hand, recurrent networks have cycles and loops, i.e. bi-directional data flow. Feed-forward neural networks, 
+also called Multilayer Perceptrons (MLP) were shown to be universal function approximators by K. Hornik et al. \cite{ref3} in 1989.
+We will use these networks to approximate the PES in thesis. 
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width = 0.7\linewidth]{Figures/Theory/MLP.png}
+  \caption{Neural network}
+  \label{fig:NN}
+  \end{center}
+\end{figure}
+An MLP networks is shown schematically in \autoref{fig:NN} (STOLEN FROM \cite{ref3}, EDIT TO ONE INPUT LATER). 
+
+This network maps input coordinates $G_i$ to a potential energy in the output layer via two hidden layers
+with an (arbitrary) number of hidden nodes. The hidden neurons have no physical meaning, but have the purpose
+of defining the functional form of the NN. All nodes in each layer are connected to the nodes in the adjacent layer by
+\textit{weights}, the fitting parameters of the NN. These are called fully connected layers. We use the notation
+$a_{ij}^{kl}$ for the weight connecting node number $i$ in layer $k$ with node number $k$ in layer $l=k+1$. 
+Also, each node in the hidden layers and the output node have a \textit{bias} $b_i^j$, where $i$ indicates
+node number and $j$ layer. All weights and biases are real-valued numbers.
+
+The output of this MLP is calculated in the following way. The configuration are specifiec by the input nodes.
+Then, a weighted sum $x_m^1$ of the input coordinates ${G_i}$ is calculated for each node $m$ in the first hidden layer 1
+\begin{equation}
+ x_m^i = \sum_{i=1}^4 G_i a_{i,m}^{01} + b_m^i 
+\end{equation}
+where we also add the bias $b_m^i$ for each node. This is a linear combination of the input coordinates
+using the connection weights as coordinates, which is used as input to the activation function $f_m^1$ of each neuron, thus
+producing the output $y_m^1$ of all neurons in layer 1:
+\begin{equation}
+ y_m^1 = f_m^1(x_m^1)
+\end{equation}
+For an arbitrary node $m$ in a hidden layer $n$ this generalizes to
+\begin{equation}
+ y_m^n = f_m^n(x_m^n) = f_m^n\left(\sum_{i=1}^{N_{n-1}} y_i^{n-1}a_{i,m}^{n-1,n}\right)
+\end{equation}
+where $N_n$ is the number of nodes in layer $n$. When the output of all the nodes in the first hidden layer are computed,
+the values of the subsequent layer can be calculated and so forth until the output is obtained. The complete functional form
+of an MPL with $n$ hidden layers is thus
+\begin{equation}
+ E = f_1^{n+1}\biggr(\sum_m^{N_n}f_m^{n}\biggr(\sum_l^{N_{n-1}}f_l^{n-1}\biggr( \cdots \sum_j^{N_1} 
+     f_j^1\biggr(\sum_{i=1}a_{i,j}^{0,1}G_i + b_j^1\biggr) \cdots \biggr)\biggr)\biggr)
+     \label{completeNN}
+\end{equation}
+i.e. a nested sum of activation functions. A desired property of activation functions is to converge asymptotically
+to constant output values for large and small arguments, with a non-linear region in-between. The non-linearity enables
+the ANN to fit arbitrary functions \cite{ref3}. Common activation functions \cite{ref4} for 
+function approximation are the sigmoid function
+\begin{equation}
+ f(x) = \frac{1}{1 + e^{-x}}
+ \label{sigmoidActivationFunction}
+\end{equation}
+and the hyperbolic tangent
+\begin{equation}
+ f(x) = \tanh(x)
+ \label{tanhActivationFunction}
+\end{equation}
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width = 0.7\linewidth]{Figures/Theory/activationFunctions.pdf}
+  \caption{Activation functions}
+  \label{fig:activations}
+  \end{center}
+\end{figure}
+Both these functions (Figure \ref{fig:activations}) have the desired properties mentioned above:
+They are constant (1 or 0) for all values except a small interval around zero, where they have non-linear behaviour. 
+This keeps the outputs of the neurons from blowing up. The sigmoid are more bilogically plausible because 
+the output of inactive neurons are zero. Such activation function are called \textit{one-sided}. However,
+it has been shown \cite{ref5} that the hyperbolic tangent 
+performs better than the sigmoid for multi-layer networks. Nevertheless, one should assess the problem 
+at hand when deciding what activation function to use; the performance can vary from problem to problem. 
+(VENTE MED Å DISKUTERE DETTE TIL JEG HAR SNAKKET OM BACKPROPAGATION OSV.)
+SNAKKE OM SATURATION OSV. 
+
+In later years, the rectifier function (Figure \ref{fig:rectifier})
+\begin{equation}
+ f(x) = \max(0,x)
+\end{equation}
+has become the most popular for deep neural networks \cite{ref6}. PLOT DENNE FUNKSJONEN.
+The two former functions are symmetrical around zero osv....
+It have been argued to be even more biologically plausible than the sigmoid and also perform better
+than the hyperbolic tangent for deep NNs. \cite{ref7}. 
+
+
+A linear activation function $f(x) = x$ is often used in the output layer to avoid any constraint in the range 
+of output values. For regression, the most widely used output activation is the unity function $f(x) = 1$, i.e.
+no activation (HVORFOR?).
+
+As shown in \eqref{completeNN}, the NN consists of several nested terms of the form
+\begin{equation}
+ h(x) = c_1 f(c_2 x + c_3) + c4
+\end{equation}
+where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
+can be shifted up and down or left and right, change slope or be rescaled, thus making the NN more flexible.
+
+\section{Training}
+The ability of the NN to represent a function accurately depends on the values of the weights. 
+The weights are typically initialized as random numbers, and then optimized iteratively to minimize the error
+to a set of expected output values. The expected output values are in our case known energies of a set of atomic
+configurations, which have been obtained in quantum mechanical calculations of electronic structure. 
+This optimization is called \textit{training} and an iteration is called an \textit{epoch}. 
+The fitting process corresponds to the minimization of an error function, also known as the quadratic \textit{cost} function
+\begin{equation}
+ \Gamma = \frac{1}{2N}\sum_{i=1}^N (E_{i,ref} - E_{i,NN})^2
+ \label{quadraticCostFunction}
+\end{equation}
+$E_{i,ref}$ are the known target energies, while $E_{i,NN}$ are the energies produced by the network. 
+The constant $1/2$ are there to cancel out the exponent when we differentiate later. 
+Other cost functions are used for other ML tasks (SKRIVE OM DISSE. KANSKJE HELE DENNE SEKSJONEN BØR 
+SKRIVES MER GENERELL OG IKKE KUN FOR TILFELLET PES?)
+
+\subsection{Backpropagation} \label{sec:backprop}
+From: https://www.willamette.edu/~gorr/classes/cs449/backprop.html and \newline
+http://neuralnetworksanddeeplearning.com/chap2.html. 
+Mainly from the first one, but argument for error of neuron from second.
+
+There are a large number of algorithms that can be used to determine the set of weights minimizing the 
+cost function \eqref{quadraticCostFunction}. 
+Different kinds of gradient descent methods are widely used, but to implement these we need the partial derivatives of
+the cost function w.r.t. to all weights and biases to determine how we should adjust each weight. The idea behind gradient descent 
+methods is to minimize a function by iteratively taking steps in the direction of the negative of its gradient w.r.t. 
+all its parameters, i.e. the direction of steepest descent towards a minima:
+\begin{equation}
+ w_{ij}^{new} = w_{ij}^{old} - \gamma \frac{\partial \Gamma}{\partial w_{ij}^{old}}
+ \label{gradientDescent}
+\end{equation}
+where we have skipped the layer indicies for clarity. Also, $w_{ij}$ now denotes the weight connecting node $j$ 
+in layer $k$ with node $i$ in the following layer. This change of order is introduced to make it easier
+to rewrite the below equations for backpropagation into matrix-vector equations. 
+As seen from \eqref{gradientDescent}, we need to adjust each weight by an amount
+\begin{equation}
+\Delta w_{ij} = \frac{\partial \Gamma}{\partial w_{ij}}
+\label{weightChange}
+\end{equation}
+The corresponding expression for the biases is
+\begin{equation}
+ \Delta b_i = \frac{\partial \Gamma}{\partial b_i}
+\end{equation}
+A common method to obtain these derivatives is backpropagation \cite{ref8}. 
+In backpropagation, the output of the NN is compared to the desired output, the error is then propagated backwards
+to adjust the weights. The method is essentially an implementation of the chain rule, and will allow us to calculate
+the partial derivatives of the cost with respect to all the weights, thereby obtaining the gradient of the network. 
+
+To change the value of the cost function \eqref{costFunction}, we need to change the outputs of the neurons in the network. 
+Changing the input to neuron $j$ by a small amount $\Delta x_j$ results in the output
+\begin{equation}
+ y_j = f_j(x_j + \Delta x_j)
+ \label{neuronError}
+\end{equation}
+This change will propagate through later layers in the network, finally causing the overall cost to change
+by an amount $\frac{\partial \Gamma}{\partial x_j}\Delta x_j$. If $\partial \Gamma / \partial x_j$ is close to zero,
+then we can't improve the cost much by perturbing the weighted input $x_j$; the neuron is already quite near the optimal value.
+This is a heuristic argument for $\partial \Gamma / \partial x_j$ to be a measure of the error of the neuron:
+\begin{equation}
+ \delta_j \equiv \frac{\partial \Gamma}{\partial x_j}
+\end{equation}
+We also define
+\begin{equation}
+ A_i = \{j:w_{ij}\}
+\end{equation}
+as the set $\{j\}$ of nodes anterior to node $i$ and connected to node $i$ with weights $w_{ij}$, in addition to
+\begin{equation}
+ P_j = \{i:w_{ij}\}
+\end{equation}
+as the set $\{i\}$ of nodes posterior to node $j$ and connected to node $j$ with weights $w_{ij}$. 
+
+The weight change \eqref{weightChange} can be expanded into two factors by use of the chain rule:
+\begin{equation}
+ \Delta w_{ij} = \frac{\partial \Gamma}{\partial x_i}\frac{\partial x_i}{\partial w_{ij}}
+\end{equation}
+Now we move in the opposite direction compared to the feed-forward function composition stage: First we differentiate the cost w.r.t 
+neuron $i$'s input, then we differentiate the input w.r.t. weight $w_{ij}$ connecting neurons $j$ and $i$. The first term on the right
+is the error $\delta_i$ of node $i$. The second is
+\begin{equation}
+ \frac{\partial x_i}{\partial w_{ij}} = \frac{\partial}{\partial w_{ij}} \sum_{m\in A_i} w_{im}y_m = y_j
+\end{equation}
+Putting the two together, we get
+\begin{equation}
+ \Delta w_{ij} = \delta_i y_j
+\end{equation}
+To compute this quantity, we thus need to know the output and the error for all nodes in the network. 
+The outputs are as we have seen
+\begin{equation}
+ y_i = f_i(x_i) = f_i\left(\sum_{j\in A_i} w_{ij}y_j + b_i\right)
+ \label{forwardProp}
+\end{equation}
+The error for output neuron $o$ is
+\begin{equation}
+ \delta_o = \frac{\partial \Gamma}{\partial x_o} = \frac{\partial \Gamma}{\partial y_o}\frac{\partial y_o}{\partial x_o}
+          = (d_o - f_o(x_o)) \frac{\partial f_o(x_o)}{\partial x_o}
+\end{equation}
+When doing regression our output neurons will have the unity activation function, which means that the error is reduced to
+\begin{equation}
+ \delta_o = d_o  - y_o
+\end{equation}
+This error is then propagated backwards through the network. Each hidden neuron will have an error
+\begin{equation}
+ \delta_j = \frac{\partial \Gamma}{\partial x_j} = 
+ \sum_{i\in P_j} \frac{\partial \Gamma}{\partial x_i}\frac{\partial x_i}{\partial y_j}\frac{\partial y_j}{\partial x_j}
+ \label{errorTerms}
+\end{equation}
+The first term on the right is the error of node $i$. The second is the derivative of the net input of all posterior
+nodes $\{i\}$ w.r.t. the output of node $j$:
+\begin{equation}
+ \frac{\partial x_i}{\partial y_j} = \frac{\partial}{y_j}\left(\sum_{m\in A_i} w_{im}y_m + b_i\right) = w_{ij}
+\end{equation}
+while the third is the derivative of node $j$'s activation function w.r.t. its net input:
+\begin{equation}
+ \frac{\partial y_j}{\partial x_j} = \frac{\partial f_j(x_j)}{\partial x_j} \equiv f_j^\prime (x_j)
+\end{equation}
+Putting all the pieces together we obtain
+\begin{equation}
+ \delta_j = f_j^\prime(x_j)\sum_{i\in P_j} \delta_i w_{ij}
+ \label{backProp}
+\end{equation}
+The above expression requires that we know the errors of all the posterior nodes
+of node $j$. As long as there are no cycles in the network, there is an ordering of nodes from the output back to the 
+input that respects this condition. It is therefore valid only for feed-forward NNs.
+The errors are propagated backwards through the whole NN until we reach the input nodes. By propagating the error
+of only one ouput neuron, we thus obtain the errors of all the neurons at once. This is the strength of the backpropagation
+algorithm. 
+For the biases, we have
+\begin{equation}
+ \Delta b_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial x_i}
+	      \frac{\partial x_i}{\partial y_j} \frac{\partial y_j}{\partial x_j} \frac{\partial x_j}{\partial b_j}
+\end{equation}
+The only new term her is the last one:
+\begin{equation}
+ \frac{\partial x_j}{\partial b_j} = \frac{\partial}{\partial b_j}\left(\sum_{m\in A_j} w_{jm}y_m + b_j\right) = 1
+\end{equation}
+Consequentially, the update rule for the biases is simply the error of each neuron:
+\begin{equation}
+ \Delta b_j = \delta_j
+\end{equation}
+For fully-connected FFNNs we can easily rewrite these equations in matrix notation. In this notation, 
+the biases, inputs, outputs and errors for all nodes in a layer are combined into vectors, while all weights from 
+one layer to the next form a matrix $W_l$, where $l$ denotes the layer number. The inputs to all the nodes in 
+layer $l$ can be written
+\begin{equation*}
+    \left(\begin{array}{c}
+            x_1^l \\
+            x_2^l \\
+            x_3^l \\
+          \end{array} \right)
+ = \left(\begin{array}{c c c}
+            w_{11} & w_{12} & w_{13} \\
+            w_{21} & w_{22} & w_{23} \\
+	    w_{31} & w_{32} & w_{33} \\
+   \end{array} \right)
+   \left(\begin{array}{c}
+            y_1^k \\
+            y_2^k \\
+            y_3^k \\
+         \end{array}\right)
+ + \left(\begin{array}{c}
+          b_1^l \\
+          b_2^l \\
+          b_3^l \\
+         \end{array}\right)
+\end{equation*}
+so that equation \eqref{forwardProp} takes the form
+\begin{equation}
+\vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)
+\end{equation}
+Comparing equations \eqref{forwardProp} and \eqref{backProp}, we observe that 
+\begin{equation}
+ \sum_{j\in A_i}w_{ij} = \left(\sum_{i\in A_j}w_{ij}\right)^T
+\end{equation}
+i.e. the weight matrices used in backpropagation are the transpose of the matrices used in forward activation.
+The complete backpropagation algorithm including forward activation then looks as follows:
+\begin{enumerate}
+ \item Initialize the input layer:
+ \begin{equation}
+  \vec{y}_0 = \vec{x}_0
+ \end{equation}
+ \item Propagate the activity forward: for $l = 1,2,\dots ,L$:
+ \begin{equation}
+  \vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)
+ \end{equation}
+ \item Calculate the error in the output layer:
+ \begin{equation}
+  \vec{\delta}_L = \vec{t} - \vec{y}_L
+ \end{equation}
+ \item Calculate the error: for $l = L-1, L-2, \dots ,1$:
+ \begin{equation}
+ \vec{\delta}_l = (W^T_{l+1}\vec{\delta}_{l+1}) \cdot f_l^\prime (\vec{x}_l)
+ \end{equation}
+ \item Update the weights and biases: 
+ \begin{equation}
+  \Delta W_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \Delta \vec{b}_l = \vec{\delta}_l
+ \end{equation}
+\end{enumerate}
+
+
+\chapter{Neural networks in molecular dynamics}
+Following \cite{ref9} and \cite{ref10}.
+All the dynamics of a molecular system is determined by the multidimensional potential-energy surface (PES), which
+in general is a real-valued function depending on all atomic coordinates in the system. Using the Born-Oppenheimer approximation
+(FORKLARE ELLER REFERERE), 
+various quantum mechanical methods like Hartree-Fock and density functional theory (DFT) are available to directly calculate
+the PES and forces for a given configuration. Calculating the energies for all relevant configurations of a system is
+demanding and time-consuming, and only a limited number of energies can be computed and stored. 
+Consequentially, during a \textit{ab inito} molecular dynamics (MD) simulations, the energies and forces for all configurations visited
+are not available beforehand. In \textit{ab inito} MD, energies and forces are therefore calculated on-the-fly, typically using DFT.
+This is however a very inefficient approach. A more efficient method is to construct an analytical PES to use in simulations, 
+but this can only be done for very simple systems.
+
+A solution to this problem is the introduction of approximate PESs, and there are two fundamental approaches. 
+The most widely used and convential method is to replace the solution of the Schrödinger equation by a simplified
+energy expression based on physical considerations and reasonable approximations. These functions are not obtained
+by ab inito methods, but can in many cases be sufficiently accurate to be used in simulations (BØR HA EN EGEN SEKSJON
+OM DE VANLIGSTE POTENSIALENE).
+
+An alternative approach is to employ machine learning (ML) potentials that have no direct physical meaning. 
+The aim of these purely mathematical functions is to fit an analytic expression to a set of reference data
+obtained by quantum mechanical calulations. There are various methods (REFERENCES). 
+ML potentials are particularly useful
+\begin{itemize}
+ \item if long MD simulations are required
+ \item if many MD trajectories are needed
+ \item if the systems are too large for the application of QM methods
+\end{itemize}
+Physical and ML potentials thus enables us to extend the time and length scales of MD simulations
+beyond the realm of ab inito methods. 
+
+Feed-forward neural networks (FFNN) have been demonstrated to be useful for the construction of PESs because
+they are universal function approximators. There is no restriction in the accuracy that can be achieved when 
+constructing neural network potentials (NNP). Unlike physical potentials, they are not restricted by any \textit{ad hoc}
+functional form. NNPs offer a number of advantages for the construction of PESs:
+\begin{itemize}
+ \item Energies can be fitted to very high accuracy, leaving only
+ the underlying error of the reference data
+ \item Evaluation of NNPs require much less CPU time than QM methods
+ \item The NNP expression is unbiased and generally applicable to all types of bonding
+\end{itemize}
+Still, there are disadvantages one should be aware of:
+\begin{itemize}
+ \item The evaluation of NNPs are notably slower compared to the use of classical force fields
+ \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities
+ \item NNPs are, for the time being, only applicable to systems containing only a few
+ different chemical elements (but many atoms)
+\end{itemize}
+
+\section{High-dimensional NNPs}
+The use of a single FFNN to represent complicated systems containing many atoms of different types is not possible for several reasons.
+First of all, the deegrees of freedom (the number of weight parameters) will be very many, making the training and evaluation
+of the network slow. Secondly, the NN has a symmetry problem. It does not take into account that exchanging two or more atoms
+can lead to an energetically equivalent configuration. For example, exchanging the positions of both hydrogen atoms
+in a water molecule will not alter the configuration energy. However, noting that all weights have numerically different values,
+changing the order of the input coordinates to the NN will result in a different energy value. This problem can be solved
+by a different choice of input coordinates, discussed below. The third problem in using a single FFNN is that it is 
+only applicable to the system size that has been used during the training. If the NN has been trained with 5 inputs, 
+it can not be used for a system containing any other number of atoms. 
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width = 100mm]{Figures/Theory/cutOffHighDimNN.jpeg}
+  \caption{}
+  \label{fig:cutOffNeighbours}
+  \end{center}
+\end{figure}
+A solution to all these problems is to construct the system energy $E_s$ as a sum of $N$ atomic energy contributions
+$E_i$, which are provided by a set of individual atomic NNs,
+\begin{equation}
+ E_s = \sum_{i=1}^N E_i
+ \label{systemEnergy}
+\end{equation}
+The atomic energies $E_i$ depend on the local chemical environment up to a cutoff radius $R_c$ as shown in figure
+\ref{fig:cutOffNeighbours} (STJÅLET FRA PAPER, MÅ LAGE EGEN?). 
+This is analogous to MD simulations with neighbour lists, thus making it possible to 
+obtain the energies and forces of an atom and all its neighbours simultaneously. The positions of the neighbouring atoms within 
+the cutoff sphere are described by a set of many-body symmetry functions discussed below. As the order of the summation does not 
+change the total energy $E_s$, the symmetry problem above is solved. Each chemical element have seperate types of
+NNs with their own architecture and weights, but for a given element all atomic NNs are equal. Such a system of NNs are also 
+applicable to different system sizes: To add an atom of a given type, we simply extend the set of NNs by another network
+identical to the other NNs of the same type, and if an atom is removed, we delete the respective NN. 
+\begin{itemize}
+ \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
+ of the problem, which allows to use NNs of tractable size
+ \item The total energy is invariant with respect to the order of the atoms
+ \item The NNP can be used for systems of different sizes
+ \item We 
+\end{itemize}
+We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
+should be invariant with respect to these operations. 
+
+\subsection{Symmetry functions} \label{sec:symmetryFunctions}
+To construct adequate symmetry functions, we need to have a cutoff function that defines the atomic environments. 
+One such function is \cite{ref9},
+\begin{equation}
+ f_c(R_{ij}) = 
+\begin{cases}
+0.5 \cdot \left[\cos\left(\frac{\pi R_{ij}}{R_c}\right) + 1 \right], & R_{ij} \leq R_c \\
+0, & R_{ij} > R_c
+\end{cases}
+\label{cutoffFunction}
+\end{equation}
+which is the monotonically decreasing part of a cosine function on $R_{ij} \in [0,R_c]$, seen in \autoref{fig:cutoffFunction}. 
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width = 0.9\linewidth]{Figures/Theory/cutoffFunction.pdf}
+  \caption{Plot of the cutoff function \eqref{cutoffFunction} applied in this thesis. 
+	   This function is used to define a chemical environment around a central atom:
+           only the atoms within the cutoff radius $R_c$ contribute to its energy. 
+           These are called neighbouring atoms. The closer a neighbouring atom is, the larger
+           the energy contribution, as is the case for most physical systems.}
+  \label{fig:cutoffFunction}
+  \end{center}
+\end{figure}
+This function have the desirable property that it decreases with increasing distance $R_{ij}$ between the central
+atom $i$ and its neighbour $j$. At the cutoff radius $R_c$, is has zero value and slope, which is important
+to avoid discontinuities when computing energies and forces. Atoms beyond the cutoff radius are not a part of the central
+atom's chemical environment and therfore do not contribute to its energy. 
+
+Several types of many-body symmetry functions can be
+constructed based on these cutoff functions. They can be divided into two classes: \textit{radial} symmetry functions, describing 
+the radial distribution of neighbours up to the cutoff radius, and \textit{angular} symmetry functions, specifying their
+angular arrangement. All symmetry functions depend on the positions of all the atoms inside the cutoff spheres. They make
+it possible to obtain a constant number of function values independent of the number of neighbours, which can change
+during MD simulations. 
+
+The most basic radial symmetry function is simply the sum of the cutoff functions for all the neighbours $j$ to 
+atom $i$,
+\begin{equation}
+ G_i^1 = \sum_{j=1}^N f_c(R_{ij})
+ \label{G1}
+\end{equation}
+We need a set of such functions with different cutoff radii to describe the radial arrangement of the neighbouring atoms. 
+A better alternative is to use a sum of products of Gaussians and the cutoff function,
+\begin{equation}
+ G_i^2 = \sum_{j=1}^N \exp[-\eta(R_{ij}-R_s)^2] \cdot f_c(R_{ij})
+ \label{G2}
+\end{equation}
+We now have two parameters that can be adjusted to probe different radii. The width parameter $\eta$ determines the 
+radial extension of the symmetry functions, while the shifting parameter $R_s$ displaces the Gaussians to improve
+the sensitivity of the symmetry functions at specific radii. A third option is 
+\begin{equation}
+ G_i^3 = \sum_{j=1}^N \cos(\kappa R_{ij}) \cdot f_c(R_{ij})
+ \label{G3}
+\end{equation}
+which are damped cosine functions with a period length adjusted by parameter $\kappa$. We will however not use 
+this function because of the existence of negative function values which can lead to atoms canceling each other's
+contribution to the sum. In \autoref{fig:radialSymmetriFunctions} we see the radial symmetry functions for several
+different parameters. It is clear that a set of such functions have a large flexibility when we tune the parameters
+in different ways. This is what makes them able to represent the radial distribution of neighbours around a central atom. 
+\begin{figure}[H] 
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Theory/G1.pdf} 
+    \label{fig:radialSymmetriFunctions:a} 
+    \vspace{1ex}
+  \end{subfigure}%% 
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Theory/G2_1.pdf} 
+    \label{fig:radialSymmetriFunctions:b} 
+    \vspace{1ex}
+  \end{subfigure} 
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Theory/G2_2.pdf} 
+    \label{fig:radialSymmetriFunctions:c} 
+  \end{subfigure}%%
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Theory/G3.pdf} 
+    \label{fig:radialSymmetriFunctions:d} 
+  \end{subfigure} 
+  \caption{Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such 
+	   functions represents the radial distrubution of neighbours around a central atom placed at the origin.
+	   For $G^2$ and $G^3$ a cutoff $R_c = \SI{11.0}{\angstrom}$ has been used.}
+  \label{fig:radialSymmetriFunctions} 
+\end{figure}
+To obtain a suitable structural fingerprint of the atomic environments, we also need the angular distribution
+of neighbouring atoms. This can be achieved by using functions depending on $\theta_{ijk}$, which
+is the angle formed by the central atom $i$ and the two interatomic distances $R_{ij}$ and $R_{ik}$. 
+The potential is periodic with respect to this angle, so we can use the cosine of $\theta_{ijk}$ instead. 
+We thus define an angular symmetry function as a sum over all cosines with respect to any possible pair of 
+neighbours $j$ and $k$, multiplied by Gaussians of the three interatomic distances and the respective cutoff functions,
+\begin{align}
+ G_i^4 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
+ \exp(-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)) \cdot \\
+ &f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})]
+ \label{G4}
+\end{align}
+This function becomes zero if any of the interatomic distances is larger than $R_c$. The parameter $\eta$ takes here
+into account that the angular contribution depends on the atomic seperations. The angular arrangement can be 
+investigated by using different values for $\zeta$ while the normalization factor $2^{1-\zeta}$ ensures that the range of 
+values is independent of the choice of $\zeta$. The parameter $\lambda \in {-1,1}$ can be used to invert the shape of the 
+cosine function: for $\lambda = +1$ the maxima of the cosine terms are at $\theta_{ijk} = 0^\circ$, 
+while for $\lambda=-1$ they are located at $\theta_{ijk} = 180^\circ$. The cutoff function $R_{jk}$
+is included to ensure that only triplets where all three inter-atomic distances are within the cutoff radius. 
+Another function can be defined that has no constraint on $R_{jk}$,
+\begin{align}
+  G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
+ \exp(-\eta (R_{ij}^2 + R_{ik}^2)) \cdot \\
+ &f_c(R_{ij}) f_c(R_{ik})]
+ \label{G5}
+\end{align}
+\eqref{G5} will generally have larger function values than \eqref{G4} because the lack of constraint on $R_{jk}$ results in 
+a larger number of non-zero terms in the summation. The angular part of $G^4$ and $G^5$ is identical, shown in 
+\autoref{fig:angularSymmetryFunctions} for different values of $\zeta$. 
+\begin{figure}[H]
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Theory/G4G5angular1.pdf}
+    \subcaption{}
+    \label{fig:angularSymmetryFunctions:a} 
+  \end{subfigure}%% 
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Theory/G4G5angular2.pdf} 
+    \subcaption{}
+    \label{fig:angularSymmetryFunctions:b} 
+  \end{subfigure} 
+  \caption{Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such 
+	   functions represents the angular distrubution of neighbours around a central atom placed at the origin.
+	   $\lambda = +1$ for \autoref{fig:angularSymmetryFunctions:a}, $\lambda=-1$ for \autoref{fig:angularSymmetryFunctions:b}.}
+ \label{fig:angularSymmetryFunctions} 
+\end{figure}
+The parameter values $R_c, \eta, R_s, \zeta$ and $\lambda$ are not automatically optimized, like the weights. 
+Once a set of symmetry functions has been determined, they remain fixed during the training of the NN. They are therefore
+an integral part of the NN, and need to be evaluated together with the NN itself when applied in simulations. 
+The symmetry function set have to be customized for different systems, but in our experience the quality of the fit 
+is not very sensitive to the choice of parameters. An adequate set will shorten the convergence time, but it will not 
+necesseraly result in a lower RMSE. 
+However, it is important to use at least as many symmetry functions as there are degrees of freedom in the system.
+If this is not the case, the NN will recieve insufficient information and will not be able to fit the data properly. 
+
+\subsection{Symmetry functions and forces}
+To integrate Newton's laws in MD simulations we need the forces on all the atoms. The force field associated with a PES
+was introduced in section \ref{sec:potentialEnergySurfaces} and is restated here for reference:
+\begin{equation}
+ \vec{F} = -\nabla E
+ \label{forcePES2}
+\end{equation}
+In the present case, the total energy $E$ of the system is defined as a sum over all the atomic energies \eqref{systemEnergy}. 
+Further, we have applied a cutoff so that each atom only gets energy contributions from its atomic environment up 
+to a certain distance $R_c$.
+The force component $F_{k,\alpha}$, $\alpha = (x,y,z)$ acting on atom $k$ with respect to coordinate $R_{k,\alpha}$,
+can therefore be written
+\begin{equation}
+ F_{k,\alpha} = -\frac{\partial E}{\partial R_{k,\alpha}} = -\sum_{i=1}^N\frac{\partial E_i}{\partial R_{k,\alpha}}
+ = -\sum_{i=1}^{N_k+1}\frac{\partial E_i}{\partial R_{k,\alpha}}
+ \label{forceAtomk}
+\end{equation}
+$N$ is as before the total number of atoms, while $N_k$ is the number of neighbours of atom $k$. 
+Note that $E_k$ is included in the above sum - atom $k$ itself contributes to the total energy of its atomic
+environment. We therefore have $N_k+1$ contributions. 
+
+NNs have as we have seen well-defined functional forms, and analytical derivatives are therefore readily available.
+However, when symmetry transformations is applied, there is only an indirect relation between the energy and the cartesian coordinates
+of the atoms. To calculate the force \eqref{forceAtomk} we therefore need to apply the chain rule,
+\begin{equation}
+ F_{k,\alpha} = -\sum_{i=1}^{N_k+1}\frac{\partial E_i}{\partial R_{k,\alpha}} = 
+ -\sum_{i=1}^{N_k+1}\sum_{s=1}^{M_i}\frac{\partial E_i}{\partial G_{i,s}}\frac{\partial G_{i,s}}{\partial R_{k,\alpha}}
+ \label{forceAtomkChainRule}
+\end{equation}
+where $M_i$ is the number of symmetry functions of atom $i$. In other words, we need to sum over all the symmetry functions
+of all the neighbours $i$ of atom $k$ and $k$ itself (IS THIS CORRECT???) Looking at Fiure (MAKE A FIGURE ILLUSTRATING
+THE SYMMETRY TRANSFORMATION OF THE CARTESIAN COORDINATES THAT IS SENT TO THE NN), we realize that the first term
+$\partial E_i\partial G_{i,s}$ is the derivative of the output of the atomic NN of atom $i$ with respect to the inputs,
+which is defined as the gradient of the NN. This gradient is given by the architecture of the NN, 
+including the values of the weights and biases.
+We recall from \ref{sec:backprop} that the backpropagation algorithm calculates the derivatives of all neurons in a NN to obtain
+the amount of which each weight and bias should be adjusted during training. We can thus use a slightly modified version
+of this algorithm to compute the gradient of a NN,
+\begin{enumerate}
+ \item Instead of backpropagating the \textit{error} of the output neuron, 
+ we backpropagate the \textit{derivative} of the output neuron's activation function.
+ \item The derivative is propagated all the way back to the input nodes. During training, the propagation
+ stops at the weights connecting the input layer and the first hidden layer. 
+\end{enumerate}
+This procedure clarifies how a fully-connected feed-forward NN is built: To get the derivative of the output neuron
+w.r.t. the input neurons, we have to also compute the derivative of all the neurons in-between because
+all nodes in each layer are connected to all nodes in the following layer. 
+
+The second term $\partial G_{i,s}/\partial R_{k,\alpha}$ in \eqref{forceAtomkChainRule} is given by the 
+definition of the employed symmetry functions. 
+The derivatives of the Behler symmetry functions given in section \ref{sec:symmetryFunctions} are listed in \ref{app:appendixA1}. 
+Since all these functions
+
+
+\part{Implementation and validation}
+
+\chapter{LAMMPS}
 (HAVE TO REFER TO THE MANUAL HERE OR SOMETHING.
 DOES THAT COUNT AS AN ORDINARY REFERENCE, 
 OR SHOULD IT BE A FOOTNOTE?)
@@ -452,605 +1069,7 @@ We aim to construct a many-body potential, and
 have chosen to base our implementation on the 
 Stillinger-Weber potential file, pair\_sw.cpp and -.h.
 
-
-
-
-
-\chapter{Machine learning}
-Machine learning is the science of giving computers the ability to learn without being explicitly programmed. 
-The idea is that there exist generic algorithms which can be used to find patterns in a broad class of data sets without 
-having to write code specifically for each problem. The algorithm will build its own logic based on the data. 
-
-There are two main machine learning methods, supervised learning and unsupervised learning. For the former method, 
-you know the answer to a problem and let the computer deduce the logic behind it. When doing the latter, you do not
-know the answer and are just trying to find patterns and relationship in the data. 
-
-Another way to categorize machine learning tasks is to consider the desired output of a system.
-Some of the most common tasks are:
-\begin{itemize}
- \item Classification: Outputs are divided into two or more classes. The goal is to 
- produce a model that assigns inputs into one of these classes. An example is to identify
- digits based on pictures of hand-written ones. Typically supervised. 
- \item Regression: Find a functional relationship between variables, the outputs are thus continous. 
- \item Clustering: Inputs are divided into groups without knowing the different groups, i.e. a form of unsupervised classification.  
-\end{itemize}
-In this thesis we will use machine learning to do regression, i.e. to find the PES of interacting molecules.
-One approach to machine learning regression is artificial neural networks. 
-
-\section{Artificial Neural Networks}
-An Artificial Neural Network (ANN) consists of layers of connected nodes, or neurons. 
-It is supposed to mimic a biological nervous system by letting each neuron interact with other neurons
-by sending signals between layers. The accumulated signals received by a neuron is used as input to its 
-\textit{activation function}, which is used to to send new signals to following layers. This function is supposed to mimic that 
-a biological neuron is activated if the input is above a certain threshold. We will here follow 
-Behler \cite{ref1} and Dragly \cite{ref2}.
-
-There are many types of ANNs made for different purposes. The most widely used are feed-forward and recurrent ANNs. 
-The feedforward network was the first and arguably the most simple type of ANN. In this network the information or signals
-only move forward through the layers - from the input layer, through each successive hidden layer and finally to the output layer. 
-On the other hand, recurrent networks have cycles and loops, i.e. bi-directional data flow. Feed-forward neural networks, 
-also called Multilayer Perceptrons (MLP) were shown to be universal function approximators by K. Hornik et al. \cite{ref3} in 1989.
-We will use these networks to approximate the PES in thesis. 
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[width = 0.7\linewidth]{Figures/Theory/MLP.png}
-  \caption{Neural network}
-  \label{fig:NN}
-  \end{center}
-\end{figure}
-An MLP networks is shown schematically in \autoref{fig:NN} (STOLEN FROM \cite{ref3}, EDIT TO ONE INPUT LATER). 
-
-This network maps input coordinates $G_i$ to a potential energy in the output layer via two hidden layers
-with an (arbitrary) number of hidden nodes. The hidden neurons have no physical meaning, but have the purpose
-of defining the functional form of the NN. All nodes in each layer are connected to the nodes in the adjacent layer by
-\textit{weights}, the fitting parameters of the NN. These are called fully connected layers. We use the notation
-$a_{ij}^{kl}$ for the weight connecting node number $i$ in layer $k$ with node number $k$ in layer $l=k+1$. 
-Also, each node in the hidden layers and the output node have a \textit{bias} $b_i^j$, where $i$ indicates
-node number and $j$ layer. All weights and biases are real-valued numbers.
-
-The output of this MLP is calculated in the following way. The configuration are specifiec by the input nodes.
-Then, a weighted sum $x_m^1$ of the input coordinates ${G_i}$ is calculated for each node $m$ in the first hidden layer 1
-\begin{equation}
- x_m^i = \sum_{i=1}^4 G_i a_{i,m}^{01} + b_m^i 
-\end{equation}
-where we also add the bias $b_m^i$ for each node. This is a linear combination of the input coordinates
-using the connection weights as coordinates, which is used as input to the activation function $f_m^1$ of each neuron, thus
-producing the output $y_m^1$ of all neurons in layer 1:
-\begin{equation}
- y_m^1 = f_m^1(x_m^1)
-\end{equation}
-For an arbitrary node $m$ in a hidden layer $n$ this generalizes to
-\begin{equation}
- y_m^n = f_m^n(x_m^n) = f_m^n\left(\sum_{i=1}^{N_{n-1}} y_i^{n-1}a_{i,m}^{n-1,n}\right)
-\end{equation}
-where $N_n$ is the number of nodes in layer $n$. When the output of all the nodes in the first hidden layer are computed,
-the values of the subsequent layer can be calculated and so forth until the output is obtained. The complete functional form
-of an MPL with $n$ hidden layers is thus
-\begin{equation}
- E = f_1^{n+1}\biggr(\sum_m^{N_n}f_m^{n}\biggr(\sum_l^{N_{n-1}}f_l^{n-1}\biggr( \cdots \sum_j^{N_1} 
-     f_j^1\biggr(\sum_{i=1}a_{i,j}^{0,1}G_i + b_j^1\biggr) \cdots \biggr)\biggr)\biggr)
-     \label{completeNN}
-\end{equation}
-i.e. a nested sum of activation functions. A desired property of activation functions is to converge asymptotically
-to constant output values for large and small arguments, with a non-linear region in-between. The non-linearity enables
-the ANN to fit arbitrary functions \cite{ref3}. Common activation functions \cite{ref4} for 
-function approximation are the sigmoid function
-\begin{equation}
- f(x) = \frac{1}{1 + e^{-x}}
- \label{sigmoidActivationFunction}
-\end{equation}
-and the hyperbolic tangent
-\begin{equation}
- f(x) = \tanh(x)
- \label{tanhActivationFunction}
-\end{equation}
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[width = 0.7\linewidth]{Figures/Theory/activationFunctions.pdf}
-  \caption{Activation functions}
-  \label{fig:activations}
-  \end{center}
-\end{figure}
-Both these functions (Figure \ref{fig:activations}) have the desired properties mentioned above:
-They are constant (1 or 0) for all values except a small interval around zero, where they have non-linear behaviour. 
-This keeps the outputs of the neurons from blowing up. The sigmoid are more bilogically plausible because 
-the output of inactive neurons are zero. Such activation function are called \textit{one-sided}. However,
-it has been shown \cite{ref5} that the hyperbolic tangent 
-performs better than the sigmoid for multi-layer networks. Nevertheless, one should assess the problem 
-at hand when deciding what activation function to use; the performance can vary from problem to problem. 
-(VENTE MED Å DISKUTERE DETTE TIL JEG HAR SNAKKET OM BACKPROPAGATION OSV.)
-SNAKKE OM SATURATION OSV. 
-
-In later years, the rectifier function (Figure \ref{fig:rectifier})
-\begin{equation}
- f(x) = \max(0,x)
-\end{equation}
-has become the most popular for deep neural networks \cite{ref6}. PLOT DENNE FUNKSJONEN.
-The two former functions are symmetrical around zero osv....
-It have been argued to be even more biologically plausible than the sigmoid and also perform better
-than the hyperbolic tangent for deep NNs. \cite{ref7}. 
-
-
-A linear activation function $f(x) = x$ is often used in the output layer to avoid any constraint in the range 
-of output values. For regression, the most widely used output activation is the unity function $f(x) = 1$, i.e.
-no activation (HVORFOR?).
-
-As shown in \eqref{completeNN}, the NN consists of several nested terms of the form
-\begin{equation}
- h(x) = c_1 f(c_2 x + c_3) + c4
-\end{equation}
-where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
-can be shifted up and down or left and right, change slope or be rescaled, thus making the NN more flexible.
-
-\section{Training}
-The ability of the NN to represent a function accurately depends on the values of the weights. 
-The weights are typically initialized as random numbers, and then optimized iteratively to minimize the error
-to a set of expected output values. The expected output values are in our case known energies of a set of atomic
-configurations, which have been obtained in quantum mechanical calculations of electronic structure. 
-This optimization is called \textit{training} and an iteration is called an \textit{epoch}. 
-The fitting process corresponds to the minimization of an error function, also known as the quadratic \textit{cost} function
-\begin{equation}
- \Gamma = \frac{1}{2N}\sum_{i=1}^N (E_{i,ref} - E_{i,NN})^2
- \label{quadraticCostFunction}
-\end{equation}
-$E_{i,ref}$ are the known target energies, while $E_{i,NN}$ are the energies produced by the network. 
-The constant $1/2$ are there to cancel out the exponent when we differentiate later. 
-Other cost functions are used for other ML tasks (SKRIVE OM DISSE. KANSKJE HELE DENNE SEKSJONEN BØR 
-SKRIVES MER GENERELL OG IKKE KUN FOR TILFELLET PES?)
-
-\subsection{Backpropagation}
-From: https://www.willamette.edu/~gorr/classes/cs449/backprop.html and \newline
-http://neuralnetworksanddeeplearning.com/chap2.html. 
-Mainly from the first one, but argument for error of neuron from second.
-
-There are a large number of algorithms that can be used to determine the set of weights minimizing the 
-cost function \eqref{quadraticCostFunction}. 
-Different kinds of gradient descent methods are widely used, but to implement these we need the partial derivatives of
-the cost function w.r.t. to all weights and biases to determine how we should adjust each weight. The idea behind gradient descent 
-methods is to minimize a function by iteratively taking steps in the direction of the negative of its gradient w.r.t. 
-all its parameters, i.e. the direction of steepest descent towards a minima:
-\begin{equation}
- w_{ij}^{new} = w_{ij}^{old} - \gamma \frac{\partial \Gamma}{\partial w_{ij}^{old}}
- \label{gradientDescent}
-\end{equation}
-where we have skipped the layer indicies for clarity. Also, $w_{ij}$ now denotes the weight connecting node $j$ 
-in layer $k$ with node $i$ in the following layer. This change of order is introduced to make it easier
-to rewrite the below equations for backpropagation into matrix-vector equations. 
-As seen from \eqref{gradientDescent}, we need to adjust each weight by an amount
-\begin{equation}
-\Delta w_{ij} = \frac{\partial \Gamma}{\partial w_{ij}}
-\label{weightChange}
-\end{equation}
-The corresponding expression for the biases is
-\begin{equation}
- \Delta b_i = \frac{\partial \Gamma}{\partial b_i}
-\end{equation}
-A common method to obtain these derivatives is backpropagation \cite{ref8}. 
-In backpropagation, the output of the NN is compared to the desired output, the error is then propagated backwards
-to adjust the weights. The method is essentially an implementation of the chain rule, and will allow us to calculate
-the partial derivatives of the cost with respect to all the weights, thereby obtaining the gradient of the network. 
-
-To change the value of the cost function \eqref{costFunction}, we need to change the outputs of the neurons in the network. 
-Changing the input to neuron $j$ by a small amount $\Delta x_j$ results in the output
-\begin{equation}
- y_j = f_j(x_j + \Delta x_j)
- \label{neuronError}
-\end{equation}
-This change will propagate through later layers in the network, finally causing the overall cost to change
-by an amount $\frac{\partial \Gamma}{\partial x_j}\Delta x_j$. If $\partial \Gamma / \partial x_j$ is close to zero,
-then we can't improve the cost much by perturbing the weighted input $x_j$; the neuron is already quite near the optimal value.
-This is a heuristic argument for $\partial \Gamma / \partial x_j$ to be a measure of the error of the neuron:
-\begin{equation}
- \delta_j \equiv \frac{\partial \Gamma}{\partial x_j}
-\end{equation}
-We also define
-\begin{equation}
- A_i = \{j:w_{ij}\}
-\end{equation}
-as the set $\{j\}$ of nodes anterior to node $i$ and connected to node $i$ with weights $w_{ij}$, in addition to
-\begin{equation}
- P_j = \{i:w_{ij}\}
-\end{equation}
-as the set $\{i\}$ of nodes posterior to node $j$ and connected to node $j$ with weights $w_{ij}$. 
-
-The weight change \eqref{weightChange} can be expanded into two factors by use of the chain rule:
-\begin{equation}
- \Delta w_{ij} = \frac{\partial \Gamma}{\partial x_i}\frac{\partial x_i}{\partial w_{ij}}
-\end{equation}
-Now we move in the opposite direction compared to the feed-forward function composition stage: First we differentiate the cost w.r.t 
-neuron $i$'s input, then we differentiate the input w.r.t. weight $w_{ij}$ connecting neurons $j$ and $i$. The first term on the right
-is the error $\delta_i$ of node $i$. The second is
-\begin{equation}
- \frac{\partial x_i}{\partial w_{ij}} = \frac{\partial}{\partial w_{ij}} \sum_{m\in A_i} w_{im}y_m = y_j
-\end{equation}
-Putting the two together, we get
-\begin{equation}
- \Delta w_{ij} = \delta_i y_j
-\end{equation}
-To compute this quantity, we thus need to know the output and the error for all nodes in the network. 
-The outputs are as we have seen
-\begin{equation}
- y_i = f_i(x_i) = f_i\left(\sum_{j\in A_i} w_{ij}y_j + b_i\right)
- \label{forwardProp}
-\end{equation}
-The error for output neuron $o$ is
-\begin{equation}
- \delta_o = \frac{\partial \Gamma}{\partial x_o} = \frac{\partial \Gamma}{\partial y_o}\frac{\partial y_o}{\partial x_o}
-          = (d_o - f_o(x_o)) \frac{\partial f_o(x_o)}{\partial x_o}
-\end{equation}
-When doing regression our output neurons will have the unity activation function, which means that the error is reduced to
-\begin{equation}
- \delta_o = d_o  - y_o
-\end{equation}
-This error is then propagated backwards through the network. Each hidden neuron will have an error
-\begin{equation}
- \delta_j = \frac{\partial \Gamma}{\partial x_j} = 
- \sum_{i\in P_j} \frac{\partial \Gamma}{\partial x_i}\frac{\partial x_i}{\partial y_j}\frac{\partial y_j}{\partial x_j}
- \label{errorTerms}
-\end{equation}
-The first term on the right is the error of node $i$. The second is the derivative of the net input of all posterior
-nodes $\{i\}$ w.r.t. the output of node $j$:
-\begin{equation}
- \frac{\partial x_i}{\partial y_j} = \frac{\partial}{y_j}\left(\sum_{m\in A_i} w_{im}y_m + b_i\right) = w_{ij}
-\end{equation}
-while the third is the derivative of node $j$'s activation function w.r.t. its net input:
-\begin{equation}
- \frac{\partial y_j}{\partial x_j} = \frac{\partial f_j(x_j)}{\partial x_j} \equiv f_j^\prime (x_j)
-\end{equation}
-Putting all the pieces together we obtain
-\begin{equation}
- \delta_j = f_j^\prime(x_j)\sum_{i\in P_j} \delta_i w_{ij}
- \label{backProp}
-\end{equation}
-The above expression requires that we know the errors of all the posterior nodes
-of node $j$. As long as there are no cycles in the network, there is an ordering of nodes from the output back to the 
-input that respects this condition. It is therefore valid only for feed-forward NNs.
-The errors are propagated backwards through the whole NN until we reach the input nodes. By propagating the error
-of only one ouput neuron, we thus obtain the errors of all the neurons at once. This is the strength of the backpropagation
-algorithm. 
-For the biases, we have
-\begin{equation}
- \Delta b_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial x_i}
-	      \frac{\partial x_i}{\partial y_j} \frac{\partial y_j}{\partial x_j} \frac{\partial x_j}{\partial b_j}
-\end{equation}
-The only new term her is the last one:
-\begin{equation}
- \frac{\partial x_j}{\partial b_j} = \frac{\partial}{\partial b_j}\left(\sum_{m\in A_j} w_{jm}y_m + b_j\right) = 1
-\end{equation}
-Consequentially, the update rule for the biases is simply the error of each neuron:
-\begin{equation}
- \Delta b_j = \delta_j
-\end{equation}
-For fully-connected FFNNs we can easily rewrite these equations in matrix notation. In this notation, 
-the biases, inputs, outputs and errors for all nodes in a layer are combined into vectors, while all weights from 
-one layer to the next form a matrix $W_l$, where $l$ denotes the layer number. The inputs to all the nodes in 
-layer $l$ can be written
-\begin{equation*}
-    \left(\begin{array}{c}
-            x_1^l \\
-            x_2^l \\
-            x_3^l \\
-          \end{array} \right)
- = \left(\begin{array}{c c c}
-            w_{11} & w_{12} & w_{13} \\
-            w_{21} & w_{22} & w_{23} \\
-	    w_{31} & w_{32} & w_{33} \\
-   \end{array} \right)
-   \left(\begin{array}{c}
-            y_1^k \\
-            y_2^k \\
-            y_3^k \\
-         \end{array}\right)
- + \left(\begin{array}{c}
-          b_1^l \\
-          b_2^l \\
-          b_3^l \\
-         \end{array}\right)
-\end{equation*}
-so that equation \eqref{forwardProp} takes the form
-\begin{equation}
-\vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)
-\end{equation}
-Comparing equations \eqref{forwardProp} and \eqref{backProp}, we observe that 
-\begin{equation}
- \sum_{j\in A_i}w_{ij} = \left(\sum_{i\in A_j}w_{ij}\right)^T
-\end{equation}
-i.e. the weight matrices used in backpropagation are the transpose of the matrices used in forward activation.
-The complete backpropagation algorithm including forward activation then looks as follows:
-\begin{enumerate}
- \item Initialize the input layer:
- \begin{equation}
-  \vec{y}_0 = \vec{x}_0
- \end{equation}
- \item Propagate the activity forward: for $l = 1,2,\dots ,L$:
- \begin{equation}
-  \vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)
- \end{equation}
- \item Calculate the error in the output layer:
- \begin{equation}
-  \vec{\delta}_L = \vec{t} - \vec{y}_L
- \end{equation}
- \item Calculate the error: for $l = L-1, L-2, \dots ,1$:
- \begin{equation}
- \vec{\delta}_l = (W^T_{l+1}\vec{\delta}_{l+1}) \cdot f_l^\prime (\vec{x}_l)
- \end{equation}
- \item Update the weights and biases: 
- \begin{equation}
-  \Delta W_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \Delta \vec{b}_l = \vec{\delta}_l
- \end{equation}
-\end{enumerate}
-
-
-\chapter{Neural networks in molecular dynamics}
-Following \cite{ref9} and \cite{ref10}.
-All the dynamics of a molecular system is determined by the multidimensional potential-energy surface (PES), which
-in general is a real-valued function depending on all atomic coordinates in the system. Using the Born-Oppenheimer approximation
-(FORKLARE ELLER REFERERE), 
-various quantum mechanical methods like Hartree-Fock and density functional theory (DFT) are available to directly calculate
-the PES and forces for a given configuration. Calculating the energies for all relevant configurations of a system is
-demanding and time-consuming, and only a limited number of energies can be computed and stored. 
-Consequentially, during a \textit{ab inito} molecular dynamics (MD) simulations, the energies and forces for all configurations visited
-are not available beforehand. In \textit{ab inito} MD, energies and forces are therefore calculated on-the-fly, typically using DFT.
-This is however a very inefficient approach. A more efficient method is to construct an analytical PES to use in simulations, 
-but this can only be done for very simple systems.
-
-A solution to this problem is the introduction of approximate PESs, and there are two fundamental approaches. 
-The most widely used and convential method is to replace the solution of the Schrödinger equation by a simplified
-energy expression based on physical considerations and reasonable approximations. These functions are not obtained
-by ab inito methods, but can in many cases be sufficiently accurate to be used in simulations (BØR HA EN EGEN SEKSJON
-OM DE VANLIGSTE POTENSIALENE).
-
-An alternative approach is to employ machine learning (ML) potentials that have no direct physical meaning. 
-The aim of these purely mathematical functions is to fit an analytic expression to a set of reference data
-obtained by quantum mechanical calulations. There are various methods (REFERENCES). 
-ML potentials are particularly useful
-\begin{itemize}
- \item if long MD simulations are required
- \item if many MD trajectories are needed
- \item if the systems are too large for the application of QM methods
-\end{itemize}
-Physical and ML potentials thus enables us to extend the time and length scales of MD simulations
-beyond the realm of ab inito methods. 
-
-Feed-forward neural networks (FFNN) have been demonstrated to be useful for the construction of PESs because
-they are universal function approximators. There is no restriction in the accuracy that can be achieved when 
-constructing neural network potentials (NNP). Unlike physical potentials, they are not restricted by any \textit{ad hoc}
-functional form. NNPs offer a number of advantages for the construction of PESs:
-\begin{itemize}
- \item Energies can be fitted to very high accuracy, leaving only
- the underlying error of the reference data
- \item Evaluation of NNPs require much less CPU time than QM methods
- \item The NNP expression is unbiased and generally applicable to all types of bonding
-\end{itemize}
-Still, there are disadvantages one should be aware of:
-\begin{itemize}
- \item The evaluation of NNPs are notably slower compared to the use of classical force fields
- \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities
- \item NNPs are, for the time being, only applicable to systems containing only a few
- different chemical elements (but many atoms)
-\end{itemize}
-
-\section{High-dimensional NNPs}
-The use of a single FFNN to represent complicated systems containing many atoms of different types is not possible for several reasons.
-First of all, the deegrees of freedom (the number of weight parameters) will be very many, making the training and evaluation
-of the network slow. Secondly, the NN has a symmetry problem. It does not take into account that exchanging two or more atoms
-can lead to an energetically equivalent configuration. For example, exchanging the positions of both hydrogen atoms
-in a water molecule will not alter the configuration energy. However, noting that all weights have numerically different values,
-changing the order of the input coordinates to the NN will result in a different energy value. This problem can be solved
-by a different choice of input coordinates, discussed below. The third problem in using a single FFNN is that it is 
-only applicable to the system size that has been used during the training. If the NN has been trained with 5 inputs, 
-it can not be used for a system containing any other number of atoms. 
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[width = 100mm]{Figures/Theory/cutOffHighDimNN.jpeg}
-  \caption{}
-  \label{fig:cutOffNeighbours}
-  \end{center}
-\end{figure}
-A solution to all these problems is to construct the system energy $E_s$ as a sum of $N$ atomic energy contributions
-$E_i$, which are provided by a set of individual atomic NNs,
-\begin{equation}
- E_s = \sum_{i=1}^N E_i
-\end{equation}
-The atomic energies $E_i$ depend on the local chemical environment up to a cutoff radius $R_c$ as shown in figure
-\ref{fig:cutOffNeighbours} (STJÅLET FRA PAPER, MÅ LAGE EGEN?). 
-This is analogous to MD simulations with neighbour lists, thus making it possible to 
-obtain the energies and forces of an atom and all its neighbours simultaneously. The positions of the neighbouring atoms within 
-the cutoff sphere are described by a set of many-body symmetry functions discussed below. As the order of the summation does not 
-change the total energy $E_s$, the symmetry problem above is solved. Each chemical element have seperate types of
-NNs with their own architecture and weights, but for a given element all atomic NNs are equal. Such a system of NNs are also 
-applicable to different system sizes: To add an atom of a given type, we simply extend the set of NNs by another network
-identical to the other NNs of the same type, and if an atom is removed, we delete the respective NN. 
-\begin{itemize}
- \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
- of the problem, which allows to use NNs of tractable size
- \item The total energy is invariant with respect to the order of the atoms
- \item The NNP can be used for systems of different sizes
- \item We 
-\end{itemize}
-We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
-should be invariant with respect to these operations. 
-
-\subsection{Symmetry functions}
-To construct adequate symmetry functions, we need to have a cutoff function that defines the atomic environments. 
-One such function is \cite{ref9},
-\begin{equation}
- f_c(R_{ij}) = 
-\begin{cases}
-0.5 \cdot \left[\cos\left(\frac{\pi R_{ij}}{R_c}\right) + 1 \right], & R_{ij} \leq R_c \\
-0, & R_{ij} > R_c
-\end{cases}
-\label{cutoffFunction}
-\end{equation}
-which is the monotonically decreasing part of a cosine function on $R_{ij} \in [0,R_c]$, seen in \autoref{fig:cutoffFunction}. 
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[width = 0.9\linewidth]{Figures/Theory/cutoffFunction.pdf}
-  \caption{Plot of the cutoff function \eqref{cutoffFunction} applied in this thesis. 
-	   This function is used to define a chemical environment around a central atom:
-           only the atoms within the cutoff radius $R_c$ contribute to its energy. 
-           These are called neighbouring atoms. The closer a neighbouring atom is, the larger
-           the energy contribution, as is the case for most physical systems.}
-  \label{fig:cutoffFunction}
-  \end{center}
-\end{figure}
-This function have the desirable property that it decreases with increasing distance $R_{ij}$ between the central
-atom $i$ and its neighbour $j$. At the cutoff radius $R_c$, is has zero value and slope, which is important
-to avoid discontinuities when computing energies and forces. Atoms beyond the cutoff radius are not a part of the central
-atom's chemical environment and therfore do not contribute to its energy. 
-
-Several types of many-body symmetry functions can be
-constructed based on these cutoff functions. They can be divided into two classes: \textit{radial} symmetry functions, describing 
-the radial distribution of neighbours up to the cutoff radius, and \textit{angular} symmetry functions, specifying their
-angular arrangement. All symmetry functions depend on the positions of all the atoms inside the cutoff spheres. They make
-it possible to obtain a constant number of function values independent of the number of neighbours, which can change
-during MD simulations. 
-
-The most basic radial symmetry function is simply the sum of the cutoff functions for all the neighbours $j$ to 
-atom $i$,
-\begin{equation}
- G_i^1 = \sum_{j=1}^N f_c(R_{ij})
- \label{G1}
-\end{equation}
-We need a set of such functions with different cutoff radii to describe the radial arrangement of the neighbouring atoms. 
-A better alternative is to use a sum of products of Gaussians and the cutoff function,
-\begin{equation}
- G_i^2 = \sum_{j=1}^N \exp[-\eta(R_{ij}-R_s)^2] \cdot f_c(R_{ij})
- \label{G2}
-\end{equation}
-We now have two parameters that can be adjusted to probe different radii. The width parameter $\eta$ determines the 
-radial extension of the symmetry functions, while the shifting parameter $R_s$ displaces the Gaussians to improve
-the sensitivity of the symmetry functions at specific radii. A third option is 
-\begin{equation}
- G_i^3 = \sum_{j=1}^N \cos(\kappa R_{ij}) \cdot f_c(R_{ij})
- \label{G3}
-\end{equation}
-which are damped cosine functions with a period length adjusted by parameter $\kappa$. We will however not use 
-this function because of the existence of negative function values which can lead to atoms canceling each other's
-contribution to the sum. In \autoref{fig:radialSymmetriFunctions} we see the radial symmetry functions for several
-different parameters. It is clear that a set of such functions have a large flexibility when we tune the parameters
-in different ways. This is what makes them able to represent the radial distribution of neighbours around a central atom. 
-\begin{figure}[H] 
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/Theory/G1.pdf} 
-    \label{fig:radialSymmetriFunctions:a} 
-    \vspace{1ex}
-  \end{subfigure}%% 
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/Theory/G2_1.pdf} 
-    \label{fig:radialSymmetriFunctions:b} 
-    \vspace{1ex}
-  \end{subfigure} 
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/Theory/G2_2.pdf} 
-    \label{fig:radialSymmetriFunctions:c} 
-  \end{subfigure}%%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/Theory/G3.pdf} 
-    \label{fig:radialSymmetriFunctions:d} 
-  \end{subfigure} 
-  \caption{Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such 
-	   functions represents the radial distrubution of neighbours around a central atom placed at the origin.
-	   For $G^2$ and $G^3$ a cutoff $R_c = \SI{11.0}{\angstrom}$ has been used.}
-  \label{fig:radialSymmetriFunctions} 
-\end{figure}
-To obtain a suitable structural fingerprint of the atomic environments, we also need the angular distribution
-of neighbouring atoms. This can be achieved by using functions depending on $\theta_{ijk}$, which
-is the angle formed by the central atom $i$ and the two interatomic distances $R_{ij}$ and $R_{ik}$. 
-The potential is periodic with respect to this angle, so we can use the cosine of $\theta_{ijk}$ instead. 
-We thus define an angular symmetry function as a sum over all cosines with respect to any possible pair of 
-neighbours $j$ and $k$, multiplied by Gaussians of the three interatomic distances and the respective cutoff functions,
-\begin{align}
- G_i^4 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
- \exp(-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)) \cdot \\
- &f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})]
- \label{G4}
-\end{align}
-This function becomes zero if any of the interatomic distances is larger than $R_c$. The parameter $\eta$ takes here
-into account that the angular contribution depends on the atomic seperations. The angular arrangement can be 
-investigated by using different values for $\zeta$ while the normalization factor $2^{1-\zeta}$ ensures that the range of 
-values is independent of the choice of $\zeta$. The parameter $\lambda \in {-1,1}$ can be used to invert the shape of the 
-cosine function: for $\lambda = +1$ the maxima of the cosine terms are at $\theta_{ijk} = 0^\circ$, 
-while for $\lambda=-1$ they are located at $\theta_{ijk} = 180^\circ$. The cutoff function $R_{jk}$
-is included to ensure that only triplets where all three inter-atomic distances are within the cutoff radius. 
-Another function can be defined that has no constraint on $R_{jk}$,
-\begin{align}
-  G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
- \exp(-\eta (R_{ij}^2 + R_{ik}^2)) \cdot \\
- &f_c(R_{ij}) f_c(R_{ik})]
- \label{G5}
-\end{align}
-\eqref{G5} will generally have larger function values than \eqref{G4} because the lack of constraint on $R_{jk}$ results in 
-a larger number of non-zero terms in the summation. The angular part of $G^4$ and $G^5$ is identical, shown in 
-\autoref{fig:angularSymmetryFunctions} for different values of $\zeta$. 
-\begin{figure}[H]
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/Theory/G4G5angular1.pdf}
-    \subcaption{}
-    \label{fig:angularSymmetryFunctions:a} 
-  \end{subfigure}%% 
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{Figures/Theory/G4G5angular2.pdf} 
-    \subcaption{}
-    \label{fig:angularSymmetryFunctions:b} 
-  \end{subfigure} 
-  \caption{Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such 
-	   functions represents the angular distrubution of neighbours around a central atom placed at the origin.
-	   $\lambda = +1$ for \autoref{fig:angularSymmetryFunctions:a}, $\lambda=-1$ for \autoref{fig:angularSymmetryFunctions:b}.}
- \label{fig:angularSymmetryFunctions} 
-\end{figure}
-The parameter values $R_c, \eta, R_s, \zeta$ and $\lambda$ are not automatically optimized, like the weights. 
-Once a set of symmetry functions has been determined, they remain fixed during the training of the NN. They are therefore
-an integral part of the NN, and need to be evaluated together with the NN itself when applied in simulations. 
-The symmetry function set have to be customized for different systems, but in our experience the quality of the fit 
-is not very sensitive to the choice of parameters. An adequate set will shorten the convergence time, but it will not 
-necesseraly result in a lower RMSE. 
-However, it is important to use at least as many symmetry functions as there are degrees of freedom in the system.
-If this is not the case, the NN will recieve insufficient information and will not be able to fit the data properly. 
-
-\subsection{Symmetry functions and forces}
-To do MD simulations we need need the forces \eqref{forcePES}, i.e. the gradient of the PES. 
-NNs have as we have seen well-defined functional forms, and analytical derivatives are therefore readily available.
-The pair-force on the central atom $i$ from neighbour $j$ w.r.t som atomic coordinate $\alpha$ is
-\begin{equation}
- F_{ij,\alpha} = -\frac{\partial E}{\partial \alpha_{ij}} = \sum_{\mu=1}^{M}\frac{\partial E}{\partial G_\mu}
- \frac{\partial G_\mu}{\partial \alpha_{ij}}
- \label{pairForce}
-\end{equation}
-where $\alpha_{ij} = \alpha_i - \alpha_j = \alpha_j$ and $M$ is the number of symmetry functions, i.e. the number
-of inputs to the NN. As seen by the r.h.s of this equation, we need to apply the chain rule: The first term
-$\partial E/\partial G_\mu$ is the derivative of the output ($E$) w.r.t. symmetry function number $\mu$, the second
-term is the derivative of $G_\mu$ w.r.t. the atomic coordinate $\alpha$. The former is obtained with a slightly modified
-form of backpropagation.
-\begin{enumerate}
- \item Instead of backpropagating the error, we backpropagate the derivative of the output neuron's activation function
- \item The derivative is propagated all the way back to the input nodes. When training, the propagation
- stops at the weights of the first hidden layer. 
-\end{enumerate}
-This clarifies how a fully-connected feed-forward NN is built: To get the derivative of the output neuron
-w.r.t. the input neurons, we have to also compute the derivative of all the neurons and weights in-between because
-all nodes in each layer are connected to all nodes in the following layer. The term $\partial G_\mu/\partial \alpha_{ij}$
-depends only on the form of the symmetry functions. See appendix for derivatives of these. Since all symmetry functions
-$G_\mu$ depend on the atomic coordinates of all the neighbours, we have to sum over all the input nodes to get
-the total force from neighbour $j$ on central atom $i$. 
-
-The total force on atom $i$ is obtained by calculating \eqref{pairForce} for all neighbours and adding them,
-\begin{equation}
- F_{i,\alpha}^{TOT} = -\sum_{j=1}^N
- \sum_{\mu=1}^{M}\frac{\partial E}{\partial G_\mu}
- \frac{\partial G_\mu}{\partial \alpha_{ij}}
-\end{equation}
-where $N$ is the number of neighbours. TODO: THIS EXPRESSION HAS TO BE MODIFIED A BIT IF I INCLUDE MORE THAN ONE ATOM TYPE.
-THEN THE TOTAL ENERGY E WILL BE DIFFERENT DEPENDING ON WHICH ATOM TYPE EACH NEIGHBOUR IS AND SO ON...
-
-
-\section{TensorFlow}
+\chapter{TensorFlow}
 TensorFlow is an open source software library for numerical computation using data flow graphs (DFG). 
 A DFG describe mathematical computations with a directed graph of nodes and egdes. Nodes typically represent mathematical
 operations, while the graph edges describe the input/output relationship between nodes. In TensorFlow, these edges
@@ -1084,8 +1103,7 @@ input layer.
 
 Using this approach, we can aggregate statistics of these features at various locations. This is called pooling. 
 
-\part{Implementation and validation}
-
+\chapter{Validation}
 \section{Time usage}
 The workflow when training a NN and using it in MD is as follows: 
 \begin{enumerate}
@@ -1348,12 +1366,22 @@ will magnify for each time step, resulting in inaccurate statistical properties 
 Therefore it is a better idea to have the NN only output the total energy, and find the forces by analytically
 differentiating the NN for each time step. $\SI{4}{\angstrom}$
 
+\part{Results and discussion}
 
-\newpage 
-%\section{Appendix}
+\section{NN potential for Si}
+Construct an NN potential for Si that works in a certain temperature range (only solid, or liquid too?)
+Compute thermodynamic properties and things like radial distrubution function and compare both 
+with experiments and with results with Stillinger-Weber. 
+
+\section{NN potential for SiO2}
+Construct an NN potential for SiO2 that works in a certain temperature range (only solid, or liquid too?). 
+Can use various potentials as the black box, e.g. Vashishta or ReaxFF. 
+ReaxFF would be great, because then we would maybe get a speed-up. 
+
+
 \appendix
-\section{Appendix}
-\subsection{Symmetry functions derivatives} \label{app:appendixA1}
+\part{Appendix}
+\chapter{Symmetry functions derivatives} \label{app:appendixA1}
 We list here the derivatives of the symmetry functions used for training neural networks. These have to be known
 to compute forces for MD simulations. In some cases we only show the deriviative with respect to 
 $R = \sqrt{x^2 + y^2 + z^2}$. 
