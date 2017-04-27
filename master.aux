@@ -99,55 +99,58 @@
 \newlabel{forcePES2}{{4.10}{29}{Symmetry functions and forces}{equation.4.1.10}{}}
 \newlabel{forceAtomk}{{4.11}{29}{Symmetry functions and forces}{equation.4.1.11}{}}
 \newlabel{forceAtomkChainRule}{{4.12}{29}{Symmetry functions and forces}{equation.4.1.12}{}}
-\@writefile{toc}{\contentsline {part}{II\hspace  {1em}Implementation and validation}{31}{part.2}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}LAMMPS}{33}{chapter.5}}
+\newlabel{changeOfCoordinates}{{4.13}{30}{Symmetry functions and forces}{equation.4.1.13}{}}
+\newlabel{changeOfCoordsSymmetry1}{{4.17}{31}{Symmetry functions and forces}{equation.4.1.17}{}}
+\newlabel{changeOfCoordsSymmetry2}{{4.18}{31}{Symmetry functions and forces}{equation.4.1.18}{}}
+\@writefile{toc}{\contentsline {part}{II\hspace  {1em}Implementation and validation}{33}{part.2}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}LAMMPS}{35}{chapter.5}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Installing LAMMPS}{33}{subsection.5.0.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}LAMMPS input script}{34}{subsection.5.0.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Installing LAMMPS}{35}{subsection.5.0.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}LAMMPS input script}{36}{subsection.5.0.2}}
 \citation{ref11}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.3}LAMMPS structure}{38}{subsection.5.0.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.4}Extending LAMMPS}{38}{subsection.5.0.4}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}TensorFlow}{39}{chapter.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.3}LAMMPS structure}{40}{subsection.5.0.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.4}Extending LAMMPS}{40}{subsection.5.0.4}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}TensorFlow}{41}{chapter.6}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}Convolution}{39}{subsection.6.0.1}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Validation}{41}{chapter.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.0.1}Convolution}{41}{subsection.6.0.1}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Validation}{43}{chapter.7}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Time usage}{41}{section.7.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }}{42}{figure.caption.8}}
-\newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{7.1}{42}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }{figure.caption.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }}{43}{figure.caption.9}}
-\newlabel{fig:timeComparisonEvaluateNetwork2}{{7.2}{43}{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }{figure.caption.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Training Lennard-Jones potential}{43}{section.7.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }}{44}{figure.caption.10}}
-\newlabel{fig:errorLJTest}{{7.3}{44}{Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{45}{figure.caption.11}}
-\newlabel{fig:errorBackPropTest}{{7.4}{45}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.11}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Many-neighbour Lennard-Jones}{45}{subsection.7.2.1}}
-\newlabel{zoomedOut}{{7.5a}{46}{Zoomed out\relax }{figure.caption.12}{}}
-\newlabel{sub@zoomedOut}{{a}{46}{Zoomed out\relax }{figure.caption.12}{}}
-\newlabel{zoomedIn}{{7.5b}{46}{Zoomed in\relax }{figure.caption.12}{}}
-\newlabel{sub@zoomedIn}{{b}{46}{Zoomed in\relax }{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{46}{figure.caption.12}}
-\newlabel{fig:trainingManyNeighbourNN}{{7.5}{46}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{49}{figure.caption.13}}
-\newlabel{fig:errorManyNeighbourNN}{{7.6}{49}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.13}{}}
-\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Results and discussion}{51}{part.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.3}NN potential for Si}{53}{section.7.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.4}NN potential for SiO2}{53}{section.7.4}}
-\@writefile{toc}{\contentsline {part}{IV\hspace  {1em}Appendix}{55}{part.4}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{57}{appendix.A}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Time usage}{43}{section.7.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }}{44}{figure.caption.8}}
+\newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{7.1}{44}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }}{45}{figure.caption.9}}
+\newlabel{fig:timeComparisonEvaluateNetwork2}{{7.2}{45}{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Training Lennard-Jones potential}{45}{section.7.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }}{46}{figure.caption.10}}
+\newlabel{fig:errorLJTest}{{7.3}{46}{Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{47}{figure.caption.11}}
+\newlabel{fig:errorBackPropTest}{{7.4}{47}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Many-neighbour Lennard-Jones}{47}{subsection.7.2.1}}
+\newlabel{zoomedOut}{{7.5a}{48}{Zoomed out\relax }{figure.caption.12}{}}
+\newlabel{sub@zoomedOut}{{a}{48}{Zoomed out\relax }{figure.caption.12}{}}
+\newlabel{zoomedIn}{{7.5b}{48}{Zoomed in\relax }{figure.caption.12}{}}
+\newlabel{sub@zoomedIn}{{b}{48}{Zoomed in\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{48}{figure.caption.12}}
+\newlabel{fig:trainingManyNeighbourNN}{{7.5}{48}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{51}{figure.caption.13}}
+\newlabel{fig:errorManyNeighbourNN}{{7.6}{51}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Results and discussion}{53}{part.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}NN potential for Si}{55}{section.7.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}NN potential for SiO2}{55}{section.7.4}}
+\@writefile{toc}{\contentsline {part}{IV\hspace  {1em}Appendix}{57}{part.4}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{59}{appendix.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:appendixA1}{{A}{57}{Symmetry functions derivatives}{appendix.A}{}}
-\newlabel{cutOffFunctionDerivative}{{A.3}{57}{Symmetry functions derivatives}{equation.A.0.3}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.4}{57}{Symmetry functions derivatives}{equation.A.0.4}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.5}{57}{Symmetry functions derivatives}{equation.A.0.5}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.7}{57}{Symmetry functions derivatives}{equation.A.0.7}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.8}{58}{Symmetry functions derivatives}{equation.A.0.8}{}}
-\newlabel{G4Derivative}{{A.16}{58}{Symmetry functions derivatives}{equation.A.0.16}{}}
+\newlabel{app:appendixA1}{{A}{59}{Symmetry functions derivatives}{appendix.A}{}}
+\newlabel{cutOffFunctionDerivative}{{A.3}{59}{Symmetry functions derivatives}{equation.A.0.3}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.4}{59}{Symmetry functions derivatives}{equation.A.0.4}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.5}{59}{Symmetry functions derivatives}{equation.A.0.5}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.7}{59}{Symmetry functions derivatives}{equation.A.0.7}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.8}{60}{Symmetry functions derivatives}{equation.A.0.8}{}}
+\newlabel{G4Derivative}{{A.16}{60}{Symmetry functions derivatives}{equation.A.0.16}{}}
 \bibcite{ref1}{1}
 \bibcite{ref2}{2}
 \bibcite{ref3}{3}

@@ -547,7 +547,7 @@ identical to the other NNs of the same type, and if an atom is removed, we delet
 We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
 should be invariant with respect to these operations. 
 
-\subsection{Symmetry functions}
+\subsection{Symmetry functions} \label{sec:symmetryFunctions}
 To construct adequate symmetry functions, we need to have a cutoff function that defines the atomic environments. 
 One such function is \cite{ref9},
 \begin{equation}
@@ -723,35 +723,107 @@ where $M_i$ is the number of symmetry functions of atom $i$. In other words, we 
 of all the neighbours $i$ of atom $k$ and $k$ itself (IS THIS CORRECT???) Looking at Fiure (MAKE A FIGURE ILLUSTRATING
 THE SYMMETRY TRANSFORMATION OF THE CARTESIAN COORDINATES THAT IS SENT TO THE NN), we realize that the first term
 $\partial E_i\partial G_{i,s}$ is the derivative of the output of the atomic NN of atom $i$ with respect to the inputs,
-and is thus given by the architecture of the NN, including the values of the weights and biases.
-The derivatives of the output(s) of a neural network w.r.t. its inputs is defined as the gradient of the network. 
-We remember from  \ref{sec:backprop} that the backpropagatio
+i.e. the gradient of the NN. This is an analytical gradient
+which is given by the architecture of the NN, including the values of the weights and biases.
+We recall from \ref{sec:backprop} that the backpropagation algorithm calculates the derivatives of all neurons in a NN to obtain
+the amount of which each weight and bias should be adjusted during training. We can thus use a slightly modified version
+of this algorithm to compute the gradient of a NN,
 \begin{enumerate}
- \item Instead of backpropagating the error of the output neuron, 
- we backpropagate the derivative of the output neuron's activation function.
+ \item Instead of backpropagating the \textit{error} of the output neuron, 
+ we backpropagate the \textit{derivative} of the output neuron's activation function.
  \item The derivative is propagated all the way back to the input nodes. During training, the propagation
  stops at the weights connecting the input layer and the first hidden layer. 
 \end{enumerate}
-This procedure serves as a definition of the gradient of a neural network and also 
-clarifies how a fully-connected feed-forward NN is built: To get the derivative of the output neuron
+This procedure clarifies how a fully-connected feed-forward NN is built: To get the derivative of the output neuron
 w.r.t. the input neurons, we have to also compute the derivative of all the neurons in-between because
 all nodes in each layer are connected to all nodes in the following layer. 
 
-The second term $\partial G_{i,s}/\partial R_{k,\alpha}$ is given by the definition of the employed symmetry functions. 
-The derivatives of the Behler symmetry functions are listed in \ref{app:appendixA1}. Since all symmetry functions
-$G_\mu$ depend on the atomic coordinates of all the neighbours, we have to sum over all the input nodes to get
-the total force from neighbour $j$ on central atom $i$. 
+The second term $\partial G_{i,s}/\partial R_{k,\alpha}$ in \eqref{forceAtomkChainRule} is given by the 
+definition of the employed symmetry functions. 
+The derivatives of the Behler symmetry functions given in \autoref{sec:symmetryFunctions} are listed in \autoref{app:appendixA1}.
+WRITE ABOUT DIFFERENTIATION WITH SYMPY AND TENSORFLOW ETC. 
 
-The second term is the derivative of $G_{i,s}$ w.r.t. the atomic coordinate $\alpha$. 
-
-The total force on atom $i$ is obtained by calculating \eqref{pairForce} for all neighbours and adding them,
+In an MD simulation we only work with relative or inter-atomic coordinates and potentials. 
+The training of neural networks is also based on an atom-centered approach; the cartesian coordinates
+that is given as input to the symmetry functions are always atom-centered. This means that the atom
+in question is placed at the origin and the positions of all neighbouring atoms are measured relative to 
+the origin. Effectively, we are making a change of coordinates to the neighbours $\{j\}$ of the central atom $i$,
 \begin{equation}
- F_{i,\alpha}^{TOT} = -\sum_{j=1}^N
- \sum_{\mu=1}^{M}\frac{\partial E}{\partial G_\mu}
- \frac{\partial G_\mu}{\partial \alpha_{ij}}
+ \vec{r}_j \rightarrow \vec{r}_j - \vec{r}_i
+ \label{changeOfCoordinates}
 \end{equation}
-where $N$ is the number of neighbours. TODO: THIS EXPRESSION HAS TO BE MODIFIED A BIT IF I INCLUDE MORE THAN ONE ATOM TYPE.
-THEN THE TOTAL ENERGY E WILL BE DIFFERENT DEPENDING ON WHICH ATOM TYPE EACH NEIGHBOUR IS AND SO ON...
+This is in accordance with the Behler symmetry functions, which only operate with relative coordinates. 
+It is however not trivial how this affects the above equations for the forces, which are not written in 
+an atom-centered way. The process of obtaining the forces can be illustrated with an example system
+consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in Figure (LAG FIGUR!!). 
+We want to find the force on atom 1 in the $x$-direction. Atom 0 is outside the cutoff sphere of atom 1, 
+so according to \eqref{forceAtomk} the force is,
+\begin{equation}
+ F_{1,x} = \frac{\partial E_1}{\partial x_1} + \frac{\partial E_2}{\partial x_1}
+\end{equation}
+For simplicity, we assume that each atom only have two different symmetry functions describing their atomic environment;
+one $G_{i,0}^2$ function describing the radial arrangement of neighbours and one $G_{i,1}^4$ dealing with the angular distribution.
+Each atomic NN thus have two inputs and one output. 
+Since the three atoms are all of the same type, they will have identical NNs and symmetry vectors. We will therefore 
+denote the the two symmetry functions simply as $G^2$ and $G^4$. In the following we apply the notation
+$r_{ij} = |\vec{r}_j - \vec{r}_i|$. 
+The expressions for $E_1$ and $E_2$ then are,
+\begin{equation}
+ E_1 = \textrm{NN}\bigr[G^2(r_{10}) + G^4(r_{10},0,0)\bigr] = \textrm{NN}\bigr[G^2(r_{10})\bigr]
+\end{equation}
+where NN denotes the atomic neural network of the atoms. $G^4$ is zero because atom 1 only has one neighbour. Further, 
+\begin{equation}
+ E_2 = \textrm{NN}\bigr[G^2(r_{20}, r_{21}) + G^4(r_{20},r_{21},\theta_{021})\bigr]
+\end{equation}
+We note that atom 2 receives an energy contribution from both atom 0 and 1. 
+To compute the derivatives of these energies with respect to the $x$-coordinate of atom 1, we
+must take into account the change of coordinates \eqref{changeOfCoordinates}. We have that
+\begin{equation}
+ \frac{\partial G^n(x_{ij})}{\partial x_j} = \frac{\partial G^n(x_{ij})}{\partial x_{ij}}\frac{\partial x_{ij}}{\partial x_j}
+ = \frac{\partial G^n(x_{ij})}{\partial x_{ij}}\frac{\partial (x_j-x_i)}{\partial x_j} = 
+ \frac{\partial G^n(x_{ij})}{\partial x_{ij}}
+ \label{changeOfCoordsSymmetry1}
+\end{equation}
+and
+\begin{equation}
+ \frac{\partial G^n(x_{ij})}{\partial x_i} = \frac{\partial G^n(x_{ij})}{\partial x_{ij}}\frac{\partial (x_j-x_i)}{\partial x_i} =
+ -\frac{\partial G^n(x_{ij})}{\partial x_{ij}}
+ \label{changeOfCoordsSymmetry2}
+\end{equation}
+This symmetry enables us to calculate the derivatives above. Applying the chain rule we get,
+\begin{equation}
+ \frac{\partial E_1}{\partial x_1} = \frac{\partial \textrm{NN}}{\partial G^2(r_{10})}
+ \frac{\partial G^2(r_{10})}{\partial x_1} = 
+ -\frac{\partial \textrm{NN}}{\partial G^2(r_{10})}\frac{\partial G^2(r_{10})}{\partial x_{10}}
+\end{equation}
+where we have applied the above change of coordinates \eqref{changeOfCoordsSymmetry1}.
+Using \eqref{changeOfCoordsSymmetry2}, the derivative of $E_2$ can be calculated correspondingly,
+\begin{align}
+ \frac{\partial E_2}{\partial x_1} &= 
+ \frac{\partial \textrm{NN}}{\partial G^2(r_{20}, r_{21})}\frac{\partial G^2(r_{20}, r_{21})}{\partial x_1} + 
+ \frac{\partial \textrm{NN}}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_1} \\
+ &= \frac{\partial \textrm{NN}}{\partial G^2(r_{20}, r_{21})}\frac{\partial G^2(r_{20}, r_{21})}{\partial x_{21}} + 
+ \frac{\partial \textrm{NN}}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_{21}}
+\end{align}
+Based on these expressions we can do an observation that at first might seem strange. 
+From the definition of $G_2$ \eqref{G2} we see that the sum contains two terms
+in the case of atom 2, one for each pair interaction between atom 2 and its two neighbours. 
+The interaction term between atom 0 and 2 will 
+disappear when differentiated with respect to atom 1's coordinates, and is thus not included in the force on atom 1. 
+The sum in $G_4$ \eqref{G4} however, consists of only one term corresponding to the only unique triplet with atom 2
+as the central atom. This term is directly dependent on the coordinates of atom 0, which means that 
+an atom which is outside the cutoff sphere of atom 1 still contributes to the force. This is an artefact of many-body potentials
+like the NN potentials employed in this thesis: The force acting on an atom depends on the postions of the atoms as 
+far as $2R_c$ away because we differentiate the energies of all neighbouring atoms, which in turn depend on \textit{their}
+neighbours. 
+
+
+
+
+
+
+
+
 
 
 \part{Implementation and validation}
