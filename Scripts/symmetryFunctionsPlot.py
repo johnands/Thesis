@@ -34,7 +34,7 @@ def G4(Rij, Rik, Rjk, theta, width, cutoff, zeta, inversion):
            np.exp( -width*(Rij**2 + Rik**2 + Rjk**2) ) * \
            cutoffFunction(Rij, cutoff) * cutoffFunction(Rik, cutoff) * cutoffFunction(Rjk, cutoff, cut=True)
            
-def G4angular(theta, zeta, inversion):
+def G4G5angular(theta, zeta, inversion):
     
     return 2**(1-zeta) * (1 + inversion*np.cos(theta))**zeta
            
@@ -152,7 +152,7 @@ theta = np.linspace(0, 2*np.pi, 1000)
 inversion = 1.0
 legends = []
 for zeta in [1.0, 2.0, 4.0, 16.0, 64.0]:
-    functionValue = G4angular(theta, zeta, inversion)
+    functionValue = G4G5angular(theta, zeta, inversion)
     plt.plot(theta*180/np.pi, functionValue)
     legends.append(r'$\zeta = %d$' % zeta)
     plt.hold('on')
@@ -162,15 +162,15 @@ plt.xlabel(r'$\theta$')
 plt.ylabel(r'$G^4/G^5$ angular part')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
-#plt.show()
-plt.savefig('../Figures/Theory/G4G5angular1.pdf')
+plt.show()
+#plt.savefig('../Figures/Theory/G4G5angular1.pdf')
     
 plt.figure()    
     
 inversion = -1.0
 legends = []
 for zeta in [1.0, 2.0, 4.0, 16.0, 64.0]:
-    functionValue = G4angular(theta, zeta, inversion)
+    functionValue = G4G5angular(theta, zeta, inversion)
     plt.plot(theta*180/np.pi, functionValue)
     legends.append(r'$\zeta = %d$' % zeta)
     plt.hold('on')
@@ -180,8 +180,8 @@ plt.xlabel(r'$\theta$')
 plt.ylabel(r'$G^4/G^5$ angular part')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
-#plt.show()
-plt.savefig('../Figures/Theory/G4G5angular2.pdf')
+plt.show()
+#plt.savefig('../Figures/Theory/G4G5angular2.pdf')
 
 
 ##### G5 plot #####

@@ -813,9 +813,12 @@ disappear when differentiated with respect to atom 1's coordinates, and is thus 
 The sum in $G_4$ \eqref{G4} however, consists of only one term corresponding to the only unique triplet with atom 2
 as the central atom. This term is directly dependent on the coordinates of atom 0, which means that 
 an atom which is outside the cutoff sphere of atom 1 still contributes to the force. This is an artefact of many-body potentials
-like the NN potentials employed in this thesis: The force acting on an atom depends on the postions of the atoms as 
-far as $2R_c$ away because we differentiate the energies of all neighbouring atoms, which in turn depend on \textit{their}
-neighbours. 
+like the NN potentials employed in this thesis: The force acting on an atom $i$ depends on the positions of the atoms as 
+far as $2R_c$ away because neighbours $k$ of the neighbours $j$ of $i$ are included in the 
+energies $E_j$ that is differentiated. 
+
+This large effective range of atomic interactions is however not of great importance taking into account
+that the interaction strength falls rapidly with distance for most systems where Coulomb forces are not included. 
 
 
 
