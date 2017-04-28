@@ -5,8 +5,7 @@
 \usepackage{verbatim}	% \begin{comment}
 \usepackage{subcaption}
 \usepackage{siunitx}
-
-
+\usepackage[toc,page]{appendix}
 
 %\bibliography{references}
 
@@ -21,12 +20,6 @@
 \begin{abstract}
 This is an abstract text.
 \end{abstract}
-
-\begin{dedication}
-  To someone
-  \\\vspace{12pt}
-  This is a dedication to my cat.
-\end{dedication}
 
 \begin{acknowledgements}
   I acknowledge my acknowledgements.
@@ -158,13 +151,13 @@ It is supposed to mimic a biological nervous system by letting each neuron inter
 by sending signals between layers. The accumulated signals received by a neuron is used as input to its 
 \textit{activation function}, which is used to to send new signals to following layers. This function is supposed to mimic that 
 a biological neuron is activated if the input is above a certain threshold. We will here follow 
-Behler \cite{ref1} and Dragly \cite{ref2}.
+Behler \cite{Behler11general} and Dragly \cite{Dragly14}.
 
 There are many types of ANNs made for different purposes. The most widely used are feed-forward and recurrent ANNs. 
 The feedforward network was the first and arguably the most simple type of ANN. In this network the information or signals
 only move forward through the layers - from the input layer, through each successive hidden layer and finally to the output layer. 
 On the other hand, recurrent networks have cycles and loops, i.e. bi-directional data flow. Feed-forward neural networks, 
-also called Multilayer Perceptrons (MLP) were shown to be universal function approximators by K. Hornik et al. \cite{ref3} in 1989.
+also called Multilayer Perceptrons (MLP) were shown to be universal function approximators by K. Hornik et al. \cite{Hornik89} in 1989.
 We will use these networks to approximate the PES in thesis. 
 \begin{figure}[H]
 \begin{center}
@@ -173,7 +166,7 @@ We will use these networks to approximate the PES in thesis.
   \label{fig:NN}
   \end{center}
 \end{figure}
-An MLP networks is shown schematically in \autoref{fig:NN} (STOLEN FROM \cite{ref3}, EDIT TO ONE INPUT LATER). 
+An MLP networks is shown schematically in \autoref{fig:NN} (STOLEN FROM \cite{Behler11general}, EDIT TO ONE INPUT LATER). 
 
 This network maps input coordinates $G_i$ to a potential energy in the output layer via two hidden layers
 with an (arbitrary) number of hidden nodes. The hidden neurons have no physical meaning, but have the purpose
@@ -208,7 +201,7 @@ of an MPL with $n$ hidden layers is thus
 \end{equation}
 i.e. a nested sum of activation functions. A desired property of activation functions is to converge asymptotically
 to constant output values for large and small arguments, with a non-linear region in-between. The non-linearity enables
-the ANN to fit arbitrary functions \cite{ref3}. Common activation functions \cite{ref4} for 
+the ANN to fit arbitrary functions \cite{Hornik89}. Common activation functions \cite{Rojas96} for 
 function approximation are the sigmoid function
 \begin{equation}
  f(x) = \frac{1}{1 + e^{-x}}
@@ -230,7 +223,7 @@ Both these functions (Figure \ref{fig:activations}) have the desired properties 
 They are constant (1 or 0) for all values except a small interval around zero, where they have non-linear behaviour. 
 This keeps the outputs of the neurons from blowing up. The sigmoid are more bilogically plausible because 
 the output of inactive neurons are zero. Such activation function are called \textit{one-sided}. However,
-it has been shown \cite{ref5} that the hyperbolic tangent 
+it has been shown \cite{Karlik11} that the hyperbolic tangent 
 performs better than the sigmoid for multi-layer networks. Nevertheless, one should assess the problem 
 at hand when deciding what activation function to use; the performance can vary from problem to problem. 
 (VENTE MED Å DISKUTERE DETTE TIL JEG HAR SNAKKET OM BACKPROPAGATION OSV.)
@@ -240,10 +233,10 @@ In later years, the rectifier function (Figure \ref{fig:rectifier})
 \begin{equation}
  f(x) = \max(0,x)
 \end{equation}
-has become the most popular for deep neural networks \cite{ref6}. PLOT DENNE FUNKSJONEN.
+has become the most popular for deep neural networks \cite{LeCun15}. PLOT DENNE FUNKSJONEN.
 The two former functions are symmetrical around zero osv....
 It have been argued to be even more biologically plausible than the sigmoid and also perform better
-than the hyperbolic tangent for deep NNs. \cite{ref7}. 
+than the hyperbolic tangent for deep NNs. \cite{Glorot11}. 
 
 
 A linear activation function $f(x) = x$ is often used in the output layer to avoid any constraint in the range 
@@ -300,7 +293,7 @@ The corresponding expression for the biases is
 \begin{equation}
  \Delta b_i = \frac{\partial \Gamma}{\partial b_i}
 \end{equation}
-A common method to obtain these derivatives is backpropagation \cite{ref8}. 
+A common method to obtain these derivatives is backpropagation \cite{Rumelhart86}. 
 In backpropagation, the output of the NN is compared to the desired output, the error is then propagated backwards
 to adjust the weights. The method is essentially an implementation of the chain rule, and will allow us to calculate
 the partial derivatives of the cost with respect to all the weights, thereby obtaining the gradient of the network. 
@@ -457,7 +450,7 @@ The complete backpropagation algorithm including forward activation then looks a
 
 
 \chapter{Neural networks in molecular dynamics}
-Following \cite{ref9} and \cite{ref10}.
+Following \cite{Behler15} and \cite{Behler11symmetry}.
 All the dynamics of a molecular system is determined by the multidimensional potential-energy surface (PES), which
 in general is a real-valued function depending on all atomic coordinates in the system. Using the Born-Oppenheimer approximation
 (FORKLARE ELLER REFERERE), 
@@ -549,7 +542,7 @@ should be invariant with respect to these operations.
 
 \subsection{Symmetry functions} \label{sec:symmetryFunctions}
 To construct adequate symmetry functions, we need to have a cutoff function that defines the atomic environments. 
-One such function is \cite{ref9},
+One such function is \cite{Behler15},
 \begin{equation}
  f_c(R_{ij}) = 
 \begin{cases}
@@ -701,7 +694,7 @@ In the present case, the total energy $E$ of the system is defined as a sum over
 Further, we have applied a cutoff so that each atom only gets energy contributions from its atomic environment up 
 to a certain distance $R_c$.
 The force component $F_{k,\alpha}$, $\alpha = (x,y,z)$ acting on atom $k$ with respect to coordinate $R_{k,\alpha}$,
-can therefore be written
+can therefore be written \cite{Behler11symmetry}
 \begin{equation}
  F_{k,\alpha} = -\frac{\partial E}{\partial R_{k,\alpha}} = -\sum_{i=1}^N\frac{\partial E_i}{\partial R_{k,\alpha}}
  = -\sum_{i=1}^{N_k+1}\frac{\partial E_i}{\partial R_{k,\alpha}}
@@ -755,7 +748,16 @@ the origin. Effectively, we are making a change of coordinates to the neighbours
 This is in accordance with the Behler symmetry functions, which only operate with relative coordinates. 
 It is however not trivial how this affects the above equations for the forces, which are not written in 
 an atom-centered way. The process of obtaining the forces can be illustrated with an example system
-consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in Figure (LAG FIGUR!!). 
+consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{threeAtoms}.
+\begin{figure}[H]
+\begin{center}
+  \includegraphics[width = 0.9\linewidth]{Figures/Implementation/3atoms.pdf}
+  \caption{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to 
+	   take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type,
+	   they have identical atomic NNs and symmetry function sets.}
+  \label{fig:threeAtoms}
+  \end{center}
+\end{figure}
 We want to find the force on atom 1 in the $x$-direction. Atom 0 is outside the cutoff sphere of atom 1, 
 so according to \eqref{forceAtomk} the force is,
 \begin{equation}
@@ -1054,7 +1056,7 @@ with the velocity-Verlet algorithm by defualt.
 This is the integrator of choice for most MD
 applications due to its simplicity and 
 symplectic nature (REF TO SECTION). The 
-rRESPA integrator \cite{ref11} scheme is also available.
+rRESPA integrator \cite{Tuckerman92} scheme is also available.
 LAMMPS does however not integrate and update
 the positions and velocities of the particles
 if not explicitly told so. This is done with
@@ -1466,8 +1468,8 @@ Can use various potentials as the black box, e.g. Vashishta or ReaxFF.
 ReaxFF would be great, because then we would maybe get a speed-up. 
 
 
-\appendix
-\part{Appendix}
+\begin{appendices}
+
 \chapter{Symmetry functions derivatives} \label{app:appendixA1}
 We list here the derivatives of the symmetry functions used for training neural networks. These have to be known
 to compute forces for MD simulations. In some cases we only show the deriviative with respect to 
@@ -1669,19 +1671,7 @@ and
 \end{align}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+\end{appendices}
 
 
 
@@ -1689,64 +1679,70 @@ and
 
 \newpage
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{56}
 
-\bibitem{ref1}
- J. Behler
- \textit{Neural network potential-energy surfaces in chemistry: a tool for large-scale simulations}
- Phys. Chem. Chem. Phys., 2011, {\bf 13}, 17930-17955 (2011)
+\bibitem{Behler11general}
+ J. Behler.
+ ''Neural network potential-energy surfaces in chemistry: a tool for large-scale simulations''.
+ Phys. Chem. Chem. Phys. 13, 17930-17955 (2011). 
+ DOI: \href{http://dx.doi.org/10.1039/c1cp21668f}{10.1039/c1cp21668f}. 
  
-\bibitem{ref2}
- Dragly, Svenn Arne
- \textit{Bridging quantum mechanics and molecular dynamics with artificial neural networks}
- Thesis for the degree of Master of Science, University of Oslo (2014)
+\bibitem{Behler11symmetry}
+ J. Behler.
+ ''Atom-centered symmetry functions for constructing high-dimensional neural network potentials''.
+ The Journal of Chemical Physics 134, 074106 (2011). 
+ DOI: \href{http://dx.doi.org/10.1063/1.3553717}{10.1063/1.3553717}.
+ 
+\bibitem{Dragly14}
+ S. A. Dragly.
+ ''Bridging quantum mechanics and molecular dynamics with artificial neural networks''.
+ MA thesis, University of Oslo (2014). \\
+ URL: \href{https://www.duo.uio.no/handle/10852/41843}{https://www.duo.uio.no/handle/10852/41843}.
 
-\bibitem{ref3}
- K. Hornik, M. Stinchcombe and H. White
- \textit{Multilayer Feedforward Networks are Universal Approximators}
- Neural Networks {\bf 2}, 359 (1989).
+\bibitem{Hornik89}
+ K. Hornik, M. Stinchcombe and H. White.
+ ''Multilayer Feedforward Networks are Universal Approximators''.
+ Neural Networks 2, 359 (1989). 
+ DOI: \href{https://doi.org/10.1016/0893-6080(89)90020-8}{10.1016/0893-6080(89)90020-8}
  
-\bibitem{ref4}
+\bibitem{Rojas96}
  R. Rojas. 
- \textit{Neural Networks: A Systematic Introduction.}
+ \textit{Neural Networks: A Systematic Introduction}.
  Springer, 1996.
  
-\bibitem{ref5}
- B. Karlik and A. V. Olgac
- \textit{Performance Analysis of Various Activation Functions in Generalized MLP Architectures of Neural Networks.}
- IJAE {\bf 1} 111-122 (2011)
+\bibitem{Karlik11}
+ B. Karlik and A. V. Olgac.
+ ''Performance Analysis of Various Activation Functions in Generalized MLP Architectures of Neural Networks''.
+ IJAE 1, 111-122 (2011).
  
-\bibitem{ref6}
- Y. LeCun, Y. Bengio and G. Hinton
- \textit{Deep learning}
- Nature {\bf 521}, 436-444 (2015)
+\bibitem{LeCun15}
+ Y. LeCun, Y. Bengio and G. Hinton.
+ ''Deep learning''.
+ Nature 521, 436-444 (2015). 
+ DOI: \href{http://dx.doi.org/10.1038/nature14539}{10.1038/nature14539}
  
-\bibitem{ref7}
- X. Glorot, A. Bordes, Y. Bengio
- \textit{Deep Sparse Rectifier Neural Networks}
- JMLR {15}, 315-323 (2011)
+\bibitem{Glorot11}
+ X. Glorot, A. Bordes, Y. Bengio.
+ ''Deep Sparse Rectifier Neural Networks''.
+ JMLR 15, 315-323 (2011).
  
-\bibitem{ref8}
- D. E. Rumelhart, G. E. Hinton and R. J. Williams
- \textit{Learning representations by back-propagating errors}
- Nature {\bf 323}, 533-536 (1986)
+\bibitem{Rumelhart86}
+ D. E. Rumelhart, G. E. Hinton and R. J. Williams.
+ ''Learning representations by back-propagating errors''.
+ Nature 323, 533-536 (1986).
+ DOI: \href{http://dx.doi.org/10.1038/323533a0}{10.1038/323533a0}
  
-\bibitem{ref9}
- J. Behler
- \textit{Constructing High-Dimensional Neural Network Potentials: A Tutorial Review}
- International Journal of Quantum Chemistry {\bf 115}, 1032-1050 (2015)
+\bibitem{Behler15}
+ J. Behler.
+ ''Constructing High-Dimensional Neural Network Potentials: A Tutorial Review''.
+ International Journal of Quantum Chemistry 115, 1032-1050 (2015).
+ DOI: \href{http://dx.doi.org/10.1002/qua.24890}{10.1002/qua.24890}
  
-\bibitem{ref10}
- J. Behler
- \textit{Neural network potential-energy surfaces in chemistry: a tool for large-scale simulations}
- Phys. Chem. Chem. Phys. {\bf 13}, 17930–17955 (2011)
+\bibitem{Tuckerman92}
+ Tuckerman, Berne and Martyna .
+ ''Reversible multiscale molecular dynamics''.
+ J. Chem Phys, 97, 1990 (1992).
  
-\bibitem{ref11}
- Tuckerman, Berne and Martyna 
- \textit{Reversible multiscale molecular dynamics}
- J. Chem Phys, {\bf 97}, 1990 (1992).
- 
-
 \end{thebibliography}
 
 \end{document}
