@@ -17,14 +17,14 @@
 \contentsline {subsection}{\numberline {5.0.2}LAMMPS input script}{38}{subsection.5.0.2}
 \contentsline {subsection}{\numberline {5.0.3}LAMMPS structure}{42}{subsection.5.0.3}
 \contentsline {subsection}{\numberline {5.0.4}Extending LAMMPS}{42}{subsection.5.0.4}
-\contentsline {chapter}{\numberline {6}TensorFlow}{43}{chapter.6}
-\contentsline {subsection}{\numberline {6.0.1}Convolution}{43}{subsection.6.0.1}
-\contentsline {chapter}{\numberline {7}Validation}{45}{chapter.7}
-\contentsline {section}{\numberline {7.1}Time usage}{45}{section.7.1}
-\contentsline {section}{\numberline {7.2}Training Lennard-Jones potential}{47}{section.7.2}
-\contentsline {subsection}{\numberline {7.2.1}Many-neighbour Lennard-Jones}{49}{subsection.7.2.1}
-\contentsline {part}{III\hspace {1em}Results and discussion}{55}{part.3}
-\contentsline {section}{\numberline {7.3}NN potential for Si}{57}{section.7.3}
-\contentsline {section}{\numberline {7.4}NN potential for SiO2}{57}{section.7.4}
-\contentsline {chapter}{Appendices}{59}{section*.15}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{61}{Appendix.1.A}
+\contentsline {chapter}{\numberline {6}TensorFlow}{45}{chapter.6}
+\contentsline {subsection}{\numberline {6.0.1}Convolution}{45}{subsection.6.0.1}
+\contentsline {chapter}{\numberline {7}Validation}{47}{chapter.7}
+\contentsline {section}{\numberline {7.1}Time usage}{47}{section.7.1}
+\contentsline {section}{\numberline {7.2}Training Lennard-Jones potential}{49}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Many-neighbour Lennard-Jones}{51}{subsection.7.2.1}
+\contentsline {part}{III\hspace {1em}Results and discussion}{57}{part.3}
+\contentsline {section}{\numberline {7.3}NN potential for Si}{59}{section.7.3}
+\contentsline {section}{\numberline {7.4}NN potential for SiO2}{59}{section.7.4}
+\contentsline {chapter}{Appendices}{61}{section*.15}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{63}{Appendix.1.A}

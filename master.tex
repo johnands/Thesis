@@ -1,11 +1,22 @@
 \documentclass[twoside,english]{uiofysmaster}
 
 \usepackage{float}	% figurer der man plasserer dem
-%\usepackage{caption}
+\usepackage{caption}
 \usepackage{verbatim}	% \begin{comment}
 \usepackage{subcaption}
 \usepackage{siunitx}
 \usepackage[toc,page]{appendix}
+
+% define lammps code listing
+\lstset{
+  frame=single,
+  keywordstyle=\ttfamily,
+  keepspaces=true,
+  columns=fixed,
+  commentstyle=\color{black},
+  stringstyle=\color{black},
+  tabsize=4,
+  }
 
 %\bibliography{references}
 
@@ -836,12 +847,10 @@ that the interaction strength falls rapidly with distance for most systems where
 \part{Implementation and validation}
 
 \chapter{LAMMPS}
-(HAVE TO REFER TO THE MANUAL HERE OR SOMETHING.
-DOES THAT COUNT AS AN ORDINARY REFERENCE, 
-OR SHOULD IT BE A FOOTNOTE?)
+REFERENCE TO MANUAL - FOOTNOTE OF REFERNCE?
 LAMMPS (Large-scale Atomic/Molecular Massively Parallel Simulator)
 is a classical molecular dynamics simulation package 
-developed at Sandia National Laboratories. It is written
+developed at Sandia National Laboratories \cite{Plimpton95}. It is written
 in highly portable and extendable objected-oriented c++. 
 The package's functionality encompasses a wide variety of 
 potentials, atom types, integrators, thermostats and 
@@ -854,7 +863,9 @@ There exist several other molecular dynamics packages,
 like GROMACS, OpenMD, Aber and NAMD that could also
 have served the purpose of this thesis. We have chosen
 to work with LAMMPS because it is well documented, 
-easy to expand upon and because the Computational
+\footnote{\href{http://lammps.sandia.gov/doc/Manual.html}{http://lammps.sandia.gov/doc/Manual.html}}
+easy to expand upon \footnote{\href{http://lammps.sandia.gov/doc/Developer.pdf}{http://lammps.sandia.gov/doc/Developer.pdf}}
+and because the Computational
 physics group at UiO has a lot of experience with using
 it for molecular dynamics simulations. 
 In this section we will outline the basic usage of LAMMPS, including
@@ -864,8 +875,8 @@ to the package.
 
 \subsection{Installing LAMMPS}
 We have chosen to install LAMMPS by cloning
-the Github repository (LINK) and compile the source
-code by running $make$ in the source directory. 
+the Github repository and compile the source
+code by running \texttt{make} in the source directory. 
 To compile a serial version of the software, we simply run
 the command
 \begin{lstlisting}
@@ -878,14 +889,13 @@ MPI version is
 \end{lstlisting}
 New updates can be downloaded by setting an
 upstream git remote to point to the LAMMPS
-GitHub repository and doing a $git pull upstream master$.
-(TROR IKKE DETTE ER HELT RIKTIG). 
+GitHub repository and doing a \texttt{git fetch upstream}. 
 LAMMPS also have several additional packages that
 can be installed. This can be done by running
 \begin{lstlisting}
  make yes-<package name>
 \end{lstlisting}
-e.g. $manybody$ to install many-body potentials
+e.g. \texttt{manybody} to install many-body potentials
 like Stillinger-Weber and Vashishta. 
 
 \subsection{LAMMPS input script}
@@ -894,162 +904,163 @@ argument to the excecutable. This input script
 is read line by line and has its own syntax. 
 A good way to show the basics an input file
 is to look at a simple example of a script
-to measure diffusion in liquid argon 
-(CHANGE LC VALUE LATER):
+to measure diffusion in liquid argon,
 \begin{lstlisting}
-### initialization ###
-units 		metal		
-dimension 	3
-boundary	p p p		
-atom_style	atomic		
+# initialization
+units 			metal		
+dimension 		3
+boundary		p p p		
+atom_style		atomic		
 
-### create geometry and atoms ###
-lattice 	fcc 1.08506
-variable	Nc equal 10
-region 		myRegion block 0 ${Nc} 0 ${Nc} 0 ${Nc}
-create_box	1 myRegion
+# create geometry and atoms
+lattice 		fcc 1.08506
+variable		Nc equal 10
+region 			myRegion block 0 ${Nc} 0 ${Nc} 0 ${Nc}
+create_box		1 myRegion
 create_atoms	1 box
 
-### set mass and initial temperature ###
-mass		1 1.0
-variable	temp equal 300
-velocity	all create ${temp} 87287 mom yes 
+# set mass and initial temperature
+mass			1 1.0
+variable		temp equal 300
+velocity		all create ${temp} 87287 mom yes 
 
-### compute diffusion ###
-compute 	displacement all displace/atom
+# compute diffusion
+compute 		disp all displace/atom
 
-### potential ###
-pair_style	lj/cut 2.5
-pair_coeff	1 1 1.0 1.0 2.5
-neighbor	0.5 bin
+# potential 
+pair_style		lj/cut 2.5
+pair_coeff		1 1 1.0 1.0 2.5
+neighbor		0.5 bin
 neigh_modify	every 20 delay 0 check no
 
-### integration ###
-timestep 	0.01
-run_		style verlet
-fix 		integration all nve
+# integration
+timestep 		0.01
+run_style 		verlet
+fix 			integration all nve
 
-### output ###
-thermo		50
-thermo_style custom step temp density press ke pe etotal 
-thermo_modify norm yes
+# output
+thermo			50
+thermo_style 	custom step temp density press ke pe etotal 
+thermo_modify 	norm yes
 
-### run simulation ###
-run		5000
-dump diffusion all custom 100 diffusion*.dat c_displacement[4]
-run_		10000
+# run simulation
+run				5000
+dump 			diff all custom 100 diff*.dat c_disp[4]
+run				10000
 \end{lstlisting}
 We will in the following briefly explain what
 processes that are evoked in LAMMPS when the 
-above commands are read. 
+above commands are read. We start with the initialization of 
+three basic properties of the simulation: units, boundary conditions and particle types.
 \begin{lstlisting}
- units metal
+ units 		metal
 \end{lstlisting}
 This command defines the units that are used 
 in the simulation and the output. LAMMPS have eight
-different unit sets. The \textit{metal} set measures
-distance in Ångstrøm, energy in eV and temperature
-in Kelvin. The choice of units depend on the system
+different unit sets. The \texttt{metal} set measures
+distance in \AA{}ngstr\o{}m, energy in eV and temperature
+in Kelvin. The choice of units depends on the system
 that is investigated and the scale we are looking at.
 \begin{lstlisting}
- boundary p p p
+ boundary 	p p p
 \end{lstlisting}
 We want to measure diffusion in a bulk
 Argon liquid, thus we want to have periodic 
 boundary conditions in all three dimensions, 
-annotated by a $p$. LAMMPS can also handle stiff ($f$)
-and adaptive ($s$) non-periodic boundaries. Adaptive
+annotated by a \texttt{p}. LAMMPS can also handle stiff \texttt{f}
+and adaptive \texttt{s} non-periodic boundaries. Adaptive
 means that the position of the face is set so as to
 encompass the atoms in that dimension. 
 \begin{lstlisting}
  atom_style atomic
 \end{lstlisting}
 Different systems need different information
-to be stored for each atom. For style $atomic$, only
+to be stored for each atom. For style \texttt{atomic}, only
 the default attributes are associated with each atom, 
 namely coordinates, velocities, atom IDs and types. 
 This is sufficient for pair-interacting, non-bonded
 systems like Argon.
+
+\noindent Next, we create the geometry of the simulation domain.
 \begin{lstlisting}
 lattice 	fcc 5.720
 \end{lstlisting}
-Next, we set the initial configuration of the atoms. 
+This defines the initial configuration of the atoms. 
 Here, a ffc lattice with a lattice constant of
 5.720 is used. Other types of lattices based on
-cubic or squared unit cells are also available. 
+cubic or square unit cells are also available. 
 \begin{lstlisting}
 variable	Nc equal 10
 region 		simBox block 0 ${Nc} 0 ${Nc} 0 ${Nc}
 \end{lstlisting}
-The system's geometry is defined with the $region$
-command. The $block$ style is simply a 3-dimensional
+The system's geometry is defined with the \texttt{region}
+command. The \texttt{block} style is simply a 3-dimensional
 straight-faced box with a size of $N_c = 10$ unit
 cells in each dimension. We have labelled the 
-region $simBox$. 
+region \texttt{simBox}. 
 The number of unit cells
-$N_c$ is defined as a LAMMPS $variable$. Variables
+\texttt{N\_c} is defined as a LAMMPS \texttt{variable}. Variables
 can be referenced elsewhere in the script by
-writing $\${variable}$ to become part of a new input
+writing \texttt{\$\{variable\_name\}} to become part of a new input
 command like above. LAMMPS enables many styles
 of variables to be defined. 
 \begin{lstlisting}
-create_box	1 simBox
+create_box		1 simBox
 create_atoms	1 box
 \end{lstlisting}
-The command $create_box$ creates a simulation box 
+The command \texttt{create\_box} creates a simulation box 
 based on the specified region, in our case the 
-$block$ region defined above. The argument specifies
+\texttt{block} region defined above. The argument specifies
 the number of atom types that will be used in the
-simulation. Next, $create_atoms$ with the argument
-$box$ fills the simulation
+simulation. Next, \texttt{create\_atoms} with the argument
+\texttt{box} fills the simulation
 domain with atoms of type 1 on the lattice. 
 LAMMPS also lets you create a random collection
 of atoms or single atoms at specified coordinates.
 \begin{lstlisting}
-mass		1 28
-variable	temp equal 300
-velocity	all create ${temp} 87287 
+mass			1 28
+variable		temp equal 300
+velocity		all create ${temp} 87287 
 \end{lstlisting}
 We need to assign mass to the atoms. For metal units, 
 mass is measured in grams/mole. The atoms are also
 given an initial velocity that corresponds to 
 the given initial temperature. 
 \begin{lstlisting}
-### potential ###
-pair_style	lj/cut 2.5
-pair_coeff	1 1 1.0 1.0 2.5
+pair_style		lj/cut 2.5
+pair_coeff		1 1 1.0 1.0 2.5
 \end{lstlisting}
 The choice of potential is made with the 
-$pair_style$ command. We want to simulate
+\texttt{pair\_style} command. We want to simulate
 interactions using the cutoff Lennard-Jones potential
 with a global cutoff of 2.5 Å. The LJ parameters
-are set with $pair_coeff$, the way this is done
+are set with \texttt{pair\_coeff}, the way this is done
 depends on the potential being used. For our
 choice of potential the arguments is as follows:
-$atom-type-1 atom-type-2 sigma epsilon cutoff$. 
+\texttt{atom-type-1 atom-type-2 sigma epsilon cutoff}. 
 The parameters and cutoff can thus be set seperately 
 for each pair of atom types.
 \begin{lstlisting}
-neighbor	0.5 bin
+neighbor		0.5 bin
 neigh_modify	every 20 check yes
 \end{lstlisting}
 These commands sets parameters that affect the 
 building of neighbor lists. The first argument
-to $neighbor$ is the skin size, while the 
+to \texttt{neighbor} is the skin size, while the 
 second selects what algorithm is used
-to build the lists. The $bin$ style creates 
+to build the lists. The \texttt{bin} style creates 
 the lists by binning, which in most cases
 (including ours) is the fastest method. 
 Further, we can control how often the lists
-are built with $neigh_modify$. The above arguments
+are built with \texttt{neigh\_modify}. The above arguments
 specifies that new neighbour lists are built 
 every 20 steps, but every step LAMMPS checks
 if any atom has moved more than half the skin distance.
 If that is the case, new lists are built. 
 \begin{lstlisting}
-timestep 	0.01
-run_style 	verlet
-fix 		integration all nve
+timestep 		0.01
+run_style 		verlet
+fix 			integration all nve
 \end{lstlisting}
 LAMMPS integrates Newtons' equations of motion
 with the velocity-Verlet algorithm by defualt. 
@@ -1060,41 +1071,41 @@ rRESPA integrator \cite{Tuckerman92} scheme is also available.
 LAMMPS does however not integrate and update
 the positions and velocities of the particles
 if not explicitly told so. This is done with
-a $fix$, which is any operation that is applied to the 
+a \texttt{fix}, which is any operation that is applied to the 
 system during timestepping. The above fix 
 tells LAMMPS to integrate all atoms in the system 
 so that they follow trajectories consistent with 
 the microcanonical ensemble. 
 \begin{lstlisting}
-thermo		50
-thermo_style custom step temp press ke pe etotal 
-thermo_modify norm yes
+thermo			50
+thermo_style 	custom step temp press ke pe etotal 
+thermo_modify 	norm yes
 \end{lstlisting}
 We can control what thermodynamic properties 
-to calculate and output with $thermo_style$, while 
-$thermo$ decides how often they should be computed. 
+to calculate and output with \texttt{thermo\_style}, while 
+\texttt{thermo} decides how often they should be computed. 
 We want to output the time step, temperature, 
 pressure, kinetic energy, potential energy and total
 energy. Also, we want to normalize the extensive
 quantities (the energies) by the number of atoms. 
 \begin{lstlisting}
- compute displacement all displace/atom
- dump diffusion all custom 100 diffusion*.dat c_displacement[4]
+ compute 		disp all displace/atom
+ dump 			diff all custom 100 diff*.dat c_disp[4]
 \end{lstlisting}
 To measure diffusion in the 
 Argon liquid, we need to calculate the net
 displacement of all atoms. This can be done with a 
-$compute$, which defines a computation that is 
+\texttt{compute}, which defines a computation that is 
 performed on a group of atoms, in this case all atoms.
-The $displace/atom$ compute calculates the current
+The \texttt{displace/atom} compute calculates the current
 displacement of each atom from its original
 coordinates, including all effects due to atoms
 passing through periodic boundaries.
 For the compute to actually be performed, it needs
-to be evoked by other LAMMPS commands, like $dump$, 
+to be evoked by other LAMMPS commands, like \texttt{dump}, 
 which writes a snapshot of atom quantities to one 
 or more files every N timesteps. Computes are 
-referenced via the following notation $c_ID$, where
+referenced via the following notation \texttt{c\_ID}, where
 ID is the ID of the compute. 
 \begin{lstlisting}
 run		5000
@@ -1105,9 +1116,9 @@ after one another. This comes in handy if we want
 to thermalize the system before measuring diffusion.
 This can be achieved by writing the following commands:
 \begin{lstlisting}
- run 5000
- dump diffusion all custom 100 diffusion*.dat c_displacement[4]
- run 10000
+ run 	5000
+ dump 	diff all custom 100 diff*.dat c_disp[4]
+ run 	10000
 \end{lstlisting}
 When parsing the second run command, LAMMPS will
 continue the dynamics while computing eventual
@@ -1120,7 +1131,7 @@ on a simple input script. Now we move on to
 how class hierarchy of LAMMPS is structured. 
 
 \subsection{LAMMPS structure}
-LAMMPS is written in C++ in an object-oriented
+LAMMPS is written in \texttt{C++} in an object-oriented
 fashion. The class hierarchy is shown schematically
 in figure (MAKE MY OWN FIGURE IN INKSCAPE). 
 The blue classes are the core classes, these
@@ -1134,29 +1145,65 @@ corresponding file name in the source directory.
 For instance, the cutoff Lennard-Jones potential
 used in our input script is a subclass of Pair,
 and is evoked by the command
-$pair\_style lj/cut$ and the source file is named
-$pair\_lj\_cut$. 
+\texttt{pair\_style lj/cut} and the source file is named
+\texttt{pair\_lj\_cut}. 
 
 We will not go into detail about the functionality
-and communication of these classes. The class
-that is the most relevant for this work is the Pair class, 
-as we have implemented our own NN potential pair\_style. 
+and communication of these classes. The one
+that is the most relevant for this work is the \texttt{Pair} class. 
+This is the parent class of non-bonded or pair-wise potentials, which
+in LAMMPS includes many-body potentials like Stillinger-Weber and 
+the Tersoff 3-body potential. The NN potential in this thesis falls 
+under this category, and thus inherits from \texttt{Pair}. 
 In the following section we will describe how 
-LAMMPS can be extended with a new pair potential
-through example. 
+LAMMPS can be extended with such a new \texttt{pair\_style}.
 
 \subsection{Extending LAMMPS}
-To extend LAMMPS with a new potential, we 
-simply add a new *.cpp and *.h file to the 
+To extend LAMMPS with a new component, we 
+simply add a new \texttt{*.cpp} and \texttt{*.h} file to the 
 source directory and re-compile. The new class
 will (in theory) work with all other LAMMPS 
 classes without breaking any functionality. 
 A good strategy is to start with an existing potential
 source file that is somewhat similar to the one 
 we want to make, instead of programming from scratch.
-We aim to construct a many-body potential, and 
+We aim to construct a many-body non-bonded potential, and 
 have chosen to base our implementation on the 
-Stillinger-Weber potential file, pair\_sw.cpp and -.h.
+Stillinger-Weber potential file, \texttt{pair\_sw.cpp}.
+
+The new potential class is added to LAMMPS with the following function call in the header file,
+\begin{lstlisting}[language=c++]
+ PairStyle(nn/manybody,PairNNManyBody)
+\end{lstlisting}
+The first argument is the name the potential will have in the input script, while 
+the second is the name of the class. 
+To use our new NN potential in a simulation we simply write,
+\begin{lstlisting}
+ pair_style 	nn/manybody
+\end{lstlisting}
+in the input script. This command evokes two functions that need to be implemnted: \texttt{settings}
+and \texttt{init\_style}. The former assures that no additional arguments are provided to 
+\texttt{pair\_style} (I SHOULD MAYBE CHANGE THIS TO PROVIDE GLOBAL CUTOFF LATER???), while the latter
+decides what kind of neighbour lists that LAMMPS should operate with. Our NN potential needs 
+full neighbour lists to be able to compute three-body terms, something which applies to all many-body potentials. 
+
+The parent class \texttt{Pair} has three \textit{pure virtual member functions}, i.e. functions that is required
+to be implemented by a derived class: \texttt{compute}, \texttt{coeff} and the aforementioned \texttt{settings}. 
+The \texttt{compute} method is where the forces and energies are calculated. This function is called
+once each time step by the Verlet algorithm and the resulting forces are used to integrate Newton's equations
+of motion. The coefficients of the employed potential are set in \texttt{coeff}, which in the case of a NN potential
+is the weights and biases. These are read from file, and based on information on the architecture of the NN and 
+choice of activation function, the network is reconstructed as a set of Armadillo matrices and 
+vectors. This is achieved with the input script command,
+\begin{lstlisting}
+ pair_coeff		* * <path-to-saved-NN> <cutoff> 
+\end{lstlisting}
+where the wildcard asterisks signify that the coefficients should be given to all pairs of atom types. 
+THIS IS ONLY VALID FOR ONE ATOM TYPE. WRITE ABOUT MORE THAN ONE TYPE LATER.  
+
+
+
+
 
 \chapter{TensorFlow}
 TensorFlow is an open source software library for numerical computation using data flow graphs (DFG). 
@@ -1741,7 +1788,13 @@ and
 \bibitem{Tuckerman92}
  Tuckerman, Berne and Martyna .
  ''Reversible multiscale molecular dynamics''.
- J. Chem Phys, 97, 1990 (1992).
+ J. Chem Phys 97, 1990 (1992).
+ 
+\bibitem{Plimpton95}
+ S. Plimpton. 
+ ''Fast Parallel Algorithms for Short-Range Molecular Dynamics''.
+ Journal of Computational Physics 117, 1-19 (1995). 
+ DOI: \href{https://doi.org/10.1006/jcph.1995.1039}{10.1006/jcph.1995.1039}. 
  
 \end{thebibliography}
 
