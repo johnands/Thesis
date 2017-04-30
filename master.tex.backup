@@ -760,7 +760,7 @@ This is in accordance with the Behler symmetry functions, which only operate wit
 It is however not trivial how this affects the above equations for the forces, which are not written in 
 an atom-centered way. The process of obtaining the forces can be illustrated with an example system
 consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{threeAtoms}.
-\begin{figure}[H]
+\begin{comment}\begin{figure}[H]
 \begin{center}
   \includegraphics[width = 0.9\linewidth]{Figures/Implementation/3atoms.pdf}
   \caption{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to 
@@ -768,7 +768,7 @@ consisting of three atoms of the same element with positions $\vec{r}_i$ where $
 	   they have identical atomic NNs and symmetry function sets.}
   \label{fig:threeAtoms}
   \end{center}
-\end{figure}
+\end{figure}\end{comment}
 We want to find the force on atom 1 in the $x$-direction. Atom 0 is outside the cutoff sphere of atom 1, 
 so according to \eqref{forceAtomk} the force is,
 \begin{equation}
@@ -1185,12 +1185,12 @@ in the input script. This command evokes two functions that need to be implemnte
 and \texttt{init\_style}. The former assures that no additional arguments are provided to 
 \texttt{pair\_style} (I SHOULD MAYBE CHANGE THIS TO PROVIDE GLOBAL CUTOFF LATER???), while the latter
 decides what kind of neighbour lists that LAMMPS should operate with. Our NN potential needs 
-full neighbour lists to be able to compute three-body terms, 
+full neighbour lists to be able to compute three-body terms, something which applies to all many-body potentials. 
 
 The parent class \texttt{Pair} has three \textit{pure virtual member functions}, i.e. functions that is required
-to be implemented by a derived class: \texttt{compute}, \texttt{coeff} and \texttt{settings}. 
+to be implemented by a derived class: \texttt{compute}, \texttt{coeff} and the aforementioned \texttt{settings}. 
 The \texttt{compute} method is where the forces and energies are calculated. This function is called
-once each time step by the Verlet algortithm and the resulting forces are used to integrate Newton's equations
+once each time step by the Verlet algorithm and the resulting forces are used to integrate Newton's equations
 of motion. The coefficients of the employed potential are set in \texttt{coeff}, which in the case of a NN potential
 is the weights and biases. These are read from file, and based on information on the architecture of the NN and 
 choice of activation function, the network is reconstructed as a set of Armadillo matrices and 
@@ -1199,23 +1199,52 @@ vectors. This is achieved with the input script command,
  pair_coeff		* * <path-to-saved-NN> <cutoff> 
 \end{lstlisting}
 where the wildcard asterisks signify that the coefficients should be given to all pairs of atom types. 
-THIS IS ONLY VALID FOR ONE ATOM TYPE. WRITE ABOUT MORE THAN ONE TYPE LATER. 
-The \texttt{settings} function is evoked by the \texttt{pair\_style} command, and its only task for our potential
-is to control that the there are no additional arguments given to the \texttt{pair\_style} command. 
+THIS IS ONLY VALID FOR ONE ATOM TYPE. WRITE ABOUT MORE THAN ONE TYPE LATER. ALSO WRITE ABOUT
+HOW THE ENERGIES AND FORCES ARE CALCULATED WHEN I HAVE TWO ATOM TYPES
+UP AND RUNNING.
 
 
 
 
 
 \chapter{TensorFlow}
-TensorFlow is an open source software library for numerical computation using data flow graphs (DFG). 
-A DFG describe mathematical computations with a directed graph of nodes and egdes. Nodes typically represent mathematical
-operations, while the graph edges describe the input/output relationship between nodes. In TensorFlow, these edges
-carry dynamically-sized tensors, i.e. there is a flow of tensors between nodes in the graph. 
+TensorFlow \cite{Abadi15} is an open source software library 
+developed by Google 
+for numerical computation using data flow graphs (DFG). 
+A DFG is a graphical representation of how data is
+advanced through a system, including what kind of information is input
+to and output from the system and where data is stored.
+The data flow is represented as a directed graph
+with a number of \textit{nodes} that is connected by
+\textit{edges}. In TensorFlow, nodes represent
+mathematical operations, while the edges represent
+the multidimensional data arrays (tensors) 
+communicated between them.
 
-We train a neural network by introducing different variables at the nodes. We want to minimize the cross-entropy (error)
-with respect to these variables. The derivatives of the output w.r.t. these are calculated using bacpropagation. These derivatives
-are then used to minimize the cross-entropy using the gradient descent method or other optimization algorithms. 
+A simple example of a DFG is displayed in Figure (LAGE
+EN FIGUR BASERT PÅ EKSEMPLET 
+http://web.cecs.pdx.edu/~mperkows/temp/JULY/data-flow-graph.pdf
+, which is a visualization of the flow of data
+for the (real) solutions 
+\begin{align}
+ x_1 &= \frac{-b + \sqrt{b^2 - 4ac}}{2a} \\
+ x_2 &= \frac{-b - \sqrt{b^2 - 4ac}}{2a}
+ \label{quadraticEquationSolution}
+\end{align}
+of a quadratic equation
+\begin{equation}
+ ax^2 + bx + c = 0
+\end{equation}
+We observe that each node (circles)
+contain the mathematical operations needed to compute
+\eqref{quadraticEquationSolution}, while the arrows
+(edges) show what data each node recieve and where
+the output is sent. 
+
+
+
+
+
 
 TensorFlow uses ReLU neurons, i.e. the activation function is
 \begin{equation}
@@ -1797,6 +1826,21 @@ and
  ''Fast Parallel Algorithms for Short-Range Molecular Dynamics''.
  Journal of Computational Physics 117, 1-19 (1995). 
  DOI: \href{https://doi.org/10.1006/jcph.1995.1039}{10.1006/jcph.1995.1039}. 
+ 
+\bibitem{Abadi15}
+ M. Abadi, A. Agarwal, P. Barham, E. Brevdo,
+ Z. Chen, C. Citro, G. S. Corrado, A. Davis,
+ J. Dean, M. Devin, S. Ghemawat, I. Goodfellow,
+ A. Harp, G. Irving, M. Isard, R. Jozefowicz, Y. Jia,
+ L. Kaiser, M. Kudlur, J. Levenberg, D. Mané, M. Schuster,
+ R. Monga, S. Moore, D. Murray, C. Olah, J. Shlens,
+ B. Steiner, I. Sutskever, K. Talwar, P. Tucker,
+ V. Vanhoucke, V. Vasudevan, F. Viégas,
+ O. Vinyals, P. Warden, M. Wattenberg, M. Wicke,
+ Y. Yu and X. Zheng.
+ ''TensorFlow: Large-scale machine learning on heterogeneous systems''
+ Preliminary White Paper (2015). 
+ Software available from tensorflow.org.
  
 \end{thebibliography}
 
