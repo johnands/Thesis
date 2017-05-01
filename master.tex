@@ -1158,7 +1158,7 @@ under this category, and thus inherits from \texttt{Pair}.
 In the following section we will describe how 
 LAMMPS can be extended with such a new \texttt{pair\_style}.
 
-\subsection{Extending LAMMPS}
+\subsection{Extending LAMMPS} \label{sec:extendingLammps}
 To extend LAMMPS with a new component, we 
 simply add a new \texttt{*.cpp} and \texttt{*.h} file to the 
 source directory and re-compile. The new class
@@ -1247,36 +1247,104 @@ TensorFlow was originally developed by
 the Google Brain Team \footnote{\href
 {https://research.google.com/teams/brain/}{https://research.google.com/teams/brain/}}
 with the purpose of conducting machine learning and 
-deep neural networks research, but the software is also
-applicable in a wide variety of other domains
-as well (which ones?). 
+deep neural networks research, but is 
+applicable in other domains as well, e.g. for
+solving partial differential equations. 
+The package incorporates
+a wide variety of machine learning algorithms, including
+convolutional neural networks and recurrent neural networks.
+A computation expressed using TensorFlow can 
+be executed on a wide variety of devices and systems, 
+from mobile phones to large-scale distributed systems
+and GPUs. 
 
-SAY SOMETHING ABOUT WHAT THIS CHAPTER CONSIST OF
+In this chapter we will go through a simple 
+example on how to build a computational graph 
+with TensorFlow, and how to train a
+feed-forward neural network. But first, a few
+tips on how to install the software. 
 
-SECTION ON BASICS OF CONSTRUCTING A GRAPH
-WITH EXAMPLE SCRIPT
+\section{Installing TensorFlow}
+The easiest way to install TensorFlow on Ubuntu
+\footnote{\href{https://www.tensorflow.org/install/install\_linux}
+{https://www.tensorflow.org/install/installlinux}}
+(CHANGE LINK, IT IS WRONG BECAUSE OF UNDERSCORE...)
+is to use pip, \footnote{\href{https://pip.pypa.io/en/stable/}
+{https://pip.pypa.io/en/stable/}}
+a package management system for software written in 
+Python. Pip can be installed with the 
+command
+\begin{lstlisting}[language=bash]
+ $ sudo apt-get install python-pip python-dev
+\end{lstlisting}
+TensorFlow can be installed with or without GPU 
+support. The GPU version requires a system with
+ CUDA-enabled NVIDIA GPUs
+\footnote{\href{https://developer.nvidia.com/cuda-gpus}
+{https://developer.nvidia.com/cuda-gpus}}. 
+We have used the CPU version for the
+development of our code, which is installed
+with the command
+\begin{lstlisting}[language=bash]
+ $ pip install tensorflow
+\end{lstlisting}
+A simple
+\begin{lstlisting}[language=bash]
+ $ python -c "import tensorflow"
+\end{lstlisting}
+will test if the installation was succesful. 
 
-TENSORBOARD VISUALIZATON
+\section{TensorFlow basic usage}
+TensorFlow relies on highly-optimized
+\texttt{C++} for its computations, but offers
+APIs \footnote{\href{https://www.tensorflow.org/api_docs/}
+{https://www.tensorflow.org/api\_docs/}}
+in both \texttt{Python},
+\texttt{C++} and a few other languages. 
+The \texttt{Python} API is at present the most
+complete, the easiest to use and the best documented.
+We have therefore chosen to use \texttt{Python}
+to train neural networks. For a discussion
+on ways to import a trained NN to \texttt{C++} see
+\autoref{sec:extendingLammps}
+and \autoref{sec:timeUsage}. 
 
-DIFFERENT FEATURES OF TENSORFLOW
+\subsection{Hello world}
+As already mentioned, a TensorFlow computation
+is described by a graph which consists of nodes
+that communicate with multi-dimensional arrays along
+interconnected edges. Each node has zero or more
+outputs, and represents the instantation
+of an \textit{operation}. Each operation
+occurs within a so-called \textit{session}. 
+A \texttt{Hello world!} program can be written as
+\begin{lstlisting}[language=python]
+import tensorflow as tf
+
+hello = tf.constant('Hello world!')
+sess = tf.Session()
+print sess.run(hello)
+# --> Hello world!
+\end{lstlisting}
+This simple example outlines the general
+workflow for building a TensorFlow graph,
+\begin{enumerate}
+ \item Declare nodes (operations)
+ \item Initiate a session
+ \item Run operations within session
+\end{enumerate}
+The only operation in the above example
+is the built-in TF constant that holds the 
+\texttt{Hello world!} string, and the 
+corresponding DFG only consists of one node. 
+In more involved examples, visualizing 
+the DFG can be useful for finding out how 
+the script works. This is done with the 
+included TF visualization tool TensorBoard.
+
+\subsection{Visualizing graphs with TensorBoard}
 
 
-
-
-
-TensorFlow uses ReLU neurons, i.e. the activation function is
-\begin{equation}
- f(x) = \max(0,x)
-\end{equation}
-where $x$ is the input to the neuron. This is also known as a ramp function, or a rectifier (in analogy to half-wave
-rectification in electrical engineering). 
-The above function has lately been argued to be more biologically plausible (REFERENCE)
-than the widely used sigmoid function and hyperbolic tangent. A smooth approximation to the rectifier is the analytic function
-\begin{equation}
- f(x) = \ln(1 + e^x)
-\end{equation}
-which is called the softplus function. Using this kind of activation function prevents «dead neurons».
-In practice we give initialize the neurons with a sligthly positive initial bias. 
 
 \subsection{Convolution}
 ANNs are supposed to mimic biological systems. We know that neurons in the visual cortex of animals have
@@ -1289,7 +1357,8 @@ input layer.
 Using this approach, we can aggregate statistics of these features at various locations. This is called pooling. 
 
 \chapter{Validation}
-\section{Time usage}
+
+\section{Time usage} \label{sec:timeUsage}
 The workflow when training a NN and using it in MD is as follows: 
 \begin{enumerate}
  \item Generate training data
