@@ -6,9 +6,21 @@
 \usepackage{subcaption}
 \usepackage{siunitx}
 \usepackage[toc,page]{appendix}
+\usepackage{minted}
+\usepackage{xcolor}
+
+\definecolor{box}{RGB}{218, 218, 218}
+
+\setminted
+{
+ frame=single, 
+ fontsize=\footnotesize, 
+ bgcolor=box,
+}
 
 % define lammps code listing
-\lstset{
+\lstdefinestyle{lammps}
+{
   frame=single,
   keywordstyle=\ttfamily,
   keepspaces=true,
@@ -16,7 +28,13 @@
   commentstyle=\color{black},
   stringstyle=\color{black},
   tabsize=4,
-  }
+}
+
+\lstset%
+{%
+ morekeywords={as},% 
+ basicstyle=\footnotesize%
+}%
 
 %\bibliography{references}
 
@@ -156,7 +174,7 @@ Some of the most common tasks are:
 In this thesis we will use machine learning to do regression, i.e. to find the PES of interacting molecules.
 One approach to machine learning regression is artificial neural networks. 
 
-\section{Artificial Neural Networks}
+\section{Artificial Neural Networks} \label{sec:ANN}
 An Artificial Neural Network (ANN) consists of layers of connected nodes, or neurons. 
 It is supposed to mimic a biological nervous system by letting each neuron interact with other neurons
 by sending signals between layers. The accumulated signals received by a neuron is used as input to its 
@@ -260,6 +278,16 @@ As shown in \eqref{completeNN}, the NN consists of several nested terms of the f
 \end{equation}
 where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
 can be shifted up and down or left and right, change slope or be rescaled, thus making the NN more flexible.
+
+\subsection{Convolution}
+ANNs are supposed to mimic biological systems. We know that neurons in the visual cortex of animals have
+localized receptive fields, i.e. they respond only to stimuli in a certain location of the visual field. 
+These regions are overlapping and covers the entire visual field. This can be exploited in ANNs by making the hidden layers
+only connect to a small contigous region of the input layer. This also speeds up computations. These are called
+locally connected networks, unlike fully connected networks, where all the hidden layers are connected to the complete
+input layer. 
+
+Using this approach, we can aggregate statistics of these features at various locations. This is called pooling. 
 
 \section{Training}
 The ability of the NN to represent a function accurately depends on the values of the weights. 
@@ -879,12 +907,12 @@ the Github repository and compile the source
 code by running \texttt{make} in the source directory. 
 To compile a serial version of the software, we simply run
 the command
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
  make serial
 \end{lstlisting}
 while the corresponding command for the parallel
 MPI version is
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
  make mpi
 \end{lstlisting}
 New updates can be downloaded by setting an
@@ -892,7 +920,7 @@ upstream git remote to point to the LAMMPS
 GitHub repository and doing a \texttt{git fetch upstream}. 
 LAMMPS also have several additional packages that
 can be installed. This can be done by running
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
  make yes-<package name>
 \end{lstlisting}
 e.g. \texttt{manybody} to install many-body potentials
@@ -905,7 +933,7 @@ is read line by line and has its own syntax.
 A good way to show the basics an input file
 is to look at a simple example of a script
 to measure diffusion in liquid argon,
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 # initialization
 units 			metal		
 dimension 		3
@@ -952,7 +980,7 @@ We will in the following briefly explain what
 processes that are evoked in LAMMPS when the 
 above commands are read. We start with the initialization of 
 three basic properties of the simulation: units, boundary conditions and particle types.
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  units 		metal
 \end{lstlisting}
 This command defines the units that are used 
@@ -961,7 +989,7 @@ different unit sets. The \texttt{metal} set measures
 distance in \AA{}ngstr\o{}m, energy in eV and temperature
 in Kelvin. The choice of units depends on the system
 that is investigated and the scale we are looking at.
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  boundary 	p p p
 \end{lstlisting}
 We want to measure diffusion in a bulk
@@ -971,7 +999,7 @@ annotated by a \texttt{p}. LAMMPS can also handle stiff \texttt{f}
 and adaptive \texttt{s} non-periodic boundaries. Adaptive
 means that the position of the face is set so as to
 encompass the atoms in that dimension. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  atom_style atomic
 \end{lstlisting}
 Different systems need different information
@@ -982,14 +1010,14 @@ This is sufficient for pair-interacting, non-bonded
 systems like Argon.
 
 \noindent Next, we create the geometry of the simulation domain.
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 lattice 	fcc 5.720
 \end{lstlisting}
 This defines the initial configuration of the atoms. 
 Here, a ffc lattice with a lattice constant of
 5.720 is used. Other types of lattices based on
 cubic or square unit cells are also available. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 variable	Nc equal 10
 region 		simBox block 0 ${Nc} 0 ${Nc} 0 ${Nc}
 \end{lstlisting}
@@ -1004,7 +1032,7 @@ can be referenced elsewhere in the script by
 writing \texttt{\$\{variable\_name\}} to become part of a new input
 command like above. LAMMPS enables many styles
 of variables to be defined. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 create_box		1 simBox
 create_atoms	1 box
 \end{lstlisting}
@@ -1017,7 +1045,7 @@ simulation. Next, \texttt{create\_atoms} with the argument
 domain with atoms of type 1 on the lattice. 
 LAMMPS also lets you create a random collection
 of atoms or single atoms at specified coordinates.
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 mass			1 28
 variable		temp equal 300
 velocity		all create ${temp} 87287 
@@ -1026,7 +1054,7 @@ We need to assign mass to the atoms. For metal units,
 mass is measured in grams/mole. The atoms are also
 given an initial velocity that corresponds to 
 the given initial temperature. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 pair_style		lj/cut 2.5
 pair_coeff		1 1 1.0 1.0 2.5
 \end{lstlisting}
@@ -1040,7 +1068,7 @@ choice of potential the arguments is as follows:
 \texttt{atom-type-1 atom-type-2 sigma epsilon cutoff}. 
 The parameters and cutoff can thus be set seperately 
 for each pair of atom types.
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 neighbor		0.5 bin
 neigh_modify	every 20 check yes
 \end{lstlisting}
@@ -1057,7 +1085,7 @@ specifies that new neighbour lists are built
 every 20 steps, but every step LAMMPS checks
 if any atom has moved more than half the skin distance.
 If that is the case, new lists are built. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 timestep 		0.01
 run_style 		verlet
 fix 			integration all nve
@@ -1076,7 +1104,7 @@ system during timestepping. The above fix
 tells LAMMPS to integrate all atoms in the system 
 so that they follow trajectories consistent with 
 the microcanonical ensemble. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 thermo			50
 thermo_style 	custom step temp press ke pe etotal 
 thermo_modify 	norm yes
@@ -1088,7 +1116,7 @@ We want to output the time step, temperature,
 pressure, kinetic energy, potential energy and total
 energy. Also, we want to normalize the extensive
 quantities (the energies) by the number of atoms. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  compute 		disp all displace/atom
  dump 			diff all custom 100 diff*.dat c_disp[4]
 \end{lstlisting}
@@ -1107,7 +1135,7 @@ which writes a snapshot of atom quantities to one
 or more files every N timesteps. Computes are 
 referenced via the following notation \texttt{c\_ID}, where
 ID is the ID of the compute. 
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
 run		5000
 \end{lstlisting}
 Lastly, we run the simulation for 5000 timesteps. 
@@ -1115,7 +1143,7 @@ LAMMPS allowes several run commands to be issued
 after one another. This comes in handy if we want
 to thermalize the system before measuring diffusion.
 This can be achieved by writing the following commands:
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  run 	5000
  dump 	diff all custom 100 diff*.dat c_disp[4]
  run 	10000
@@ -1178,7 +1206,7 @@ The new potential class is added to LAMMPS with the following function call in t
 The first argument is the name the potential will have in the input script, while 
 the second is the name of the class. 
 To use our new NN potential in a simulation we simply write,
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  pair_style 	nn/manybody
 \end{lstlisting}
 in the input script. This command evokes two functions that need to be implemnted: \texttt{settings}
@@ -1195,7 +1223,7 @@ of motion. The coefficients of the employed potential are set in \texttt{coeff},
 is the weights and biases. These are read from file, and based on information on the architecture of the NN and 
 choice of activation function, the network is reconstructed as a set of Armadillo matrices and 
 vectors. This is achieved with the input script command,
-\begin{lstlisting}
+\begin{lstlisting}[style=lammps]
  pair_coeff		* * <path-to-saved-NN> <cutoff> 
 \end{lstlisting}
 where the wildcard asterisks signify that the coefficients should be given to all pairs of atom types. 
@@ -1341,20 +1369,114 @@ In more involved examples, visualizing
 the DFG can be useful for finding out how 
 the script works. This is done with the 
 included TF visualization tool TensorBoard.
+We will now look at how to construct a neural network with TF and
+visualize the corresponding DFG. 
 
-\subsection{Visualizing graphs with TensorBoard}
+\subsection{Creating a neural network}
+In \autoref{sec:ANN} we saw how an artifical neural network could be written as a nested sum 
+of activation functions \eqref{completeNN} where the weights connecting layer $l-1$ and $l$ were represented as
+a matrix $W_l$, while the biases of layer $l$ were represented as a vector $\vec{b}_l$. The input vector $\vec{x}$ to 
+the neurons in layer $l$, also called the \textit{preactivation}, can then be written
+\begin{equation}
+ \vec{x}_l = W_l \vec{y}_{l-1}  + \vec{b}_l
+ \label{preActivationLayer}
+\end{equation}
+where $\vec{y}$ is the output vector of layer $l-1$. The activations of layer $l$ is thus
+\begin{equation}
+ \vec{y}_l = f(\vec{x})
+ \label{activationLayer}
+\end{equation}
+where $f$ is the chosen activation function. This demonstrates that a NN can be constructed 
+as a set of matrix-vector multiplications and additions which are input to a chosen activation function. 
+We now want to construct a NN with 3 inputs neurons, one hidden layer with 10 neurons and 1 output neuron. 
+We use the sigmoid \eqref{sigmoidActivationFunction} activation function for the hidden layer, while 
+the output layer have the linear activation function (REF).
+This can be achieved with the following \texttt{python} script,
+\lstinputlisting[language=Python]{Scripts/TensorFlow/networkExample.py}
+There are several aspects of the TensorFlow \texttt{python} API to comment on here. 
+We observe that the input layer is declared as a TF \texttt{placeholder}. This is a special
+type of TF tensor that is not initialized with any values, but is rather fed with data on its execution.
+Specifying the first component of its shape as \texttt{None} signifies that we can supply an arbitrary 
+number of data points at the same time.
+These properties enables the same NN to be evaluated for different data vectors of varying size on-the-fly during training, 
+explained in more detail below. 
+
+The weights and biases are declared as TF \texttt{Variables}. These are the trainable parameters 
+of the computational graph, and are normally constructed as random numbers. In the present case,
+the weights are normally distributed numbers while the biases are all set to the same value 0.1. 
+We note that the shapes of the weight matrices and bias vectors depend on the number of nodes in each layer.
+If $n_l$ stands for the number of neurons in layer $l$, we have in general that the weight matrix connecting
+layer $l-1$ and $l$ is of shape $n_{l-1} \times n_l$, while the bias vector of layer $l$ has $n_l$ number of elements. 
+
+The activations (outputs) of each layer are calculated according to \eqref{preActivationLayer} and \eqref{activationLayer}. 
+Together with the input \texttt{placeholder}, these are of type \texttt{tf.Tensor}, i.e. nodes in the computational 
+graph. 
+
+\subsection{Visualizing the graph}
+We can use TensorBoard to visualize the DFG of the above script. The DFG for the present example is quite
+simple, but for more involved models it quickly becomes difficult to keep track of all the different components. 
+A convenient tool to order and group the DFG is \textit{name scoping}. Both \texttt{Tensors} and \texttt{Variables} can 
+be name scoped and TensorBoard uses this information to define a hierarchy of the nodes in the graph. 
+An example of name scoping is
+\begin{lstlisting}[language=python]
+ with tf.name_scope('layer1'):
+    W1 = tf.Variable( tf.random_normal([inputs,nodes]), name='weights')
+    b1 = tf.Variable( tf.constant(0.1, shape=[nodes]), name='biases')
+\end{lstlisting}
+which results in the following names,
+\begin{itemize}
+ \item \texttt{layer1/weights}
+ \item \texttt{layer1/biases}
+\end{itemize}
+Additionally, TensorBoard will group the two variables together under \texttt{layer1}. 
+To save the graph to file we have to start a TF session. The following script 
+deploys name scoping, initiates a session and writes the DFG to file,
+%\lstinputlisting[language=python]{Scripts/TensorFlow/tensorBoardExample.py}
+\begin{lstlisting}[language=Python]
+ import tensorflow as tf
+
+# NN parameters
+inputs = 3
+nodes = 10
+outputs = 1
+
+with tf.name_scope('inputLayer'):
+    inputData = tf.placeholder(tf.float32, [None,inputs], name='inputData')
+
+with tf.name_scope('layer1'):
+    
+    W1 = tf.Variable( tf.random_normal([inputs,nodes]), name='weights' )
+    b1 = tf.Variable( tf.constant(0.1, shape=[nodes]), name='biases' )
+ 
+    preAct1 = tf.add( tf.matmul(inputData, W1), b1, name='preActivation' ) 
+    act1 = tf.nn.sigmoid(preAct1, name='activation')
+
+with tf.name_scope('outputLayer'):
+    
+    W2 = tf.Variable( tf.random_normal([nodes,outputs]), name='weights' )
+    b2 = tf.Variable( tf.constant(0.1, shape=[outputs]), name='biases' )
+
+    preActOutput = tf.add( tf.matmul(act1, W2), b2, name='preActivation' ) 
+    actOutput = tf.identity(preActOutput, name='activation')
+
+# start session
+with tf.Session() as sess:
+    
+    # initialize variables
+    sess.run( tf.global_variables_initializer() )
+    
+    # write summaries
+    tf.summary.FileWriter('Summaries', sess.graph)
+\end{lstlisting}
+
+The line 
+\begin{lstlisting}[language=Python]
+ sess.run( tf.global_variables_initializer() )
+\end{lstlisting}
+is necessery for the values of the variables to be assigned to the variables themselves. 
+In contrast to constants, variables 
 
 
-
-\subsection{Convolution}
-ANNs are supposed to mimic biological systems. We know that neurons in the visual cortex of animals have
-localized receptive fields, i.e. they respond only to stimuli in a certain location of the visual field. 
-These regions are overlapping and covers the entire visual field. This can be exploited in ANNs by making the hidden layers
-only connect to a small contigous region of the input layer. This also speeds up computations. These are called
-locally connected networks, unlike fully connected networks, where all the hidden layers are connected to the complete
-input layer. 
-
-Using this approach, we can aggregate statistics of these features at various locations. This is called pooling. 
 
 \chapter{Validation}
 
