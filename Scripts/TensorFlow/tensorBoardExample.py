@@ -23,12 +23,15 @@ with tf.name_scope('outputLayer'):
 
     preActOutput = tf.add( tf.matmul(act1, W2), b2, name='preActivation' ) 
     actOutput = tf.identity(preActOutput, name='activation')
+    
+# initialization node
+initOperation = tf.global_variables_initializer()
 
 # start session
 with tf.Session() as sess:
     
-    # initialize variables
-    sess.run( tf.global_variables_initializer() )
+    # initialize all variables
+    sess.run(initOperation)
     
     # write summaries
     tf.summary.FileWriter('Summaries', sess.graph)

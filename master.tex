@@ -1431,50 +1431,34 @@ which results in the following names,
 Additionally, TensorBoard will group the two variables together under \texttt{layer1}. 
 To save the graph to file we have to start a TF session. The following script 
 deploys name scoping, initiates a session and writes the DFG to file,
-%\lstinputlisting[language=python]{Scripts/TensorFlow/tensorBoardExample.py}
+\lstinputlisting[language=python]{Scripts/TensorFlow/tensorBoardExample.py}
+There are two new TF function calls to comment on in this script. First, we have the line
 \begin{lstlisting}[language=Python]
- import tensorflow as tf
-
-# NN parameters
-inputs = 3
-nodes = 10
-outputs = 1
-
-with tf.name_scope('inputLayer'):
-    inputData = tf.placeholder(tf.float32, [None,inputs], name='inputData')
-
-with tf.name_scope('layer1'):
-    
-    W1 = tf.Variable( tf.random_normal([inputs,nodes]), name='weights' )
-    b1 = tf.Variable( tf.constant(0.1, shape=[nodes]), name='biases' )
- 
-    preAct1 = tf.add( tf.matmul(inputData, W1), b1, name='preActivation' ) 
-    act1 = tf.nn.sigmoid(preAct1, name='activation')
-
-with tf.name_scope('outputLayer'):
-    
-    W2 = tf.Variable( tf.random_normal([nodes,outputs]), name='weights' )
-    b2 = tf.Variable( tf.constant(0.1, shape=[outputs]), name='biases' )
-
-    preActOutput = tf.add( tf.matmul(act1, W2), b2, name='preActivation' ) 
-    actOutput = tf.identity(preActOutput, name='activation')
-
-# start session
-with tf.Session() as sess:
-    
-    # initialize variables
-    sess.run( tf.global_variables_initializer() )
-    
-    # write summaries
-    tf.summary.FileWriter('Summaries', sess.graph)
+ initOperation = tf.global_variables_initializer()
 \end{lstlisting}
+Constants are initalized when we call \texttt{tf.constant}, and their value can never change. 
+By contrast, variables need to be initialized using a seperate operation within a session. 
+The function \texttt{tf.global\_variables\_initializer} adds such an operation to the graph, which initializes
+all global variables when run with \texttt{sess.run(initOperation)}. 
 
-The line 
-\begin{lstlisting}[language=Python]
- sess.run( tf.global_variables_initializer() )
-\end{lstlisting}
-is necessery for the values of the variables to be assigned to the variables themselves. 
-In contrast to constants, variables 
+Secondly, the graph is written to file for visualization with the function \texttt{tf.summary.FileWriter}. 
+The first argument is the location of the files, while the second is the graph that is launched in the
+present session. 
+
+The resulting graph is displayed in \autoref{fig:graphExample}. 
+By default, only the top of the hierarchy defined by name scoping is shown. In our case, this
+is the three NN layers. In this figure, the output layer is expanded to reveal all the nodes in this scope. 
+The nodes are marked as ellipses, while the rectangles are namespaces defining another level in the hierarchy, 
+each containing more nodes. 
+\footnote{Each TF variable and constant are actually made up of several nodes, including \textit{assign} and 
+\textit{read} operations. See TF API for more information.}
+\begin{figure}[H]
+\centering
+  \includegraphics[width=\linewidth]{Figures/Implementation/tensorBoardExample.pdf}
+  \caption{} 
+  \label{fig:graphExample}
+\end{figure}
+
 
 
 
@@ -1899,7 +1883,7 @@ and
  \frac{\partial G_i^4}{\partial x_{ik}} = &\frac{x_{ik}}{r_{ik}} \biggr(-\frac{\cos\theta}{r_{ik}^2}K
  F_2F_3 - 2\eta F_1F_2F_3 \, + \, \\
  &F_1F_2M(r_{ik})f_c(r_{ij})f_c(r_{jk})\frac{1}{r_{ik}}\biggr) + \, \\
- &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}} + x_{jk}\Bigr(F_1F_2M(r_{jk})f_c(r_{ij})f_c(r_{ik}) + 2\eta F_1F_2F_3\Bigr)\frac{1}{r_{jk}}
+ &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}} + x_{jk}\Bigr(F_1F_2M(r_{jk})f_c(r_{ij})f_c(r_{ik}) - 2\eta F_1F_2F_3\Bigr)\frac{1}{r_{jk}}
 \end{align}
 The derivative of $G_i^5$ \eqref{G5} is found in a similar way,
 \begin{equation}
