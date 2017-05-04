@@ -25,12 +25,12 @@
 \contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{45}{subsection.6.2.2}
 \contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{47}{subsection.6.2.3}
 \contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{50}{subsection.6.2.4}
-\contentsline {chapter}{\numberline {7}Validation}{51}{chapter.7}
-\contentsline {section}{\numberline {7.1}Time usage}{51}{section.7.1}
-\contentsline {section}{\numberline {7.2}Training Lennard-Jones potential}{53}{section.7.2}
-\contentsline {subsection}{\numberline {7.2.1}Many-neighbour Lennard-Jones}{55}{subsection.7.2.1}
-\contentsline {part}{III\hspace {1em}Results and discussion}{61}{part.3}
-\contentsline {section}{\numberline {7.3}NN potential for Si}{63}{section.7.3}
-\contentsline {section}{\numberline {7.4}NN potential for SiO2}{63}{section.7.4}
-\contentsline {chapter}{Appendices}{65}{section*.15}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{67}{Appendix.1.A}
+\contentsline {chapter}{\numberline {7}Validation}{55}{chapter.7}
+\contentsline {section}{\numberline {7.1}Time usage}{55}{section.7.1}
+\contentsline {section}{\numberline {7.2}Training Lennard-Jones potential}{57}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Many-neighbour Lennard-Jones}{59}{subsection.7.2.1}
+\contentsline {part}{III\hspace {1em}Results and discussion}{65}{part.3}
+\contentsline {section}{\numberline {7.3}NN potential for Si}{67}{section.7.3}
+\contentsline {section}{\numberline {7.4}NN potential for SiO2}{67}{section.7.4}
+\contentsline {chapter}{Appendices}{69}{section*.16}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{71}{Appendix.1.A}

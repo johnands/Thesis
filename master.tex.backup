@@ -1431,7 +1431,7 @@ which results in the following names,
 Additionally, TensorBoard will group the two variables together under \texttt{layer1}. 
 To save the graph to file we have to start a TF session. The following script 
 deploys name scoping, initiates a session and writes the DFG to file,
-\lstinputlisting[language=python]{Scripts/TensorFlow/tensorBoardExample.py}
+\lstinputlisting[language=python]{Scripts/TensorFlow/tensorBoardExample.py}\label{lst:tensorBoardExample}
 There are two new TF function calls to comment on in this script. First, we have the line
 \begin{lstlisting}[language=Python]
  initOperation = tf.global_variables_initializer()
@@ -1483,7 +1483,48 @@ while the target values are the atomic energies of these configurations.
 
 A number of gradient descent-based optimizers are implemented in TensorFlow, including
 vanilla gradient descent, Momentum \cite{Qian99}, Adagrad \cite{Duchi11}, Adadelta \cite{Zeiler12} and Adam \cite{Kingma14}.
-(SHOULD REFERENCE TO SECTION ALSO LATER). 
+To add an Adam optimizer operation to the graph, we simply write
+\begin{lstlisting}[language=Python]
+optimizer = tf.train.AdamOptimizer()
+trainStep = optimizer.minimize(trainCost)
+\end{lstlisting}
+To sum up, we have added the following to the script in the previous section (now with name scoping),
+\begin{lstlisting}[language=Python]
+outputData = tf.placeholder(tf.float32, [None,outputs], name='outputData')
+
+# cost function
+with tf.name_scope('cost'):
+    error = tf.subtract(actOutput, outputData, name='deviation')
+    trainCost = tf.nn.l2_loss( error, name='L2norm')
+
+# optimizer
+with tf.name_scope('optimizer'):
+    optimizer = tf.train.AdamOptimizer(learning_rate=0.001, name='Adam')
+    trainStep = optimizer.minimize(trainCost, name='trainStep')
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+  \includegraphics[width=\linewidth]{Figures/Implementation/tensorBoardTraining.pdf}
+  \caption{Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one 
+	   hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces
+	   containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes
+	   this error is included in the graph. The optimizer namespace is expanded to display its contents:
+	   \texttt{gradients} computes the gradient of all nodes in the graph, \texttt{trainStep} implements
+	   the algorithm for updating the NN parameters, while \texttt{beta1\_power} and \texttt{beta2\_power}
+	   are the parameters of the Adam optimizer algorithm.}
+  \label{fig:tensorBoardTraining}
+\end{figure}
+The resultant graph can be seen in \autoref{fig:tensorBoardTraining}. 
+The optimizer namespace is expanded to display its contents. 
+We observe that the optimizer is connected directly to all other parts of the graph, enabling it
+to compute the derivative of the cost function with respect to all the weights and biases. This task is
+performed by the \texttt{gradients} operation, that in turn sends the total gradient to \texttt{trainStep}, 
+which implements the Adam algorithm for updating the NN parameters. 
+
+We are now ready to launch this graph in a training session,
+\begin{lstlisting}[language=Python]
+ dd
+\end{lstlisting}
 
 
 
