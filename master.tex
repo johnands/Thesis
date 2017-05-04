@@ -1236,7 +1236,7 @@ UP AND RUNNING.
 
 
 \chapter{TensorFlow}
-TensorFlow \cite{Abadi15} is an open source software library 
+TensorFlow \cite{Abadi15} \cite{Abadi16} is an open source software library 
 developed by Google 
 for numerical computation using data flow graphs (DFG). 
 A DFG is a graphical representation of how data is
@@ -1448,16 +1448,47 @@ present session.
 The resulting graph is displayed in \autoref{fig:graphExample}. 
 By default, only the top of the hierarchy defined by name scoping is shown. In our case, this
 is the three NN layers. In this figure, the output layer is expanded to reveal all the nodes in this scope. 
-The nodes are marked as ellipses, while the rectangles are namespaces defining another level in the hierarchy, 
-each containing more nodes. 
+The nodes are marked by ellipses, while the rectangles are namespaces defining another level in the hierarchy, 
+each containing more nodes. The edges show how the nodes are connected. 
 \footnote{Each TF variable and constant are actually made up of several nodes, including \textit{assign} and 
 \textit{read} operations. See TF API for more information.}
 \begin{figure}[H]
 \centering
   \includegraphics[width=\linewidth]{Figures/Implementation/tensorBoardExample.pdf}
-  \caption{} 
+  \caption{Example of a computational graph in TensorBoard of a NN consisting of an input layer, one 
+	   hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces
+	   containing several nodes.} 
   \label{fig:graphExample}
 \end{figure}
+Next, we will demonstrate how to train a NN with TensorFlow. 
+
+\subsection{Training a NN with TensorFlow}
+To train the NN described in the previous section, we need two additional components:
+a cost function and an optimizer. The cost function expresses the error of the NN fit, while
+the optimizer employs an algorithm to minimize this error. The most widely used cost function
+for regression with NNs is the L2 norm \eqref{quadraticCostFunction}, which is available as a 
+built-in function in TF, \texttt{tf.nn.l2\_loss}. To compute the error, we need to supply known 
+target values that is fed into a new \texttt{placeholder},
+\begin{lstlisting}[language=Python]
+ outputData = tf.placeholder(tf.float32, [None,outputs], name='outputData')
+\end{lstlisting}
+The cost function is now defined as
+\begin{lstlisting}[language=Python]
+ trainCost = tf.nn.l2_loss( tf.subtract(actOutput, outputData), name='cost')
+\end{lstlisting}
+This adds an operation to the graph that calculates the L2 norm of the error between the NN prediction \texttt{actOutput}
+on the training data 
+and the known target values \texttt{outputData}. In this work, the training data is configurations of atoms, 
+while the target values are the atomic energies of these configurations. 
+
+A number of gradient descent-based optimizers are implemented in TensorFlow, including
+vanilla gradient descent, Momentum \cite{Qian99}, Adagrad \cite{Duchi11}, Adadelta \cite{Zeiler12} and Adam \cite{Kingma14}.
+To add an Adam optimizer operation to the graph, we simply write
+\begin{lstlisting}[language=Python]
+optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
+trainStep = optimizer.minimize(trainCost)
+\end{lstlisting}
+
 
 
 
@@ -1955,25 +1986,25 @@ and
 \bibitem{Behler11general}
  J. Behler.
  ''Neural network potential-energy surfaces in chemistry: a tool for large-scale simulations''.
- Phys. Chem. Chem. Phys. 13, 17930-17955 (2011). 
+ In: \textit{Phys. Chem. Chem. Phys.} 13. (2011), 17930-17955. 
  DOI: \href{http://dx.doi.org/10.1039/c1cp21668f}{10.1039/c1cp21668f}. 
  
 \bibitem{Behler11symmetry}
  J. Behler.
  ''Atom-centered symmetry functions for constructing high-dimensional neural network potentials''.
- The Journal of Chemical Physics 134, 074106 (2011). 
+ In: \textit{The Journal of Chemical Physics} 134. (2011), 074106. 
  DOI: \href{http://dx.doi.org/10.1063/1.3553717}{10.1063/1.3553717}.
  
 \bibitem{Dragly14}
  S. A. Dragly.
  ''Bridging quantum mechanics and molecular dynamics with artificial neural networks''.
- MA thesis, University of Oslo (2014). \\
+ MA thesis. University of Oslo (2014). \\
  URL: \href{https://www.duo.uio.no/handle/10852/41843}{https://www.duo.uio.no/handle/10852/41843}.
 
 \bibitem{Hornik89}
  K. Hornik, M. Stinchcombe and H. White.
  ''Multilayer Feedforward Networks are Universal Approximators''.
- Neural Networks 2, 359 (1989). 
+ In: \textit{Neural Networks} 2. (1989), 359. 
  DOI: \href{https://doi.org/10.1016/0893-6080(89)90020-8}{10.1016/0893-6080(89)90020-8}
  
 \bibitem{Rojas96}
@@ -1984,40 +2015,40 @@ and
 \bibitem{Karlik11}
  B. Karlik and A. V. Olgac.
  ''Performance Analysis of Various Activation Functions in Generalized MLP Architectures of Neural Networks''.
- IJAE 1, 111-122 (2011).
+ In: \textit{IJAE} 1. (2011), 111-122.
  
 \bibitem{LeCun15}
  Y. LeCun, Y. Bengio and G. Hinton.
  ''Deep learning''.
- Nature 521, 436-444 (2015). 
+ In: \textit{Nature} 521. (2015), 436-444. 
  DOI: \href{http://dx.doi.org/10.1038/nature14539}{10.1038/nature14539}
  
 \bibitem{Glorot11}
  X. Glorot, A. Bordes, Y. Bengio.
  ''Deep Sparse Rectifier Neural Networks''.
- JMLR 15, 315-323 (2011).
+ In: \textit{JMLR} 15. (2011), 315-323.
  
 \bibitem{Rumelhart86}
  D. E. Rumelhart, G. E. Hinton and R. J. Williams.
  ''Learning representations by back-propagating errors''.
- Nature 323, 533-536 (1986).
+ In: \textit{Nature} 323. (1986), 533-536.
  DOI: \href{http://dx.doi.org/10.1038/323533a0}{10.1038/323533a0}
  
 \bibitem{Behler15}
  J. Behler.
  ''Constructing High-Dimensional Neural Network Potentials: A Tutorial Review''.
- International Journal of Quantum Chemistry 115, 1032-1050 (2015).
+ In: \textit{International Journal of Quantum Chemistry} 115. (2015), 1032-1050.
  DOI: \href{http://dx.doi.org/10.1002/qua.24890}{10.1002/qua.24890}
  
 \bibitem{Tuckerman92}
  Tuckerman, Berne and Martyna .
  ''Reversible multiscale molecular dynamics''.
- J. Chem Phys 97, 1990 (1992).
+ In: \textit{J. Chem. Phys.} 97. (1992), 1990.
  
 \bibitem{Plimpton95}
  S. Plimpton. 
  ''Fast Parallel Algorithms for Short-Range Molecular Dynamics''.
- Journal of Computational Physics 117, 1-19 (1995). 
+ In: \textit{Journal of Computational Physics} 117. (1995) 1-19. 
  DOI: \href{https://doi.org/10.1006/jcph.1995.1039}{10.1006/jcph.1995.1039}. 
  
 \bibitem{Abadi15}
@@ -2031,9 +2062,43 @@ and
  V. Vanhoucke, V. Vasudevan, F. Viégas,
  O. Vinyals, P. Warden, M. Wattenberg, M. Wicke,
  Y. Yu and X. Zheng.
- ''TensorFlow: Large-scale machine learning on heterogeneous systems''
- Preliminary White Paper (2015). 
- Software available from tensorflow.org.
+ ''TensorFlow: Large-scale machine learning on heterogeneous systems''.
+ \textit{Google Research} (2015). 
+ arXiv: \href{https://arxiv.org/abs/1603.04467}{1603.04467}
+ 
+\bibitem{Abadi16}
+ M. Abadi, P. Barham, J. Chen, Z. Chen, A. Davis, J. Dean,
+ M. Devin, S. Ghemawat, G. Irving, M. Isard, M. Kudlur,
+ J. Levenberg, R. Monga, S. Moore, D. G. Murray, B. Steiner, P. Tucker,
+ V. Vasudevan, P. Warden, M. Wicke, Y. Yu, and X. Zheng.
+ ''TensorFlow: A System for Large-Scale Machine Learning''.
+ \textit{Google Brain} (2016).
+ arXiv: \href{https://arxiv.org/abs/1605.08695}{1605.08695}
+ 
+\bibitem{Qian99}
+ N. Qian.
+ ''On the momentum term in gradient descent learning algorithms''
+ In: \textit{Neural Networks} 12(1). (1999) 145-151. 
+ DOI: \href{https://doi.org/10.1016/S0893-6080(98)00116-6}{10.1016/S0893-6080(98)00116-6}
+ 
+\bibitem{Duchi11}
+ J. Duchi, E. Hazan, Y. Singer.
+ ''Adaptive Subgradient Methods for Online Learning and Stochastic Optimization''.
+ In \textit{The Journal of Machine Learning Research} 12. (2011) 2121-2159. 
+ URL: \href{http://jmlr.org/papers/v12/duchi11a.html}{http://jmlr.org/papers/v12/duchi11a.html}
+ 
+\bibitem{Zeiler12}
+ M. D. Zeiler. 
+ ''Adadelta: an adaptive learning rate method''. (2012).
+ arXiv: \href{https://arxiv.org/abs/1212.5701}{1212.5701}
+ 
+\bibitem{Kingma14}
+ D. P. Kingma and J. Ba.
+ ''Adam: A Method for Stochastic Optimization''. (2014).
+ arXiv: \href{https://arxiv.org/abs/1412.6980}{1412.6980}
+ 
+
+ 
  
 \end{thebibliography}
 
