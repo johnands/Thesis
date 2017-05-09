@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.29)  4 MAY 2017 19:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.29)  9 MAY 2017 15:21
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -942,7 +942,7 @@ File: siunitx-abbreviations.cfg 2017/02/01 v2.7c siunitx: Abbreviated units
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 
-<figures/apollonseglet/Apollonseglet/UiO_Segl_cmyk.pdf, id=148, 140.94772pt x 1
+<figures/apollonseglet/Apollonseglet/UiO_Segl_cmyk.pdf, id=164, 140.94772pt x 1
 40.95068pt>
 File: figures/apollonseglet/Apollonseglet/UiO_Segl_cmyk.pdf Graphic file (type 
 pdf)
@@ -1009,14 +1009,14 @@ Chapter 3.
 Underfull \vbox (badness 1515) has occurred while \output is active []
 
  [11]
-<Figures/Theory/MLP.png, id=284, 1423.3175pt x 1333.98375pt>
+<Figures/Theory/MLP.png, id=304, 1423.3175pt x 1333.98375pt>
 File: Figures/Theory/MLP.png Graphic file (type png)
 
 <use Figures/Theory/MLP.png>
 Package pdftex.def Info: Figures/Theory/MLP.png used on input line 193.
 (pdftex.def)             Requested size: 287.79831pt x 269.72313pt.
  [12 <./Figures/Theory/MLP.png>]
-<Figures/Theory/activationFunctions.pdf, id=300, 1675.76062pt x 1031.6543pt>
+<Figures/Theory/activationFunctions.pdf, id=321, 1675.76062pt x 1031.6543pt>
 File: Figures/Theory/activationFunctions.pdf Graphic file (type pdf)
 
 <use Figures/Theory/activationFunctions.pdf>
@@ -1057,7 +1057,7 @@ Missing character: There is no Ã in font cmr12!
 Missing character: There is no ¶ in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no ˜ in font cmr12!
-[21] <Figures/Theory/cutOffHighDimNN.jpeg, id=439, 604.2575pt x 605.26125pt>
+[21] <Figures/Theory/cutOffHighDimNN.jpeg, id=459, 604.2575pt x 605.26125pt>
 File: Figures/Theory/cutOffHighDimNN.jpeg Graphic file (type jpg)
 
 <use Figures/Theory/cutOffHighDimNN.jpeg>
@@ -1070,7 +1070,7 @@ Missing character: There is no … in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no … in font cmr12!
  [23 <./Figures/Theory/cutOffHighDimNN.jpeg>] <Figures/Theory/cutoffFunction.pd
-f, id=454, 578.16pt x 433.62pt>
+f, id=475, 578.16pt x 433.62pt>
 File: Figures/Theory/cutoffFunction.pdf Graphic file (type pdf)
 
 <use Figures/Theory/cutoffFunction.pdf>
@@ -1084,28 +1084,28 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [25 <./Figures/Theory/cutoffFunction.pdf>]
-<Figures/Theory/G1.pdf, id=491, 578.16pt x 433.62pt>
+<Figures/Theory/G1.pdf, id=511, 578.16pt x 433.62pt>
 File: Figures/Theory/G1.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G1.pdf>
 Package pdftex.def Info: Figures/Theory/G1.pdf used on input line 644.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G2_1.pdf, id=492, 578.16pt x 433.62pt>
+<Figures/Theory/G2_1.pdf, id=512, 578.16pt x 433.62pt>
 File: Figures/Theory/G2_1.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G2_1.pdf>
 Package pdftex.def Info: Figures/Theory/G2_1.pdf used on input line 650.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G2_2.pdf, id=493, 578.16pt x 433.62pt>
+<Figures/Theory/G2_2.pdf, id=513, 578.16pt x 433.62pt>
 File: Figures/Theory/G2_2.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G2_2.pdf>
 Package pdftex.def Info: Figures/Theory/G2_2.pdf used on input line 656.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G3.pdf, id=494, 578.16pt x 433.62pt>
+<Figures/Theory/G3.pdf, id=514, 578.16pt x 433.62pt>
 File: Figures/Theory/G3.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G3.pdf>
@@ -1127,7 +1127,7 @@ on: multiple pdfs with page group included in a single page
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Theory/G3.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
->] <Figures/Theory/G4G5angular1.pdf, id=689, 578.16pt x 433.62pt>
+>] <Figures/Theory/G4G5angular1.pdf, id=709, 578.16pt x 433.62pt>
 File: Figures/Theory/G4G5angular1.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G4G5angular1.pdf>
@@ -1135,7 +1135,7 @@ Package pdftex.def Info: Figures/Theory/G4G5angular1.pdf used on input line 701
 .
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G4G5angular2.pdf, id=690, 578.16pt x 433.62pt>
+<Figures/Theory/G4G5angular2.pdf, id=710, 578.16pt x 433.62pt>
 File: Figures/Theory/G4G5angular2.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G4G5angular2.pdf>
@@ -1240,7 +1240,7 @@ LaTeX Font Warning: Font shape `OML/cmss/m/n' undefined
 
 [45] (./Scripts/TensorFlow/networkExample.py) [46]
 (./Scripts/TensorFlow/tensorBoardExample.py [47])
-<Figures/Implementation/tensorBoardExample.pdf, id=1095, 919.435pt x 1097.09875
+<Figures/Implementation/tensorBoardExample.pdf, id=1115, 919.435pt x 1097.09875
 pt>
 File: Figures/Implementation/tensorBoardExample.pdf Graphic file (type pdf)
  <use Figures/Implementation/tensorBoardExample.pdf>
@@ -1251,7 +1251,7 @@ input line 1457.
 Underfull \vbox (badness 2401) has occurred while \output is active []
 
  [49 <./Figures/Implementation/tensorBoardExample.pdf>] [50]
-<Figures/Implementation/tensorBoardTraining.pdf, id=1170, 919.435pt x 1085.0537
+<Figures/Implementation/tensorBoardTraining.pdf, id=1190, 919.435pt x 1085.0537
 6pt>
 File: Figures/Implementation/tensorBoardTraining.pdf Graphic file (type pdf)
  <use Figures/Implementation/tensorBoardTraining.pdf>
@@ -1270,83 +1270,93 @@ Overfull \vbox (0.18195pt too high) has occurred while \output is active []
 ]
 Chapter 7.
 
-Overfull \hbox (7.3953pt too wide) in paragraph at lines 1541--1544
+Overfull \hbox (3.95726pt too wide) in paragraph at lines 1533--1541
+\OT1/cmr/m/n/12 grows very large. Con-sider for in-stance wa-ter $[][][]$, whic
+h is a three-body molecule.
+ []
+
+[55] [56] [57] [58]
+Chapter 8.
+
+Overfull \hbox (7.3953pt too wide) in paragraph at lines 1684--1687
 \OT1/cmr/m/n/12 The main ap-pli-ca-tion pro-gram-ming in-ter-face (API) for Ten
 -sor-Flow (TF) is Python.
  []
 
 
-<Figures/Tests/timeComparisonNetworkTotalScatter.pdf, id=1199, 578.16pt x 433.6
+<Figures/Tests/timeComparisonNetworkTotalScatter.pdf, id=1255, 578.16pt x 433.6
 2pt>
 File: Figures/Tests/timeComparisonNetworkTotalScatter.pdf Graphic file (type pd
 f)
  <use Figures/Tests/timeComparisonNetworkTotalScatter.pdf>
 Package pdftex.def Info: Figures/Tests/timeComparisonNetworkTotalScatter.pdf us
-ed on input line 1560.
+ed on input line 1703.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
 
-<Figures/Tests/timeComparisonNetwork3.pdf, id=1200, 578.16pt x 433.62pt>
+<Figures/Tests/timeComparisonNetwork3.pdf, id=1256, 578.16pt x 433.62pt>
 File: Figures/Tests/timeComparisonNetwork3.pdf Graphic file (type pdf)
 
 <use Figures/Tests/timeComparisonNetwork3.pdf>
 Package pdftex.def Info: Figures/Tests/timeComparisonNetwork3.pdf used on input
- line 1571.
+ line 1714.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
- [55]
+ [59
+
+]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [56 <./Figures/Tests/timeComparisonNetworkTotalScatter.pdf>]
-<Figures/Tests/errorLJ.pdf, id=1262, 578.16pt x 433.62pt>
+ [60 <./Figures/Tests/timeComparisonNetworkTotalScatter.pdf>]
+<Figures/Tests/errorLJ.pdf, id=1320, 578.16pt x 433.62pt>
 File: Figures/Tests/errorLJ.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorLJ.pdf>
-Package pdftex.def Info: Figures/Tests/errorLJ.pdf used on input line 1588.
+Package pdftex.def Info: Figures/Tests/errorLJ.pdf used on input line 1731.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Tests/errorLJC.pdf, id=1263, 578.16pt x 433.62pt>
+<Figures/Tests/errorLJC.pdf, id=1321, 578.16pt x 433.62pt>
 File: Figures/Tests/errorLJC.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorLJC.pdf>
-Package pdftex.def Info: Figures/Tests/errorLJC.pdf used on input line 1592.
+Package pdftex.def Info: Figures/Tests/errorLJC.pdf used on input line 1735.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [57 <./Figures/Tests/timeComparisonNetwork3.pdf>]
-<Figures/Tests/errorDerivative.pdf, id=1302, 578.16pt x 433.62pt>
+ [61 <./Figures/Tests/timeComparisonNetwork3.pdf>]
+<Figures/Tests/errorDerivative.pdf, id=1360, 578.16pt x 433.62pt>
 File: Figures/Tests/errorDerivative.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorDerivative.pdf>
 Package pdftex.def Info: Figures/Tests/errorDerivative.pdf used on input line 1
-618.
+761.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [58 <./Figures/Tests/errorLJ.pdf> <./Figures/Tests/errorLJC.pdf
+ [62 <./Figures/Tests/errorLJ.pdf> <./Figures/Tests/errorLJC.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/errorLJC.pdf): PDF incl
 usion: multiple pdfs with page group included in a single page
->] <Figures/Tests/trainingManyNeighbourNN1.pdf, id=1366, 578.16pt x 433.62pt>
+>] <Figures/Tests/trainingManyNeighbourNN1.pdf, id=1424, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN1.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN1.pdf>
 Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN1.pdf used on inp
-ut line 1658.
+ut line 1801.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
-<Figures/Tests/trainingManyNeighbourNN2.pdf, id=1367, 578.16pt x 433.62pt>
+<Figures/Tests/trainingManyNeighbourNN2.pdf, id=1425, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN2.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN2.pdf>
 Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN2.pdf used on inp
-ut line 1659.
+ut line 1802.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
- [59 <./Figures/Tests/errorDerivative.pdf>]
+ [63 <./Figures/Tests/errorDerivative.pdf>]
 Overfull \vbox (7.74113pt too high) has occurred while \output is active []
 
 
-[60 <./Figures/Tests/trainingManyNeighbourNN1.pdf> <./Figures/Tests/trainingMan
+[64 <./Figures/Tests/trainingManyNeighbourNN1.pdf> <./Figures/Tests/trainingMan
 yNeighbourNN2.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/trainingManyNeighbourNN
@@ -1354,8 +1364,8 @@ pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/trainingManyNeighbourNN
 >]
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no … in font cmr12!
- [61]
-Overfull \hbox (20.86179pt too wide) in paragraph at lines 1742--1744
+ [65]
+Overfull \hbox (20.86179pt too wide) in paragraph at lines 1885--1887
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
@@ -1363,83 +1373,89 @@ Overfull \hbox (20.86179pt too wide) in paragraph at lines 1742--1744
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [62]
-<Figures/Tests/manyNeighbourEnergyError.pdf, id=1559, 578.16pt x 433.62pt>
+ [66]
+<Figures/Tests/manyNeighbourEnergyError.pdf, id=1618, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourEnergyError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourEnergyError.pdf>
 Package pdftex.def Info: Figures/Tests/manyNeighbourEnergyError.pdf used on inp
-ut line 1778.
+ut line 1921.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Tests/manyNeighbourForceError.pdf, id=1560, 578.16pt x 433.62pt>
+<Figures/Tests/manyNeighbourForceError.pdf, id=1619, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourForceError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourForceError.pdf>
 Package pdftex.def Info: Figures/Tests/manyNeighbourForceError.pdf used on inpu
-t line 1782.
+t line 1925.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
- [63 <./Figures/Tests/manyNeighbourEnergyError.pdf> <./Figures/Tests/manyNeighb
+ [67 <./Figures/Tests/manyNeighbourEnergyError.pdf> <./Figures/Tests/manyNeighb
 ourForceError.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/manyNeighbourForceError
 .pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [64] [65
-
-] [66]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 1798.
-
-[67] [68
-
-] [69
+>] [68] [69
 
 ] [70]
-Appendix A.
-[71
 
-] [72] [73] [74] [75] [76
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 1941.
+
+[71] [72
+
+] [73
+
+] [74]
+Appendix A.
+[75
+
+] [76] [77] [78] [79] [80
 
 ]
-Underfull \hbox (badness 1194) in paragraph at lines 2029--2033
+Underfull \hbox (badness 1194) in paragraph at lines 2172--2176
 []\OT1/cmr/m/n/12 J. Behler. ''Atom-centered sym-me-try func-tions for con-stru
 ct-ing high-
  []
 
-[77]
+[81]
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no © in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no © in font cmr12!
 
-Underfull \hbox (badness 4686) in paragraph at lines 2121--2125
+Underfull \hbox (badness 4686) in paragraph at lines 2264--2268
 []\OT1/cmr/m/n/12 J. Duchi, E. Hazan, Y. Singer. ''Adap-tive Sub-gra-di-ent Met
 h-ods
  []
 
 
-Underfull \hbox (badness 4647) in paragraph at lines 2121--2125
+Underfull \hbox (badness 4647) in paragraph at lines 2264--2268
 \OT1/cmr/m/n/12 for On-line Learn-ing and Stochas-tic Op-ti-miza-tion''. In \OT
 1/cmr/m/it/12 The Jour-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2121--2125
+Underfull \hbox (badness 10000) in paragraph at lines 2264--2268
 \OT1/cmr/m/it/12 nal of Ma-chine Learn-ing Re-search \OT1/cmr/m/n/12 12. (2011)
  2121-2159. URL:
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2141.
-[78]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2141.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2297.
+[82]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2297.
  (./master.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2141.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2141.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2297.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2297.
 
-Package rerunfilecheck Info: File `master.out' has not changed.
-(rerunfilecheck)             Checksum: 293BDE9C41BEFABBC69549CE74052F03;2381.
 
+
+Package rerunfilecheck Warning: File `master.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `master.out':
+(rerunfilecheck)             Before: D8961BA8BFCFD7FF0A4742510D7E0BEE;2692
+(rerunfilecheck)             After:  372D8595F105E10EED694DFC48EF7FBC;2692.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -1449,41 +1465,47 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2141.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2297.
  ) 
 Here is how much of TeX's memory you used:
- 22743 strings out of 494953
- 420299 string characters out of 6180977
- 612513 words of memory out of 5000000
- 25163 multiletter control sequences out of 15000+600000
+ 22774 strings out of 494953
+ 420605 string characters out of 6180977
+ 612699 words of memory out of 5000000
+ 25171 multiletter control sequences out of 15000+600000
  18426 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  44i,16n,60p,10388b,2243s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmtt12.pfb>
-Output written on master.pdf (86 pages, 1366533 bytes).
+pdfTeX warning (dest): name{figure.caption.10} has been referenced but does n
+ot exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{section*.16} has been referenced but does not exist
+, replaced by a fixed one
+
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmtt12.pfb>
+Output written on master.pdf (90 pages, 1378717 bytes).
 PDF statistics:
- 1989 PDF objects out of 2073 (max. 8388607)
- 1425 compressed objects within 15 object streams
- 573 named destinations out of 1000 (max. 500000)
- 399 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2054 PDF objects out of 2073 (max. 8388607)
+ 1486 compressed objects within 15 object streams
+ 596 named destinations out of 1000 (max. 500000)
+ 431 words of extra memory for PDF output out of 10000 (max. 10000000)
 

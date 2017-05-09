@@ -1523,9 +1523,194 @@ which implements the Adam algorithm for updating the NN parameters.
 
 We are now ready to launch this graph in a training session. 
 \begin{lstlisting}[language=Python]
- dd
+ dd	
 \end{lstlisting}
 
+
+\chapter{Training procedure}
+
+\section{Selecting the training data}
+The number of possible configurations of atomic or molecular systems quickly grows very large. 
+Consider for instance water $\textrm{H}_2\textrm{O}$, which is a three-body molecule. The configuration of the
+three atoms can be described by three internal coordinates, each with a certain range of values. 
+If each range is divided into $N$ equal segments, the total number of distint configurations is $N^3$. 
+If we were to construct an \textit{ab inito} potential that characterizes this system, we would have to compute the energies 
+and forces of all these configurations. 
+Such a brute-force approach may be feasible for a three-atom molecule, but for more complicated systems
+it quickly becomes practically impossible due to the computational cost. 
+
+In this work we do not use \textit{ab inito} methods to compute energies and forces, but this problem is still highly relevant
+due to the high-dimensional nature of our approach. The average number of neighbours for the Stillinger-Weber Si simulations
+in this thesis is about $n=6$, which is a small number compared to most other systems.  
+This number is of great importance to the efficiency of the fitting process because it defines the dimensionality 
+of the problem,
+\begin{enumerate}
+ \item When increasing $n$, each symmetry function is composed of 
+ more terms. The number of terms $N_{terms}$ scales like $N_{terms} \propto n$ for the radial symmetry functions, 
+ but for the angular symmetry functions we have that $N_{terms} \propto n^2$. 
+ \item A larger $n$ leads in general to a larger configuration space to fit, thus additional symmetry functions and 
+ a larger data set is required. 
+ \item The number of NN parameters must also be increased to obtain the same error as for a lower-dimensional problem
+\end{enumerate}
+These observations demonstrate that performance is a critical factor whether we fit \textit{ab inito} data or 
+not. However, we know that only a small subset of the possible configurations of a system is physically realizable. 
+Most of the configurations will not be visited by a system obeying Newton's laws, and are therefore not important to
+the dynamics. We thus need some kind of importance sampling method that adequately samples this subset. 
+We realize that the obvious way to achieve this is to sample configurations from molecular dynamics simulations, which
+yields precisely the subset we are looking for. 
+
+\subsection{Iterative molecular dynamics sampling}
+The method for constructing a NN PES with data sampled from MD simulations is as follows \cite{Behler11general}
+\cite{Behler15},
+\begin{enumerate} \label{NNPalgorithm}
+ \item Sample an initial data set from MD simulations. \label{sample} 
+ \item Calculate the energies and optionally the forces of this initial data set with a chosen method. \label{refEnergies}
+ \item Train a NN on the data from \ref{sample}. with reference values from \ref{refEnergies}. to
+ construct a preliminary NN potential.
+ \item Carry out simulations using the NNP to find new relevant structures. 
+ \item Compute the energies (and forces) of the new structures with the method from 2. and add them to the data set
+ \item Train a NN on the extended data set to improve the NNP
+ \item Repeat 4.-6. until a stopping criteria is met
+\end{enumerate}
+The idea is to improve the NN potential iteratively and in a self-consistent 
+way by applying it in MD simulations to find 
+''holes'' in the data set, i.e. configurations on which the NNP predicts incorrect energies and forces. The process
+is a bit different depending on whether we are constructing a NNP from \textit{ab inito} electronic structure data
+or reproducing known, empirical MD potentials. 
+
+For the latter, we construct the initial data set by sampling configurations from MD simulations that is relevant
+for the intended applications of the NNP. Furthermore, we are extracting both coordinates and energies from the simulations, i.e.
+we get both the training data in step 1 and the reference data in step 2 simultaneously. To compute the energies in
+step 4, we simply run a pseudo-simulation on the new structures. This is easily done in LAMMPS by using 
+the \texttt{rerun} command, which tells LAMMPS to compute the energies and forces of atomic configurations 
+supplied from file without doing any integration. 
+
+When constructing an \textit{ab inito} NNP however, we are immediately faced with a problem when trying to execute this process: 
+to run MD simulations in step 1 we need the PES we are trying to develop. 
+This is often termed as the ''self-starting problem'', 
+and several procedures have been suggested for handling it. 
+
+One option is obviously to generate random configurations. This does however take us back to the 
+original problem discussed in the beginning of this chapter: the large configuration space volume of
+high-dimensional systems enforces the use of importance sampling methods. 
+It is highly unlikely that random sampling will yield the important regions of configuration space, thus 
+vast amounts of data is needed. Nonetheless, random sampling can be applicable to small systems of 1-3 atoms where
+the complete configuration space can be represented without too much effort. 
+
+Another option is to use chemical intuition to select certain configurations of 
+the system under investigation. 
+For instance, if a specific chemical reaction is studied, one can use previous knowledge about this reaction to 
+select configurations along the reaction path \cite{Ischtwan94}. The disadvantage of this approach is that
+such information is not always available. 
+
+A more effective method has been presented by Raff et al. \cite{Raff05}, where a semi-empirical
+potential has been deployed to initiate the sampling. If a reasonable potential is chosen and an adequate
+sampling method is devised (discussed below), several thousand physically relevant structures can be obtained
+that will constitue the initial data set. It has also been shown \cite{Raff05} that the final PES obtained 
+by the iterative sampling of MD trajectories is not sensitive to the choice of the empirical surface employed 
+in the initial step. 
+
+In this thesis we do not construct \texti{ab inito} NNPs, thus we will not go into further details
+of the above methods. 
+
+\subsection{Sampling methods}
+We have seen that MD simulations supply the data that is needed to construct a NN potential, but we 
+also have to consider how this sampling should be performed to identify new relevant structures.
+NNs have a very flexible functional form which makes them able to accurately fit data sets, 
+but they can also yield potentially large energy and force errors 
+when evaluated for configurations that are very different from the ones included in the training set.
+It is therefore of vital importance to include all structures that are relevant for the intended
+application of the NNP. 
+
+\subsubsection{Initial sampling}
+The initial data set is supposed to function as a starting point for the construction of the NNP. 
+In this work we use empirical MD potentials to do the initial sampling. Before the process is initiated, 
+we must decide on the specific application for the NNP that we want to develop. This entails 
+defining a range of temperatures, pressures etc. that the final NNP will be valid for, and sample
+configurations based on these. 
+
+Sampling methods should in general be optimized to produce a reasonably uniform density of 
+data points in those regions of configuration space that are relevant to the application of the fit.
+If there are regions with very high point density compared to others, the NN will be trained to accurately fit these, 
+at the cost of regions that are poorly represented. An exception to this rule is regions where the potential gradient, or forces, 
+are large. These regions, typically configurations where two atoms are close to each other and experience strong
+repulsive forces, are the most difficult for the NN to fit (REFERENCE?), 
+and should therefore have a slightly higher density. 
+
+WRITE ABOUT THE SAMPLING METHODS IN RAFF BOOK, AT LEAST THE FIRST ONE (I THINK THESE ARE SUPPOSED TO BE USED TO FIND NEW
+STRUCTURES, BUT ARE PERHAPS NOT AS RELEVANT BECAUSE WE HAVE SYMMETRY FUNCTIONS). THE RAFF METHOD CAN BE USED TO
+SAMPLE REGIONS WHERE THE FORCES ARE LARGE TO CONSTRUCT INITIAL DATA SET. WHEN REPRODUCING EMPIRICAL POTENTIALS, 
+THE BEST METHOD TO IDENTIFY NEW STRUCTURES IS SIMPLY TO COMPARE THE NN AND SW ENERGIES FOR ALL CONFIGURATIONS, 
+AND ADD THOSE WHERE THE ERROR IS SIGNIFICANT. THIS IS THE METHOD USED IN THIS THESIS. CAN ALSO WRITE A BIT ABOUT HOW THIS
+IS DONE WHEN WE DON'T KNOW THE CORRECT ENERGIES. 
+
+
+
+
+There are two types of such ''unknown'' structures. 
+First, we have configurations that are outside the range of input values spanned by the training data. 
+
+
+We already have a tool
+for identifying such ''unknown'' structures, namely the Behler symmetry functions. 
+
+
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Constructing the symmetry function sets}
+The choice of symmetry functions is important to achieve a good fit to the reference data. 
+They need to be able to sufficiently distinct inequivalent structures to avoid fitting 
+contradictory data. If this distinction is not possible, different reference structures with 
+different energies and forces give rise to the same symmetry function values, which results in poor fits. 
+
+Although a NN potential is general and unbiased because it has no pre-defined functional form, the 
+construction of the symmetry function sets is to some extent empirical. The functional form of the NN
+is adjusted ''automatically'' when trained, while the symmetry function set has to be constructed manually.
+This observation does however not change the fact that the high-dimensional neural network approach to
+constructing potentials used in this work is general, and can in principle be applied to any system. The training data
+and symmetry function sets have to be customized to each system, but the training procedure is always the same. 
+
+There are a number of analyses that can be carried out to investigate if we have an adequate
+symmetry function set,
+\begin{itemize}
+ \item The symmetry functions should cover the configuration space evenly. 
+ A reasonable initial choice for the radial symmetry functions is to use an equidistant set to ensure 
+ that the whole range of distances in the reference set are probed. Also, it is a good idea 
+ to have some knowledge about the radial and angular distribution of atoms for the system we are looking at. 
+ This information can be extracted from MD runs with semi-empirical potentials or from experiments and will enable
+ us to identify high-density regions of configuration space that should be covered by a larger number
+ of symmetry functions than low-density regions. HMMMM, THIS IS VERY BIASED?????????? BEHLER SAYS ''IN AND UNBIASED WAY''.
+ \item The range of values for each symmetry function should be analyzed. If the difference between the largest
+ and smallest function value is too small, it will not be able to identify distinct structures properly. 
+ Symmetry functions which have a value of zero for all configurations should be avoided, as these will not contribute
+ to the description of the chemical environment. 
+ \item SEARCH FOR CONTRADICTORY DATA? THEN I MUST HAVE ACCESS TO THE FORCES? BUT IS HE TALKING ABOUT DIFFERENT 
+ ATOM TYPES? MAYBE CHOOSE A NEIGHBOUR LIST (ATOM), FIND $\Delta G$ AND $\Delta F$ TO ALL OTHER LISTS AND PLOT?
+ \item There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
+ the efficiency of the calculation of the NN energy output. The number of symmetry functions can be kept as low as
+ possible by investigating the correlations between the values of two different symmetry functions for the whole
+ reference set. If there is a large correlation, the two symmetry functions are almost linearly dependent, 
+ and we have a redundancy of information. Consequentially, one of them should be removed, or the parameters adjusted
+ to decrease the correlation. WRITE ABOUT CORRELATIONS AND TRAINING. 
+\end{itemize}
+These tests provide a framework for constructing suitable symmetry function sets. 
+We note that they all depend on the composition of the available data set, including its size. 
+When the iterative approach to constructing data sets are used, the size will increase step by step, 
+and we are required to add more symmetry functions as we go. 
 
 
 
@@ -2132,6 +2317,19 @@ and
  D. P. Kingma and J. Ba.
  ''Adam: A Method for Stochastic Optimization''. (2014).
  arXiv: \href{https://arxiv.org/abs/1412.6980}{1412.6980}
+ 
+\bibitem{Ischtwan94}
+ J. Ischtwan and M. A. Collins.
+ ''Molecular potential energy surfaces by interpolation''.
+ In: \textit{The Journal of Chemical Physics} 100. (1994), 8080.
+ DOI: \href{http://dx.doi.org/10.1063/1.466801}{10.1063/1.466801}
+ 
+\bibitem{Raff05}
+ L. M. Raff, M. Malshe, M. Hagan, D. I. Doughan, M. G. Rockley and R. Komanduri.
+ ''Ab inito potential-energy surfaces for complex, multichannel systems using modified
+ novelty sampling and feedforward neural networks''. 
+ In: \textit{The Journal of Chemical Physics} 122. (2005), 084104. 
+ DOI: \href{http://dx.doi.org/10.1063/1.1850458}{10.1063/1.1850458}
  
 
  
