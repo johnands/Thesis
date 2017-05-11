@@ -1610,17 +1610,25 @@ that will constitue the initial data set. It has also been shown \cite{Raff05} t
 by the iterative sampling of MD trajectories is not sensitive to the choice of the empirical surface employed 
 in the initial step. 
 
-In this thesis we do not construct \texti{ab inito} NNPs, thus we will not go into further details
+In this thesis we do not construct \textit{ab inito} NNPs, thus we will not go into further details
 of the above methods. 
 
-\subsection{Sampling methods}
+\subsection{Sampling algorithms}
 We have seen that MD simulations supply the data that is needed to construct a NN potential, but we 
 also have to consider how this sampling should be performed to identify new relevant structures.
 NNs have a very flexible functional form which makes them able to accurately fit data sets, 
 but they can also yield potentially large energy and force errors 
 when evaluated for configurations that are very different from the ones included in the training set.
 It is therefore of vital importance to include all structures that are relevant for the intended
-application of the NNP. 
+application of the NNP.
+
+Sampling methods should in general be optimized to produce a reasonably uniform density of 
+data points in those regions of configuration space that are relevant to the application of the fit \cite{Raff12}. 
+If there are regions with very high point density compared to others, the NN will be trained to accurately fit these, 
+at the cost of regions that are poorly represented. An exception to this rule is regions where the potential gradient, or forces, 
+are large. These regions, typically configurations where two atoms are close to each other and experience strong
+repulsive forces, are the most difficult for the NN to fit (REFERENCE?), 
+and should therefore have a higher density. 
 
 \subsubsection{Initial sampling}
 The initial data set is supposed to function as a starting point for the construction of the NNP. 
@@ -1629,13 +1637,28 @@ we must decide on the specific application for the NNP that we want to develop. 
 defining a range of temperatures, pressures etc. that the final NNP will be valid for, and sample
 configurations based on these. 
 
-Sampling methods should in general be optimized to produce a reasonably uniform density of 
-data points in those regions of configuration space that are relevant to the application of the fit.
-If there are regions with very high point density compared to others, the NN will be trained to accurately fit these, 
-at the cost of regions that are poorly represented. An exception to this rule is regions where the potential gradient, or forces, 
-are large. These regions, typically configurations where two atoms are close to each other and experience strong
-repulsive forces, are the most difficult for the NN to fit (REFERENCE?), 
-and should therefore have a slightly higher density. 
+The time interval between selecting configurations during the MD simulations must also be decided. 
+One alternative is to simply sample points at constant time intervals. This approach will
+however result in a non-uniform density of data points considering that atoms spend most of their time
+in regions where the forces are small, at least in equilibrium MD. 
+
+To sample configuration space with something close to a uniform density, the time interval $\tau$ between 
+sampling needs to be a function of the atomic accelerations (or forces). One such variable 
+interval sampling algorithm, suggested by Pukrittayakamee et al. \cite{Pukrittayakamee09}, is given as
+\begin{equation}
+ \tau = 
+\begin{cases}
+\textrm{trunc}\left[\alpha/a_{\textrm{max}}\right]\Delta t, 
+&\textrm{if trunc}\left[\alpha/a_{\textrm{max}}\right] > 0 \\
+\textrm{trunc}\left[\alpha/a_{\textrm{max}}\right]\Delta t + \Delta t, 
+&\textrm{if trunc}\left[\alpha/a_{\textrm{max}}\right] = 0
+\end{cases}
+\label{variableIntervalSampling}
+\end{equation}
+where $a_i$ is the absolute value of the acceleration of atom $i$
+
+
+
 
 WRITE ABOUT THE SAMPLING METHODS IN RAFF BOOK, AT LEAST THE FIRST ONE (I THINK THESE ARE SUPPOSED TO BE USED TO FIND NEW
 STRUCTURES, BUT ARE PERHAPS NOT AS RELEVANT BECAUSE WE HAVE SYMMETRY FUNCTIONS). THE RAFF METHOD CAN BE USED TO
@@ -1653,21 +1676,6 @@ First, we have configurations that are outside the range of input values spanned
 
 We already have a tool
 for identifying such ''unknown'' structures, namely the Behler symmetry functions. 
-
-
- 
-
- 
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2330,6 +2338,19 @@ and
  novelty sampling and feedforward neural networks''. 
  In: \textit{The Journal of Chemical Physics} 122. (2005), 084104. 
  DOI: \href{http://dx.doi.org/10.1063/1.1850458}{10.1063/1.1850458}
+ 
+\bibitem{Raff12}
+ L. M. Raff, R. Komanduri, M. Hagan and S. T. S. Bukkapatnam 
+ \textit{Neural networks in chemical reaction dynamics}.
+ Oxford University Press, 2012.
+ 
+\bibitem{Pukrittayakamee09}
+ A. Pukrittayakamee, M. Malshe, M. Hagan, L. M. Raff, R. Narulkar, 
+ S. Bukkapatnum and R. Komanduri. 
+ ''Simultaneous fitting of a potential-energy surface and its corresponding force fields
+ using feedforward neural networks''. 
+ In: \textit{The Journal of Chemical Physics}
+ DOI: \href{http://dx.doi.org/10.1063/1.3095491}{10.1063/1.3095491}
  
 
  
