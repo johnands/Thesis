@@ -1655,10 +1655,7 @@ interval sampling algorithm, suggested by Pukrittayakamee et al. \cite{Pukrittay
 \end{cases}
 \label{variableIntervalSampling}
 \end{equation}
-where
-\begin{equation}
- a_{\textrm{max}} = \textrm{max}[a_1, a_2, \dots ,a_i], \quad a_i = |P_i|/m_i
-\end{equation}
+where $a_i$ is the absolute value of the acceleration of atom $i$
 
 
 
