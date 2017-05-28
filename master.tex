@@ -1648,14 +1648,24 @@ interval sampling algorithm, suggested by Pukrittayakamee et al. \cite{Pukrittay
 \begin{equation}
  \tau = 
 \begin{cases}
-\textrm{trunc}\left[\alpha/a_{\textrm{max}}\right]\Delta t, 
-&\textrm{if trunc}\left[\alpha/a_{\textrm{max}}\right] > 0 \\
-\textrm{trunc}\left[\alpha/a_{\textrm{max}}\right]\Delta t + \Delta t, 
-&\textrm{if trunc}\left[\alpha/a_{\textrm{max}}\right] = 0
+\textrm{floor}\left[\alpha/a_{\textrm{max}}\right]\Delta t, 
+&\textrm{if floor}\left[\alpha/a_{\textrm{max}}\right] > 0 \\
+\textrm{floor}\left[\alpha/a_{\textrm{max}}\right]\Delta t + \Delta t, 
+&\textrm{if floor}\left[\alpha/a_{\textrm{max}}\right] = 0
 \end{cases}
 \label{variableIntervalSampling}
 \end{equation}
-where $a_i$ is the absolute value of the acceleration of atom $i$
+where $a_i$ is the absolute value of the acceleration of atom $i$, $\Delta t$ is the integration step size, 
+$a_\textrm{max}$ is the maximum acceleration of a chosen molecule and $\textrm{floor}(x)$ yields
+the integer part of $x$. The constant $\alpha$ is system dependent and must be determined empirically. It is the value 
+of $\alpha$ that determines the sampling frequency. We see from the second condition in \eqref{variableIntervalSampling} that
+configurations with an acceleration $a_i > \alpha$ yields $\tau = \Delta t$, i.e. the shortest possible sampling
+interval. On the other hand, if $a_i < \alpha$, the interval increases by a factor $\textrm{floor}(\alpha/a_\textrm{max})$. 
+This approach ensures that we sample all configurations where the gradient of the PES is large, while skipping many
+of the low-gradient regions of configuration space. 
+
+We have chosen to use 
+
 
 
 
