@@ -9,11 +9,13 @@
 \usepackage{minted}
 \usepackage{xcolor}
 
+\usemintedstyle{borland}
+
 \definecolor{box}{RGB}{218, 218, 218}
 
 \setminted
 {
- frame=single, 
+ frame=lines, 
  fontsize=\footnotesize, 
  bgcolor=box,
 }
@@ -1661,6 +1663,111 @@ the integer part of $x$. The constant $\alpha$ is system dependent and must be d
 of $\alpha$ that determines the sampling frequency. We see from the second condition in \eqref{variableIntervalSampling} that
 configurations with an acceleration $a_i > \alpha$ yields $\tau = \Delta t$, i.e. the shortest possible sampling
 interval. On the other hand, if $a_i < \alpha$, the interval increases by a factor $\textrm{floor}(\alpha/a_\textrm{max})$. 
+This approach ensures that we sample all configurations where the gradient of the PES is large, while skipping many
+of the low-gradient regions of configuration space. 
+
+We have chosen to use the forces $|\vec{F}_i| \propto a_i$ instead of the accelerations, simply because they are
+readily available in LAMMPS. When sampling systems with periodic boundary conditions, we have to consider 
+the way forces are updated during a simulation. In LAMMPS, any forces attributed to ghost atoms are added back 
+to the originals after \textit{all} forces are computed. This is done in
+\texttt{verlet.cpp},
+\begin{listing}[H]
+ \begin{minted}{c++}
+  if (pair_compute_flag) force->pair->compute(eflag,vflag);
+  // ...
+  if (force->newton) comm->reverse_comm();
+ \end{minted}
+\end{listing}
+The first line computes the forces on all atoms with the chosen \texttt{pair\_style} potential, while
+the second line communicates the forces on ghost atoms back to the original atoms according to Newton's third law. 
+This means that to employ the algorithm
+\eqref{variableIntervalSampling}, we need to sample configurations \textit{after} this reverse communication is
+executed, if not the forces will be incorrect. This can be achieved by extending LAMMPS with a new \texttt{compute} 
+(described in \autoref{sec:extendingLammps}), as all \texttt{computes} and \texttt{fixes} are invoked after the
+force calculations. 
+
+We have made an additional modification to the algorithm \eqref{variableIntervalSampling}.  
+Pukrittayakamee et al. \cite{Pukrittayakamee09} sample \texttt{clusters} of atoms for subsequent DFT calculations
+of the energies of these clusters, and computes $\tau$ based on the maximum acceleration of an atom in a cluster. 
+Our strategy is to select a few atoms, usually 1-10, and compute $\tau$ seperately for each of these atoms. When 
+the sampling criterium is met, the coordinates of all neighbours relative to the central atom is written to file, 
+as well as the atomic energy the central atom experiences in the presence of its neighbours. These coordinates
+and energies make up the training data and reference values, respectively, for a NN to interpolate. 
+Our modified sampling algorithm is thus as follows (written in a less convoluted way than above),
+\begin{equation}
+ \tau = 
+\begin{cases}
+  \textrm{floor}\left[\alpha/F_i\right], 
+  &F_i \leq \alpha \\
+  1, 
+  &F_i > \alpha
+\end{cases}
+\end{equation}
+where $\tau$ is measured in units of $\Delta t$ and $F_i$ is the total force on atom $i$ including ghost contributions. 
+We have implemented this sampling algorithm as follows,
+\begin{listing}[H]
+\begin{minted}{c++}
+// ...
+// loop through atoms that is to be sampled
+for (auto ii : chosenAtoms) {
+    i = ilist[ii];
+    itype = type[i]-1;
+
+    double F = sqrt(f[i][0]*f[i][0] + f[i][1]*f[i][1] + f[i][2]*f[i][2]);
+
+    // update tau every maxDelay step
+    if ( !(myStep % maxDelay) ) {
+
+      // no delay if force is larger than alpha
+      if (F > alpha[itype]) tau[atomCount] = 1;
+
+      // calculate delay if force less than alpha
+      else {
+        int factor = floor( alpha[itype] / F );
+        if (factor > maxDelay) tau[atomCount] = maxDelay;
+        else                   tau[atomCount] = factor;
+      }
+    }
+
+    // decide whether to sample or not based on current value of tau for atom i
+    if ( (myStep % tau[atomCount] > 0) && useAlgo) continue;
+
+    double xi = x[i][0];
+    double yi = x[i][1];
+    double zi = x[i][2];
+    
+    // loop through neighbours of atom i 
+    // write relative coordinates and atomic energy to file
+    jlist = firstneigh[i];
+    jnum = numneigh[i];
+    for (jj = 0; jj < jnum; jj++) {
+      j = jlist[jj];
+      // ...
+\end{minted}
+\end{listing}
+The vector \texttt{chosenAtoms} contains the indicies of the atoms that are to be sampled. These indicies are decided
+when the parameters of the employed potential is initiliazed with the input script command \texttt{pair\_coeff}. 
+The variable \texttt{maxDelay} decides how often $\tau$ is updated, and functions as a maximum value of $\tau$. 
+Its value does not change in the course of the simulation. 
+\begin{figure}[H]
+\begin{minipage}[t]{0.48\linewidth}
+  \includegraphics[width=\textwidth]{Figures/Implementation/forceDistSamplingAlgo.pdf}
+\end{minipage}
+\quad
+\begin{minipage}[t]{0.48\linewidth}
+\includegraphics[width=\textwidth]{Figures/Implementation/forceDistSamplingAlgoNormed.pdf}
+\end{minipage}
+  \caption{Distribution of forces for one Si atom in a quartz ($\textrm{SiO}_2$) crystal with 
+	   and withouth the use of the sampling algorithm \eqref{variableIntervalSampling}. 
+	   Initial temperature $T= \SI{1000}{\kelvin}$.}
+\label{fig:forceDistSamplingAlgo}
+\end{figure}
+In \autoref{fig:forceDistSamplingAlgo}
+
+
+
+
+
 
 
 
