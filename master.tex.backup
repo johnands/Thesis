@@ -9,6 +9,8 @@
 \usepackage{minted}
 \usepackage{xcolor}
 
+\sisetup{range-phrase=-}
+
 \usemintedstyle{borland}
 
 \definecolor{box}{RGB}{218, 218, 218}
@@ -1564,7 +1566,7 @@ yields precisely the subset we are looking for.
 \subsection{Iterative molecular dynamics sampling}
 The method for constructing a NN PES with data sampled from MD simulations is as follows \cite{Behler11general}
 \cite{Behler15},
-\begin{enumerate} \label{NNPalgorithm}
+\begin{enumerate}
  \item Sample an initial data set from MD simulations. \label{sample} 
  \item Calculate the energies and optionally the forces of this initial data set with a chosen method. \label{refEnergies}
  \item Train a NN on the data from \ref{sample}. with reference values from \ref{refEnergies}. to
@@ -1573,6 +1575,7 @@ The method for constructing a NN PES with data sampled from MD simulations is as
  \item Compute the energies (and forces) of the new structures with the method from 2. and add them to the data set
  \item Train a NN on the extended data set to improve the NNP
  \item Repeat 4.-6. until a stopping criteria is met
+  \label{NNPalgorithm}
 \end{enumerate}
 The idea is to improve the NN potential iteratively and in a self-consistent 
 way by applying it in MD simulations to find 
@@ -1697,13 +1700,14 @@ Our modified sampling algorithm is thus as follows (written in a less convoluted
 \begin{equation}
  \tau = 
 \begin{cases}
-  \textrm{floor}\left[\alpha/F_i\right], 
-  &F_i \leq \alpha \\
-  1, 
-  &F_i > \alpha
+  \textrm{floor}\left[\alpha/F_i\right], &F_i \leq \alpha \\
+  1, &F_i > \alpha \\
+  \tau_\textrm{max}, &\textrm{floor}\left[\alpha/F_i\right] > \tau_\textrm{max}
 \end{cases}
+\label{samplingAlgorithmModified}
 \end{equation}
-where $\tau$ is measured in units of $\Delta t$ and $F_i$ is the total force on atom $i$ including ghost contributions. 
+where $\tau$ is measured in units of $\Delta t$ and $\tau_\textrm{max}$ is the maximum value of $\tau$.
+$F_i$ is the total force on atom $i$ including ghost contributions. 
 We have implemented this sampling algorithm as follows,
 \begin{listing}[H]
 \begin{minted}{c++}
@@ -1751,25 +1755,88 @@ The variable \texttt{maxDelay} decides how often $\tau$ is updated, and function
 Its value does not change in the course of the simulation. 
 \begin{figure}[H]
 \begin{minipage}[t]{0.48\linewidth}
+  \subcaption{}
   \includegraphics[width=\textwidth]{Figures/Implementation/forceDistSamplingAlgo.pdf}
 \end{minipage}
 \quad
 \begin{minipage}[t]{0.48\linewidth}
+\subcaption{}
 \includegraphics[width=\textwidth]{Figures/Implementation/forceDistSamplingAlgoNormed.pdf}
 \end{minipage}
-  \caption{Distribution of forces for one Si atom in a quartz ($\textrm{SiO}_2$) crystal with 
-	   and withouth the use of the sampling algorithm \eqref{variableIntervalSampling}. 
-	   Initial temperature $T= \SI{1000}{\kelvin}$.}
+  \caption{Distribution of forces for one Si atom in a quartz $\textrm{SiO}_2$ crystal with 
+	   and withouth the use of the sampling algorithm \eqref{samplingAlgorithmModified}. 
+	   The crystal consists of 576 atoms, with an initial temperature $T= \SI{1000}{\kelvin}$, 
+	   run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with
+	   periodic boundary conditions.
+	   Sampling algorithm parameters: $\alpha=3.0$ and 
+	   $\tau_\textrm{max} = 10$.}
 \label{fig:forceDistSamplingAlgo}
 \end{figure}
-In \autoref{fig:forceDistSamplingAlgo}
+\autoref{fig:forceDistSamplingAlgo} displays the distribution of forces for one Si atom in a MD simulation
+of quartz $\textrm{SiO}_2$, with and withouth the use of the sampling algorithm \eqref{samplingAlgorithmModified}. 
+We see from the figure a) that the sampling procedure cuts the number of low-gradient configurations significantly, 
+while keeping all the environments corresponding to large forces. The resulting distribution is however not uniform, simply
+because the ratio of force counts in the range $F_i = \SIrange{0}{2}{\angstrom}$ to the range $F_i = \SIrange{2}{4}{\angstrom}$
+is too high originally.
+
+One way to smooth the distribution further is to manually delete configurations after the simulation 
+is finished, but then we risk removing relevant structures. The gradient of the PES is not the only way 
+to measure the quality of the sampled set, the time aspect is also important. 
+By selecting samples on-the-fly, we are guaranteed that the they are distributed somewhat uniformly in the time domain. 
+Deleting structures blindly subsequent to the simulation is therefore not a good idea (I AM NOT SURE IF THIS IS TRUE, 
+HAVE TO BE TESTED).
+
+Another option is to sample different types of systems where the forces are more evenly distributed. 
+Examples are non-periodic systems or systems containing only a few atoms. Also, it can be a good idea 
+to do short simulations where the atoms start out in non-equilibrium positions to obtain configurations
+that are not visited by systems with a regular lattice initial state. 
+In general, it is not required that the data used to train the NNs are the results of physically plausible 
+simulations, the only requirement is that it should cover all possible configurations that the NNP have the possibility
+of experiencing in the course of its application. WRITE MORE / DO TESTS ON THIS???
+
+\subsubsection{Iterative sampling}
+The initial data set is usually not sufficient to construct a stable neural network PES. 
+It is difficult to identify all the relevant structures that the NN have to learn to perform well, and 
+since there is always a small fitting error, the 
+NNP will generate different trajectories than the PES that has been used to train it. This is solved
+by sampling new relevant structures from simulations using the preliminary NNP trained on the initial data set. 
+In this way, new configurations
+will ''naturally present themselves'', and the NNP will iteratively improve in a self-consistent way.
+
+The obvious way to identify new structures not already in the initial data set is to evalate both the NNP and 
+the PES we are trying to fit for each structure in an NNP MD simulation and compare the energies (and eventually 
+the forces). If the energy deviation is above a certain treshold, the structure is added to the training set.
+This can be done for different temperatures, pressures etc., and after a certain amount of new data is added, 
+the NN is trained on this extended data set and thus improved. Then, new simulations are carried out with the improved
+NNP, according to the iterative process \autoref{NNPalgorithm} described in the beginning of this chapter. 
+
+This approach is easily feasible when the target PES is an empirical potential, but too computationally expensive 
+in the case where electronic structure methods are employed. Raff et al. \cite{Raff05} have developed a sampling
+algorithm called \textit{modified novelty sampling} that does not require any quantum mechanical calculations of
+the energies of new structures. They describe the database as a set of vectors $\{\vec{q}\}$, where vector
+$\vec{q}_i$ contains the internal coordinates of the $i_\textrm{th}$ cluster of atoms. New configurations
+$\vec{q}_n$ are generated using the NNP trained on this data base and the 2-norm difference $\vec{d}$ between vectors
+$\vec{q}_n$ and $\vec{q}_i$ are computed,
+\begin{equation}
+ \vec{d} = | \vec{q}_i - \vec{q}_n | = 
+ \left[(\vec{q}_i - \vec{q}_n)\cdot(\vec{q}_i - \vec{q}_n)\right]^{1/2}
+\end{equation}
+for all clusters $i$. The difference vector is characterized by its minimum value $d_\textrm{min} = \textrm{min}(\vec{d})$ and 
+the mean seperation distance $d_\textrm{mean} = \langle\vec{d}\rangle$. 
+The basic idea is to add configuration point $\vec{q}_n$ to the database with high
+probability if $d_\textrm{min}$ or $d_\textrm{mean}$ is large, but low probability if both 
+$d_\textrm{min}$ and $d_\textrm{mean}$ are small. The energy output of the NNP are also included in the scheme, along with
+a more involved selection algorithm. As this thesis only deals with empirical target potentials, the details will
+not be further discussed here. 
+
+In this work we use the Behler symmetry functions to transform atomic cartesian coordinates to vectors of symmetry values.
+These functions act as descriptors of chemical environments, and should therefore be excellent candidates
+to identify relevant structures during MD simulations without computing additional target energies. 
+Behler has suggested a method \cite{Behler15} where these symmetry functions are employed to improve the NNP. 
+He states that there are two kinds of 
 
 
-
-
-
-
-
+ 
 
 
 

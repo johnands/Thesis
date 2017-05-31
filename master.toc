@@ -30,7 +30,8 @@
 \contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{56}{subsection.7.1.1}
 \contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{57}{subsection.7.1.2}
 \contentsline {subsubsection}{Initial sampling}{58}{section*.10}
-\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{62}{section.7.2}
+\contentsline {subsubsection}{Iterative sampling}{62}{section*.12}
+\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{63}{section.7.2}
 \contentsline {chapter}{\numberline {8}Validation}{65}{chapter.8}
 \contentsline {section}{\numberline {8.1}Time usage}{65}{section.8.1}
 \contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{67}{section.8.2}
@@ -38,5 +39,5 @@
 \contentsline {part}{III\hspace {1em}Results and discussion}{75}{part.3}
 \contentsline {section}{\numberline {8.3}NN potential for Si}{77}{section.8.3}
 \contentsline {section}{\numberline {8.4}NN potential for SiO2}{77}{section.8.4}
-\contentsline {chapter}{Appendices}{79}{section*.18}
+\contentsline {chapter}{Appendices}{79}{section*.19}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{81}{Appendix.1.A}
