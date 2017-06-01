@@ -160,26 +160,52 @@ There exist a lot of different interpolation teqhniques; in this theses we will 
 \chapter{Machine learning}
 Machine learning is the science of giving computers the ability to learn without being explicitly programmed. 
 The idea is that there exist generic algorithms which can be used to find patterns in a broad class of data sets without 
-having to write code specifically for each problem. The algorithm will build its own logic based on the data. 
+having to write code specifically for each problem. The algorithm will build its own logic based on the data.  
 
-There are two main machine learning methods, supervised learning and unsupervised learning. For the former method, 
-you know the answer to a problem and let the computer deduce the logic behind it. When doing the latter, you do not
-know the answer and are just trying to find patterns and relationship in the data. 
+Machine learning is a subfield of computer science, and is closely related to computational statistics. 
+It evolved from the study of pattern recognition in artificial intelligence research (AI), and has made contributions to
+AI tasks like computer vision, natural language processing and speech recognition. It has also, especially in later years, 
+found applications in a wide variety of other areas, including bioinformatics, economy, physics, finance and marketing. 
+(SHOULD I HAVE REFERENCES HERE??)
+
+The approaches to machine learning are many, but are often split into two main categories. 
+In \textit{supervised learning} we know the answer to a problem,
+and let the computer deduce the logic behind it. On the other hand, \textit{unsupervised learning}
+is a method for finding patterns and relationship in data sets withouth any prior knowledge of the system.
+Some authours also operate with a third category, namely \textit{reinforcement learning}. This is a paradigm 
+of learning inspired by behavioural psychology, where learning is achieved by trial-and-error, 
+solely from rewards and punishment.
 
 Another way to categorize machine learning tasks is to consider the desired output of a system.
 Some of the most common tasks are:
 \begin{itemize}
  \item Classification: Outputs are divided into two or more classes. The goal is to 
  produce a model that assigns inputs into one of these classes. An example is to identify
- digits based on pictures of hand-written ones. Typically supervised. 
- \item Regression: Find a functional relationship between variables, the outputs are thus continous. 
- \item Clustering: Inputs are divided into groups without knowing the different groups, i.e. a form of unsupervised classification.  
-\end{itemize}
-In this thesis we will use machine learning to do regression, i.e. to find the PES of interacting molecules.
-One approach to machine learning regression is artificial neural networks. 
+ digits based on pictures of hand-written ones. Classification is typically supervised learning.  
+ \item Regression: Finding a functional relationship between an input data set and a reference data set. 
+ The goal is to construct a function that maps input data to continous output values. 
+ \item Clustering: Data are divided into groups with certain common traits, without knowing the different groups beforehand.
+ It is thus a form of unsupervised learning.  
+\end{itemize} 
+\autoref{fig:machineLearningDiagram} gives an (incomplete) overview of machine learning methods with some selected applications.
+We will not go into further detail on all these approaches to machine learning, as this work only concerns
+one specific area of ML: artificial neural networks. The rest of this chapter concerns the ideas behind this machine learning
+approach. 
+\begin{figure}
+\begin{center}
+ \includegraphics[width = \linewidth]{Figures/Theory/MachineLearningDiagram.png}
+ \caption{Machine learning, taken from from http://www.isaziconsulting.co.za/machinelearning.html.}
+\end{center}
+\label{fig:machineLearningDiagram}
+\end{figure}
 
-\section{Artificial Neural Networks} \label{sec:ANN}
-An Artificial Neural Network (ANN) consists of layers of connected nodes, or neurons. 
+\section{Artificial neural networks} \label{sec:ANN}
+The field of artificial neural networks has a long history of development, and is closely connected with 
+the advancement of computer science and computers in general. A model of artificial neurons 
+was first developed by McCulloch and Pitts in 1943 \cite{McCulloch43} to study signal processing in the brain and 
+has later been refined by others. This model is inspired by the network of biological neurons in the brain, 
+
+An artificial neural network consists of layers of connected nodes, or neurons. 
 It is supposed to mimic a biological nervous system by letting each neuron interact with other neurons
 by sending signals between layers. The accumulated signals received by a neuron is used as input to its 
 \textit{activation function}, which is used to to send new signals to following layers. This function is supposed to mimic that 
@@ -1532,6 +1558,15 @@ We are now ready to launch this graph in a training session.
 
 
 \chapter{Training procedure}
+In this chapter we present the general workflow for constructing a high-dimensional NNP 
+intended for a specific physical application. We describe different ways of assembling 
+an adequate training set for the NN, which is the most crucial factor for the performance of 
+the final potential. Some of the outlined procedures are primarily used to construct 
+\textit{ab inito} NNPs, but are included for reference. 
+
+Next, we discuss how to find a symmetry function set that fits the system under study. 
+The specifics of different training teqhniques are found elsewhere. (WHERE?).
+
 
 \section{Selecting the training data}
 The number of possible configurations of atomic or molecular systems quickly grows very large. 
@@ -1580,7 +1615,7 @@ The method for constructing a NN PES with data sampled from MD simulations is as
 The idea is to improve the NN potential iteratively and in a self-consistent 
 way by applying it in MD simulations to find 
 ''holes'' in the data set, i.e. configurations on which the NNP predicts incorrect energies and forces. The process
-is a bit different depending on whether we are constructing a NNP from \textit{ab inito} electronic structure data
+is different depending on whether we are constructing a NNP from \textit{ab inito} electronic structure data
 or reproducing known, empirical MD potentials. 
 
 For the latter, we construct the initial data set by sampling configurations from MD simulations that is relevant
@@ -1806,9 +1841,11 @@ will ''naturally present themselves'', and the NNP will iteratively improve in a
 The obvious way to identify new structures not already in the initial data set is to evalate both the NNP and 
 the PES we are trying to fit for each structure in an NNP MD simulation and compare the energies (and eventually 
 the forces). If the energy deviation is above a certain treshold, the structure is added to the training set.
-This can be done for different temperatures, pressures etc., and after a certain amount of new data is added, 
+The simulations should be carried out under the conditions of the intended application of the NNP to ensure
+that the relevant parts of configuration space are sampled.
+After a certain amount of new data is added, 
 the NN is trained on this extended data set and thus improved. Then, new simulations are carried out with the improved
-NNP, according to the iterative process \autoref{NNPalgorithm} described in the beginning of this chapter. 
+NNP and so on, according to the iterative process \autoref{NNPalgorithm} described in the beginning of this chapter. 
 
 This approach is easily feasible when the target PES is an empirical potential, but too computationally expensive 
 in the case where electronic structure methods are employed. Raff et al. \cite{Raff05} have developed a sampling
@@ -1832,37 +1869,47 @@ not be further discussed here.
 In this work we use the Behler symmetry functions to transform atomic cartesian coordinates to vectors of symmetry values.
 These functions act as descriptors of chemical environments, and should therefore be excellent candidates
 to identify relevant structures during MD simulations without computing additional target energies. 
-Behler has suggested a method \cite{Behler15} where these symmetry functions are employed to improve the NNP. 
-He states that there are two kinds of 
+Behler has suggested two methods \cite{Behler11general} where these symmetry functions are employed to improve the NNP. 
+The first and simplest method identifies structures that fall outside of the range of input values spanned by the training data. 
+This is achieved by comparing the symmetry function vector of each atom during the MD simulation with 
+the minimum and maximum values of each symmetry function in the database for the respective element. 
+When such configurations are encountered, a warning can be issued and the structure sampled.  
+
+The other method developed by Behler is called the \textit{multiple-NN method} and are used to identify 
+structures that are within the range of existing symmetry values, but located
+in parts of configuration space that are poorly represented in the training set.
+The idea is to use the high flexibility and reasonably fast training and evaluation of NNs to validate 
+the potential. The procedure is as follows,
+\begin{enumerate}
+ \item Fit several NNs with different architectures to the same training set. All the NNs should be trained
+ to the same accuracy. 
+ \item Generate a large number of trajectories and corresponding energies using one of these NNPs in MD simulations.
+ \item Recalculate the energies of the obtained trajectories using the other NNPs
+ \item Structures for which the energy disagreement between the different NNPs is significant should be added to 
+ the training set.
+\end{enumerate}
+This method takes advantage of the poor extrapolation abilites of NNs: the energy predictions of the different NNPs will
+be more or less random on structures that are far away from the training points. Thus, missing structures can 
+be identified by comparing the energy predictions of the different NNPs on the genereated trajectories. The procedure 
+also provides a criterion for determining the convergence of the PES without requiring the repeated computation 
+of dynamic properties of the system under study. When, after several iterations of the multiple-NN method,
+no problematic structures are found, the NNP should be reliable and ready for use. 
+
+\subsubsection{Summary}
+In this section we have presented the workflow for constructing a NNP, including several procedures to 
+assemble the training set for the NN, which depends on how the target energies are computed. 
+In this work, we know the PES we are trying to fit, which are well-known empirical MD potentials. 
+Therefore, the NNP is validated simply by comparing its predictions to the target PES.  
+On the other hand, if an \textit{ab inito} NNP is to be constructed, the underlying target PES is not known, 
+and computing energies and forces of eventual new structures are expensive. Two methods circumventing
+this problem has been described, but they are not used in this thesis. 
+
+Still, there are several factors to consider when constructing the training set, irrelevant of how the target PES looks like.  
+We have implemented and employed the sampling algorithm \eqref{samplingAlgorithmModified} in this thesis to obtain a more uniform
+distribution of forces in the data set. The thermodynamical properties of the MD simulations that we sample configurations 
+from have also been carefully considered, described in more detail in \autoref{sec:SiPotentialResults}.  
 
 
- 
-
-
-
-WRITE ABOUT THE SAMPLING METHODS IN RAFF BOOK, AT LEAST THE FIRST ONE (I THINK THESE ARE SUPPOSED TO BE USED TO FIND NEW
-STRUCTURES, BUT ARE PERHAPS NOT AS RELEVANT BECAUSE WE HAVE SYMMETRY FUNCTIONS). THE RAFF METHOD CAN BE USED TO
-SAMPLE REGIONS WHERE THE FORCES ARE LARGE TO CONSTRUCT INITIAL DATA SET. WHEN REPRODUCING EMPIRICAL POTENTIALS, 
-THE BEST METHOD TO IDENTIFY NEW STRUCTURES IS SIMPLY TO COMPARE THE NN AND SW ENERGIES FOR ALL CONFIGURATIONS, 
-AND ADD THOSE WHERE THE ERROR IS SIGNIFICANT. THIS IS THE METHOD USED IN THIS THESIS. CAN ALSO WRITE A BIT ABOUT HOW THIS
-IS DONE WHEN WE DON'T KNOW THE CORRECT ENERGIES. 
-
-SAMPLING FILOSOFI:
-USING THE ABOVE ALGORITHM TO MAKE SURE I SAMPLE ALL THE CONFIGS THAT CORRESPOND TO LARGE FORCES ON CENTRAL ATOM.
-THIS IS ENSURED BY SETTING ALPHA TO ABOUT 2.0 FOR SIO2 AND RESTRICT THE VALUE OF TAU TO ABOUT 20-30. 
-AFTERWARDS, I DELETE A LOT OF THE LESSER FORCES. I SHOULD CHECK THAT THIS GIVES A RESONABLE FIRST APPROXIMATION
-TO THE NN PES. I SHOULD TRY TO MAKE ONE NET WITH GENERIC SAMPLING, ONE WITH ONLY SAMPLING ALGO, AND ONE WITH BOTH SAMPLING
-ALGO AND CUTTING. THE DATA SETS SHOULD BE OF ABOUT EQUAL SIZE. 
-
-
-
-
-There are two types of such ''unknown'' structures. 
-First, we have configurations that are outside the range of input values spanned by the training data. 
-
-
-We already have a tool
-for identifying such ''unknown'' structures, namely the Behler symmetry functions. 
 
 
 
@@ -1877,7 +1924,7 @@ construction of the symmetry function sets is to some extent empirical. The func
 is adjusted ''automatically'' when trained, while the symmetry function set has to be constructed manually.
 This observation does however not change the fact that the high-dimensional neural network approach to
 constructing potentials used in this work is general, and can in principle be applied to any system. The training data
-and symmetry function sets have to be customized to each system, but the training procedure is always the same. 
+and symmetry function sets have to be customized to each system, but the overarching procedure is the same. 
 
 There are a number of analyses that can be carried out to investigate if we have an adequate
 symmetry function set,
@@ -2175,12 +2222,12 @@ differentiating the NN for each time step. $\SI{4}{\angstrom}$
 
 \part{Results and discussion}
 
-\section{NN potential for Si}
+\chapter{NN potential for Si} \label{sec:SiPotentialResults}
 Construct an NN potential for Si that works in a certain temperature range (only solid, or liquid too?)
 Compute thermodynamic properties and things like radial distrubution function and compare both 
 with experiments and with results with Stillinger-Weber. 
 
-\section{NN potential for SiO2}
+\chapter{NN potential for SiO2}
 Construct an NN potential for SiO2 that works in a certain temperature range (only solid, or liquid too?). 
 Can use various potentials as the black box, e.g. Vashishta or ReaxFF. 
 ReaxFF would be great, because then we would maybe get a speed-up. 
@@ -2536,8 +2583,14 @@ and
  S. Bukkapatnum and R. Komanduri. 
  ''Simultaneous fitting of a potential-energy surface and its corresponding force fields
  using feedforward neural networks''. 
- In: \textit{The Journal of Chemical Physics}
+ In: \textit{The Journal of Chemical Physics} 130. (2009) 134101.
  DOI: \href{http://dx.doi.org/10.1063/1.3095491}{10.1063/1.3095491}
+ 
+\bibitem{McCulloch43}
+ W. S. McCulloch and W. Pitts.
+ ''A logical calculus of the ideas immanent in nervous activity''.
+ In: \textit{Bulletin of Mathematical Biophysics} 5. (1943), 115. 
+ DOI: \href{http://dx.doi.org/10.1007/BF02478259}{10.1007/BF02478259}
  
 
  
