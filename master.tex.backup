@@ -195,37 +195,106 @@ approach.
 \begin{center}
  \includegraphics[width = \linewidth]{Figures/Theory/MachineLearningDiagram.png}
  \caption{Machine learning, taken from from http://www.isaziconsulting.co.za/machinelearning.html.}
+ \label{fig:machineLearningDiagram}
 \end{center}
-\label{fig:machineLearningDiagram}
 \end{figure}
 
-\section{Artificial neural networks} \label{sec:ANN}
+\section{Artificial neurons} \label{sec:ANN}
 The field of artificial neural networks has a long history of development, and is closely connected with 
 the advancement of computer science and computers in general. A model of artificial neurons 
 was first developed by McCulloch and Pitts in 1943 \cite{McCulloch43} to study signal processing in the brain and 
-has later been refined by others. This model is inspired by the network of biological neurons in the brain, 
+has later been refined by others. The general idea is to the mimic neural networks in the human brain, which
+is composed of billions of neurons that communicate with each other by sending electrical signals. 
+Each neuron accumulates its incoming signals, 
+which must exceed an activation threshold to yield an output of one. If the threshold is not overcome, the neuron
+remains inactive, i.e. has zero output.  
 
-An artificial neural network consists of layers of connected nodes, or neurons. 
+This behaviour has inspired a simple mathematical model for an artificial neuron \cite{Rojas96},
+\begin{equation}
+ y = f\left(\sum_{i=1}^n w_ix_i\right) = f(u)
+ \label{artificialNeuron}
+\end{equation}
+Here, the output $y$ of the neuron is the value of its activation function, which have as input
+a weighted sum of signals $x_i, \dots ,x_n$ received by $n$ other neurons.
+The model is illustrated in \autoref{fig:neuronModel}. We will now take a closer look at if and how 
+this mathematical model is biologically plausible.
+\begin{figure}
+ \begin{center}
+  \includegraphics[width=\linewidth]{Figures/Theory/neuron.pdf}
+  \caption{Mathematical model of an artificial neuron. The neuron receives input signals $x_i,\dots,x_n$ from
+	   $n$ other neurons. Each signal $x_i$ is associated with a weight $w_i$, and the neuron accumulates
+	   all input signals as a weighted sum $u$. This sum is then used as input to its activation function
+	   $f$, which serves as the neuron's output signal.}
+  \label{fig:neuronModel}
+ \end{center}
+\end{figure}
+
+\subsection{Biological model}
+Artificial neurons are designed to mimic certain aspects of their biological counterparts \cite{Kriesel07}. 
+A schematic model of a biological nervous cell is depicted in \autoref{fig:neuronBiological}.
+The \textit{dendrites} in a neuron acts as the input vector, and allow the cell to receive signals from a large number
+of neighbouring neurons. As in the mathematical model, each dendrite is associated with the multiplication of a
+''weight value'', which is achieved by an increase or decrease of chemical neurotransmitters that amplifies or
+weakens the input signals. The cell can also transmit signal inhibitors (oppositely charged ions) to 
+accomplish ''negative'' weight values. 
+
+The positive and negative ions arriving from the dendrites are mixed together in the solution inside the \textit{soma}. 
+which corresponds to the summation in \eqref{artificialNeuron}. Finally, the \textit{axon} serves
+as the activation function by sampling the electrical potential of this solution. If the potential 
+reaches a certain strength, the axon transmits a signal pulse down its own length. The axon is connected 
+to another neuron's dendrites (or other parts of the cell), enabling the neurons to communicate. 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width=\linewidth]{Figures/Theory/neuron_anatomy.jpg}
+  \caption{Biological model of a neuron. 
+	   Source: \href{https://askabiologist.asu.edu/neuron-anatomy}{https://askabiologist.asu.edu/neuron-anatomy}}
+  \label{fig:neuronBiological}
+ \end{center}
+\end{figure}
+
+This discussion of nervous cells helps, to a certain degree, to validate the mathematical form \eqref{artificialNeuron}
+of artifical neurons. However, we note that the above description is a highly simplified picture of the great complexity
+of biological neurons, which is not yet fully understood. Our mathematical neurons are thus only caricatures of nature. 
+Next, we will look at how networks of these mathematical objects can be formed to emulate the neural networks
+in the brain.
+
+\section{Neural networks}
+An artificial neural network (ANN), is a computational model that consists of layers of connected neurons, or \textit{nodes}.  
 It is supposed to mimic a biological nervous system by letting each neuron interact with other neurons
-by sending signals between layers. The accumulated signals received by a neuron is used as input to its 
-\textit{activation function}, which is used to to send new signals to following layers. This function is supposed to mimic that 
-a biological neuron is activated if the input is above a certain threshold. We will here follow 
+by sending signals in the form of mathematical functions between layers. A wide variety of different ANNs have
+been developed, but most of them consist of an input layer, an output layer and eventual layers in-between, called
+\textit{hidden layers}. All layers can contain an arbitrary number of nodes. 
+The main factor that seperates the different types are how the neurons are \textit{connected}. 
+This section contains a short presentation of some of the most common types of ANNs, before we move on to 
+a more detailed description of the ANN architecture used in this thesis. In the following we will refer to artificial 
+neural networks simply as neural networks (NNs), i.e. not referring to its biological counterpart.  
+
+\subsection{Feed-forward neural networks}
+The feed-forward neural network (FFNN) was the first and simplest type of NN devised. In this network, 
+the information moves in only one direction - forward through the layers. An example of a FFNN is shown
+in figure 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width=\linewidth]{Figures/Theory/networkGeneral.pdf}
+  \caption{Example of a fully-connected feed-forward neural network with an input layer, two hidden layers
+	   and an output layer. Each node in a layer is connected to \textit{all} nodes in the subsequent layer, 
+	   and information only flows forward through the layers, hence the name.}
+  \label{fig:networkGeneral}
+ \end{center}
+\end{figure}
+
+
+We will here follow 
 Behler \cite{Behler11general} and Dragly \cite{Dragly14}.
 
 There are many types of ANNs made for different purposes. The most widely used are feed-forward and recurrent ANNs. 
 The feedforward network was the first and arguably the most simple type of ANN. In this network the information or signals
-only move forward through the layers - from the input layer, through each successive hidden layer and finally to the output layer. 
+only move forward through the layers - from the input layer, 
+through each successive hidden layer and finally to the output layer. 
 On the other hand, recurrent networks have cycles and loops, i.e. bi-directional data flow. Feed-forward neural networks, 
-also called Multilayer Perceptrons (MLP) were shown to be universal function approximators by K. Hornik et al. \cite{Hornik89} in 1989.
+also called Multilayer Perceptrons (MLP) were shown to be universal function approximators by 
+K. Hornik et al. \cite{Hornik89} in 1989.
 We will use these networks to approximate the PES in thesis. 
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[width = 0.7\linewidth]{Figures/Theory/MLP.png}
-  \caption{Neural network}
-  \label{fig:NN}
-  \end{center}
-\end{figure}
-An MLP networks is shown schematically in \autoref{fig:NN} (STOLEN FROM \cite{Behler11general}, EDIT TO ONE INPUT LATER). 
 
 This network maps input coordinates $G_i$ to a potential energy in the output layer via two hidden layers
 with an (arbitrary) number of hidden nodes. The hidden neurons have no physical meaning, but have the purpose
@@ -2592,6 +2661,10 @@ and
  In: \textit{Bulletin of Mathematical Biophysics} 5. (1943), 115. 
  DOI: \href{http://dx.doi.org/10.1007/BF02478259}{10.1007/BF02478259}
  
+\bibitem{Kriesel07}
+ D. Kriesel. 
+ ''A Breif Introduction to Neural Networks''
+ Available at \href{http://www.dkriesel.com}{http://www.dkriesel.com}
 
  
  
