@@ -258,12 +258,16 @@ of biological neurons, which is not yet fully understood. Our mathematical neuro
 Next, we will look at how networks of these mathematical objects can be formed to emulate the neural networks
 in the brain.
 
-\section{Neural networks}
-An artificial neural network (ANN), is a computational model that consists of layers of connected neurons, or \textit{nodes}.  
+\section{Neural network types}
+An artificial neural network (ANN), is a computational model that consists of layers of connected neurons, or \textit{nodes}. 
 It is supposed to mimic a biological nervous system by letting each neuron interact with other neurons
-by sending signals in the form of mathematical functions between layers. A wide variety of different ANNs have
+by sending signals in the form of mathematical functions between layers. 
+Each node is modelled according to \eqref{artificialNeuron}. 
+A wide variety of different ANNs have
 been developed, but most of them consist of an input layer, an output layer and eventual layers in-between, called
-\textit{hidden layers}. All layers can contain an arbitrary number of nodes. 
+\textit{hidden layers}. All layers can contain an arbitrary number of nodes, and each connection between two nodes
+is associated with a weight variable. 
+
 The main factor that seperates the different types are how the neurons are \textit{connected}. 
 This section contains a short presentation of some of the most common types of ANNs, before we move on to 
 a more detailed description of the ANN architecture used in this thesis. In the following we will refer to artificial 
@@ -271,8 +275,14 @@ neural networks simply as neural networks (NNs), i.e. not referring to its biolo
 
 \subsection{Feed-forward neural networks}
 The feed-forward neural network (FFNN) was the first and simplest type of NN devised. In this network, 
-the information moves in only one direction - forward through the layers. An example of a FFNN is shown
-in figure 
+the information moves in only one direction - forward through the layers. An example FFNN is shown
+in \autoref{fig:networkGeneral}, which consists of an input layer, two hidden layers and an output layer. 
+Nodes are represented by circles, while the arrows display the connections between the nodes, including the 
+direction of information flow. Additionaly, each arrow corresponds to a weight variable, not displayed here. 
+We observe that each node in a layer is connected to \textit{all} nodes in the subsequent layer, 
+making this a so-called \textit{fully-connected} FFNN. 
+This is the type of NN that is used in the present work, 
+and will be further investigated in chapter (REF TO CHAPTER).
 \begin{figure}
  \begin{center}
   \includegraphics[width=\linewidth]{Figures/Theory/networkGeneral.pdf}
@@ -282,6 +292,76 @@ in figure
   \label{fig:networkGeneral}
  \end{center}
 \end{figure}
+
+A different variant of FFNNs are \textit{convolutional neural networks} (CNNs) \cite{LeCun99}, which have a connectivity pattern
+inspired by the animal visual cortex. Individual neurons in the visual cortex only respond to stimuli from
+small sub-regions of the visual field, called a receptive field. This makes the neurons well-suited to exploit the strong
+spatially local correlation present in natural images. The response of each neuron can be approximated mathematically 
+as a convolution operation. 
+
+CNNs emulate the behaviour of neurons in the visual cortex by enforcing a \textit{local} connectivity pattern
+between nodes of adjacent layers: Each node
+in a convolutional layer is connected to a subset of the nodes in the previous layer, 
+in contrast to the fully-connected FFNN in \autoref{fig:networkGeneral}.
+Often, CNNs 
+consist of several convolutional layers that learn local features of the input, with a fully-connected layer at the end, 
+which gathers all the local data and produces the outputs. They have wide applications in image and video recognition. 
+
+\subsection{Recurrent neural networks}
+So far we have only mentioned NNs where information flows in one direction: forward. \textit{Recurrent neural networks} on
+the other hand, have connections between nodes that form directed \textit{cycles}. This creates a form of 
+internal memory which are able to capture information on what has been calculated before; the output is dependent 
+on the previous computations. Recurrent NNs make use of sequential information by performing the same task for 
+every element in a sequence, where each element depends on previous elements. An example of such information is 
+sentences, making recurrent NNs especially well-suited for handwriting and speech recognition.
+
+\subsection{Other types of networks}
+There are many other kinds of NNs that have been developed. One type that is specifically designed for interpolation
+in multidimensional space is the radial basis function (RBF) network. RBFs are typically made up of three layers: 
+an input layer, a hidden layer with non-linear radial symmetric activation functions and a linear output layer (''linear'' here
+means that each node in the output layer has a linear activation function). The layers are normally fully-connected and 
+there are no cycles, thus RBFs can be viewed as a type of fully-connected FFNN. They are however usually treated as
+a seperate type of NN due the unusual activation functions (common activation functions are presented in chapter
+(REF TO CHAPTER)) 
+and a different training algorithm, that we will not expand upon 
+here. 
+
+Other types of NNs could also be mentioned, but are outside the scope of this work. Now we will move on to a detailed description
+of how a fully-connected FFNN functions, and how it can be trained to interpolate data. 
+
+\section{Multilayer perceptron}
+In this thesis we use fully-connected feed-forward neural networks with three
+or more layers (an input layer, one or more hidden layers and an output layer), mainly
+consisting of neurons that have non-linear activation functions.
+Such networks are often called \textit{multilayer perceptrons} (MLPs). 
+\footnote{The terms ''feed-forward neural network'' and ''multilayer perceptron'' are used interchangeably in the 
+literature, although the MLP is just one type of FFNN, namely a fully-connected one with mainly non-linear neurons.}
+The \textit{perceptron} was first introduced by Rosenblatt in 1958 \cite{Rosenblatt58}, and was a FFNN made up of an input layer
+and an ouput layer only. It served as a \textit{binary classifier}, i.e. a function that maps a real-valued vector $\vec{x}$ 
+to a single binary value $f(\vec{x})$, employing a linear activation function. The addition of hidden layers and 
+non-linear activation functions led to the MLP, which could produce an arbitrary number of continous output values. 
+
+\subsection{Why multilayer perceptrons?}
+We have chosen to use MLPs to interpolate data sets for the construction of inter-atomic potentials. 
+Other NN types could also have been used, but our choice is well justified. According to the
+\textit{Universal approximation theorem} \cite{Hornik89}, a FFNN with just a single hidden layer containing 
+a finite number of neurons can approximate a continous multidimensional function to arbitrary accuracy, 
+assuming the the activation function is a non-constant, bounded and monotonically-increasing continous function. 
+
+First, the MLPs is the simplest multilayer NN. Adding complicating factors like recurrent or local connectivity is 
+unnecessary, as these teqhniques have been developed for classification purposes, not continous regression. 
+
+The MLP maps sets of input data onto a set of appropriate outputs, and can be used for both regression and classification.
+
+
+
+This choice is NN type is well justified, considering that MLPs
+was proven to be a universal function approximators
+by Hornik et al. \cite{Hornik89}. 
+
+
+
+
 
 
 We will here follow 
@@ -377,16 +457,6 @@ As shown in \eqref{completeNN}, the NN consists of several nested terms of the f
 \end{equation}
 where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
 can be shifted up and down or left and right, change slope or be rescaled, thus making the NN more flexible.
-
-\subsection{Convolution}
-ANNs are supposed to mimic biological systems. We know that neurons in the visual cortex of animals have
-localized receptive fields, i.e. they respond only to stimuli in a certain location of the visual field. 
-These regions are overlapping and covers the entire visual field. This can be exploited in ANNs by making the hidden layers
-only connect to a small contigous region of the input layer. This also speeds up computations. These are called
-locally connected networks, unlike fully connected networks, where all the hidden layers are connected to the complete
-input layer. 
-
-Using this approach, we can aggregate statistics of these features at various locations. This is called pooling. 
 
 \section{Training}
 The ability of the NN to represent a function accurately depends on the values of the weights. 
@@ -2665,7 +2735,18 @@ and
  D. Kriesel. 
  ''A Breif Introduction to Neural Networks''
  Available at \href{http://www.dkriesel.com}{http://www.dkriesel.com}
-
+ 
+\bibitem{LeCun99}
+ Y. LeCun, P. Haffner, L. Bottou, Y. Bengio. 
+ ''Object recognition with Gradient-Based Learning''.
+ In: \textit{Shape, Contour and Grouping in Computer Vision. Lecture Notes in Computer Science}.
+ 1681. (1999) 319-345. 
+ DOI: \href{http://dx.doi.org/10.1007/3-540-46805-6_19}{10.1007/3-540-46805-6\_19}
+ 
+\bibitem{Rosenblatt58}
+ F. Rosenblatt. 
+ ''The Perceptron: A probabilistic model for information storage and organization in the brain''.
+ In: \textit{Psychological Review} 65. (1958), 386-408. 
  
  
 \end{thebibliography}
