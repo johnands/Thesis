@@ -230,7 +230,7 @@ this mathematical model is biologically plausible.
  \end{center}
 \end{figure}
 
-\subsection{Biological model}
+\subsection*{Biological model}
 Artificial neurons are designed to mimic certain aspects of their biological counterparts \cite{Kriesel07}. 
 A schematic model of a biological nervous cell is depicted in \autoref{fig:neuronBiological}.
 The \textit{dendrites} in a neuron acts as the input vector, and allow the cell to receive signals from a large number
@@ -342,19 +342,28 @@ and an ouput layer only. It served as a \textit{binary classifier}, i.e. a funct
 to a single binary value $f(\vec{x})$, employing a linear activation function. The addition of hidden layers and 
 non-linear activation functions led to the MLP, which could produce an arbitrary number of continous output values. 
 
-\subsection{Why multilayer perceptrons?}
+\subsection{Why multilayer perceptrons?} \label{sec:whyMLP}
 We have chosen to use MLPs to interpolate data sets for the construction of inter-atomic potentials. 
 Other NN types could also have been used, but our choice is well justified. According to the
 \textit{Universal approximation theorem} \cite{Hornik89}, a feed-forward neural network with just a single hidden layer containing 
 a finite number of neurons can approximate a continous multidimensional function to arbitrary accuracy, 
-assuming the the activation function is a non-constant, bounded and monotonically-increasing continous function. 
-The only requirement on the NN is that it must be feed-forward, thus recurrent NNs are out of the picture. 
+assuming the activation function for the hidden layer is a ''non-constant, bounded and monotonically-increasing continous function''.
+Note that the requirements on the activation function only applies to the hidden layer, the output nodes are always
+assumed to be linear, so as to not restrict the range of output values. 
+The only requirement on the NN information flow is that it must be feed-forward, thus recurrent NNs are out of the picture. 
 Also, we might as well use the simplest multilayer FFNN available, the MLP, as 
 adding complicating factors like local connectivity is unnecessary for our purposes. 
 
+We note that this theorem is only applicable to a NN with \textit{one} hidden layer. Therefore, we can easily construct a NN 
+which employs activation functions that do not satisfy the above requirements, as long as we have at least one layer
+with activation functions that \textit{do}. Furthermore, although the universal approximation theorem
+lays the theoretical foundation for regression with neural networks, it does not say anything about how things work in practice: 
+a NN can still be able to approximate a given function reasonably well without having the flexibility to fit \textit{all other}
+functions. 
+
 \subsection{Mathematical model}
-In an MLP, each node (neuron) is modelled according to \eqref{artificialNeuron}. To increase the flexibility of the NN
-(explained in sec (REF TO SEC)), we also add a \textit{bias} to this model, resulting in 
+In an MLP, each node (neuron) is modelled according to \eqref{artificialNeuron}. To increase the flexibility of the NN,
+we also add a \textit{bias} to this model, resulting in 
 \begin{equation}
  y = f\left(\sum_{i=1}^n w_ix_i + b_i\right) = f(u)
  \label{artificialNeuron2}
@@ -381,7 +390,10 @@ which they belong to respectively.
 \end{figure}
 The following notation is introduced: $y_i^l$ is the output of the $i$-th node in layer $l$, where $l=0$ is the input layer, 
 $l=1$ is the first hidden layer and so on. The same notation applies to the biases. For the weights, we have that
-$w_{ij}^l$ is the weight connecting node $i$ in layer $l-1$ with node $j$ in layer $l$. All weights and biases are real-valued numbers.
+$w_{ij}^l$ is the weight connecting node $j$ in layer $l-1$ with node $i$ in layer $l$. 
+\footnote{This order of indicies $i$ and $j$ may seem illogical, but will become useful when converting
+the equations below to matrix equations.}
+All weights and biases are real-valued numbers.
 
 The MLP in \autoref{fig:networkNotation} maps the inputs $x_i$ to the output $y_1^3$ via two hidden layers
 with an (arbitrary) number of hidden nodes. The hidden neurons have no physical meaning, but have the purpose
@@ -402,6 +414,7 @@ where we assume that all nodes in the same layer have identical activation funct
 For an arbitrary node $i$ in layer $l$ this generalizes to
 \begin{equation}
  y_i^l = f^l(u_i^l) = f^l\left(\sum_{m=1}^{N_{l-1}} y_m^{l-1}w_{m,i}^l + b_i^l\right)
+ \label{generalLayer}
 \end{equation}
 where $N_l$ is the number of nodes in layer $l$. When the output of all the nodes in the first hidden layer are computed,
 the values of the subsequent layer can be calculated and so forth until the output is obtained. 
@@ -423,6 +436,7 @@ is,
  \cdots f^1\left(\sum_{j=1}^{N_0} x_j w_{j,k}^1 + b_k^1\right)
  \cdots \right) w_{k,m}^2 + b_m^2\right)
  w_{m,1}^3 + b_1^3\right]
+ \label{completeNN}
 \end{equation}
 which illustrates a basic property of MLPs: the only \textit{variables} are the input values $x_j$. 
 This confirms that a MLP,
@@ -430,11 +444,79 @@ despite its quite convoluted mathematical form, is nothing more than an analytic
 mapping of real-valued vectors $\vec{x} \in \mathbb{R}^n \rightarrow \vec{y} \in \mathbb{R}^m$. 
 In our example (\autoref{fig:networkNotation}) $n=2$ and $m=1$.  
 
-\subsection{Activation functions}
-A desired property of activation functions is to converge asymptotically
-to constant output values for large and small arguments, with a non-linear region in-between. The non-linearity enables
-the ANN to fit arbitrary functions \cite{Hornik89}. Common activation functions \cite{Rojas96} for 
-function approximation are the sigmoid function
+Furthermore, the flexibility and universality of a MLP can be illustrated by realizing that 
+the expression \eqref{completeNN} is essentially a nested sum of scaled activation functions of the form
+\begin{equation}
+ h(x) = c_1 f(c_2 x + c_3) + c_4
+\end{equation}
+where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
+can be shifted up and down or left and right, change slope or be rescaled (\autoref{fig:activationsFlex}), 
+which is the key to the flexibility of a NN. 
+\begin{figure}
+\begin{center}
+  \includegraphics[width = 0.9\linewidth]{Figures/Theory/activationFlex.pdf}
+  \caption{The mathematical expression for a MLP consists of nested terms of the form $h(x) = c_1 f(c_2 x + c_3) + c_4$, 
+	   where $f$ is the activation function
+	    and $c_i$ are NN parameters. The flexibility of the MLP is shown by adjusting $c_1$, $c_2$, $c_3$ and $c_4$ such that
+	    $h(x)$
+	    a) is scaled, b) has a change of slope, c) is shifted left and right, d) is shifted up and down, respectively.}
+  \label{fig:activationsFlex}
+  \end{center}
+\end{figure}
+
+\subsubsection*{Matrix representation}
+We can introduce a more convenient notation for the activations in a NN. 
+If we look at the structure of the NN in \autoref{fig:networkNotation}, we realize that all the weights connecting 
+two adjacent layers can be represented as a matrix $W$, where $w^l_{ij}$ is as before the weight connecting connecting node $j$
+in layer $l-1$ with node $i$ in layer $l$. Additionaly, we can represent the biases and activations
+as layer-wise column vectors, so that e.g. $\vec{b}^l_i$ is the bias of node $i$ in layer $l$. 
+We have that $W^l$ is a $N_{l-1} \times N_l$ matrix, while $\vec{b}^l$ and $\vec{y}^l$ are $N_l \times 1$ column vectors. 
+
+With this notation, the sum in \eqref{outputLayer2} becomes a matrix-vector multiplication, and we can write
+the equation for the activations of hidden layer 2 in \autoref{fig:networkNotation} as
+\begin{equation}
+ \vec{y}^2 = f(W^2 \vec{y}^{1} + \vec{b}^{2}) = 
+ f\left(\left[\begin{array}{ccc}
+    w^2_{11} &w^2_{12} &w^2_{13} \\
+    w^2_{21} &w^2_{22} &w^2_{23} \\
+    w^2_{31} &w^2_{32} &w^2_{33} \\
+    \end{array} \right] \cdot
+    \left[\begin{array}{c}
+           y^1_1 \\
+           y^1_2 \\
+           y^1_3 \\
+          \end{array}\right] + 
+    \left[\begin{array}{c}
+           b^2_1 \\
+           b^2_2 \\
+           b^2_3 \\
+          \end{array}\right]\right)
+\end{equation}
+and we see that the activation of node $i$ in layer 2 is
+\begin{equation}
+ y^2_i = w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3
+\end{equation} 
+
+
+
+\section{Activation functions}
+A property that characterizes a NN, other than its connectivity, is the choice of activation function(s). 
+As described in \autoref{sec:whyMLP}, the following restrictions are imposed on an activation function for a FFNN
+to fulfill the universal approximation theorem \cite{Hornik89}:
+\begin{enumerate}
+ \item Non-constant
+ \item Bounded
+ \item Monotonically-increasing
+ \item Continous
+\end{enumerate}
+We realize that the second requirement excludes all linear functions. Furthermore, in a MLP with only linear activation functions, each 
+layer simply performs a linear transformation of its inputs. Consequentially, regardless of the number of layers, 
+the output of the NN will be nothing but a linear function of the inputs. Thus we need to introduce some kind of 
+non-linearity to the NN to be able to fit non-linear functions. 
+
+A group of non-linear functions that meet the above requirements are the \textit{sigmoid} functions. 
+The two sigmoid functions that are most commonly used as activation functions \cite{Rojas96} in 
+neural networks are the logistic function
 \begin{equation}
  f(x) = \frac{1}{1 + e^{-x}}
  \label{sigmoidActivationFunction}
@@ -444,59 +526,87 @@ and the hyperbolic tangent
  f(x) = \tanh(x)
  \label{tanhActivationFunction}
 \end{equation}
-\begin{figure}[H]
+The logistic functon is often referred to as ''the sigmoid'', which is the naming convention we will use 
+in the following. Both functions are depicted in \autoref{fig:SigmoidActivationFunctions}. We observe that they
+are bounded above by 1, while the lower bound is -1 and 0 for the hyperbolic tangent and sigmoid respectively. This property 
+keeps the activations from blowing up. 
+\begin{figure}
 \begin{center}
   \includegraphics[width = 0.7\linewidth]{Figures/Theory/activationFunctions.pdf}
-  \caption{Activation functions}
-  \label{fig:activations}
+  \caption{Two of the most common activation functions for neural networks. Both meet the requirements
+	   of the universal approximation theorem.}
+  \label{fig:SigmoidActivationFunctions}
   \end{center}
 \end{figure}
-Both these functions (Figure \ref{fig:activations}) have the desired properties mentioned above:
-They are constant (1 or 0) for all values except a small interval around zero, where they have non-linear behaviour. 
-This keeps the outputs of the neurons from blowing up. The sigmoid are more bilogically plausible because 
+The sigmoid are more bilogically plausible because 
 the output of inactive neurons are zero. Such activation function are called \textit{one-sided}. However,
 it has been shown \cite{Karlik11} that the hyperbolic tangent 
-performs better than the sigmoid for multi-layer networks. Nevertheless, one should assess the problem 
+performs better than the sigmoid for training MLPs. This will be further discussed in section (REF TO SECTION). 
+Nevertheless, one should assess the problem 
 at hand when deciding what activation function to use; the performance can vary from problem to problem. 
-(VENTE MED Å DISKUTERE DETTE TIL JEG HAR SNAKKET OM BACKPROPAGATION OSV.)
-SNAKKE OM SATURATION OSV. 
 
-In later years, the rectifier function (Figure \ref{fig:rectifier})
+In later years, the rectifier function (\autoref{fig:reluActivationFunction})
 \begin{equation}
  f(x) = \max(0,x)
 \end{equation}
-has become the most popular for deep neural networks \cite{LeCun15}. PLOT DENNE FUNKSJONEN.
-The two former functions are symmetrical around zero osv....
-It have been argued to be even more biologically plausible than the sigmoid and also perform better
-than the hyperbolic tangent for deep NNs. \cite{Glorot11}. 
+has become the most popular \cite{LeCun15} for \textit{deep neural networks}, i.e. NNs with a large number of hidden layers.
+It has been argued to be even more biologically plausible than the sigmoid and also perform better
+than the hyperbolic tangent, especially for deep, convolutional NNs \cite{Glorot11}. Even though the rectifier is a
+piecewise \textit{linear} function, it effectively behaves as a non-linearity. However, it does not have an upper bound, and
+therefore does not satisfy the universal approximator requirements. Further, the function values can potentially blow up. 
+These problems are solved in practice by employing various teqhniques, illustrating that the universal approximation theorem
+should not be used as an absolute guideline for the construction of activation functions. 
+\begin{figure}
+\begin{center}
+ \includegraphics[width = 0.7\linewidth]{Figures/Theory/reluActivation.pdf}
+  \caption{Two of the most common activation functions for neural networks. Both meet the requirements
+	   of the universal approximation theorem.}
+  \label{fig:reluActivationFunction}
+  \end{center}
+\end{figure}
 
-
-A linear activation function $f(x) = x$ is often used in the output layer to avoid any constraint in the range 
-of output values. For regression, the most widely used output activation is the unity function $f(x) = 1$, i.e.
-no activation (HVORFOR?).
-
-As shown in \eqref{completeNN}, the NN consists of several nested terms of the form
-\begin{equation}
- h(x) = c_1 f(c_2 x + c_3) + c4
-\end{equation}
-where the parameters $c_i$ are weights and biases. By adjusting these parameters, the activation functions
-can be shifted up and down or left and right, change slope or be rescaled, thus making the NN more flexible.
 
 \section{Training}
-The ability of the NN to represent a function accurately depends on the values of the weights. 
-The weights are typically initialized as random numbers, and then optimized iteratively to minimize the error
-to a set of expected output values. The expected output values are in our case known energies of a set of atomic
-configurations, which have been obtained in quantum mechanical calculations of electronic structure. 
-This optimization is called \textit{training} and an iteration is called an \textit{epoch}. 
-The fitting process corresponds to the minimization of an error function, also known as the quadratic \textit{cost} function
+In the beginning of this chapter we defined machine learning as the ''science of giving computers the ability to learn without
+being explicitly programmed.'' In the neural network case, this learning is achieved by iteratively adjusting 
+the parameters, i.e. the weights and biases (in the following, ''weights'' will often be equivalent to all 
+the NN parameters, including the biases).
+The procedure depends on what learning paradigm we work with
+(unsupervised or supervised learning), and the type of NN we use. 
+
+In this thesis we employ NNs for regression: we want to interpolate data sets og atomic coordinates and energies.
+The goal is to adjust the weights of a MLP so that it accurately represents a function that maps
+atomic coordinates to the corresponding energies. The input values to the function that we want to fit are
+are called the \textit{training set}, while the output values are called the \textit{reference set} or the \textit{target values}.
+Interpolation with NNs is essentialy an optimization problem:
+the weights are typically initialized as random numbers, and then modified iteratively to minimize the error
+to a set of expected output values, in our case energies. 
+This procedure is called \textit{training}. 
+
+
+
+\subsection{Cost functions}
+To minimize the error, we need a way to \textit{define} it. 
+As in mathematical optimization, the error is represented by an objective function, also called \textit{loss} function
+or \textit{cost} function. Training a NN therefore amounts to the minimization of this function, which can be written in the 
+following general way,
 \begin{equation}
- \Gamma = \frac{1}{2N}\sum_{i=1}^N (E_{i,ref} - E_{i,NN})^2
- \label{quadraticCostFunction}
+ \Gamma = \Gamma(W, B, X, Y)
+ \label{generalCost}
 \end{equation}
-$E_{i,ref}$ are the known target energies, while $E_{i,NN}$ are the energies produced by the network. 
-The constant $1/2$ are there to cancel out the exponent when we differentiate later. 
-Other cost functions are used for other ML tasks (SKRIVE OM DISSE. KANSKJE HELE DENNE SEKSJONEN BØR 
-SKRIVES MER GENERELL OG IKKE KUN FOR TILFELLET PES?)
+where $W$ and $B$ are the NN's weights and biases respectively, $X$ is the training data and $Y$ is the target values. 
+The value of this function is a measure of how well the NN is able to map $X \rightarrow Y$. 
+By adjusting $W$ and $B$, we try to minimize the value of this function.  
+
+The most common cost function used in regression with NNs is the mean-square error,
+\begin{equation}
+ \Gamma = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
+ \label{quadraticCost}
+\end{equation}
+where $y_i = y_i(W, B, X_i)$ is the value predicted by the NN for traing data sample $X_i$.  
+The presence of the constant $1/2$ is explained in \autoref{sec:backprop}.  
+
+Other cost functions are used for other ML tasks. 
 
 \subsection{Backpropagation} \label{sec:backprop}
 From: https://www.willamette.edu/~gorr/classes/cs449/backprop.html and \newline
