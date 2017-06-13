@@ -361,7 +361,7 @@ lays the theoretical foundation for regression with neural networks, it does not
 a NN can still be able to approximate a given function reasonably well without having the flexibility to fit \textit{all other}
 functions. 
 
-\subsection{Mathematical model}
+\subsection{Mathematical model} \label{sec:MLPmodel}
 In an MLP, each node (neuron) is modelled according to \eqref{artificialNeuron}. To increase the flexibility of the NN,
 we also add a \textit{bias} to this model, resulting in 
 \begin{equation}
@@ -402,47 +402,52 @@ is also valid for a NN with several outputs; the result applies to each ouput no
 
 First, for each node $i$ in the first hidden layer, we calculate a weighted sum $u_i^1$ of the input coordinates $x_m$,
 \begin{equation}
- u_i^1 = \sum_{m=1}^2 x_m w_{m,i}^1 + b_i^1 
+ u_i^1 = \sum_{j=1}^2 w_{ij}^1 x_j  + b_i^1 
 \end{equation}
 This value is the argument to the activation function $f^1$ of each neuron,
 producing the output $y_i^1$ of all neurons in layer 1,
 \begin{equation}
- y_i^1 = f^1(u_i^1) = f^1\left(\sum_{m=1}^2 x_m w_{m,i}^1 + b_i^1\right)
+ y_i^1 = f^1(u_i^1) = f^1\left(\sum_{j=1}^2 w_{ij}^1 x_j  + b_i^1\right)
  \label{outputLayer1}
 \end{equation}
 where we assume that all nodes in the same layer have identical activation functions, hence the notation $f^l$. 
 For an arbitrary node $i$ in layer $l$ this generalizes to
 \begin{equation}
- y_i^l = f^l(u_i^l) = f^l\left(\sum_{m=1}^{N_{l-1}} y_m^{l-1}w_{m,i}^l + b_i^l\right)
+ y_i^l = f^l(u_i^l) = f^l\left(\sum_{j=1}^{N_{l-1}} w_{ij}^l y_j^{l-1} + b_i^l\right)
  \label{generalLayer}
 \end{equation}
 where $N_l$ is the number of nodes in layer $l$. When the output of all the nodes in the first hidden layer are computed,
 the values of the subsequent layer can be calculated and so forth until the output is obtained. 
 The output of neuron $i$ in layer 2 is thus,
 \begin{align}
- y_i^2 &= f^2\left(\sum_{m=1}^3 y_m^1w_{m,i}^2 + b_i^2\right) \\
- &= f^2\left[\sum_{m=1}^3 f^1\left(\sum_{k=1}^2 x_n w_{k,m}^1 + b_m^1\right)w_{m,i}^2 + b_i^2\right]
+ y_i^2 &= f^2\left(\sum_{j=1}^3 w_{ij}^2 y_j^1 + b_i^2\right) \\
+ &= f^2\left[\sum_{j=1}^3 w_{ij}^2f^1\left(\sum_{k=1}^2 w_{jk}^1 x_k + b_j^1\right) + b_i^2\right]
+ \label{outputLayer2}
 \end{align}
 where we have substituted $y_m^1$ with \eqref{outputLayer1}. Finally, the NN output yields,
 \begin{align}
- y_1^3 &= f^3\left(\sum_{m=1}^3 y_m^2w_{m,1}^3 + b_1^3\right) \\
- &= f^3\left[\sum_{m=1}^3 f^2\left(\sum_{k=1}^3 f^1\left(\sum_{j=1}^2 x_j w_{j,k}^1 + b_k^1\right)w_{k,m}^2 + b_m^2\right)
- w_{m,1}^3 + b_1^3\right]
+ y_1^3 &= f^3\left(\sum_{j=1}^3 w_{1m}^3 y_j^2 + b_1^3\right) \\
+ &= f^3\left[\sum_{j=1}^3 w_{1j}^3 f^2\left(\sum_{k=1}^3 w_{jk}^2 f^1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
+  + b_1^3\right]
 \end{align}
 We can generalize this expression to a MLP with $l$ hidden layers. The complete functional form
 is,
 \begin{equation}
- y^{l+1}_1 = f^{l+1}\left[\sum_{m=1}^{N_l} f^l\left(\sum_{k=1}^{N_{l-1}}f^{l-1}\left(
- \cdots f^1\left(\sum_{j=1}^{N_0} x_j w_{j,k}^1 + b_k^1\right)
- \cdots \right) w_{k,m}^2 + b_m^2\right)
- w_{m,1}^3 + b_1^3\right]
+ y^{l+1}_1 = f^{l+1}\left[\sum_{j=1}^{N_l} w_{1j}^3 f^l\left(\sum_{k=1}^{N_{l-1}} w_{jk}^2 f^{l-1}\left(
+ \cdots f^1\left(\sum_{n=1}^{N_0} w_{mn}^1 x_n + b_m^1\right)
+ \cdots \right) + b_k^2\right)
+ + b_1^3\right]
  \label{completeNN}
 \end{equation}
-which illustrates a basic property of MLPs: the only \textit{variables} are the input values $x_j$. 
+which illustrates a basic property of MLPs: the only independent variables are the input values $x_j$. 
 This confirms that a MLP,
 despite its quite convoluted mathematical form, is nothing more than an analytic function, specifically a 
 mapping of real-valued vectors $\vec{x} \in \mathbb{R}^n \rightarrow \vec{y} \in \mathbb{R}^m$. 
-In our example (\autoref{fig:networkNotation}) $n=2$ and $m=1$.  
+In our example (\autoref{fig:networkNotation}), $n=2$ and $m=1$. Consequentially, 
+the number of input and output values of the function we want to fit must be equal to the number of inputs and outputs of our MLP.  
+
+The number of inputs and outputs thus defines
+the dimensions of the function we want to fit: 
 
 Furthermore, the flexibility and universality of a MLP can be illustrated by realizing that 
 the expression \eqref{completeNN} is essentially a nested sum of scaled activation functions of the form
@@ -494,8 +499,14 @@ the equation for the activations of hidden layer 2 in \autoref{fig:networkNotati
 \end{equation}
 and we see that the activation of node $i$ in layer 2 is
 \begin{equation}
- y^2_i = w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3
+ y^2_i = w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3 + b_i = 
+ \sum_{j=1}^3 w_{ij} y_j^1 + b_i
 \end{equation} 
+which is in accordance with \eqref{outputLayer2}. This is not just a nice and compact notation, but also 
+a useful and intuitive way to think about MLPs: the output is calculated by a series of matrix-vector multiplications
+and vector additions that are used as input to the activation functions. For each operation 
+$W^l \vec{y}^{l-1}$ we move forward one layer. Furthermore, it is the easiest way to implement NNs with 
+TensorFlow, which is discussed in \autoref{sec:TensorFlowCreatingNN}. 
 
 
 
@@ -566,7 +577,7 @@ should not be used as an absolute guideline for the construction of activation f
 \end{figure}
 
 
-\section{Training}
+\section{Training} \label{sec:training}
 In the beginning of this chapter we defined machine learning as the ''science of giving computers the ability to learn without
 being explicitly programmed.'' In the neural network case, this learning is achieved by iteratively adjusting 
 the parameters, i.e. the weights and biases (in the following, ''weights'' will often be equivalent to all 
@@ -576,13 +587,18 @@ The procedure depends on what learning paradigm we work with
 
 In this thesis we employ NNs for regression: we want to interpolate data sets og atomic coordinates and energies.
 The goal is to adjust the weights of a MLP so that it accurately represents a function that maps
-atomic coordinates to the corresponding energies. The input values to the function that we want to fit are
-are called the \textit{training set}, while the output values are called the \textit{reference set} or the \textit{target values}.
-Interpolation with NNs is essentialy an optimization problem:
+atomic coordinates to the corresponding energies. Interpolation with NNs is essentialy an optimization problem:
 the weights are typically initialized as random numbers, and then modified iteratively to minimize the error
 to a set of expected output values, in our case energies. 
 This procedure is called \textit{training}. 
 
+The input values to the function that we want to fit
+are called the \textit{training set}, while the output values are called the \textit{reference set} or the \textit{target values}.
+The training set $X$ and reference set $Y$ are represented as matrices, where the $i$-th row of $X$ and the $i$-th row of $Y$
+together form a \textit{training example}. The combined data set consists of $N$ such training examples. 
+Note that the number of columns of $X$ and $Y$ are equal to the number of inputs and outputs of our MLP respectively. 
+This is a restatement of the observation made in \autoref{sec:MLPmodel}: the number of inputs and outputs of our MLP must be equal 
+to the number of input and output values of the function we are trying to fit. 
 
 
 \subsection{Cost functions}
@@ -594,38 +610,72 @@ following general way,
  \Gamma = \Gamma(W, B, X, Y)
  \label{generalCost}
 \end{equation}
-where $W$ and $B$ are the NN's weights and biases respectively, $X$ is the training data and $Y$ is the target values. 
+where $W$ and $B$ are the NN's weights and biases respectively. 
 The value of this function is a measure of how well the NN is able to map $X \rightarrow Y$. 
 By adjusting $W$ and $B$, we try to minimize the value of this function.  
 
-The most common cost function used in regression with NNs is the mean-square error,
+The standard cost function used in regression with NNs is the mean-square error,
 \begin{equation}
  \Gamma = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
  \label{quadraticCost}
 \end{equation}
 where $y_i = y_i(W, B, X_i)$ is the value predicted by the NN for traing data sample $X_i$.  
-The presence of the constant $1/2$ is explained in \autoref{sec:backprop}.  
+The presence of the constant $1/2$ is explained in \autoref{sec:backprop}.
 
-Other cost functions are used for other ML tasks. 
+A variety of other cost functions are used for other machine learning tasks. In classificiation the output is often binary, 
+hence the mean-square error function is inadequate. We will not go into further detail on other cost functions here. 
+
+
+\section{Optimization algorithms} \label{sec:optimization}
+There are a large number of algorithms that can be used to determine the set of weights minimizing the 
+cost function \eqref{quadraticCost}. 
+Different kinds of gradient descent-based methods are widely used, but also higher order methods like
+the conjugate gradient algorithm. 
+The idea behind gradient descent methods is to minimize a function by 
+iteratively taking steps in the direction of steepest descent towards a minima in parameter space. 
+This direction is defined as the negative gradient of the function w.r.t. 
+all its parameters. If we define $\vec{\theta} \in \mathbb{R}^d$ as a vector containing all the weights and biases
+of a MLP, we get the following iterative scheme,
+\begin{equation}
+ \vec{\theta}^{\mathrm{new}} = \vec{\theta}^{\mathrm{old}} - \gamma \nabla_{\vec{\theta_\mathrm{old}}} \Gamma
+ \label{gradientDescent}
+\end{equation}
+where $\gamma$ is a step size, called the \textit{learning rate} in the context of machine learning. The process is started
+by initializing the parameters as random numbers. The value of $\gamma$ is of great importance for the algorithm to converge,
+and is allowed to change at every iteration. Note that convergence to 
+a minimum is not guaranteed withouth certain assumptions on the function $\Gamma$ and the particular choices of $\gamma$.
+Also, the obatained minimum is generally local, not global. 
+Different ways to update $\gamma$ is discussed below.
+
+
+\subsection{Gradient descent variants}
+There are three versions of gradient descent, which differ in 
+the number of training examples we present to the NN before updating the parameters. 
+According to neural network terminology, the process of adjusting the parameters based on all the training examples,
+either in batches or all at once, is called an \textit{epoch}. 
+
+In \textit{batch} gradient descent, 
+we compute the gradient of the cost function for the \textit{whole} training set before updating, also called 
+\textit{offline learning}. 
+This approach can be very slow and is intractable for datasets that do not fit in memory. Furthermore, there is a risk
+of performing redundant computations if many similar examples are present in the data set.
+
+In contrast, \textit{stochastic} gradient descent (SDG) performs a parameter update for \textit{each} training example. 
+SDG avoids redundant gradient calculations and is therefore faster than batch gradient descent. However, the accuracy 
+of each update is lower, which can lead to quite large error oscillations. The concept of having  
+more than one parameter update per epoch is called \textit{online learning}. 
+
+Finally, we have \textit{mini-batch} gradient descent, which is a mix of the two other approaches. The training set 
+is divided into $n$ equally sized mini-batches and a parameter update is performed for each mini-batch. This is usually the
+algorithm of choice, as it has the optimal trade-off between speed and accuracy. NORMAL BATCH SIZES
+
 
 \subsection{Backpropagation} \label{sec:backprop}
 From: https://www.willamette.edu/~gorr/classes/cs449/backprop.html and \newline
 http://neuralnetworksanddeeplearning.com/chap2.html. 
 Mainly from the first one, but argument for error of neuron from second.
 
-There are a large number of algorithms that can be used to determine the set of weights minimizing the 
-cost function \eqref{quadraticCostFunction}. 
-Different kinds of gradient descent methods are widely used, but to implement these we need the partial derivatives of
-the cost function w.r.t. to all weights and biases to determine how we should adjust each weight. The idea behind gradient descent 
-methods is to minimize a function by iteratively taking steps in the direction of the negative of its gradient w.r.t. 
-all its parameters, i.e. the direction of steepest descent towards a minima:
-\begin{equation}
- w_{ij}^{new} = w_{ij}^{old} - \gamma \frac{\partial \Gamma}{\partial w_{ij}^{old}}
- \label{gradientDescent}
-\end{equation}
-where we have skipped the layer indicies for clarity. Also, $w_{ij}$ now denotes the weight connecting node $j$ 
-in layer $k$ with node $i$ in the following layer. This change of order is introduced to make it easier
-to rewrite the below equations for backpropagation into matrix-vector equations. 
+
 As seen from \eqref{gradientDescent}, we need to adjust each weight by an amount
 \begin{equation}
 \Delta w_{ij} = \frac{\partial \Gamma}{\partial w_{ij}}
@@ -635,6 +685,8 @@ The corresponding expression for the biases is
 \begin{equation}
  \Delta b_i = \frac{\partial \Gamma}{\partial b_i}
 \end{equation}
+but to implement these we need the partial derivatives of
+the cost function w.r.t. to all weights and biases to determine how we should adjust each weight.
 A common method to obtain these derivatives is backpropagation \cite{Rumelhart86}. 
 In backpropagation, the output of the NN is compared to the desired output, the error is then propagated backwards
 to adjust the weights. The method is essentially an implementation of the chain rule, and will allow us to calculate
@@ -1675,7 +1727,7 @@ included TF visualization tool TensorBoard.
 We will now look at how to construct a neural network with TF and
 visualize the corresponding DFG. 
 
-\subsection{Creating a neural network}
+\subsection{Creating a neural network} \label{sec:TensorFlowCreatingNN}
 In \autoref{sec:ANN} we saw how an artifical neural network could be written as a nested sum 
 of activation functions \eqref{completeNN} where the weights connecting layer $l-1$ and $l$ were represented as
 a matrix $W_l$, while the biases of layer $l$ were represented as a vector $\vec{b}_l$. The input vector $\vec{x}$ to 
