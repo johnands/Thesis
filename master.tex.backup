@@ -626,18 +626,20 @@ A variety of other cost functions are used for other machine learning tasks. In 
 hence the mean-square error function is inadequate. We will not go into further detail on other cost functions here. 
 
 
-\section{Optimization algorithms} \label{sec:optimization}
+\section{Optimization} \label{sec:optimization}
 There are a large number of algorithms that can be used to determine the set of weights minimizing the 
 cost function \eqref{quadraticCost}. 
-Different kinds of gradient descent-based methods are widely used, but also higher order methods like
-the conjugate gradient algorithm. 
+Different kinds of gradient descent-based methods are widely used, while higher order methods like
+the conjugate gradient algorithm or Newton's method are rarely seen in the literature because they are 
+too computationally expensive for large NNs and data sets. Therefore, only first-order methods will be discussed here. 
+
 The idea behind gradient descent methods is to minimize a function by 
 iteratively taking steps in the direction of steepest descent towards a minima in parameter space. 
 This direction is defined as the negative gradient of the function w.r.t. 
 all its parameters. If we define $\vec{\theta} \in \mathbb{R}^d$ as a vector containing all the weights and biases
 of a MLP, we get the following iterative scheme,
 \begin{equation}
- \vec{\theta}^{\mathrm{new}} = \vec{\theta}^{\mathrm{old}} - \gamma \nabla_{\vec{\theta_\mathrm{old}}} \Gamma
+ \vec{\theta}_{k+1} = \vec{\theta}_{k} - \gamma \nabla_{\vec{\theta}_k} \Gamma(\vec{\theta})
  \label{gradientDescent}
 \end{equation}
 where $\gamma$ is a step size, called the \textit{learning rate} in the context of machine learning. The process is started
@@ -649,7 +651,7 @@ Different ways to update $\gamma$ is discussed below.
 
 
 \subsection{Gradient descent variants}
-There are three versions of gradient descent, which differ in 
+There are three versions of gradient descent \cite{Ruder16}, which differ in 
 the number of training examples we present to the NN before updating the parameters. 
 According to neural network terminology, the process of adjusting the parameters based on all the training examples,
 either in batches or all at once, is called an \textit{epoch}. 
@@ -662,11 +664,143 @@ of performing redundant computations if many similar examples are present in the
 
 In contrast, \textit{stochastic} gradient descent (SDG) performs a parameter update for \textit{each} training example. 
 SDG avoids redundant gradient calculations and is therefore faster than batch gradient descent. However, the accuracy 
-of each update is lower, which can lead to quite large error oscillations.
+of each update is lower, which can lead to quite large error oscillations. The concept of having  
+more than one parameter update per epoch is called \textit{online learning}. 
 
 Finally, we have \textit{mini-batch} gradient descent, which is a mix of the two other approaches. The training set 
 is divided into $n$ equally sized mini-batches and a parameter update is performed for each mini-batch. This is usually the
-algorithm of choice, as it has the optimal trade-off between speed and accuracy. 
+algorithm of choice, as it has the optimal trade-off between speed and accuracy. Normal mini-batch sizes range
+between 50 and 256, but should in some degree be tailored to each problem. 
+
+We realize that SDG can be seen as 
+a variant of mini-batch gradient descent with a mini-batch size of 1. In the literature, these two methods 
+are often collectively referred to as SDG. We will adopt this naming convention for the rest of this thesis. 
+
+
+\subsection{Optimization algorithms} \label{sec:optimizationAlgorithms}
+In the following we will outline different optimization algorithms that are widely used in neural network research. 
+They are all variations on the update rule \eqref{gradientDescent}. The main focus of the methods is to find
+a proper learning rate. A learning rate that is too small may lead to very slow convergence, while 
+a learning rate that is too large can cause the loss function to fluctuate around the minimum or even diverge. 
+
+\subsubsection{Momentum}
+Near local minima, the surface area of the cost function (in parameter space) often curve much more steeply in one 
+direction than in another, forming ravines. SDG will have slow converge in such regions, as it will oscillate across the slopes
+while having slow progress along the bottom of the ravine. The Momentum method \cite{Qian99} avoids this problem
+by accelerating SDG in the downwards direction, while damping the oscillations. The update rule is
+\begin{equation}
+\begin{aligned}
+ \vec{v}_{k} &= \eta \vec{v}_{k-1} + \gamma \nabla_k \Gamma \\
+ \vec{\theta}_{k+1} &= \vec{\theta}_k - \vec{v}_k
+\end{aligned}
+\label{Momentum}
+\end{equation}
+where $\eta$ is the momentum term, which is usually set to 0.9 or a similar value. The new update vector $\vec{v}_k$ 
+is formed by adding a fraction $\eta$ of the previous update vector $\vec{v}_{k-1}$ to the gradient. In this way, the magnitude
+of the update decreases for parameters (dimensions) whose gradients change direction, while it increases for parameters
+whose gradients points in the same direction as in the previous step. This helps to push SDG downhill towards the minima. 
+
+\subsubsection{Adagrad}
+In SDG and Momentum, we have one learning rate $\gamma$ that is applied to all the parameters. 
+Ideally, the learning rate should be adapted to each individual parameter to perform larger or smaller updates
+depending on their importance. Adagrad \cite{Duchi11} does just that. For brevity, we set
+\begin{equation}
+ g_{k,i} = \nabla_{\theta_i} \Gamma (\vec{\theta})
+\end{equation}
+to be the gradient of the loss function w.r.t. parameter $\theta_i$ at step $k$. Adagrad adjust the general learning rate $\gamma$
+at each step $k$ for every parameter $\theta_i$ based on the past gradients for that parameter,
+\begin{equation}
+ \theta_{k+1,i} = \theta_{k,i} - \frac{\gamma}{\sqrt{G_{k,ii} + \epsilon}} \cdot g_{k,i}
+\end{equation}
+where $G_k \in \mathbb{R}^{d \times d}$ is a diagonal matrix where each diagonal element $G_{k,ii}$ is the sum of squares
+of the gradient w.r.t. $\theta_i$ up to step $k$. The smoothing constant $\epsilon \sim 10^{-8}$ is present to avoid
+division by zero. This vectorized version of this equation yields,
+\begin{equation}
+  \vec{\theta}_{k+1} = \vec{\theta}_k - \frac{\gamma}{\sqrt{\mathrm{diag}(G_k) + \epsilon}} \odot \vec{g}_k
+  \label{Adagrad}
+\end{equation}
+where $\odot$ stands for element-wise multiplication. In other words, we do not have to manually tune the learning rate, 
+Adagrad does that for us. A weakness of this method is that the learning rates inevitably shrink for each step, 
+resulting in arbitrary small values, at which point the learning stops.
+
+For the rest of \autoref{sec:optimizationAlgorithms}, we assume for brevity that all vector operations are element-wise, i.e.
+$\vec{g}\,\vec{h} = \vec{g} \odot \vec{h}$ and $\vec{g}^2 = \vec{g} \odot \vec{g}$.
+
+\subsubsection{Adadelta}
+Adadelta \cite{Zeiler12} is an extension of Adagrad that reduces the rate at which the learning rate decreases. 
+The sum of all past squared gradients is replaced by a \textit{exponentially decaying average} of all the previous squared gradients.
+We introduce the vector $\mathrm{E}[\vec{g}^2]_k$ containing the decaying averages of the gradient w.r.t. all the parameters at step $k$. 
+This vector is defined recursively
+as a weighted average of the previous averages $\mathrm{E}[\vec{g}^2]_{k-1}$ and the current gradient $\vec{g}_k$,
+\begin{equation}
+ \mathrm{E}[\vec{g}^2]_k = \eta \mathrm{E}[\vec{g}^2]_{k-1} + (1 - \eta) \vec{g}^2_k
+ \label{decayingAverageVector}
+\end{equation}
+where $\eta$ is a decay constant similar to that in the Momentum method, and is usually set to the same value (0.9). 
+We also define a new parameter update vector $\Delta \vec{\theta}_k = -\vec{v}_k$ so that
+\begin{equation}
+ \vec{\theta}_{k+1} = \vec{\theta}_k  + \Delta \vec{\theta}_k
+\end{equation}
+Replacing the vector $\mathrm{diag}(G_k)$ in \eqref{Adagrad} with the decaying average vector \eqref{decayingAverageVector}
+yields the following parameter update vector,
+\begin{equation}
+ \Delta \vec{\theta}_k = -\frac{\gamma}{\sqrt{\mathrm{E}[\vec{g}^2]_k + \epsilon}} \vec{g}_k
+ \label{preliminiaryAdadelta}
+\end{equation}
+Additionally, the learning rate $\gamma$ is replaced by a decaying average of previous squared parameter updates
+up to step $k-1$, yielding the Adadelta update rule,
+\begin{equation}
+ \vec{v}_k = \frac{\sqrt{\mathrm{E}[\Delta\vec{\theta}^2]_{k-1} + \epsilon}}{\sqrt{\mathrm{E}[\vec{g}^2]_k + \epsilon}} \vec{g}_k
+\end{equation}
+The final replacement is done to obtain correct units for the update vector and to eliminate the learning rate from the equation. 
+Thus, we do not even need to set a default learning rate with Adadelta. 
+
+\subsubsection{Adam}
+The final algorithm we are going to discuss is Adapte Moment Estimation (Adam) \cite{Kingma14}. This method
+computes adaptive learning rates for each parameter by storing 
+exponentially decaying averages of both the gradients \textit{and} 
+the squared gradients \eqref{decayingAverageVector},
+\begin{equation}
+ \begin{aligned}
+  \mathrm{E}[\vec{g}]_k &= \beta_1 \mathrm{E}[\vec{g}]_{k-1} + (1 - \beta_1) \vec{g}_k \\
+  \mathrm{E}[\vec{g}^2]_k &= \beta_2  \mathrm{E}[\vec{g}^2]_{k-1} + (1 - \beta_2) \vec{g}^2_k
+ \end{aligned}
+\end{equation}
+We set $\vec{a}_k = \mathrm{E}[\vec{g}]_k$ and $\vec{b}_k = \mathrm{E}[\vec{g}^2]_k$ so that
+\begin{equation}
+ \begin{aligned}
+ \vec{a}_k &= \beta_1 \vec{a}_{k-1} + (1 - \beta_1) \vec{g}_k \\
+ \vec{b}_k &= \beta_2 \vec{b}_{k-1} + (1 - \beta_2) \vec{g}^2_k
+ \end{aligned}
+\end{equation}
+where $\vec{a}_k$ and $\vec{b}_k$ are estimates of the first moment (the mean) and the second moment (the uncentered variance)
+of the gradients respectively, hence the name of the method. The elements of these two vectors are initialized as zeros, 
+which make them biased towards zero, especially during the first time steps. This bias is counteracted by
+computing bias-corrected version of the vectors (derived in \cite{Kingma14},
+\begin{equation}
+ \begin{aligned}
+ \hat{\vec{a}}_k &= \frac{\vec{a}_k}{1 - \beta_1^k} \\
+ \hat{\vec{b}}_k &= \frac{\vec{b}_k}{1 - \beta_2^k}
+ \end{aligned}
+\end{equation}
+The parameter update vector for Adam is obtained by replacing the gradient $\vec{g}_k$ with $\vec{a}_k$ in \eqref{preliminiaryAdadelta},
+yielding the update rule,
+\begin{equation}
+ \vec{\theta}_{k+1} = \vec{\theta}_k - \frac{\gamma}{\sqrt{\hat{\vec{b}}_k} + \epsilon} \hat{\vec{a}}_k
+\end{equation}
+The default values of the hyperparameters are $\beta_1 = 0.9$, $\beta_2 = 0.999$ and $\epsilon = 10^{-8}$. 
+
+\subsubsection{Which optimizer to use?}
+There is no general answer to the question stated above. The adaptive learning rate methods
+like Adagrad, Adadelta and Adam are generally more robust because they do not rely on manual fine-tuning of the learning rate. 
+Also, an adaptive learning rate generally handles \textit{sparse} data better, i.e. data where some learning features
+are poorly represented. 
+
+Adam has been proven to perform favourably over the other optimization methods for certain applications like classification
+with MLPs and convolutional NNs \cite{Kingma14}. However, the performance of various optimizers should be tested on 
+the problem at hand to determine which method that works best. 
+
+
 
 
 \subsection{Backpropagation} \label{sec:backprop}
@@ -2932,6 +3066,12 @@ and
  F. Rosenblatt. 
  ''The Perceptron: A probabilistic model for information storage and organization in the brain''.
  In: \textit{Psychological Review} 65. (1958), 386-408. 
+ 
+\bibitem{Ruder16}
+ S. Ruder.
+ ''An overview of gradient descent optimization algorithms''. 
+ (2016). 
+ arXiv: \href{https://arxiv.org/abs/1609.04747}{1609.04747}
  
  
 \end{thebibliography}
