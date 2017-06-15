@@ -155,6 +155,23 @@ An important step is how to fit the above potential terms obtained from QM calcu
 There exist a lot of different interpolation teqhniques; in this theses we will use ANNs to fit the data. 
 (SKRIVE OM ANDRE INTERPOLASJONSTEKNIKKER?)
 
+\section{Time integration}
+Euler, Velocity Verlet.
+
+\section{Empirical potentials}
+
+\subsection{Lennard-Jones}
+
+\subsection{Stillinger-Weber}
+
+\subsection{Vashishta}
+
+
+\section{Advanced theory}
+
+\subsection{Verlet lists}
+
+\subsection{Thermostats / ensembles}
 
 
 
@@ -446,9 +463,6 @@ mapping of real-valued vectors $\vec{x} \in \mathbb{R}^n \rightarrow \vec{y} \in
 In our example (\autoref{fig:networkNotation}), $n=2$ and $m=1$. Consequentially, 
 the number of input and output values of the function we want to fit must be equal to the number of inputs and outputs of our MLP.  
 
-The number of inputs and outputs thus defines
-the dimensions of the function we want to fit: 
-
 Furthermore, the flexibility and universality of a MLP can be illustrated by realizing that 
 the expression \eqref{completeNN} is essentially a nested sum of scaled activation functions of the form
 \begin{equation}
@@ -468,6 +482,17 @@ which is the key to the flexibility of a NN.
   \label{fig:activationsFlex}
   \end{center}
 \end{figure}
+
+\subsubsection{Activation function of output neuron}
+We stated in \autoref{sec:whyMLP} that the output neuron always have a linear activation function for regression to avoid
+restricting the output values. This is a requirement for a MLP to operate as a mapping 
+$\vec{x} \in \mathbb{R}^n \rightarrow \vec{y} \in \mathbb{R}^m$. In this thesis, we will exclusively use a
+specific linear activation function for the output neuron $o$, namely the identity function $f(x) = x$,
+\begin{equation}
+ f_o = f(u_o) = u_o
+\end{equation}
+
+
 
 \subsubsection*{Matrix representation}
 We can introduce a more convenient notation for the activations in a NN. 
@@ -619,8 +644,9 @@ The standard cost function used in regression with NNs is the mean-square error,
  \Gamma = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
  \label{quadraticCost}
 \end{equation}
-where $y_i = y_i(W, B, X_i)$ is the value predicted by the NN for traing data sample $X_i$.  
-The presence of the constant $1/2$ is explained in \autoref{sec:backprop}.
+where $y_i = y_i(W, B, X_i)$ is the value predicted by the NN for traing example $X_i$. 
+For a MLP with more than one output, $Y_i$ and $y_i$ are vectors. 
+The constant $1/2$ is included to cancel out the exponent when this function is differentiated in \autoref{sec:backprop}.
 
 A variety of other cost functions are used for other machine learning tasks. In classificiation the output is often binary, 
 hence the mean-square error function is inadequate. We will not go into further detail on other cost functions here. 
@@ -808,37 +834,37 @@ From: https://www.willamette.edu/~gorr/classes/cs449/backprop.html and \newline
 http://neuralnetworksanddeeplearning.com/chap2.html. 
 Mainly from the first one, but argument for error of neuron from second.
 
+In the preceding sections we have discussed different optimizers that implements various update rules for 
+the parameters of a loss function. In our case, these parameters are the weights and biases of a neural network
+and the cost function $\Gamma$ is the mean-square-error \eqref{quadraticCost}
+\begin{equation}
+ \Gamma = \frac{1}{2} (Y - y)^2
+\end{equation}
+here written as a function of only \textit{one} training example. 
+What we have not discussed yet, is
+how we calculate the gradient of the cost function, i.e. how we obtain the partial derivatives $g_{ij}$ and $g_i$ w.r.t.
+all the weights and biases respectively,
+\begin{equation}
+\begin{aligned}
+ g_{ij} &= \frac{\partial \Gamma}{\partial w_{ij}} \\
+ g_i &= \frac{\partial \Gamma}{\partial b_i}
+\label{partialDerivatives}
+\end{aligned}
+\end{equation}
+where we have dropped layer indicies for clarity. 
+A common method to obtain these derivatives is \textit{backpropagation} \cite{Rumelhart86}. 
+In backpropagation, a training example is propagated forward through the NN to produce an output. 
+This output is compared to the desired output (target values), and the error is then propagated \textit{backwards}
+through the layers to obtain the amount of which each parameter should be adjusted, 
+hence the name.
+The method is essentially an implementation of the chain rule, and will allow us to calculate
+the partial derivatives of the cost with respect to all the parameters, thereby obtaining the gradient of the network. 
 
-As seen from \eqref{gradientDescent}, we need to adjust each weight by an amount
-\begin{equation}
-\Delta w_{ij} = \frac{\partial \Gamma}{\partial w_{ij}}
-\label{weightChange}
-\end{equation}
-The corresponding expression for the biases is
-\begin{equation}
- \Delta b_i = \frac{\partial \Gamma}{\partial b_i}
-\end{equation}
-but to implement these we need the partial derivatives of
-the cost function w.r.t. to all weights and biases to determine how we should adjust each weight.
-A common method to obtain these derivatives is backpropagation \cite{Rumelhart86}. 
-In backpropagation, the output of the NN is compared to the desired output, the error is then propagated backwards
-to adjust the weights. The method is essentially an implementation of the chain rule, and will allow us to calculate
-the partial derivatives of the cost with respect to all the weights, thereby obtaining the gradient of the network. 
-
-To change the value of the cost function \eqref{costFunction}, we need to change the outputs of the neurons in the network. 
-Changing the input to neuron $j$ by a small amount $\Delta x_j$ results in the output
-\begin{equation}
- y_j = f_j(x_j + \Delta x_j)
- \label{neuronError}
-\end{equation}
-This change will propagate through later layers in the network, finally causing the overall cost to change
-by an amount $\frac{\partial \Gamma}{\partial x_j}\Delta x_j$. If $\partial \Gamma / \partial x_j$ is close to zero,
-then we can't improve the cost much by perturbing the weighted input $x_j$; the neuron is already quite near the optimal value.
-This is a heuristic argument for $\partial \Gamma / \partial x_j$ to be a measure of the error of the neuron:
-\begin{equation}
- \delta_j \equiv \frac{\partial \Gamma}{\partial x_j}
-\end{equation}
-We also define
+\subsubsection{1. Forward propagation}
+The first stage of the algorithm is forward propagation, producing an output as described in \autoref{sec:MLPmodel}.
+\footnote{We assume that the MLP only has one output. As before, the results are valid for each individual output in 
+a many-output MLP.}
+In the following, we will use the same notation as in \autoref{sec:MLPmodel}. We also define
 \begin{equation}
  A_i = \{j:w_{ij}\}
 \end{equation}
@@ -848,100 +874,107 @@ as the set $\{j\}$ of nodes anterior to node $i$ and connected to node $i$ with 
 \end{equation}
 as the set $\{i\}$ of nodes posterior to node $j$ and connected to node $j$ with weights $w_{ij}$. 
 
-The weight change \eqref{weightChange} can be expanded into two factors by use of the chain rule:
+\subsubsection{2. Backward propagation}
+The second step is to backpropagate the error of the NN output. The weight derivative \eqref{partialDerivatives}
+can be expanded into two factors by use of the chain rule,
 \begin{equation}
- \Delta w_{ij} = \frac{\partial \Gamma}{\partial x_i}\frac{\partial x_i}{\partial w_{ij}}
+ g_{ij} = \frac{\partial \Gamma}{\partial u_i}\frac{\partial u_i}{\partial w_{ij}}
+ \label{partialDerivativeExpanded}
 \end{equation}
-Now we move in the opposite direction compared to the feed-forward function composition stage: First we differentiate the cost w.r.t 
-neuron $i$'s input, then we differentiate the input w.r.t. weight $w_{ij}$ connecting neurons $j$ and $i$. The first term on the right
-is the error $\delta_i$ of node $i$. The second is
+Now we move in the opposite direction of the feed-forward stage: First we differentiate the cost w.r.t 
+the input of neuron $i$, then we differentiate the input w.r.t. weight $w_{ij}$ connecting neurons $j$ (in the preceding layer)
+and $i$. 
+The first term on the r.h.s. is defined as the the error $\delta_i$ of node $i$, 
 \begin{equation}
- \frac{\partial x_i}{\partial w_{ij}} = \frac{\partial}{\partial w_{ij}} \sum_{m\in A_i} w_{im}y_m = y_j
+ \delta_i = \frac{\partial\Gamma}{\partial u_i}
+ \label{neuronError}
 \end{equation}
-Putting the two together, we get
+This definition can be justified by the following argument.
+To change the value of a cost function \eqref{generalCost}, we need to change the outputs of the neurons in the network. 
+Changing the input $u_j$ to neuron $j$ by a small amount $\Delta u_j$ results in the output
 \begin{equation}
- \Delta w_{ij} = \delta_i y_j
+ y_j = f_j(u_j + \Delta u_j)
 \end{equation}
-To compute this quantity, we thus need to know the output and the error for all nodes in the network. 
-The outputs are as we have seen
+This change will propagate through later layers in the network, finally causing the overall cost to change
+by an amount $\frac{\partial \Gamma}{\partial u_j}\Delta u_j$. If $\partial \Gamma / \partial u_j$ is close to zero,
+we are not able improve the cost much by perturbing the weighted input $u_j$; the neuron is already quite near the optimal value.
+This is a heuristic argument for $\partial \Gamma / \partial x_j$ to be a measure of the error of the neuron. 
+
+The second term on the r.h.s. of \eqref{partialDerivativeExpanded} is 
 \begin{equation}
- y_i = f_i(x_i) = f_i\left(\sum_{j\in A_i} w_{ij}y_j + b_i\right)
+ \frac{\partial u_i}{\partial w_{ij}} = \frac{\partial}{\partial w_{ij}} \sum_{m\in A_i} w_{im}y_m = y_j
+ \label{derivativeSecondTerm}
+\end{equation}
+Combining the the two terms \eqref{neuronError} and \eqref{derivativeSecondTerm} yield
+\begin{equation}
+ g_{ij} = \delta_i y_j
+\end{equation}
+To compute this quantity, we thus need to know the outputs and the errors of all nodes in the network. 
+The outputs are generated during the feed-forward stage \eqref{generalLayer},
+\begin{equation}
+ y_i = f_i(u_i) = f_i\left(\sum_{j\in A_i} w_{ij}y_j + b_i\right)
  \label{forwardProp}
 \end{equation}
-The error for output neuron $o$ is
+and need to be stored for all nodes. 
+The errors are obtained by backpropagating the error of the output neuron $o$,
 \begin{equation}
- \delta_o = \frac{\partial \Gamma}{\partial x_o} = \frac{\partial \Gamma}{\partial y_o}\frac{\partial y_o}{\partial x_o}
-          = (d_o - f_o(x_o)) \frac{\partial f_o(x_o)}{\partial x_o}
+ \delta_o = \frac{\partial \Gamma}{\partial u_o} = \frac{\partial \Gamma}{\partial y_o}\frac{\partial y_o}{\partial u_o}
+          = (Y - y_o) \frac{\partial y_o}{\partial u_o}
 \end{equation}
-When doing regression our output neurons will have the unity activation function, which means that the error is reduced to
+We remember from \autoref{sec:MLPmodel} that the output neuron has the identity activation function $y_o = f_o(u_o) = u_o$, 
+which reduces the error to
 \begin{equation}
- \delta_o = d_o  - y_o
+ \delta_o = Y  - y_o
 \end{equation}
-This error is then propagated backwards through the network. Each hidden neuron will have an error
+This error is then propagated backwards through the network. 
+Each hidden neuron will have an error
 \begin{equation}
- \delta_j = \frac{\partial \Gamma}{\partial x_j} = 
- \sum_{i\in P_j} \frac{\partial \Gamma}{\partial x_i}\frac{\partial x_i}{\partial y_j}\frac{\partial y_j}{\partial x_j}
+ \delta_j = \frac{\partial \Gamma}{\partial u_j} = 
+ \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}\frac{\partial u_i}{\partial y_j}\frac{\partial y_j}{\partial u_j}
  \label{errorTerms}
 \end{equation}
-The first term on the right is the error of node $i$. The second is the derivative of the net input of all posterior
-nodes $\{i\}$ w.r.t. the output of node $j$:
+and we observe that also the inputs $u_i$ to all nodes need to be stored during forward propagation for 
+this scheme to work. 
+The first term on the r.h.s. of \eqref{errorTerms} is the error of node $i$. 
+The second is the derivative of the net input of all posterior
+nodes $\{i\}$ w.r.t. the output of node $j$,
 \begin{equation}
- \frac{\partial x_i}{\partial y_j} = \frac{\partial}{y_j}\left(\sum_{m\in A_i} w_{im}y_m + b_i\right) = w_{ij}
+ \frac{\partial u_i}{\partial y_j} = \frac{\partial}{y_j}\left(\sum_{m\in A_i} w_{im}y_m + b_i\right) = w_{ij}
 \end{equation}
 while the third is the derivative of node $j$'s activation function w.r.t. its net input:
 \begin{equation}
- \frac{\partial y_j}{\partial x_j} = \frac{\partial f_j(x_j)}{\partial x_j} \equiv f_j^\prime (x_j)
+ \frac{\partial y_j}{\partial u_j} = \frac{\partial f_j(u_j)}{\partial u_j} \equiv y^\prime_j
 \end{equation}
 Putting all the pieces together we obtain
 \begin{equation}
- \delta_j = f_j^\prime(x_j)\sum_{i\in P_j} \delta_i w_{ij}
+ \delta_j = y^\prime_j\sum_{i\in P_j} \delta_i w_{ij}
  \label{backProp}
 \end{equation}
 The above expression requires that we know the errors of all the posterior nodes
 of node $j$. As long as there are no cycles in the network, there is an ordering of nodes from the output back to the 
 input that respects this condition. It is therefore valid only for feed-forward NNs.
-The errors are propagated backwards through the whole NN until we reach the input nodes. By propagating the error
-of only one ouput neuron, we thus obtain the errors of all the neurons at once. This is the strength of the backpropagation
-algorithm. 
-For the biases, we have
+The errors are propagated backwards through the whole NN until we reach the weights connecting the input layer
+and the first hidden layer. 
+By propagating the error
+of only one ouput neuron, we thus obtain the errors of all the neurons at once. This is the main strength of the backpropagation
+algorithm, and the reason for its popularity in neural network research. 
+
+\noindent For the biases, we have \eqref{partialDerivatives},
 \begin{equation}
- \Delta b_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial x_i}
-	      \frac{\partial x_i}{\partial y_j} \frac{\partial y_j}{\partial x_j} \frac{\partial x_j}{\partial b_j}
+ g_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}
+	      \frac{\partial u_i}{\partial y_j} \frac{\partial y_j}{\partial u_j} \frac{\partial u_j}{\partial b_j}
 \end{equation}
 The only new term her is the last one:
 \begin{equation}
- \frac{\partial x_j}{\partial b_j} = \frac{\partial}{\partial b_j}\left(\sum_{m\in A_j} w_{jm}y_m + b_j\right) = 1
+ \frac{\partial u_j}{\partial b_j} = \frac{\partial}{\partial b_j}\left(\sum_{m\in A_j} w_{jm}y_m + b_j\right) = 1
 \end{equation}
-Consequentially, the update rule for the biases is simply the error of each neuron:
+Consequentially, the bias gradient is simply the error of each neuron:
 \begin{equation}
- \Delta b_j = \delta_j
+ g_j = \delta_j
 \end{equation}
-For fully-connected FFNNs we can easily rewrite these equations in matrix notation. In this notation, 
-the biases, inputs, outputs and errors for all nodes in a layer are combined into vectors, while all weights from 
-one layer to the next form a matrix $W_l$, where $l$ denotes the layer number. The inputs to all the nodes in 
-layer $l$ can be written
-\begin{equation*}
-    \left(\begin{array}{c}
-            x_1^l \\
-            x_2^l \\
-            x_3^l \\
-          \end{array} \right)
- = \left(\begin{array}{c c c}
-            w_{11} & w_{12} & w_{13} \\
-            w_{21} & w_{22} & w_{23} \\
-	    w_{31} & w_{32} & w_{33} \\
-   \end{array} \right)
-   \left(\begin{array}{c}
-            y_1^k \\
-            y_2^k \\
-            y_3^k \\
-         \end{array}\right)
- + \left(\begin{array}{c}
-          b_1^l \\
-          b_2^l \\
-          b_3^l \\
-         \end{array}\right)
-\end{equation*}
+In \autoref{sec:MLPmodel} we rewrote the forward propagation framework as matrix-vector equations. 
+This is easily done also for the backpropagation case. 
+
 so that equation \eqref{forwardProp} takes the form
 \begin{equation}
 \vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)

@@ -20,18 +20,21 @@
 \contentsline {section}{\numberline {3.3}Multilayer perceptron}{17}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Why multilayer perceptrons?}{17}{subsection.3.3.1}
 \contentsline {subsection}{\numberline {3.3.2}Mathematical model}{18}{subsection.3.3.2}
+\contentsline {subsubsection}{Activation function of output neuron}{20}{section*.9}
 \contentsline {section}{\numberline {3.4}Activation functions}{22}{section.3.4}
 \contentsline {section}{\numberline {3.5}Training}{24}{section.3.5}
 \contentsline {subsection}{\numberline {3.5.1}Cost functions}{25}{subsection.3.5.1}
-\contentsline {section}{\numberline {3.6}Optimization}{25}{section.3.6}
+\contentsline {section}{\numberline {3.6}Optimization}{26}{section.3.6}
 \contentsline {subsection}{\numberline {3.6.1}Gradient descent variants}{26}{subsection.3.6.1}
 \contentsline {subsection}{\numberline {3.6.2}Optimization algorithms}{27}{subsection.3.6.2}
-\contentsline {subsubsection}{Momentum}{27}{section*.12}
-\contentsline {subsubsection}{Adagrad}{27}{section*.13}
-\contentsline {subsubsection}{Adadelta}{28}{section*.14}
-\contentsline {subsubsection}{Adam}{29}{section*.15}
-\contentsline {subsubsection}{Which optimizer to use?}{29}{section*.16}
+\contentsline {subsubsection}{Momentum}{27}{section*.13}
+\contentsline {subsubsection}{Adagrad}{27}{section*.14}
+\contentsline {subsubsection}{Adadelta}{28}{section*.15}
+\contentsline {subsubsection}{Adam}{29}{section*.16}
+\contentsline {subsubsection}{Which optimizer to use?}{29}{section*.17}
 \contentsline {subsection}{\numberline {3.6.3}Backpropagation}{30}{subsection.3.6.3}
+\contentsline {subsubsection}{1. Forward propagation}{30}{section*.18}
+\contentsline {subsubsection}{2. Backward propagation}{31}{section*.19}
 \contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{35}{chapter.4}
 \contentsline {section}{\numberline {4.1}High-dimensional NNPs}{36}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Symmetry functions}{38}{subsection.4.1.1}
@@ -53,9 +56,9 @@
 \contentsline {section}{\numberline {7.1}Selecting the training data}{69}{section.7.1}
 \contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{70}{subsection.7.1.1}
 \contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{71}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{72}{section*.23}
-\contentsline {subsubsection}{Iterative sampling}{76}{section*.25}
-\contentsline {subsubsection}{Summary}{77}{section*.26}
+\contentsline {subsubsection}{Initial sampling}{72}{section*.26}
+\contentsline {subsubsection}{Iterative sampling}{76}{section*.28}
+\contentsline {subsubsection}{Summary}{77}{section*.29}
 \contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{78}{section.7.2}
 \contentsline {chapter}{\numberline {8}Validation}{81}{chapter.8}
 \contentsline {section}{\numberline {8.1}Time usage}{81}{section.8.1}
@@ -64,5 +67,5 @@
 \contentsline {part}{III\hspace {1em}Results and discussion}{91}{part.3}
 \contentsline {chapter}{\numberline {9}NN potential for Si}{93}{chapter.9}
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{95}{chapter.10}
-\contentsline {chapter}{Appendices}{97}{section*.33}
+\contentsline {chapter}{Appendices}{97}{section*.36}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{99}{Appendix.1.A}
