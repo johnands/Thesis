@@ -842,12 +842,12 @@ and the cost function $\Gamma$ is the mean-square-error \eqref{quadraticCost}
 \end{equation}
 here written as a function of only \textit{one} training example. 
 What we have not discussed yet, is
-how we calculate the gradient of the cost function, i.e. how we obtain the partial derivatives $g_{ij}$ and $g_i$ w.r.t.
+how we calculate the gradient of the cost function, i.e. how we obtain the partial derivatives $g_{ij}$ and $h_i$ w.r.t.
 all the weights and biases respectively,
 \begin{equation}
 \begin{aligned}
  g_{ij} &= \frac{\partial \Gamma}{\partial w_{ij}} \\
- g_i &= \frac{\partial \Gamma}{\partial b_i}
+ h_i &= \frac{\partial \Gamma}{\partial b_i}
 \label{partialDerivatives}
 \end{aligned}
 \end{equation}
@@ -905,9 +905,10 @@ The second term on the r.h.s. of \eqref{partialDerivativeExpanded} is
  \frac{\partial u_i}{\partial w_{ij}} = \frac{\partial}{\partial w_{ij}} \sum_{m\in A_i} w_{im}y_m = y_j
  \label{derivativeSecondTerm}
 \end{equation}
-Combining the the two terms \eqref{neuronError} and \eqref{derivativeSecondTerm} yield
+Combining the the two terms \eqref{neuronError} and \eqref{derivativeSecondTerm} yields
 \begin{equation}
  g_{ij} = \delta_i y_j
+ \label{weightGradient}
 \end{equation}
 To compute this quantity, we thus need to know the outputs and the errors of all nodes in the network. 
 The outputs are generated during the feed-forward stage \eqref{generalLayer},
@@ -928,15 +929,25 @@ which reduces the error to
 \end{equation}
 This error is then propagated backwards through the network, layer by layer. 
 The error of each neuron in layer $l$ thus depends on the errors of all nerons in layer $l+1$.  
-Consequentially, the error of an arbitrary hidden neuron can be written as a recursive equation,
+Consequentially, the error of an arbitrary hidden neuron can be written as a recursive equation (\autoref{fig:backprop}),
 \begin{equation}
  \delta_j = \frac{\partial \Gamma}{\partial u_j} = 
  \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}\frac{\partial u_i}{\partial y_j}\frac{\partial y_j}{\partial u_j}
  \label{errorTerms}
 \end{equation}
+\begin{figure}
+\begin{center}
+ \includegraphics[width = 0.9\linewidth]{Figures/Theory/backprop.pdf}
+  \caption{Illustration of the backpropagation algorithm. The direction of information flow is opposite of \autoref{fig:neuronModel}. 
+	   A hidden neuron $j$ recieves a weighted sum of errors of all nodes in the posterior layer. Then, we differentiate
+	   in the backwards direction: the activation function (output) $y_j$ of node $j$ is differentiated w.r.t to its 
+	   net input $u_j$.}
+  \label{fig:backprop}
+  \end{center}
+\end{figure}
 We observe that also the inputs $u_i$ to all nodes need to be stored during forward propagation for 
 this scheme to work. 
-The first term on the r.h.s. of \eqref{errorTerms} is the error of node $i$, which is assumed to be known. 
+The first term on the r.h.s. of \eqref{errorTerms} is the error $\delta_i$ of node $i$, which is assumed to be known. 
 As long as there are no cycles in the network, there is an ordering
 of nodes from the output back to the input that respects this condition. It is
 therefore valid only for feed-forward NNs.
@@ -952,9 +963,15 @@ while the third is the derivative of node $j$'s activation function w.r.t. its n
 \end{equation}
 Putting all the pieces together we obtain
 \begin{equation}
- \delta_j = y^\prime_j\sum_{i\in P_j} \delta_i w_{ij}
- \label{backProp}
+ \delta_j = y^\prime_j\sum_{i\in P_j}w_{ij} \delta_i 
+ \label{backprop}
 \end{equation}
+This expression is illustrated in \autoref{fig:backprop}.  
+Each hidden neuron $j$ recieves a weighted sum
+of the errors of all nodes in the posterior layer. Then we differentiate in the backwards direction (compare with 
+\autoref{fig:neuronModel}): 
+the output $y_j$ of node $j$ is differentiated w.r.t. its input $u_j$. 
+
 The errors are propagated backwards through the whole NN until we reach the weights connecting the input layer
 and the first hidden layer. 
 By propagating the error
@@ -963,7 +980,7 @@ algorithm, and the reason for its popularity in neural network research.
 
 \noindent For the biases, we have \eqref{partialDerivatives},
 \begin{equation}
- g_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}
+ h_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}
 	      \frac{\partial u_i}{\partial y_j} \frac{\partial y_j}{\partial u_j} \frac{\partial u_j}{\partial b_j}
 \end{equation}
 The only new term her is the last one:
@@ -972,41 +989,63 @@ The only new term her is the last one:
 \end{equation}
 Consequentially, the bias gradient is simply the error of each neuron:
 \begin{equation}
- g_j = \delta_j
+ h_j = \delta_j
 \end{equation}
-In \autoref{sec:MLPmodel} we rewrote the forward propagation framework as matrix-vector equations. 
-This is easily done also for the backpropagation case. 
 
-so that equation \eqref{forwardProp} takes the form
+\subsubsection{Matrix notation}
+In \autoref{sec:MLPmodel} we rewrote the forward propagation framework as matrix-vector equations. 
+This is easily done also for the backpropagation case. From \autoref{sec:MLPmodel} we have the
+set of vectors $\vec{b}^l$ and $\vec{y}^l$ for $l = 1,\dots ,L+1$, 
+where $L$ is the number of hidden layers. We now extend this set with the vectors $\vec{\delta}^l$ 
+and $\vec{u}^l$, i.e. the errors and inputs (or \textit{preactivations}) of layer $l$
+respectively. These are all column vectors of size $N_l \times 1$. 
+
+\noindent Comparing the sums in \eqref{forwardProp} and \eqref{backprop}, we realize that since 
 \begin{equation}
-\vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)
+ \sum_j w_{ij} y_j \: \Rightarrow \: W \vec{y}
 \end{equation}
-Comparing equations \eqref{forwardProp} and \eqref{backProp}, we observe that 
+we have
 \begin{equation}
- \sum_{j\in A_i}w_{ij} = \left(\sum_{i\in A_j}w_{ij}\right)^T
+  \sum_i w_{ij} \delta_i \:  \Rightarrow \: W^T \vec{\delta}
 \end{equation}
 i.e. the weight matrices used in backpropagation are the transpose of the matrices used in forward activation.
-The complete backpropagation algorithm including forward activation then looks as follows:
+Thus, for nodes $\{j\}$ in layer $l$ and nodes $\{i\}$ in layer $l+1$, the vectorized equation for the error of each hidden neuron is
+\begin{equation}
+ \delta_j = y^\prime_j\sum_{i\in P_j}w_{ij} \delta_i \: \Rightarrow \:
+ \vec{\delta}_l = \vec{y}^\prime_l \odot (W_{l+1} \vec{\delta}_{l+1})
+\end{equation}
+where $\odot$ signifies element-wise multiplication. The expression for the weight gradients \eqref{weightGradient} is converted
+into an outer product of the errors of layer $l+1$ and the outputs of layer $l$,
+\begin{equation}
+ g_{ij} = \delta_i y_j \Rightarrow G_l = \vec{\delta}_{l+1} \vec{y}^T_l
+\end{equation}
+
+
+\subsubsection{Training algorithm}
+We are now ready to express the complete training algorithm for a MLP with backpropagation using
+matrix-vector notation:
 \begin{enumerate}
  \item Initialize the input layer:
  \begin{equation}
-  \vec{y}_0 = \vec{x}_0
+  \vec{y}_0 = \vec{x}
  \end{equation}
- \item Propagate the activity forward: for $l = 1,2,\dots ,L$:
- \begin{equation}
-  \vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l)
- \end{equation}
+ \item Propagate the activity forward: for $l = 1,\dots,L+1$:
+ \begin{align}
+  \vec{u}_l &= W_l\vec{y}_{l-1} + \vec{b}_l \\
+  \vec{y}_l &= f_l(\vec{u}_l)
+ \end{align}
+ Store all vectors $\vec{u}_l$ and $\vec{y}_l$.
  \item Calculate the error in the output layer:
  \begin{equation}
-  \vec{\delta}_L = \vec{t} - \vec{y}_L
+  \vec{\delta}_{L+1} = \vec{Y} - \vec{y}_{L+1}
  \end{equation}
- \item Calculate the error: for $l = L-1, L-2, \dots ,1$:
+ \item Backpropagate the error: for $l = L, L-1, \dots ,1$:
  \begin{equation}
- \vec{\delta}_l = (W^T_{l+1}\vec{\delta}_{l+1}) \cdot f_l^\prime (\vec{x}_l)
+ \vec{\delta}_l = \vec{y}^\prime_l \odot (W^T_{l+1}\vec{\delta}_{l+1}) \cdot 
  \end{equation}
- \item Update the weights and biases: 
+ \item Compute the weight and bias gradients: 
  \begin{equation}
-  \Delta W_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \Delta \vec{b}_l = \vec{\delta}_l
+  G_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad H_l = \vec{\delta}_l
  \end{equation}
 \end{enumerate}
 

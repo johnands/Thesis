@@ -35,6 +35,8 @@
 \contentsline {subsection}{\numberline {3.6.3}Backpropagation}{30}{subsection.3.6.3}
 \contentsline {subsubsection}{1. Forward propagation}{30}{section*.18}
 \contentsline {subsubsection}{2. Backward propagation}{31}{section*.19}
+\contentsline {subsubsection}{Matrix notation}{33}{section*.21}
+\contentsline {subsubsection}{Training algorithm}{34}{section*.22}
 \contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{35}{chapter.4}
 \contentsline {section}{\numberline {4.1}High-dimensional NNPs}{36}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Symmetry functions}{38}{subsection.4.1.1}
@@ -56,9 +58,9 @@
 \contentsline {section}{\numberline {7.1}Selecting the training data}{69}{section.7.1}
 \contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{70}{subsection.7.1.1}
 \contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{71}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{72}{section*.26}
-\contentsline {subsubsection}{Iterative sampling}{76}{section*.28}
-\contentsline {subsubsection}{Summary}{77}{section*.29}
+\contentsline {subsubsection}{Initial sampling}{72}{section*.29}
+\contentsline {subsubsection}{Iterative sampling}{76}{section*.31}
+\contentsline {subsubsection}{Summary}{77}{section*.32}
 \contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{78}{section.7.2}
 \contentsline {chapter}{\numberline {8}Validation}{81}{chapter.8}
 \contentsline {section}{\numberline {8.1}Time usage}{81}{section.8.1}
@@ -67,5 +69,5 @@
 \contentsline {part}{III\hspace {1em}Results and discussion}{91}{part.3}
 \contentsline {chapter}{\numberline {9}NN potential for Si}{93}{chapter.9}
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{95}{chapter.10}
-\contentsline {chapter}{Appendices}{97}{section*.36}
+\contentsline {chapter}{Appendices}{97}{section*.39}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{99}{Appendix.1.A}
