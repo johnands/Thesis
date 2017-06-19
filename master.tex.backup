@@ -88,54 +88,43 @@ This goal can be split into the following intermediate objecives:
 \chapter{Molecular dynamics}
 Molecular dynamics (MD) is a method to simulate the physical movements of atoms and molecules in gases, liquids and solids. 
 It is thus a type of N-body simulation. The atoms are modelled as point-like particles with interactions described
-by classical force fields. Their time-evolution is governed by Newton's equations of motion. MD allows one to study the microscopic
+by force fields. Their time-evolution is governed by Newton's equations of motion. MD allows one to study the microscopic
 movement of thousands or millions of atoms, enabling the sampling of macroscopic properties such at temperature, pressure, 
 diffusion, heat capacity and so on. 
 
-The dynamics of an ensemble of particles is governed by their interactions. 
-In classical MD, the interactions are described
-by a classical force field $\vec{F}$, which is defined as the negative gradient of a potential energy surface (PES) $E$,
-\begin{equation}
- \vec{F} = -\nabla E
-\end{equation}
-The PES is represented by a mathematical function, often split into a sum over two- and three-body interactions. 
-Instead of using an analytical functional form to represent the energy, one can 
-calculate the energies and forces for each time step in the MD simulation using an ab inito method. 
-Different quantum mechanical methods like Hartree-Fock (HF) and Density Functional Theory (DFT) are used for this purpose. 
-These approahces to MD are called quantum-classical molecular dynamics (QCMD). 
-
 \section{Potential energy surfaces} \label{sec:potentialEnergySurfaces}
 The dynamics of an ensemble of particles is governed by their interactions. 
-In classical MD, the interactions are described
-by a classical force field $\vec{F}$, which is defined as the negative gradient of a potential energy surface (PES) $E$,
+In \textit{classical} MD, the interactions are described
+by a classical force field $\vec{F}$, which is defined as the negative gradient of a potential energy surface (PES) $V(\vec{r})$,
 \begin{equation}
- \vec{F} = -\nabla E
+ \vec{F} = -\nabla V(\vec{r})
  \label{forcePES}
 \end{equation}
-The expression for $V(r)$ may be obtained in different ways:
+The PES describes the potential energy of a system for any configuration of atoms 
+$\vec{r} = (\vec{r}_1, \vec{r}_2, \dots, \vec{r}_N)$, and is represented by a predefined, analytic function. 
+The expression for $V(\vec{r})$ may be chosen in various ways, defining three classes of potentials,
 \begin{itemize}
  \item Empirical potentials: the functional form are chosen and the parameters fitted from 
- empirical knowledge about the system
- \item Semi-empirical potentials: based on methods from computational QM, but many approximations
- are made and some parameters are obatained from empirical data
+ empirical knowledge about the system.
+ \item Semi-empirical potentials: based on methods from computational quantum mechanics (QM), but many approximations
+ are made and some parameters are obtained from empirical data. 
  \item Quantum mechanical potentials: a computational QM method 
- is used to obtain the energy for different configurations, and then fitted by a functional form
+ is used to obtain the energy for different configurations, and then fitted by a functional form.
 \end{itemize}
-Instead of using a pre-defined functional form to represent the energy, one can 
-calculate the energies and forces for each time step in the MD simulation using an ab inito method. 
-Different quantum mechanical methods like Hartree-Fock (HF) and Density Functional Theory (DFT) are used for this purpose. 
-These approahces to MD are called quantum-classical molecular dynamics (QCMD). 
+Instead of employing a predefined functional form to represent the potential energy, we can 
+calculate the energies and forces for each time step during the MD simulation, using a method from 
+computational QM. This \textit{ab inito} approach to MD is more accurate, but very computationally expensive. 
+In this thesis we restrict ourselves to classical MD. 
 
-The PES represents the potential energy $V(\vec{r})$ of a system as a mathematical function of the configuration of the atomic 
-positions $\vec{r} = (\vec{r}_1, \vec{r}_2, \dots \vec{r}_N)$. To reduce
-the $N$-body problem from a fully quantum description to a classical potential we must make the Born-Oppenheimer 
+\subsection{Born-Oppenheimer approximation}
+To reduce the $N$-body problem from a fully quantum mechanical description to a classical potential we must make the Born-Oppenheimer 
 approximation, which is the assumption that the motion of atomic nuclei and electrons in a molecule
 can be seperated. This enables us to freeze the degrees of freedom of the nuclei and solve the electronic
 Schrödinger equation with the positions of the nuclei as parameters. Varying the positions of the nuclei
 in small steps and repeatedly soving the Schrödinger equation, the quantum PES is made. 
 Classically, we can now approximate the atomic nuclei as point-particles that follow
 Newtonian dynamics, while the positions and velocities of the electrons are baked into the PES, usually
-representing the ground state. (HA ET EGET AVNSITT OM BORN-OPPENHEIMER I KVANTETEORIDELEN KANSKJE?)
+representing the ground state.
 
 As mentioned above, we represent the PES by a pre-defined functional form in classical MD. We can assume that this
 function can be written as a sum of $n$-body terms,
@@ -494,18 +483,18 @@ specific linear activation function for the output neuron $o$, namely the identi
 
 
 
-\subsubsection*{Matrix representation}
+\subsubsection{Matrix representation}
 We can introduce a more convenient notation for the activations in a NN. 
 If we look at the structure of the NN in \autoref{fig:networkNotation}, we realize that all the weights connecting 
-two adjacent layers can be represented as a matrix $W$, where $w^l_{ij}$ is as before the weight connecting connecting node $j$
+two adjacent layers can be represented as a matrix $W$, where $w_{ij} = w^l_{ij}$ is the weight connecting connecting node $j$
 in layer $l-1$ with node $i$ in layer $l$. Additionaly, we can represent the biases and activations
-as layer-wise column vectors, so that e.g. $\vec{b}^l_i$ is the bias of node $i$ in layer $l$. 
-We have that $W^l$ is a $N_{l-1} \times N_l$ matrix, while $\vec{b}^l$ and $\vec{y}^l$ are $N_l \times 1$ column vectors. 
+as layer-wise column vectors $\vec{b}$ and $\vec{y}$, so that $b_i = b_i^l$ is the bias of node $i$ in layer $l$. 
+We have that $W_l$ is a $N_{l-1} \times N_l$ matrix, while $\vec{b}_l$ and $\vec{y}_l$ are $N_l \times 1$ column vectors. 
 
 With this notation, the sum in \eqref{outputLayer2} becomes a matrix-vector multiplication, and we can write
 the equation for the activations of hidden layer 2 in \autoref{fig:networkNotation} as
 \begin{equation}
- \vec{y}^2 = f(W^2 \vec{y}^{1} + \vec{b}^{2}) = 
+ \vec{y}_2 = f(W_2 \vec{y}_{1} + \vec{b}_{2}) = 
  f\left(\left[\begin{array}{ccc}
     w^2_{11} &w^2_{12} &w^2_{13} \\
     w^2_{21} &w^2_{22} &w^2_{23} \\
@@ -524,8 +513,8 @@ the equation for the activations of hidden layer 2 in \autoref{fig:networkNotati
 \end{equation}
 and we see that the activation of node $i$ in layer 2 is
 \begin{equation}
- y^2_i = w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3 + b_i = 
- \sum_{j=1}^3 w_{ij} y_j^1 + b_i
+ y^2_i = w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3 + b^2_i = 
+ \sum_{j=1}^3 w^2_{ij} y_j^1 + b^2_i
 \end{equation} 
 which is in accordance with \eqref{outputLayer2}. This is not just a nice and compact notation, but also 
 a useful and intuitive way to think about MLPs: the output is calculated by a series of matrix-vector multiplications
@@ -619,7 +608,8 @@ This procedure is called \textit{training}.
 
 The input values to the function that we want to fit
 are called the \textit{training set}, while the output values are called the \textit{reference set} or the \textit{target values}.
-The training set $X$ and reference set $Y$ are represented as matrices, where the $i$-th row of $X$ and the $i$-th row of $Y$
+The training set $X$ and reference set $Y$ are represented as matrices, where the $i$-th row of $X$ and $Y$, 
+denoted $X_{i*}$ and $Y_{i*}$ respectively, 
 together form a \textit{training example}. The combined data set consists of $N$ such training examples. 
 Note that the number of columns of $X$ and $Y$ are equal to the number of inputs and outputs of our MLP respectively. 
 This is a restatement of the observation made in \autoref{sec:MLPmodel}: the number of inputs and outputs of our MLP must be equal 
@@ -644,7 +634,7 @@ The standard cost function used in regression with NNs is the mean-square error,
  \Gamma = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
  \label{quadraticCost}
 \end{equation}
-where $y_i = y_i(W, B, X_i)$ is the value predicted by the NN for traing example $X_i$. 
+where $y_i = y_i(W, B, X_{i*})$ is the value predicted by the NN for traing example $X_{i*}$. 
 For a MLP with more than one output, $Y_i$ and $y_i$ are vectors. 
 The constant $1/2$ is included to cancel out the exponent when this function is differentiated in \autoref{sec:backprop}.
 
@@ -842,12 +832,12 @@ and the cost function $\Gamma$ is the mean-square-error \eqref{quadraticCost}
 \end{equation}
 here written as a function of only \textit{one} training example. 
 What we have not discussed yet, is
-how we calculate the gradient of the cost function, i.e. how we obtain the partial derivatives $g_{ij}$ and $g_i$ w.r.t.
+how we calculate the gradient of the cost function, i.e. how we obtain the partial derivatives $g_{ij}$ and $h_i$ w.r.t.
 all the weights and biases respectively,
 \begin{equation}
 \begin{aligned}
  g_{ij} &= \frac{\partial \Gamma}{\partial w_{ij}} \\
- g_i &= \frac{\partial \Gamma}{\partial b_i}
+ h_i &= \frac{\partial \Gamma}{\partial b_i}
 \label{partialDerivatives}
 \end{aligned}
 \end{equation}
@@ -900,14 +890,15 @@ by an amount $\frac{\partial \Gamma}{\partial u_j}\Delta u_j$. If $\partial \Gam
 we are not able improve the cost much by perturbing the weighted input $u_j$; the neuron is already quite near the optimal value.
 This is a heuristic argument for $\partial \Gamma / \partial x_j$ to be a measure of the error of the neuron. 
 
-The second term on the r.h.s. of \eqref{partialDerivativeExpanded} is 
+\noindent The second term on the r.h.s. of \eqref{partialDerivativeExpanded} is 
 \begin{equation}
  \frac{\partial u_i}{\partial w_{ij}} = \frac{\partial}{\partial w_{ij}} \sum_{m\in A_i} w_{im}y_m = y_j
  \label{derivativeSecondTerm}
 \end{equation}
-Combining the the two terms \eqref{neuronError} and \eqref{derivativeSecondTerm} yield
+Combining the the two terms \eqref{neuronError} and \eqref{derivativeSecondTerm} yields
 \begin{equation}
  g_{ij} = \delta_i y_j
+ \label{weightGradient}
 \end{equation}
 To compute this quantity, we thus need to know the outputs and the errors of all nodes in the network. 
 The outputs are generated during the feed-forward stage \eqref{generalLayer},
@@ -979,7 +970,7 @@ algorithm, and the reason for its popularity in neural network research.
 
 \noindent For the biases, we have \eqref{partialDerivatives},
 \begin{equation}
- g_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}
+ h_j = \frac{\partial \Gamma}{\partial b_j} = \sum_{i\in P_j} \frac{\partial \Gamma}{\partial u_i}
 	      \frac{\partial u_i}{\partial y_j} \frac{\partial y_j}{\partial u_j} \frac{\partial u_j}{\partial b_j}
 \end{equation}
 The only new term her is the last one:
@@ -988,7 +979,7 @@ The only new term her is the last one:
 \end{equation}
 Consequentially, the bias gradient is simply the error of each neuron:
 \begin{equation}
- g_j = \delta_j
+ h_j = \delta_j
 \end{equation}
 
 \subsubsection{Matrix notation}
@@ -1013,32 +1004,47 @@ Thus, for nodes $\{j\}$ in layer $l$ and nodes $\{i\}$ in layer $l+1$, the vecto
  \delta_j = y^\prime_j\sum_{i\in P_j}w_{ij} \delta_i \: \Rightarrow \:
  \vec{\delta}_l = \vec{y}^\prime_l \odot (W_{l+1} \vec{\delta}_{l+1})
 \end{equation}
-where $\odot$ signifies element-wise multiplication. 
+where $\odot$ signifies element-wise multiplication. The expression for the weight gradients \eqref{weightGradient} is converted
+into an outer product of the errors of layer $l+1$ and the outputs of layer $l$,
+\begin{equation}
+ g_{ij} = \delta_i y_j \Rightarrow G_l = \vec{\delta}_{l+1} \vec{y}^T_l
+\end{equation}
+where $G_l$ is a matrix containing all gradients for the weights connecting layer $l$ and $l+1$. 
+The corresponding matrix for the biases is a $N_l \times 1$ column vector $\vec{H}_l$,
+\begin{equation}
+ \vec{H}_l = \vec{\delta}_l
+\end{equation}
+The set $\{G_l, \vec{H}_l\}$ for $l=1,\dots,L+1$ thus make up the total gradient of the cost function \eqref{quadraticCost}. 
 
 \subsubsection{Training algorithm}
 We are now ready to express the complete training algorithm for a MLP with backpropagation using
-matrix-vector notation:
+matrix-vector notation. The below process is performed for each training example $\vec{x} = X_{i*}$ in the whole
+training set.
 \begin{enumerate}
  \item Initialize the input layer:
  \begin{equation}
   \vec{y}_0 = \vec{x}
  \end{equation}
  \item Propagate the activity forward: for $l = 1,\dots,L+1$:
- \begin{equation}
-  \vec{y}_l = f_l(W_l\vec{y}_{l-1} + \vec{b}_l) + f_l(\vec{u}_l)
- \end{equation}
+ \begin{align}
+  \vec{u}_l &= W_l\vec{y}_{l-1} + \vec{b}_l \\
+  \vec{y}_l &= f_l(\vec{u}_l)
+ \end{align}
+ Store all vectors $\vec{u}_l$ and $\vec{y}_l$.
  \item Calculate the error in the output layer:
  \begin{equation}
   \vec{\delta}_{L+1} = \vec{Y} - \vec{y}_{L+1}
  \end{equation}
  \item Backpropagate the error: for $l = L, L-1, \dots ,1$:
  \begin{equation}
- \vec{\delta}_l = f_l^\prime (\vec{x}_l) \odot (W^T_{l+1}\vec{\delta}_{l+1}) \cdot 
+ \vec{\delta}_l = \vec{y}^\prime_l \odot (W^T_{l+1}\vec{\delta}_{l+1}) \cdot 
  \end{equation}
- \item Update the weights and biases: 
+ Store all errors $\vec{\delta}_l$. 
+ \item Compute weight and bias gradients: 
  \begin{equation}
-  \Delta W_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \Delta \vec{b}_l = \vec{\delta}_l
+  G_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \vec{H}_l = \vec{\delta}_l
  \end{equation}
+ \item Update weights and biases using an update rule of choice
 \end{enumerate}
 
 
