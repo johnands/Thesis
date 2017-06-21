@@ -87,66 +87,108 @@ This goal can be split into the following intermediate objecives:
 
 \chapter{Molecular dynamics}
 Molecular dynamics (MD) is a method to simulate the physical movements of atoms and molecules in gases, liquids and solids. 
-It is thus a type of N-body simulation. The atoms are modelled as point-like particles with interactions described
-by force fields. Their time-evolution is governed by Newton's equations of motion. MD allows one to study the microscopic
+It is thus a type of $N$-body simulation. The atoms are modelled as point-like particles with interactions described
+by force fields. Their time-evolution is governed by Newton's equations of motion. MD allows us to study the microscopic
 movement of thousands or millions of atoms, enabling the sampling of macroscopic properties such at temperature, pressure, 
 diffusion, heat capacity and so on. 
 
-\section{Potential energy surfaces} \label{sec:potentialEnergySurfaces}
 The dynamics of an ensemble of particles is governed by their interactions. 
-In \textit{classical} MD, the interactions are described
-by a classical force field $\vec{F}$, which is defined as the negative gradient of a potential energy surface (PES) $V(\vec{r})$,
+In MD, the interactions are described
+by a force field $\vec{F}$, which is defined as the negative gradient of a 
+potential energy surface (PES) $V(\vec{r})$,
 \begin{equation}
  \vec{F} = -\nabla V(\vec{r})
  \label{forcePES}
 \end{equation}
 The PES describes the potential energy of a system for any configuration of atoms 
-$\vec{r} = (\vec{r}_1, \vec{r}_2, \dots, \vec{r}_N)$, and is represented by a predefined, analytic function. 
+$\vec{r} = (\vec{r}_1, \vec{r}_2, \dots, \vec{r}_N)$, and thereby the forces, thus
+controlling the behaviour of the system. In other words, the PES is clearly the most important
+factor for a MD simulation to be physically plausible. 
+
+In this chapter, we will start out with a discussion on different ways to construct an adequate PES, followed 
+by details about time-integration and functions that are commonly used to define a PES. 
+
+\section{Potential energy surfaces} \label{sec:potentialEnergySurfaces}
+We know that atomic interactions are governed by the laws of quantum mechanics (QM). 
+In principle, we can solve the time-dependent Schr\"{o}dinger equation to obtain the trajectories of 
+an ensemble of atoms. This is however a very computationally expensive task, and is not feasible except for
+small systems and time scales. Numerical methods for this purpose scales non-linearly with system size, while
+MD simulations scale linearly, if implemented in a certain way. 
+
+An alternative is to solve the time-\textit{independent} Schr\"{o}dinger equation for each time step in a simulation. 
+The resulting PES is differentiated to obtain the forces on all atoms, and the new positions and velocities are calculated
+by employing Newton's laws. This method is called \textit{ab inito} molecular dynamics. Although this is the most accurate
+approach to MD, it also suffers from bad scalability when the system size grows. 
+
+In \textit{classical} MD, the PES is represented by a predefined, mathematical function, i.e. we do not have to 
+update the PES during the simulation, resulting in better performance. The cost is a loss of accuracy, but for many 
+systems it is fully possible to construct a predefined PES that yields the correct thermodynamics properties. 
+In this thesis, we present a method to construct potential energy surfaces for classical MD.  
+
+\subsection{From quantum mechanics to classical potentials}
+It it not obvious how an ensemble of atoms, which is a quantum mechanical system, can be simulated using 
+laws from classical mechanics. To be able to do this,
+we must make the assumption that the motion of atomic nuclei and electrons in a molecule
+can be seperated, known as the Born-Oppenheimer approximation. 
+Under this assumption, we can solve the electronic Schr\"{o}dinger equation with the nucleonic degrees of freedom as parameters.
+The resulting wavefunction serves as a potential in a \textit{nucleonic} Schr\"{o}dinger equation, yielding a PES 
+for the nuclear motion. In this way, the positions and velocities of the electrons are baked into the PES, 
+allowing us to model the atomic nuclei as point particles that follow Newtonian dynamics. 
+
+\subsection{Constructing potential energy surfaces}
 The expression for $V(\vec{r})$ may be chosen in various ways, defining three classes of potentials,
 \begin{itemize}
- \item Empirical potentials: the functional form are chosen and the parameters fitted from 
- empirical knowledge about the system.
- \item Semi-empirical potentials: based on methods from computational quantum mechanics (QM), but many approximations
- are made and some parameters are obtained from empirical data. 
- \item Quantum mechanical potentials: a computational QM method 
- is used to obtain the energy for different configurations, and then fitted by a functional form.
+ \item Empirical potentials: The functional form are chosen and the parameters fitted from 
+ empirical knowledge about the system. 
+ \item Quantum mechanical potentials: A computational quantum mechanics (QM) method 
+ is used to obtain the potential energy for different atomic configurations. The configurations and corresponding energies
+ are then fitted by a functional form. 
+ \item Semi-empirical potentials: Mainly based on methods from computational quantum mechanics (QM), but many approximations
+ are made and some parameters are obtained from empirical data.
 \end{itemize}
-In this thesis we will present a method to do the latter, where atomic configurations and energies are fitted
+In this thesis we will present a method to construct quantum mechanial potentials, where atomic configurations and energies are fitted
 by artifical neural networks. 
 
-\subsection*{Ab inito molecular dynamics}
-Instead of employing a predefined functional form to represent the potential energy, we can 
-calculate the energies and forces for each time step during the MD simulation, using a method from 
-computational QM. This \textit{ab inito} approach to MD is more accurate, but very computationally expensive. 
-In this thesis we restrict ourselves to classical MD. 
+In the following section, we describe how the functional form of a PES can be constructed.  
 
-\subsection{Born-Oppenheimer approximation}
-To reduce the $N$-body problem from a fully quantum mechanical description to a classical potential we must make the Born-Oppenheimer 
-approximation, which is the assumption that the motion of atomic nuclei and electrons in a molecule
-can be seperated. This enables us to freeze the degrees of freedom of the nuclei and solve the electronic
-Schrödinger equation with the positions of the nuclei as parameters. Varying the positions of the nuclei
-in small steps and repeatedly soving the Schrödinger equation, the quantum PES is made. 
-Classically, we can now approximate the atomic nuclei as point-particles that follow
-Newtonian dynamics, while the positions and velocities of the electrons are baked into the PES, usually
-representing the ground state.
-
-As mentioned above, we represent the PES by a pre-defined functional form in classical MD. We can assume that this
-function can be written as a sum of $n$-body terms,
+\subsection{Constructing potential energy surfaces}
+As mentioned above, we represent the PES by a predefined functional form in classical MD. We assume that this
+function can be constructed as a sum of $n$-body terms $V_n$,
 \begin{equation}
  V(\vec{r}) \approx \sum_{i=1}^N V_1(\vec{r}_i) + \sum_{i<j}^N V_2(\vec{r}_i, \vec{r}_j) + 
  \sum_{i<j<k}^N V_3(\vec{r}_i, \vec{r}_j, \vec{r}_k) + \dots
+ \label{generalPotential}
 \end{equation}
-Each term can be determined by performing an electronic structure calculation for a number of configurations, 
-and fitted by a suitable functional form. Determining how many terms that is sufficient to 
+Each term is determined by empirical knowledge of the system, by quantum mechanical calculations or a combination of both. 
+The resulting PES is called an empirical, quantum mechanical or semi-empirical potential respectively. 
+
+When constructing empirical potentials, we typically start out with a functional form that captures some of the known, basic properties
+of the system under investigation. The function has a set of parameters that are fitted to experimental data, hence the name.
+Empirical potentials are often quite simple and only have a few parameters, making their performance superior. However, their
+accuracy is limited by the choice of functional form; there is always a risk that not all the physics of a system
+is captured. Further, the parameters need to be fitted specifically for a given system and are typically not transferable 
+from one system to another. Also, the fitting process can be difficult and time-consuming. 
+
+For QM potentials, electronic structure calculations are performed for a number of atomic configurations, yielding a data set
+of configurations and corresponding potential energies. A very flexible functional form, often containing many parameters, 
+are then fitted to this data set. Potentials of this type can in principle be fitted to arbitrary accuracy, and may thus 
+be viewed as \textit{ab inito} potentials. 
+Potentials of this type can be very accurate due to their unbiased nature, and the method can in principle be applied to 
+any system. 
+
+
+Determining how many terms that is sufficient to 
 describe a system adequately is however not trivial. Noble gases like argon have weak interactions and 
 may be well described by a two-body potential $V_2$, while molecules with strong angular dependencies on their bond, like
-silicon (Si), will need at least three-body potentials $V_3$. Another challenge is to identify the
+silicon (Si), will need more terms. Another challenge is to identify the
 configuration space of the system. For three-body potentials and more the set of probable configurations is large, and 
-running an \textit{ab inito} simulation for each configuration is expensive. This problem will be discussed below. 
+running electronic structure calculations for each configuration is expensive.
 
+In this thesis we present a method to construct potential energy surfaces 
 An important step is how to fit the above potential terms obtained from QM calculations to a functional form. 
 There exist a lot of different interpolation teqhniques; in this theses we will use ANNs to fit the data. 
 (SKRIVE OM ANDRE INTERPOLASJONSTEKNIKKER?)
+
 
 \section{Time integration}
 Euler, Velocity Verlet.
@@ -2102,7 +2144,7 @@ Next, we discuss how to find a symmetry function set that fits the system under 
 The specifics of different training teqhniques are found elsewhere. (WHERE?).
 
 
-\section{Selecting the training data}
+\section{Selecting the training data} \label{sec:selectingTrainingData}
 The number of possible configurations of atomic or molecular systems quickly grows very large. 
 Consider for instance water $\textrm{H}_2\textrm{O}$, which is a three-body molecule. The configuration of the
 three atoms can be described by three internal coordinates, each with a certain range of values. 

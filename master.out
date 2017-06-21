@@ -3,59 +3,60 @@
 \BOOKMARK [-1][-]{part.1}{I Theory}{}% 3
 \BOOKMARK [0][-]{chapter.2}{Molecular dynamics}{part.1}% 4
 \BOOKMARK [1][-]{section.2.1}{Potential energy surfaces}{chapter.2}% 5
-\BOOKMARK [2][-]{subsection.2.1.1}{Born-Oppenheimer approximation}{section.2.1}% 6
-\BOOKMARK [1][-]{section.2.2}{Time integration}{chapter.2}% 7
-\BOOKMARK [1][-]{section.2.3}{Empirical potentials}{chapter.2}% 8
-\BOOKMARK [2][-]{subsection.2.3.1}{Lennard-Jones}{section.2.3}% 9
-\BOOKMARK [2][-]{subsection.2.3.2}{Stillinger-Weber}{section.2.3}% 10
-\BOOKMARK [2][-]{subsection.2.3.3}{Vashishta}{section.2.3}% 11
-\BOOKMARK [1][-]{section.2.4}{Advanced theory}{chapter.2}% 12
-\BOOKMARK [2][-]{subsection.2.4.1}{Verlet lists}{section.2.4}% 13
-\BOOKMARK [2][-]{subsection.2.4.2}{Thermostats / ensembles}{section.2.4}% 14
-\BOOKMARK [0][-]{chapter.3}{Machine learning}{part.1}% 15
-\BOOKMARK [1][-]{section.3.1}{Artificial neurons}{chapter.3}% 16
-\BOOKMARK [1][-]{section.3.2}{Neural network types}{chapter.3}% 17
-\BOOKMARK [2][-]{subsection.3.2.1}{Feed-forward neural networks}{section.3.2}% 18
-\BOOKMARK [2][-]{subsection.3.2.2}{Recurrent neural networks}{section.3.2}% 19
-\BOOKMARK [2][-]{subsection.3.2.3}{Other types of networks}{section.3.2}% 20
-\BOOKMARK [1][-]{section.3.3}{Multilayer perceptron}{chapter.3}% 21
-\BOOKMARK [2][-]{subsection.3.3.1}{Why multilayer perceptrons?}{section.3.3}% 22
-\BOOKMARK [2][-]{subsection.3.3.2}{Mathematical model}{section.3.3}% 23
-\BOOKMARK [1][-]{section.3.4}{Activation functions}{chapter.3}% 24
-\BOOKMARK [1][-]{section.3.5}{Training}{chapter.3}% 25
-\BOOKMARK [2][-]{subsection.3.5.1}{Cost functions}{section.3.5}% 26
-\BOOKMARK [1][-]{section.3.6}{Optimization}{chapter.3}% 27
-\BOOKMARK [2][-]{subsection.3.6.1}{Gradient descent variants}{section.3.6}% 28
-\BOOKMARK [2][-]{subsection.3.6.2}{Optimization algorithms}{section.3.6}% 29
-\BOOKMARK [2][-]{subsection.3.6.3}{Backpropagation}{section.3.6}% 30
-\BOOKMARK [0][-]{chapter.4}{Neural networks in molecular dynamics}{part.1}% 31
-\BOOKMARK [1][-]{section.4.1}{High-dimensional NNPs}{chapter.4}% 32
-\BOOKMARK [2][-]{subsection.4.1.1}{Symmetry functions}{section.4.1}% 33
-\BOOKMARK [2][-]{subsection.4.1.2}{Symmetry functions and forces}{section.4.1}% 34
-\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 35
-\BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 36
-\BOOKMARK [1][-]{subsection.5.0.1}{Installing LAMMPS}{chapter.5}% 37
-\BOOKMARK [2][-]{subsection.5.0.2}{LAMMPS input script}{subsection.5.0.1}% 38
-\BOOKMARK [2][-]{subsection.5.0.3}{LAMMPS structure}{subsection.5.0.1}% 39
-\BOOKMARK [2][-]{subsection.5.0.4}{Extending LAMMPS}{subsection.5.0.1}% 40
-\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 41
-\BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 42
-\BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 43
-\BOOKMARK [2][-]{subsection.6.2.1}{Hello world}{section.6.2}% 44
-\BOOKMARK [2][-]{subsection.6.2.2}{Creating a neural network}{section.6.2}% 45
-\BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 46
-\BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 47
-\BOOKMARK [0][-]{chapter.7}{Training procedure}{part.2}% 48
-\BOOKMARK [1][-]{section.7.1}{Selecting the training data}{chapter.7}% 49
-\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 50
-\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 51
-\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 52
-\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 53
-\BOOKMARK [1][-]{section.8.1}{Time usage}{chapter.8}% 54
-\BOOKMARK [1][-]{section.8.2}{Training Lennard-Jones potential}{chapter.8}% 55
-\BOOKMARK [2][-]{subsection.8.2.1}{Many-neighbour Lennard-Jones}{section.8.2}% 56
-\BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 57
-\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.3}% 58
-\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.3}% 59
-\BOOKMARK [0][-]{section*.40}{Appendices}{part.3}% 60
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 61
+\BOOKMARK [2][-]{subsection.2.1.1}{From quantum mechanics to classical potentials}{section.2.1}% 6
+\BOOKMARK [2][-]{subsection.2.1.2}{Constructing potential energy surfaces}{section.2.1}% 7
+\BOOKMARK [1][-]{section.2.2}{Time integration}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.3}{Empirical potentials}{chapter.2}% 9
+\BOOKMARK [2][-]{subsection.2.3.1}{Lennard-Jones}{section.2.3}% 10
+\BOOKMARK [2][-]{subsection.2.3.2}{Stillinger-Weber}{section.2.3}% 11
+\BOOKMARK [2][-]{subsection.2.3.3}{Vashishta}{section.2.3}% 12
+\BOOKMARK [1][-]{section.2.4}{Advanced theory}{chapter.2}% 13
+\BOOKMARK [2][-]{subsection.2.4.1}{Verlet lists}{section.2.4}% 14
+\BOOKMARK [2][-]{subsection.2.4.2}{Thermostats / ensembles}{section.2.4}% 15
+\BOOKMARK [0][-]{chapter.3}{Machine learning}{part.1}% 16
+\BOOKMARK [1][-]{section.3.1}{Artificial neurons}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.2}{Neural network types}{chapter.3}% 18
+\BOOKMARK [2][-]{subsection.3.2.1}{Feed-forward neural networks}{section.3.2}% 19
+\BOOKMARK [2][-]{subsection.3.2.2}{Recurrent neural networks}{section.3.2}% 20
+\BOOKMARK [2][-]{subsection.3.2.3}{Other types of networks}{section.3.2}% 21
+\BOOKMARK [1][-]{section.3.3}{Multilayer perceptron}{chapter.3}% 22
+\BOOKMARK [2][-]{subsection.3.3.1}{Why multilayer perceptrons?}{section.3.3}% 23
+\BOOKMARK [2][-]{subsection.3.3.2}{Mathematical model}{section.3.3}% 24
+\BOOKMARK [1][-]{section.3.4}{Activation functions}{chapter.3}% 25
+\BOOKMARK [1][-]{section.3.5}{Training}{chapter.3}% 26
+\BOOKMARK [2][-]{subsection.3.5.1}{Cost functions}{section.3.5}% 27
+\BOOKMARK [1][-]{section.3.6}{Optimization}{chapter.3}% 28
+\BOOKMARK [2][-]{subsection.3.6.1}{Gradient descent variants}{section.3.6}% 29
+\BOOKMARK [2][-]{subsection.3.6.2}{Optimization algorithms}{section.3.6}% 30
+\BOOKMARK [2][-]{subsection.3.6.3}{Backpropagation}{section.3.6}% 31
+\BOOKMARK [0][-]{chapter.4}{Neural networks in molecular dynamics}{part.1}% 32
+\BOOKMARK [1][-]{section.4.1}{High-dimensional NNPs}{chapter.4}% 33
+\BOOKMARK [2][-]{subsection.4.1.1}{Symmetry functions}{section.4.1}% 34
+\BOOKMARK [2][-]{subsection.4.1.2}{Symmetry functions and forces}{section.4.1}% 35
+\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 36
+\BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 37
+\BOOKMARK [1][-]{subsection.5.0.1}{Installing LAMMPS}{chapter.5}% 38
+\BOOKMARK [2][-]{subsection.5.0.2}{LAMMPS input script}{subsection.5.0.1}% 39
+\BOOKMARK [2][-]{subsection.5.0.3}{LAMMPS structure}{subsection.5.0.1}% 40
+\BOOKMARK [2][-]{subsection.5.0.4}{Extending LAMMPS}{subsection.5.0.1}% 41
+\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 42
+\BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 43
+\BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 44
+\BOOKMARK [2][-]{subsection.6.2.1}{Hello world}{section.6.2}% 45
+\BOOKMARK [2][-]{subsection.6.2.2}{Creating a neural network}{section.6.2}% 46
+\BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 47
+\BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 48
+\BOOKMARK [0][-]{chapter.7}{Training procedure}{part.2}% 49
+\BOOKMARK [1][-]{section.7.1}{Selecting the training data}{chapter.7}% 50
+\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 51
+\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 52
+\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 53
+\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 54
+\BOOKMARK [1][-]{section.8.1}{Time usage}{chapter.8}% 55
+\BOOKMARK [1][-]{section.8.2}{Training Lennard-Jones potential}{chapter.8}% 56
+\BOOKMARK [2][-]{subsection.8.2.1}{Many-neighbour Lennard-Jones}{section.8.2}% 57
+\BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 58
+\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.3}% 59
+\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.3}% 60
+\BOOKMARK [0][-]{section*.39}{Appendices}{part.3}% 61
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 62
