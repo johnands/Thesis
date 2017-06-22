@@ -135,70 +135,145 @@ The resulting wavefunction serves as a potential in a \textit{nucleonic} Schr\"{
 for the nuclear motion. In this way, the positions and velocities of the electrons are baked into the PES, 
 allowing us to model the atomic nuclei as point particles that follow Newtonian dynamics. 
 
-\subsection{Constructing potential energy surfaces}
-The expression for $V(\vec{r})$ may be chosen in various ways, defining three classes of potentials,
-\begin{itemize}
- \item Empirical potentials: The functional form are chosen and the parameters fitted from 
- empirical knowledge about the system. 
- \item Quantum mechanical potentials: A computational quantum mechanics (QM) method 
- is used to obtain the potential energy for different atomic configurations. The configurations and corresponding energies
- are then fitted by a functional form. 
- \item Semi-empirical potentials: Mainly based on methods from computational quantum mechanics (QM), but many approximations
- are made and some parameters are obtained from empirical data.
-\end{itemize}
-In this thesis we will present a method to construct quantum mechanial potentials, where atomic configurations and energies are fitted
-by artifical neural networks. 
-
-In the following section, we describe how the functional form of a PES can be constructed.  
 
 \subsection{Constructing potential energy surfaces}
 As mentioned above, we represent the PES by a predefined functional form in classical MD. We assume that this
 function can be constructed as a sum of $n$-body terms $V_n$,
 \begin{equation}
- V(\vec{r}) \approx \sum_{i=1}^N V_1(\vec{r}_i) + \sum_{i<j}^N V_2(\vec{r}_i, \vec{r}_j) + 
- \sum_{i<j<k}^N V_3(\vec{r}_i, \vec{r}_j, \vec{r}_k) + \dots
+ V(\vec{r}) \approx \sum_i^N V_1(\vec{r}_i) + \sum_{i,j}^N V_2(\vec{r}_i, \vec{r}_j) + 
+ \sum_{i,j,k}^N V_3(\vec{r}_i, \vec{r}_j, \vec{r}_k) + \dots
  \label{generalPotential}
 \end{equation}
+where the sums are over all single atoms $i$, all pairs $(i,j)$, all triplets $(i,j,k)$ and so on. 
 Each term is determined by empirical knowledge of the system, by quantum mechanical calculations or a combination of both. 
 The resulting PES is called an empirical, quantum mechanical or semi-empirical potential respectively. 
 
 When constructing empirical potentials, we typically start out with a functional form that captures some of the known, basic properties
 of the system under investigation. The function has a set of parameters that are fitted to experimental data, hence the name.
-Empirical potentials are often quite simple and only have a few parameters, making their performance superior. However, their
+Empirical potentials are often quite simple and only have a few parameters, making their computatioal performance superior. 
+However, their
 accuracy is limited by the choice of functional form; there is always a risk that not all the physics of a system
 is captured. Further, the parameters need to be fitted specifically for a given system and are typically not transferable 
 from one system to another. Also, the fitting process can be difficult and time-consuming. 
 
 For QM potentials, electronic structure calculations are performed for a number of atomic configurations, yielding a data set
-of con and corresponding potential energies. Then, a very flexible functional form is employed to 
-and fitted by a very flexible functional form, often containing many parameters. 
-Potentials of this type can be very accurate due to their unbiased nature, and the method can in principle be applied to 
-any system. 
+of configurations and corresponding potential energies. A very flexible functional form, often containing many parameters, 
+are then fitted to this data set. Potentials of this type can in principle be fitted to arbitrary accuracy, and may thus 
+be treated as \textit{ab inito} potentials. QM potentials are purely mathematical,
+in the sense that no physics can be extracted from their functional form. Therefore, the construction of the potential
+has to be done with great care, i.e. the data set must contain all relevant configurations for the intended application
+of the PES. However, the unbiased nature of QM potentials make them more general than their empirical counterparts,
+and the methodology can be applied to any system. 
 
+Semi-empirical potentials are constructed as a combination of the two schemes above. Their general functional form
+are based on methods from computational QM, but many approximations are made and some parameters are obtained from empirical data. 
 
-Determining how many terms that is sufficient to 
-describe a system adequately is however not trivial. Noble gases like argon have weak interactions and 
+\subsubsection{Truncation and configuration space}
+Determining how many terms in \eqref{generalPotential} that is sufficient to 
+describe a system adequately is not trivial. Noble gases like argon have weak interactions and 
 may be well described by a two-body potential $V_2$, while molecules with strong angular dependencies on their bond, like
-silicon (Si), will need more terms. Another challenge is to identify the
-configuration space of the system. For three-body potentials and more the set of probable configurations is large, and 
-running electronic structure calculations for each configuration is expensive.
+silicon (Si), will need more terms. We note that the one-body term $V_1$ is only included if the system 
+is experiencing an external force. 
 
-In this thesis we present a method to construct potential energy surfaces 
-An important step is how to fit the above potential terms obtained from QM calculations to a functional form. 
-There exist a lot of different interpolation teqhniques; in this theses we will use ANNs to fit the data. 
-(SKRIVE OM ANDRE INTERPOLASJONSTEKNIKKER?)
+Another challenge is to identify the
+configuration space of the system. For three-body potentials and more the set of probable configurations is large, and 
+running electronic structure calculations for each configuration is expensive. The problem of identifying the configuration
+space is described in \autoref{sec:selectingTrainingData}. 
+
+\subsubsection{Fitting procedure}
+In this thesis we present a method to construct many-body QM potentials for MD simulations.
+An important step in this process is the fitting of the data set of atomic configurations and energies by 
+a suitable functional form. Several methods have been proposed, like different types of splines, 
+interpolating moving least squares \cite{Dawes08} and modified Sheppard interpolation \cite{Ischtwan94}. 
+We will use \textit{artificial neural networks} (ANNs) for this purpose. 
+The basic theory of ANNs 
+is presented in chapter 2, while chapter 3 deales with physical symmetries that has to be considered. 
+Finally, in the implementation part, the details of constructing and applying an AAN potential in MD simulations are described. 
+
+
+\section{Common empirical potentials}
+Although the method described in this thesis is for the construction of QM potentials, empirical potentials
+are useful as test cases and validations of the method. We can define two types of empirical potentials based on how they 
+relate to groups of atoms. \textit{Bonded} potentials compute the energy of each (covalent) bond for a predefined set 
+of atoms or molecules, while \textit{non-bonded} potentials depend on the spatial configuration of \textit{each possible set}
+of particles of a specific kind, e.g. all pairs of Ar atoms or all triplets of Si atoms. The total potential 
+is the sum of the contributions from these potentials,
+\begin{equation}
+ V_{\mathrm{tot}} = V_{\mathrm{bonded}} + V_{\mathrm{non-bonded}}
+\end{equation}
+We will only work with non-bonded potentials in this thesis. In the following we will discuss three such potentials
+that are common in the literature, and which we have employed to validate our PES construction method. 
+
+\subsection{Lennard-Jones}
+The Lennard-Jones (LJ) potential \cite{Jones24} is one of the simplest and most widely used potentials. 
+It has a simple functional form which is inexpensive to compute, and is able to reproduce weakly interacting systems 
+like noble gases well. It is a two-body potential that only depends on the distance $r$ between pairs of atoms. 
+The general form is (\autoref{fig:LJ})
+\begin{equation}
+ V_{LJ}(r) = 4\epsilon \left[\left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6\right]
+ \label{Lennard-Jones}
+\end{equation}
+where the two parameters $\epsilon$ and $\sigma$ are the depth of the potential well and the zero-point of the potential respectively.
+The Lennard-Jones potential captures a basic, phyiscal property of many atomic systems: atoms repulse each other at short distances
+and are attracted to each other at long distances. The first term describes the Pauli repulsion due to overlapping electron orbitals, 
+while the second term is the attraction due to the so-called van der Waals force. 
+The functional form of the repulsive term has, in contrast to the attractive one, no theoretical justification other than that
+it approximates the Pauli repulsion well. 
+\begin{figure}
+\begin{center}
+ \includegraphics[width = 0.8\linewidth]{Figures/Theory/LJ.pdf}
+ \caption{The Lennard-Jones potential \eqref{Lennard-Jones} as a function of inter-atomic distance for two different parameter sets. 
+ The depth of the potential well (potential
+ strength) is given by $\epsilon$, while $\sigma$ is the inter-atomic distance for which the potential is zero.}
+ \label{fig:LJ}
+\end{center}
+\end{figure}
+
+\subsubsection{Calculating total potential energy}
+Before we move on to three-body potentials, we will briefly explain how the total potential energy of a system is calculated. 
+For a two-body potential like LJ, each unique pair of atoms is only counted once, so that
+\begin{equation}
+ V_{tot} = \sum_i\sum_{j>i} V_2(r_{ij}) = \frac{1}{2}\sum_i\sum_j V_2(r_{ij})
+ \label{twoBodyPotentialEnergy}
+\end{equation}
+In the second expression we count all pairs twice, thus a factor $1/2$ is required. 
+For the three-body case, there are three different ways to count each unique triplet. 
+\begin{equation}
+ V_{tot} = \sum_i\sum_{j\neq i}\sum_{k>j} V_3(r_{ij}, r_{ik})
+ \label{threeBodyPotentialEnergy}
+\end{equation}
+\begin{figure}
+\begin{center}
+ \includegraphics[width = 0.9\linewidth]{Figures/Theory/triplets.pdf}
+ \caption{}
+ \label{fig:triplets}
+\end{center}
+\end{figure}
+
+
+
+\subsection{Stillinger-Weber}
+The Stillinger-Weber (SW) potential was proposed in 1985 \cite{Stillinger85} for simulating Si atoms. It has a two-body
+and a three-body term. The general expression for a three-body potential written in inter-atomic coordinates is
+\begin{equation}
+ V_{3\mathrm{body}} = \sum_i\sum_{j>i}V_2(r_{ij}) + \sum_i\sum_{j\neq i}\sum_{k>j} V_3(r_{ij}, r_{ik}, \theta_{ijk})
+ \label{threeBodyPotential}
+\end{equation}
+Comparing with \eqref{generalPotential}, the only difference is the sum indicies
+The two-body term is
+\begin{equation}
+ V_2(r_{ij}) = A\epsilon\left[B\left(\frac{\sigma}{r_{ij}}\right)^p - 
+ \left(\frac{\sigma}{r_{ij}}\right)^q\right]\exp\left(\frac{\sigma}{r_{ij} - a\sigma}\right)
+\end{equation}
+
+
+
+\subsection{Vashishta}
 
 
 \section{Time integration}
 Euler, Velocity Verlet.
 
-\section{Empirical potentials}
-
-\subsection{Lennard-Jones}
-
-\subsection{Stillinger-Weber}
-
-\subsection{Vashishta}
 
 
 \section{Advanced theory}
@@ -3040,7 +3115,7 @@ and
  URL: \href{https://www.duo.uio.no/handle/10852/41843}{https://www.duo.uio.no/handle/10852/41843}.
 
 \bibitem{Hornik89}
- K. Hornik, M. Stinchcombe and H. White.
+ K. Hornik, M. Stinchcombe, and H. White.
  ''Multilayer Feedforward Networks are Universal Approximators''.
  In: \textit{Neural Networks} 2. (1989), 359. 
  DOI: \href{https://doi.org/10.1016/0893-6080(89)90020-8}{10.1016/0893-6080(89)90020-8}
@@ -3056,18 +3131,18 @@ and
  In: \textit{IJAE} 1. (2011), 111-122.
  
 \bibitem{LeCun15}
- Y. LeCun, Y. Bengio and G. Hinton.
+ Y. LeCun, Y. Bengio, and G. Hinton.
  ''Deep learning''.
  In: \textit{Nature} 521. (2015), 436-444. 
  DOI: \href{http://dx.doi.org/10.1038/nature14539}{10.1038/nature14539}
  
 \bibitem{Glorot11}
- X. Glorot, A. Bordes, Y. Bengio.
+ X. Glorot, A. Bordes, and Y. Bengio.
  ''Deep Sparse Rectifier Neural Networks''.
  In: \textit{JMLR} 15. (2011), 315-323.
  
 \bibitem{Rumelhart86}
- D. E. Rumelhart, G. E. Hinton and R. J. Williams.
+ D. E. Rumelhart, G. E. Hinton, and R. J. Williams.
  ''Learning representations by back-propagating errors''.
  In: \textit{Nature} 323. (1986), 533-536.
  DOI: \href{http://dx.doi.org/10.1038/323533a0}{10.1038/323533a0}
@@ -3079,7 +3154,7 @@ and
  DOI: \href{http://dx.doi.org/10.1002/qua.24890}{10.1002/qua.24890}
  
 \bibitem{Tuckerman92}
- Tuckerman, Berne and Martyna .
+ Tuckerman, Berne, and Martyna .
  ''Reversible multiscale molecular dynamics''.
  In: \textit{J. Chem. Phys.} 97. (1992), 1990.
  
@@ -3120,7 +3195,7 @@ and
  DOI: \href{https://doi.org/10.1016/S0893-6080(98)00116-6}{10.1016/S0893-6080(98)00116-6}
  
 \bibitem{Duchi11}
- J. Duchi, E. Hazan, Y. Singer.
+ J. Duchi, E. Hazan, and Y. Singer.
  ''Adaptive Subgradient Methods for Online Learning and Stochastic Optimization''.
  In \textit{The Journal of Machine Learning Research} 12. (2011) 2121-2159. 
  URL: \href{http://jmlr.org/papers/v12/duchi11a.html}{http://jmlr.org/papers/v12/duchi11a.html}
@@ -3142,19 +3217,19 @@ and
  DOI: \href{http://dx.doi.org/10.1063/1.466801}{10.1063/1.466801}
  
 \bibitem{Raff05}
- L. M. Raff, M. Malshe, M. Hagan, D. I. Doughan, M. G. Rockley and R. Komanduri.
+ L. M. Raff, M. Malshe, M. Hagan, D. I. Doughan, M. G. Rockley, and R. Komanduri.
  ''Ab inito potential-energy surfaces for complex, multichannel systems using modified
  novelty sampling and feedforward neural networks''. 
  In: \textit{The Journal of Chemical Physics} 122. (2005), 084104. 
  DOI: \href{http://dx.doi.org/10.1063/1.1850458}{10.1063/1.1850458}
  
 \bibitem{Raff12}
- L. M. Raff, R. Komanduri, M. Hagan and S. T. S. Bukkapatnam 
+ L. M. Raff, R. Komanduri, M. Hagan, and S. T. S. Bukkapatnam 
  \textit{Neural networks in chemical reaction dynamics}.
  Oxford University Press, 2012.
  
 \bibitem{Pukrittayakamee09}
- A. Pukrittayakamee, M. Malshe, M. Hagan, L. M. Raff, R. Narulkar, 
+ A. Pukrittayakamee, M. Malshe, M. Hagan, L. M. Raff, and R. Narulkar, 
  S. Bukkapatnum and R. Komanduri. 
  ''Simultaneous fitting of a potential-energy surface and its corresponding force fields
  using feedforward neural networks''. 
@@ -3173,7 +3248,7 @@ and
  Available at \href{http://www.dkriesel.com}{http://www.dkriesel.com}
  
 \bibitem{LeCun99}
- Y. LeCun, P. Haffner, L. Bottou, Y. Bengio. 
+ Y. LeCun, P. Haffner, L. Bottou, and Y. Bengio. 
  ''Object recognition with Gradient-Based Learning''.
  In: \textit{Shape, Contour and Grouping in Computer Vision. Lecture Notes in Computer Science}.
  1681. (1999) 319-345. 
@@ -3181,14 +3256,33 @@ and
  
 \bibitem{Rosenblatt58}
  F. Rosenblatt. 
- ''The Perceptron: A probabilistic model for information storage and organization in the brain''.
+ ''The Perceptron: A probabilistic model for information storage and organization in the brain.''
  In: \textit{Psychological Review} 65. (1958), 386-408. 
  
 \bibitem{Ruder16}
  S. Ruder.
- ''An overview of gradient descent optimization algorithms''. 
+ ''An overview of gradient descent optimization algorithms.''
  (2016). 
  arXiv: \href{https://arxiv.org/abs/1609.04747}{1609.04747}
+ 
+\bibitem{Dawes08}
+ R. Dawes, D. L. Thompson, A. F. Wagner, and Michael Minkoff. 
+ ''Interpolating moving least-squares methods for fitting potential energy surfaces:
+ A strategy for efficient automatic data point placement in high dimensions''. 
+ In: \textit{The Journal of Chemical Physics} 128. (2008), 084107.
+ DOI: \href{http://dx.doi.org/10.1063/1.2831790}{10.1063/1.2831790}
+ 
+\bibitem{Jones24}
+ J. E. Jones. 
+ ''On the Determination of Molecular Fields - II. From the Equation of State of a Gas.''
+ In: \textit{Proceedings of the Royal Society of London. Series A} 106. (1924), 463. 
+ DOI: \href{http://dx.doi.org/10.1098/rspa.1924.0082}{10.1098/rspa.1924.0082}
+ 
+\bibitem{Stillinger85}
+ F. H. Stillinger and T. A. Weber. 
+ ''Computer simulation of local order in condensed phases of silicon''. 
+ In: \textit{Physical Review B} 31. (1985), 5262. 
+ DOI: \href{http://dx.doi.org/0.1103/PhysRevB.31.5262}{10.1103/PhysRevB.31.5262}
  
  
 \end{thebibliography}
