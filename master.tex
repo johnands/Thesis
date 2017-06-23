@@ -233,18 +233,25 @@ it approximates the Pauli repulsion well.
 Before we move on to three-body potentials, we will briefly explain how the total potential energy of a system is calculated. 
 For a two-body potential like LJ, each unique pair of atoms is only counted once, so that
 \begin{equation}
- V_{tot} = \sum_i\sum_{j>i} V_2(r_{ij}) = \frac{1}{2}\sum_i\sum_j V_2(r_{ij})
+ V_{\mathrm{tot}} = \sum_{i<j} V_2(r_{ij}) = \frac{1}{2}\sum_{i\neq j} V_2(r_{ij})
  \label{twoBodyPotentialEnergy}
 \end{equation}
 In the second expression we count all pairs twice, thus a factor $1/2$ is required. 
 For the three-body case, the counting is a bit more complicated. An atomic triplet is defined by the three
 variables $(r_{ij}, r_{ik}, \theta_{jik}$), where $r_{ij}$ and $r_{ik}$ are the 
 two inter-atomic distances to the central atom $i$, and $\theta_{jik}$ is the angle between the lines from $i$ to $j$ and 
-from $i$ to $k$, illustrated in \autoref{fig:triplets}. 
-\autoref{fig:triplets} illustrates 
+from $i$ to $k$. Note that there are only two \textit{independent} variables, since
 \begin{equation}
- V_{tot} = \sum_i\sum_{j\neq i}\sum_{k>j} V_3(r_{ij}, r_{ik})
- \label{threeBodyPotentialEnergy}
+ \theta_{jik} = \frac{\vec{r}_{ij} \cdot \vec{r}_{ik}}{r_{ij}^2r_{ik}^2}
+\end{equation}
+\autoref{fig:triplets} illustrates that three atoms $(i, j, k)$ define three different triplets depending
+on which atom that is the central one. All three triplets have different energies, and must therefore be tallied individually.
+If we assume that the potential form is such that it is symmetric with respect to exchange of the $j$ and $k$
+indicies (which is not always the case for multielemental systems), we have
+\begin{equation}
+ \sum_{i<j<k}\left[V_3^{(1)}(r_{ij}, r_{ik}, \theta_{jik}) + V_3^{(2)}(r_{ij}, r_{jk}, \theta_{ijk}) + 
+ V_3^{(3)}(r_{ik}, r_{jk}, \theta_{ikj})\right]
+ \label{threeBodyPotentialEnergy1}
 \end{equation}
 \begin{figure}
 \begin{center}
@@ -253,30 +260,85 @@ from $i$ to $k$, illustrated in \autoref{fig:triplets}.
  \label{fig:triplets}
 \end{center}
 \end{figure}
-
+where $V_3^{(i)}$ is one of the triplets in \autoref{fig:triplets}. Alternatively, we can calculate the energy of one triplet 
+at a time and instead sum over all $j$,
+\begin{equation}
+ \sum_{i}\sum_{j\neq i}\sum_{k>j} V_3 (r_{ij}, r_{ik}, \theta_{jik}) 
+ \label{threeBodyPotentialEnergy2}
+\end{equation}
+This is the strategy we are going to adopt in the following. 
+The total energy is now written,
+\begin{equation}
+ V_{\mathrm{tot}} = \sum_i\sum_{j>i} V_2(r_{ij}) + \sum_{i}\sum_{j\neq i}\sum_{k>j} V_3 (r_{ij}, r_{ik}, \theta_{jik}) 
+ \label{totalPotentialEnergy}
+\end{equation}
 
 
 \subsection{Stillinger-Weber}
 The Stillinger-Weber (SW) potential was proposed in 1985 \cite{Stillinger85} for simulating Si atoms. It has a two-body
-and a three-body term. The general expression for a three-body potential written in inter-atomic coordinates is
-\begin{equation}
- V_{3\mathrm{body}} = \sum_i\sum_{j>i}V_2(r_{ij}) + \sum_i\sum_{j\neq i}\sum_{k>j} V_3(r_{ij}, r_{ik}, \theta_{ijk})
- \label{threeBodyPotential}
-\end{equation}
-Comparing with \eqref{generalPotential}, the only difference is the sum indicies
-The two-body term is
+and a three-body term, and is thus written on the form \eqref{totalPotentialEnergy}. 
+The two-body part consists of a Lennard-Jones factor with variable exponents, together with an exponential decay factor
+that ensures zeroing out of the potential at a \textit{cutoff} $a\sigma$,
 \begin{equation}
  V_2(r_{ij}) = A\epsilon\left[B\left(\frac{\sigma}{r_{ij}}\right)^p - 
- \left(\frac{\sigma}{r_{ij}}\right)^q\right]\exp\left(\frac{\sigma}{r_{ij} - a\sigma}\right)
+ \left(\frac{\sigma}{r_{ij}}\right)^q\right] \exp\left(\frac{\sigma}{r_{ij} - a\sigma}\right)
 \end{equation}
+Silicon forms 4-coordinated
+tetrahedral bonded structures, and the purpose of the three-body component is to enforce the tetrahedral bond angle
+$\theta_0 \approx 109^\circ$, 
+\begin{equation}
+ V_3(r_{ij}, r_{ik}, \theta_{jik}) = \lambda\epsilon[\cos\theta_{jik} - \cos\theta_0]^2
+ \exp\left(\frac{\gamma\sigma}{r_{ij} - a\sigma}\right)\exp\left(\frac{\gamma\sigma}{r_{ik} - a\sigma}\right)
+\end{equation}
+We observe that for $\theta_{jik} = \theta_0$, the three-body term is zeroed out, making this configuration energetically 
+favourable. The expression also contains two exponential decay factors to ensure that the potential goes 
+to zero once $r_{ij}$ and/or $r_{ik}$ approach the cutoff. 
 
-
+SW simulations of solid and liquid silicon agree reasonably well with experimental data \cite{Stillinger85}
+The potential has also been used on other systems than silicon, for instance in monatomic water models \cite{Molinero08}. 
 
 \subsection{Vashishta}
+In 1990, Vashishta et al. \cite{Vashishta90} suggested a three-body interaction potential for $\mathrm{SiO}_2$. 
+The three-body term is of similar form to that of Stillinger-Weber, 
+\begin{equation}
+\begin{aligned}
+ V_3(r_{ij}, r_{ik}, \theta_{jik}) \: = \:
+ &B_{jik}\frac{[\cos\theta_{jik} - \cos\theta_{0jik}]^2}{1 + C[\cos\theta_{jik} - \cos\theta_{0jik}]^2} \: \cdot \\
+ &\exp\left(\frac{\gamma_{ij}}{r_{ij} - r_{0ij}}\right)
+ \exp\left(\frac{\gamma_{ik}}{r_{ik} - r_{0ik}}\right)
+\end{aligned}
+\end{equation}
+We note that indicies are included for the parameters, as they are generally different for each pair and triplet combination
+of elements; the parameter set must be fitted to e.g. Si-Si-Si and Si-O-O seperately. The angle $\theta_{0jik}$ has 
+the same purpose as for SW, while $r_{0ij}$ is the cutoff distance for each pair of elements. 
 
+\noindent The two-body part is more complex,
+\begin{equation}
+ V_2(r_{ij}) = \frac{H_{ij}}{r^{\eta_{ij}}} - \frac{W_{ij}}{r^6} + \frac{Z_iZ_j}{r}\exp(-r/\lambda_{1,ij}) - 
+ \frac{D_{ij}}{r^4}\exp(-r/\lambda_{4,ij}) 
+\end{equation}
+where we recognize the two first terms as typical LJ repulsive and attractive components. The other two describe
+electrostatic interactions, the third being a so-called screened Coulomb potential for charges $Z_i$ and $Z_j$. 
+We will not expand upon the physical justification of these terms here. 
+
+The Vashishta potential has also been succesfully employed on other multi-component systems like SiC \cite{Vashishta07}. 
 
 \section{Time integration}
-Euler, Velocity Verlet.
+To evolve the system forward in time, we need a numerical method to integrate Newton's equations of motion,
+\begin{align}
+ \vec{v}(t) = \vec{v}(0) + \int_0^t\vec{a}(t)dt \\
+ \vec{r}(t) = \vec{r}(0) + \int_0^t\vec{v}(t)dt
+\end{align}
+Various finite different schemes can be used for this purpose. 
+
+In the context of molecular dynamics, there are 
+certain favourable properies that an integration algorithm should posess, such as time reversibility and especially energy
+conservation. 
+
+There are several things to consider when deciding
+which algorithm that is suitable for molecular dynamics. 
+These methods approximate derivatives 
+as finite differences, which introduces a truncation error. 
 
 
 
@@ -3284,9 +3346,27 @@ and
  
 \bibitem{Stillinger85}
  F. H. Stillinger and T. A. Weber. 
- ''Computer simulation of local order in condensed phases of silicon''. 
+ ''Computer simulation of local order in condensed phases of silicon.'' 
  In: \textit{Physical Review B} 31. (1985), 5262. 
  DOI: \href{http://dx.doi.org/0.1103/PhysRevB.31.5262}{10.1103/PhysRevB.31.5262}
+ 
+\bibitem{Molinero08}
+ V. Molinero, E. B. Moore. 
+ ''Water modeled as an intermediate element between carbon and silico.'' 
+ In: \textit{J. Phys. Chem. B} 113 (13). (2008), 4008-4016. 
+ DOI: \href{http://dx.doi.org/10.1021/jp805227c}{10.1021/jp805227c}
+ 
+\bibitem{Vashishta90}
+ P. Vashishta, R. K. Kalia, J. P. Rino, and I. Ebbsj\"{o}.
+ ''Interaction potential for $\mathrm{SiO}_2$: A molecular-dynamics study of structural correlations.''
+ In: \textit{Physical Review B} 41. (1990), 12197. 
+ DOI: \href{http://dx.doi.org/10.1103/PhysRevB.41.12197}{10.1103/PhysRevB.41.12197}
+ 
+\bibitem{Vashishta07}
+ P. Vashishta, R. K. Kalia, A. Nakano, J. P. Rino. 
+ ''Interaction potential for silicon carbide: A molecular dynamics study of elastic constants
+ and vibrational density of states for crystalline and amorphous silicon carbide''. 
+ In: \textit{Journal of Applied Physics} 101. (2007), 103515. 
  
  
 \end{thebibliography}

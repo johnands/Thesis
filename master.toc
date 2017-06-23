@@ -10,12 +10,12 @@
 \contentsline {section}{\numberline {2.2}Common empirical potentials}{10}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Lennard-Jones}{10}{subsection.2.2.1}
 \contentsline {subsubsection}{Calculating total potential energy}{12}{section*.5}
-\contentsline {subsection}{\numberline {2.2.2}Stillinger-Weber}{12}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.2}Stillinger-Weber}{13}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Vashishta}{13}{subsection.2.2.3}
-\contentsline {section}{\numberline {2.3}Time integration}{13}{section.2.3}
-\contentsline {section}{\numberline {2.4}Advanced theory}{13}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Verlet lists}{13}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.2}Thermostats / ensembles}{13}{subsection.2.4.2}
+\contentsline {section}{\numberline {2.3}Time integration}{14}{section.2.3}
+\contentsline {section}{\numberline {2.4}Advanced theory}{14}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Verlet lists}{14}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Thermostats / ensembles}{14}{subsection.2.4.2}
 \contentsline {chapter}{\numberline {3}Machine learning}{15}{chapter.3}
 \contentsline {section}{\numberline {3.1}Artificial neurons}{16}{section.3.1}
 \contentsline {section}{\numberline {3.2}Neural network types}{18}{section.3.2}
