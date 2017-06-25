@@ -207,10 +207,10 @@ that are common in the literature, and which we have employed to validate our PE
 \subsection{Lennard-Jones}
 The Lennard-Jones (LJ) potential \cite{Jones24} is one of the simplest and most widely used potentials. 
 It has a simple functional form which is inexpensive to compute, and is able to reproduce weakly interacting systems 
-like noble gases well. It is a two-body potential that only depends on the distance $r$ between pairs of atoms. 
+like noble gases well. It is a two-body potential that only depends on the distance $r_{ij}$ between pairs of atoms $i$ and $j$. 
 The general form is (\autoref{fig:LJ})
 \begin{equation}
- V_{LJ}(r) = 4\epsilon \left[\left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6\right]
+ V_{LJ}(r_{ij}) = 4\epsilon \left[\left(\frac{\sigma}{r_{ij}}\right)^{12} - \left(\frac{\sigma}{r_{ij}}\right)^6\right]
  \label{Lennard-Jones}
 \end{equation}
 where the two parameters $\epsilon$ and $\sigma$ are the depth of the potential well and the zero-point of the potential respectively.
@@ -228,6 +228,9 @@ it approximates the Pauli repulsion well.
  \label{fig:LJ}
 \end{center}
 \end{figure}
+
+
+
 
 \subsubsection{Calculating total potential energy}
 Before we move on to three-body potentials, we will briefly explain how the total potential energy of a system is calculated. 
@@ -323,28 +326,82 @@ We will not expand upon the physical justification of these terms here.
 
 The Vashishta potential has also been succesfully employed on other multi-component systems like SiC \cite{Vashishta07}. 
 
+
 \section{Time integration}
 To evolve the system forward in time, we need a numerical method to integrate Newton's equations of motion,
 \begin{align}
- \vec{v}(t) = \vec{v}(0) + \int_0^t\vec{a}(t)dt \\
+ \vec{v}(t) = \vec{v}(0) + \int_0^t\vec{a}(t)dt \label{equationsOfMotion1} \\
  \vec{r}(t) = \vec{r}(0) + \int_0^t\vec{v}(t)dt
+ \label{equationsOfMotion2}
 \end{align}
-Various finite different schemes can be used for this purpose. In the context of molecular dynamics, there are 
-certain favourable traits that an integration algorithm should posess, such as time reversibility and especially energy
-conservation. 
+Various finite different schemes can be used for this purpose, and the choice of algorithm is 
+of vital importance to the quality of the simulation. The most important property of an integrator
+for use in MD, is long-term energy conservation. MD simulations are often run for millions of time steps, 
+and a significant energy drift may cause useless results. Further, all integration schemes approximate 
+derivatives as finite differences, introducing truncation errors. Finally, numerical stability is
+important to prevent unphysical behaviour on large time scales. 
 
-There are several things to consider when deciding
-which algorithm that is suitable for molecular dynamics. 
-These methods approximate derivatives 
-as finite differences, which introduces a truncation error. 
+A good choice is the Velocity-Verlet algorithm, which is
+a \textit{symplectic} integrator. Put simply, this means that it preserves the form of Hamilton's equations, thereby
+conserving energy. \footnote{Strictly speaking, Velocity-Verlet only conserves a pseudo-Hamiltonian
+approaching the true Hamiltonian in the limit of infinitesimal time steps. \cite{Frenkel01}}
+Employing Velocity-Verlet
+allows us to sample the phase space of the microcanonical (NVE) ensemble, and collect 
+thermodynamic properties like temperature and pressure.
+The steps of the algorithm are,
+\begin{align}
+ \vec{v}(t + \Delta t/2) &= \vec{v}(t) + \frac{\vec{F}(t)}{m}\frac{\Delta t}{2} \\
+ \vec{r}(t + \Delta t) &= \vec{r}(t) + \vec{v}(t + \Delta t/2)\Delta t \\
+ \vec{v}(t + \Delta t) &= \vec{v}(t + \Delta t) + \frac{\vec{F}(t + \Delta t)}{m}\frac{\Delta t}{2}
+\end{align}
+First, the velocity at half the time step forward $\vec{v}(t + \Delta t/2)$ is computed. 
+This half-velocity is used to obtain the new positions $\vec{r}(t + \Delta t)$. 
+Then we calculate the new accelerations $\vec{F}(t+\Delta t)/m$ based on the new positions, which is used
+to compute the velocities at a whole time step forward $\vec{v}(t + \Delta t)$. 
 
+In addition to being symplectic, Velocity-Verlet is time-reversible \cite{Frenkel01}, which it should be considering that we 
+are solving time-reversible equations \eqref{equationsOfMotion1} \eqref{equationsOfMotion2}. 
+It is also computationally inexpensive; the only 
+additional computation compared to the primitive Euler method is the half-velocity. 
+The global error in position and velocity is $O(\Delta t^2)$, which may not seem very impressive. However, 
+this is good enough for collecting statistical properties, 
+our goal is not to reproduce the exact trajectories of the particles. 
 
+Velocity-Verlet is the integrator of choice in LAMMPS (\autoref{sec:lammps}), and thus the 
+only scheme used in this work. 
 
-\section{Advanced theory}
-
-\subsection{Verlet lists}
-
-\subsection{Thermostats / ensembles}
+\section{Force calculations and cutoff radius}
+We need the force on each atom to compute the acceleration that is integrated in the equations of motion
+\eqref{equationsOfMotion1}\eqref{equationsOfMotion2}. 
+Using the Lennard-Jones potential as an example, 
+the force on atom $i$ from atom $j$ is \eqref{forcePES} \eqref{Lennard-Jones},
+\begin{equation}
+ F_{\mathrm{LJ}}(r_{ij}) = -\nabla V_{\mathrm{LJ}}(r_{ij}) = 
+ -24\epsilon\left[2\left(\frac{\sigma^{12}}{r_{ij}^{13}}\right) - \left(\frac{\sigma^6}{r_{ij}^7}\right)\right] 
+\end{equation}
+The force is of the same shape 
+as the potential in \autoref{fig:LJ}, which means it rapidly goes to zero. If we choose units so that
+$\sigma=\epsilon=1.0$, the force at a distance $r_{ij} = 3\sigma$ is
+\begin{equation}
+ F_{\mathrm{LJ}}(r_{ij} = 3.0\sigma) \approx 0.01
+\end{equation}
+This is a general property of systems where only van der Waal-interactions are present: atoms that 
+are far apart do not effectively interact. This can be exploited in MD simulations by introducing 
+a cutoff radius $r_{\mathrm{cut}}$, and only compute forces for atoms displaced by a distance smaller than this cutoff. 
+In principle, we have to sum over all pairs of atoms in the system to compute the energy and forces, which 
+scales like $O(N^2)$. With a cutoff, this is reduced to $O(N)$, and the force is now written,
+\begin{equation}
+ F_{\mathrm{LJ}}(r_{ij}) = 
+ \begin{cases}
+  -24\epsilon\left[2\left(\frac{\sigma^{12}}{r_{ij}^{13}}\right) - \left(\frac{\sigma^6}{r_{ij}^7}\right)\right] ,
+  & r_{ij} \leq r_{\mathrm{cut}} \\
+  0, & r_{ij} > r_{\mathrm{cut}} 
+ \end{cases}
+ \label{forceCutoff}
+\end{equation}
+and similar for the potential energy \eqref{Lennard-Jones}. 
+This greatly increases the computational performance of MD simulations. In fact, simulations with non-bonded potentials
+not including a cutoff is unfeasible except for small systems. 
 
 
 
@@ -1618,7 +1675,7 @@ that the interaction strength falls rapidly with distance for most systems where
 
 \part{Implementation and validation}
 
-\chapter{LAMMPS}
+\chapter{LAMMPS} \label{sec:lammps}
 REFERENCE TO MANUAL - FOOTNOTE OF REFERNCE?
 LAMMPS (Large-scale Atomic/Molecular Massively Parallel Simulator)
 is a classical molecular dynamics simulation package 
@@ -3366,6 +3423,10 @@ and
  and vibrational density of states for crystalline and amorphous silicon carbide''. 
  In: \textit{Journal of Applied Physics} 101. (2007), 103515. 
  
+\bibitem{Frenkel01}
+D. Frenkel and B. Smit. 
+''Understanding molecular simulation: from algorithms to applications.''
+Academic Press, 2001.
  
 \end{thebibliography}
 

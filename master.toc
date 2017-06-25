@@ -13,67 +13,65 @@
 \contentsline {subsection}{\numberline {2.2.2}Stillinger-Weber}{13}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Vashishta}{13}{subsection.2.2.3}
 \contentsline {section}{\numberline {2.3}Time integration}{14}{section.2.3}
-\contentsline {section}{\numberline {2.4}Advanced theory}{14}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Verlet lists}{14}{subsection.2.4.1}
-\contentsline {subsection}{\numberline {2.4.2}Thermostats / ensembles}{14}{subsection.2.4.2}
-\contentsline {chapter}{\numberline {3}Machine learning}{15}{chapter.3}
-\contentsline {section}{\numberline {3.1}Artificial neurons}{16}{section.3.1}
-\contentsline {section}{\numberline {3.2}Neural network types}{18}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Feed-forward neural networks}{19}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Recurrent neural networks}{20}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Other types of networks}{20}{subsection.3.2.3}
-\contentsline {section}{\numberline {3.3}Multilayer perceptron}{21}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Why multilayer perceptrons?}{21}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Mathematical model}{22}{subsection.3.3.2}
-\contentsline {subsubsection}{Activation function of output neuron}{24}{section*.14}
-\contentsline {subsubsection}{Matrix representation}{24}{section*.15}
-\contentsline {section}{\numberline {3.4}Activation functions}{26}{section.3.4}
-\contentsline {section}{\numberline {3.5}Training}{28}{section.3.5}
-\contentsline {subsection}{\numberline {3.5.1}Cost functions}{29}{subsection.3.5.1}
-\contentsline {section}{\numberline {3.6}Optimization}{30}{section.3.6}
-\contentsline {subsection}{\numberline {3.6.1}Gradient descent variants}{30}{subsection.3.6.1}
-\contentsline {subsection}{\numberline {3.6.2}Optimization algorithms}{31}{subsection.3.6.2}
-\contentsline {subsubsection}{Momentum}{31}{section*.18}
-\contentsline {subsubsection}{Adagrad}{31}{section*.19}
-\contentsline {subsubsection}{Adadelta}{32}{section*.20}
-\contentsline {subsubsection}{Adam}{33}{section*.21}
-\contentsline {subsubsection}{Which optimizer to use?}{33}{section*.22}
-\contentsline {subsection}{\numberline {3.6.3}Backpropagation}{34}{subsection.3.6.3}
-\contentsline {subsubsection}{1. Forward propagation}{34}{section*.23}
-\contentsline {subsubsection}{2. Backward propagation}{35}{section*.24}
-\contentsline {subsubsection}{Matrix notation}{37}{section*.26}
-\contentsline {subsubsection}{Training algorithm}{38}{section*.27}
-\contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{41}{chapter.4}
-\contentsline {section}{\numberline {4.1}High-dimensional NNPs}{42}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Symmetry functions}{44}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Symmetry functions and forces}{49}{subsection.4.1.2}
-\contentsline {part}{II\hspace {1em}Implementation and validation}{53}{part.2}
-\contentsline {chapter}{\numberline {5}LAMMPS}{55}{chapter.5}
-\contentsline {subsection}{\numberline {5.0.1}Installing LAMMPS}{55}{subsection.5.0.1}
-\contentsline {subsection}{\numberline {5.0.2}LAMMPS input script}{56}{subsection.5.0.2}
-\contentsline {subsection}{\numberline {5.0.3}LAMMPS structure}{60}{subsection.5.0.3}
-\contentsline {subsection}{\numberline {5.0.4}Extending LAMMPS}{60}{subsection.5.0.4}
-\contentsline {chapter}{\numberline {6}TensorFlow}{63}{chapter.6}
-\contentsline {section}{\numberline {6.1}Installing TensorFlow}{64}{section.6.1}
-\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{64}{section.6.2}
-\contentsline {subsection}{\numberline {6.2.1}Hello world}{65}{subsection.6.2.1}
-\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{65}{subsection.6.2.2}
-\contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{67}{subsection.6.2.3}
-\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{70}{subsection.6.2.4}
-\contentsline {chapter}{\numberline {7}Training procedure}{75}{chapter.7}
-\contentsline {section}{\numberline {7.1}Selecting the training data}{75}{section.7.1}
-\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{76}{subsection.7.1.1}
-\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{77}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{78}{section*.34}
-\contentsline {subsubsection}{Iterative sampling}{82}{section*.36}
-\contentsline {subsubsection}{Summary}{83}{section*.37}
-\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{84}{section.7.2}
-\contentsline {chapter}{\numberline {8}Validation}{87}{chapter.8}
-\contentsline {section}{\numberline {8.1}Time usage}{87}{section.8.1}
-\contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{89}{section.8.2}
-\contentsline {subsection}{\numberline {8.2.1}Many-neighbour Lennard-Jones}{91}{subsection.8.2.1}
-\contentsline {part}{III\hspace {1em}Results and discussion}{97}{part.3}
-\contentsline {chapter}{\numberline {9}NN potential for Si}{99}{chapter.9}
-\contentsline {chapter}{\numberline {10}NN potential for SiO2}{101}{chapter.10}
-\contentsline {chapter}{Appendices}{103}{section*.44}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{105}{Appendix.1.A}
+\contentsline {section}{\numberline {2.4}Force calculations and cutoff radius}{15}{section.2.4}
+\contentsline {chapter}{\numberline {3}Machine learning}{17}{chapter.3}
+\contentsline {section}{\numberline {3.1}Artificial neurons}{18}{section.3.1}
+\contentsline {section}{\numberline {3.2}Neural network types}{20}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Feed-forward neural networks}{21}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Recurrent neural networks}{22}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Other types of networks}{22}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.3}Multilayer perceptron}{23}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Why multilayer perceptrons?}{23}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Mathematical model}{24}{subsection.3.3.2}
+\contentsline {subsubsection}{Activation function of output neuron}{26}{section*.14}
+\contentsline {subsubsection}{Matrix representation}{26}{section*.15}
+\contentsline {section}{\numberline {3.4}Activation functions}{28}{section.3.4}
+\contentsline {section}{\numberline {3.5}Training}{30}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Cost functions}{31}{subsection.3.5.1}
+\contentsline {section}{\numberline {3.6}Optimization}{32}{section.3.6}
+\contentsline {subsection}{\numberline {3.6.1}Gradient descent variants}{32}{subsection.3.6.1}
+\contentsline {subsection}{\numberline {3.6.2}Optimization algorithms}{33}{subsection.3.6.2}
+\contentsline {subsubsection}{Momentum}{33}{section*.18}
+\contentsline {subsubsection}{Adagrad}{33}{section*.19}
+\contentsline {subsubsection}{Adadelta}{34}{section*.20}
+\contentsline {subsubsection}{Adam}{35}{section*.21}
+\contentsline {subsubsection}{Which optimizer to use?}{35}{section*.22}
+\contentsline {subsection}{\numberline {3.6.3}Backpropagation}{36}{subsection.3.6.3}
+\contentsline {subsubsection}{1. Forward propagation}{36}{section*.23}
+\contentsline {subsubsection}{2. Backward propagation}{37}{section*.24}
+\contentsline {subsubsection}{Matrix notation}{39}{section*.26}
+\contentsline {subsubsection}{Training algorithm}{40}{section*.27}
+\contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}
+\contentsline {section}{\numberline {4.1}High-dimensional NNPs}{44}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Symmetry functions}{46}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Symmetry functions and forces}{51}{subsection.4.1.2}
+\contentsline {part}{II\hspace {1em}Implementation and validation}{55}{part.2}
+\contentsline {chapter}{\numberline {5}LAMMPS}{57}{chapter.5}
+\contentsline {subsection}{\numberline {5.0.1}Installing LAMMPS}{57}{subsection.5.0.1}
+\contentsline {subsection}{\numberline {5.0.2}LAMMPS input script}{58}{subsection.5.0.2}
+\contentsline {subsection}{\numberline {5.0.3}LAMMPS structure}{62}{subsection.5.0.3}
+\contentsline {subsection}{\numberline {5.0.4}Extending LAMMPS}{62}{subsection.5.0.4}
+\contentsline {chapter}{\numberline {6}TensorFlow}{65}{chapter.6}
+\contentsline {section}{\numberline {6.1}Installing TensorFlow}{66}{section.6.1}
+\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{66}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Hello world}{67}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{67}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{69}{subsection.6.2.3}
+\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{72}{subsection.6.2.4}
+\contentsline {chapter}{\numberline {7}Training procedure}{77}{chapter.7}
+\contentsline {section}{\numberline {7.1}Selecting the training data}{77}{section.7.1}
+\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{78}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{79}{subsection.7.1.2}
+\contentsline {subsubsection}{Initial sampling}{80}{section*.34}
+\contentsline {subsubsection}{Iterative sampling}{84}{section*.36}
+\contentsline {subsubsection}{Summary}{85}{section*.37}
+\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{86}{section.7.2}
+\contentsline {chapter}{\numberline {8}Validation}{89}{chapter.8}
+\contentsline {section}{\numberline {8.1}Time usage}{89}{section.8.1}
+\contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{91}{section.8.2}
+\contentsline {subsection}{\numberline {8.2.1}Many-neighbour Lennard-Jones}{93}{subsection.8.2.1}
+\contentsline {part}{III\hspace {1em}Results and discussion}{99}{part.3}
+\contentsline {chapter}{\numberline {9}NN potential for Si}{101}{chapter.9}
+\contentsline {chapter}{\numberline {10}NN potential for SiO2}{103}{chapter.10}
+\contentsline {chapter}{Appendices}{105}{section*.44}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{107}{Appendix.1.A}
