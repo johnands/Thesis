@@ -1,5 +1,6 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
+\providecommand\zref@newlabel[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
 \global\let\oldcontentsline\contentsline
@@ -158,6 +159,8 @@
 \newlabel{backprop}{{3.48}{39}{2. Backward propagation}{equation.3.6.48}{}}
 \@writefile{toc}{\contentsline {subsubsection}{Matrix notation}{39}{section*.26}}
 \@writefile{toc}{\contentsline {subsubsection}{Training algorithm}{40}{section*.27}}
+\newlabel{forwardPropMatrix}{{3.59}{40}{Training algorithm}{equation.3.6.59}{}}
+\newlabel{backPropMatrix}{{3.61}{40}{Training algorithm}{equation.3.6.61}{}}
 \citation{Behler15}
 \citation{Behler11symmetry}
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}}
@@ -176,13 +179,13 @@
 \newlabel{G1}{{4.3}{48}{Symmetry functions}{equation.4.1.3}{}}
 \newlabel{G2}{{4.4}{48}{Symmetry functions}{equation.4.1.4}{}}
 \newlabel{G3}{{4.5}{48}{Symmetry functions}{equation.4.1.5}{}}
-\newlabel{fig:radialSymmetriFunctions:a}{{\caption@xref {fig:radialSymmetriFunctions:a}{ on input line 1444}}{49}{Symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:a}{{\caption@xref {fig:radialSymmetriFunctions:a}{ on input line 1452}}{49}{Symmetry functions}{figure.caption.30}{}}
 \newlabel{sub@fig:radialSymmetriFunctions:a}{{}{49}{Symmetry functions}{figure.caption.30}{}}
-\newlabel{fig:radialSymmetriFunctions:b}{{\caption@xref {fig:radialSymmetriFunctions:b}{ on input line 1450}}{49}{Symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:b}{{\caption@xref {fig:radialSymmetriFunctions:b}{ on input line 1458}}{49}{Symmetry functions}{figure.caption.30}{}}
 \newlabel{sub@fig:radialSymmetriFunctions:b}{{}{49}{Symmetry functions}{figure.caption.30}{}}
-\newlabel{fig:radialSymmetriFunctions:c}{{\caption@xref {fig:radialSymmetriFunctions:c}{ on input line 1456}}{49}{Symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:c}{{\caption@xref {fig:radialSymmetriFunctions:c}{ on input line 1464}}{49}{Symmetry functions}{figure.caption.30}{}}
 \newlabel{sub@fig:radialSymmetriFunctions:c}{{}{49}{Symmetry functions}{figure.caption.30}{}}
-\newlabel{fig:radialSymmetriFunctions:d}{{\caption@xref {fig:radialSymmetriFunctions:d}{ on input line 1461}}{49}{Symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:d}{{\caption@xref {fig:radialSymmetriFunctions:d}{ on input line 1469}}{49}{Symmetry functions}{figure.caption.30}{}}
 \newlabel{sub@fig:radialSymmetriFunctions:d}{{}{49}{Symmetry functions}{figure.caption.30}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such functions represents the radial distrubution of neighbours around a central atom placed at the origin. For $G^2$ and $G^3$ a cutoff $R_c = \SI {11.0}{\angstrom }$ has been used.\relax }}{49}{figure.caption.30}}
 \newlabel{fig:radialSymmetriFunctions}{{4.3}{49}{Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such functions represents the radial distrubution of neighbours around a central atom placed at the origin. For $G^2$ and $G^3$ a cutoff $R_c = \SI {11.0}{\angstrom }$ has been used.\relax }{figure.caption.30}{}}
@@ -196,120 +199,137 @@
 \newlabel{fig:angularSymmetryFunctions}{{4.4}{50}{Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such functions represents the angular distrubution of neighbours around a central atom placed at the origin. $\lambda = +1$ for \autoref {fig:angularSymmetryFunctions:a}, $\lambda =-1$ for \autoref {fig:angularSymmetryFunctions:b}.\relax }{figure.caption.31}{}}
 \citation{Behler11symmetry}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Symmetry functions and forces}{51}{subsection.4.1.2}}
+\newlabel{sec:symmAndForces}{{4.1.2}{51}{Symmetry functions and forces}{subsection.4.1.2}{}}
 \newlabel{forcePES2}{{4.10}{51}{Symmetry functions and forces}{equation.4.1.10}{}}
 \newlabel{forceAtomk}{{4.11}{51}{Symmetry functions and forces}{equation.4.1.11}{}}
 \newlabel{forceAtomkChainRule}{{4.12}{51}{Symmetry functions and forces}{equation.4.1.12}{}}
 \newlabel{changeOfCoordinates}{{4.13}{52}{Symmetry functions and forces}{equation.4.1.13}{}}
-\newlabel{changeOfCoordsSymmetry1}{{4.17}{53}{Symmetry functions and forces}{equation.4.1.17}{}}
-\newlabel{changeOfCoordsSymmetry2}{{4.18}{53}{Symmetry functions and forces}{equation.4.1.18}{}}
-\@writefile{toc}{\contentsline {part}{II\hspace  {1em}Implementation and validation}{55}{part.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type, they have identical atomic NNs and symmetry function sets.\relax }}{53}{figure.caption.32}}
+\newlabel{fig:threeAtoms}{{4.5}{53}{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type, they have identical atomic NNs and symmetry function sets.\relax }{figure.caption.32}{}}
+\newlabel{changeOfCoordsSymmetry1}{{4.17}{54}{Symmetry functions and forces}{equation.4.1.17}{}}
+\newlabel{changeOfCoordsSymmetry2}{{4.18}{54}{Symmetry functions and forces}{equation.4.1.18}{}}
+\@writefile{toc}{\contentsline {part}{II\hspace  {1em}Implementation and validation}{57}{part.2}}
 \citation{Plimpton95}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}LAMMPS}{57}{chapter.5}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{sec:lammps}{{5}{57}{LAMMPS}{chapter.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.1}Installing LAMMPS}{57}{subsection.5.0.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.2}LAMMPS input script}{58}{subsection.5.0.2}}
+\newlabel{sec:lammps}{{5}{59}{LAMMPS}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Installing LAMMPS}{59}{section.5.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}LAMMPS input script}{60}{section.5.2}}
 \citation{Tuckerman92}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.3}LAMMPS structure}{62}{subsection.5.0.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.0.4}Extending LAMMPS}{62}{subsection.5.0.4}}
-\newlabel{sec:extendingLammps}{{5.0.4}{62}{Extending LAMMPS}{subsection.5.0.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}LAMMPS structure}{64}{section.5.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Extending LAMMPS}{64}{section.5.4}}
+\newlabel{sec:extendingLammps}{{5.4}{64}{Extending LAMMPS}{section.5.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Class hierarchy of LAMMPS. The inheritance is from left to right. The top-level classes (blue) are visible everywhere in the code. Only a selected set of sub-classes (green and yellow) is displayed, where we recognize many of the input script commands.\relax }}{65}{figure.caption.33}}
+\newlabel{fig:lammpsClasses}{{5.1}{65}{Class hierarchy of LAMMPS. The inheritance is from left to right. The top-level classes (blue) are visible everywhere in the code. Only a selected set of sub-classes (green and yellow) is displayed, where we recognize many of the input script commands.\relax }{figure.caption.33}{}}
+\zref@newlabel{mdf@pagelabel-1}{\default{5.4}\page{67}\abspage{75}\mdf@pagevalue{67}}
+\zref@newlabel{mdf@pagelabel-2}{\default{5.4}\page{67}\abspage{75}\mdf@pagevalue{67}}
+\zref@newlabel{mdf@pagelabel-3}{\default{5.4}\page{68}\abspage{76}\mdf@pagevalue{68}}
+\zref@newlabel{mdf@pagelabel-4}{\default{5.4}\page{68}\abspage{76}\mdf@pagevalue{68}}
+\newlabel{forwardPropMatrixLammpsChapter}{{5.1}{69}{Extending LAMMPS}{equation.5.4.1}{}}
+\zref@newlabel{mdf@pagelabel-5}{\default{5.4}\page{69}\abspage{77}\mdf@pagevalue{69}}
+\newlabel{backPropMatrixLammpsChapter}{{5.2}{69}{Extending LAMMPS}{equation.5.4.2}{}}
+\zref@newlabel{mdf@pagelabel-6}{\default{5.4}\page{69}\abspage{77}\mdf@pagevalue{69}}
+\newlabel{forceAtomkChainRuleLammpsChapter}{{5.3}{69}{Extending LAMMPS}{equation.5.4.3}{}}
+\zref@newlabel{mdf@pagelabel-7}{\default{5.4}\page{70}\abspage{78}\mdf@pagevalue{70}}
 \citation{Abadi15}
 \citation{Abadi16}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}TensorFlow}{65}{chapter.6}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}TensorFlow}{73}{chapter.6}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{quadraticEquationSolution}{{6.2}{65}{TensorFlow}{equation.6.0.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Installing TensorFlow}{66}{section.6.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{66}{section.6.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Hello world}{67}{subsection.6.2.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{67}{subsection.6.2.2}}
-\newlabel{sec:TensorFlowCreatingNN}{{6.2.2}{67}{Creating a neural network}{subsection.6.2.2}{}}
-\newlabel{preActivationLayer}{{6.4}{67}{Creating a neural network}{equation.6.2.4}{}}
-\newlabel{activationLayer}{{6.5}{67}{Creating a neural network}{equation.6.2.5}{}}
-\@writefile{lol}{\contentsline {lstlisting}{Scripts/TensorFlow/networkExample.py}{68}{lstlisting.6.-26}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{69}{subsection.6.2.3}}
-\@writefile{lol}{\contentsline {lstlisting}{Scripts/TensorFlow/tensorBoardExample.py}{69}{lstlisting.6.-28}}
-\newlabel{lst:tensorBoardExample}{{6.2.3}{70}{Visualizing the graph}{lstnumber.-28.40}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Example of a computational graph in TensorBoard of a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes.\relax }}{71}{figure.caption.32}}
-\newlabel{fig:graphExample}{{6.1}{71}{Example of a computational graph in TensorBoard of a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes.\relax }{figure.caption.32}{}}
+\newlabel{quadraticEquationSolution}{{6.2}{73}{TensorFlow}{equation.6.0.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Installing TensorFlow}{74}{section.6.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{74}{section.6.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Hello world}{75}{subsection.6.2.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{75}{subsection.6.2.2}}
+\newlabel{sec:TensorFlowCreatingNN}{{6.2.2}{75}{Creating a neural network}{subsection.6.2.2}{}}
+\newlabel{preActivationLayer}{{6.4}{75}{Creating a neural network}{equation.6.2.4}{}}
+\newlabel{activationLayer}{{6.5}{75}{Creating a neural network}{equation.6.2.5}{}}
+\@writefile{lol}{\contentsline {lstlisting}{Scripts/TensorFlow/networkExample.py}{76}{lstlisting.6.-27}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{77}{subsection.6.2.3}}
+\@writefile{lol}{\contentsline {lstlisting}{Scripts/TensorFlow/tensorBoardExample.py}{77}{lstlisting.6.-29}}
+\newlabel{lst:tensorBoardExample}{{6.2.3}{78}{Visualizing the graph}{lstnumber.-29.40}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Example of a computational graph in TensorBoard of a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes.\relax }}{79}{figure.caption.34}}
+\newlabel{fig:graphExample}{{6.1}{79}{Example of a computational graph in TensorBoard of a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes.\relax }{figure.caption.34}{}}
 \citation{Qian99}
 \citation{Duchi11}
 \citation{Zeiler12}
 \citation{Kingma14}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{72}{subsection.6.2.4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes this error is included in the graph. The optimizer namespace is expanded to display its contents: \texttt  {gradients} computes the gradient of all nodes in the graph, \texttt  {trainStep} implements the algorithm for updating the NN parameters, while \texttt  {beta1\_power} and \texttt  {beta2\_power} are the parameters of the Adam optimizer algorithm.\relax }}{74}{figure.caption.33}}
-\newlabel{fig:tensorBoardTraining}{{6.2}{74}{Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes this error is included in the graph. The optimizer namespace is expanded to display its contents: \texttt {gradients} computes the gradient of all nodes in the graph, \texttt {trainStep} implements the algorithm for updating the NN parameters, while \texttt {beta1\_power} and \texttt {beta2\_power} are the parameters of the Adam optimizer algorithm.\relax }{figure.caption.33}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Training procedure}{77}{chapter.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{80}{subsection.6.2.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes this error is included in the graph. The optimizer namespace is expanded to display its contents: \texttt  {gradients} computes the gradient of all nodes in the graph, \texttt  {trainStep} implements the algorithm for updating the NN parameters, while \texttt  {beta1\_power} and \texttt  {beta2\_power} are the parameters of the Adam optimizer algorithm.\relax }}{82}{figure.caption.35}}
+\newlabel{fig:tensorBoardTraining}{{6.2}{82}{Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes this error is included in the graph. The optimizer namespace is expanded to display its contents: \texttt {gradients} computes the gradient of all nodes in the graph, \texttt {trainStep} implements the algorithm for updating the NN parameters, while \texttt {beta1\_power} and \texttt {beta2\_power} are the parameters of the Adam optimizer algorithm.\relax }{figure.caption.35}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Training procedure}{85}{chapter.7}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Selecting the training data}{77}{section.7.1}}
-\newlabel{sec:selectingTrainingData}{{7.1}{77}{Selecting the training data}{section.7.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Selecting the training data}{85}{section.7.1}}
+\newlabel{sec:selectingTrainingData}{{7.1}{85}{Selecting the training data}{section.7.1}{}}
 \citation{Behler11general}
 \citation{Behler15}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{78}{subsection.7.1.1}}
-\newlabel{sample}{{1}{78}{Iterative molecular dynamics sampling}{Item.19}{}}
-\newlabel{refEnergies}{{2}{78}{Iterative molecular dynamics sampling}{Item.20}{}}
-\newlabel{NNPalgorithm}{{7}{78}{Iterative molecular dynamics sampling}{Item.25}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{86}{subsection.7.1.1}}
+\newlabel{sample}{{1}{86}{Iterative molecular dynamics sampling}{Item.25}{}}
+\newlabel{refEnergies}{{2}{86}{Iterative molecular dynamics sampling}{Item.26}{}}
+\newlabel{NNPalgorithm}{{7}{86}{Iterative molecular dynamics sampling}{Item.31}{}}
 \citation{Ischtwan94}
 \citation{Raff05}
 \citation{Raff05}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{79}{subsection.7.1.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{87}{subsection.7.1.2}}
 \citation{Raff12}
 \citation{Pukrittayakamee09}
-\@writefile{toc}{\contentsline {subsubsection}{Initial sampling}{80}{section*.34}}
-\newlabel{variableIntervalSampling}{{7.1}{80}{Initial sampling}{equation.7.1.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Initial sampling}{88}{section*.36}}
+\newlabel{variableIntervalSampling}{{7.1}{88}{Initial sampling}{equation.7.1.1}{}}
 \citation{Pukrittayakamee09}
-\newlabel{samplingAlgorithmModified}{{7.2}{81}{Initial sampling}{equation.7.1.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Distribution of forces for one Si atom in a quartz $\textrm  {SiO}_2$ crystal with and withouth the use of the sampling algorithm \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {samplingAlgorithmModified}\unskip \@@italiccorr )}}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm  {max} = 10$.\relax }}{83}{figure.caption.35}}
-\newlabel{fig:forceDistSamplingAlgo}{{7.1}{83}{Distribution of forces for one Si atom in a quartz $\textrm {SiO}_2$ crystal with and withouth the use of the sampling algorithm \eqref {samplingAlgorithmModified}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm {max} = 10$.\relax }{figure.caption.35}{}}
+\zref@newlabel{mdf@pagelabel-8}{\default{\caption@xref {??}{ on input line 2703}}\page{89}\abspage{97}\mdf@pagevalue{89}}
+\newlabel{samplingAlgorithmModified}{{7.2}{89}{Initial sampling}{equation.7.1.2}{}}
+\zref@newlabel{mdf@pagelabel-9}{\default{\caption@xref {??}{ on input line 2771}}\page{90}\abspage{98}\mdf@pagevalue{90}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Distribution of forces for one Si atom in a quartz $\textrm  {SiO}_2$ crystal with and withouth the use of the sampling algorithm \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {samplingAlgorithmModified}\unskip \@@italiccorr )}}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm  {max} = 10$.\relax }}{91}{figure.caption.37}}
+\newlabel{fig:forceDistSamplingAlgo}{{7.1}{91}{Distribution of forces for one Si atom in a quartz $\textrm {SiO}_2$ crystal with and withouth the use of the sampling algorithm \eqref {samplingAlgorithmModified}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm {max} = 10$.\relax }{figure.caption.37}{}}
 \citation{Raff05}
 \citation{Behler11general}
-\@writefile{toc}{\contentsline {subsubsection}{Iterative sampling}{84}{section*.36}}
-\@writefile{toc}{\contentsline {subsubsection}{Summary}{85}{section*.37}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{86}{section.7.2}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Validation}{89}{chapter.8}}
+\@writefile{toc}{\contentsline {subsubsection}{Iterative sampling}{92}{section*.38}}
+\@writefile{toc}{\contentsline {subsubsection}{Summary}{93}{section*.39}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{94}{section.7.2}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Validation}{97}{chapter.8}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {8.1}Time usage}{89}{section.8.1}}
-\newlabel{sec:timeUsage}{{8.1}{89}{Time usage}{section.8.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }}{90}{figure.caption.38}}
-\newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{8.1}{90}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }{figure.caption.38}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }}{91}{figure.caption.39}}
-\newlabel{fig:timeComparisonEvaluateNetwork2}{{8.2}{91}{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }{figure.caption.39}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{91}{section.8.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }}{92}{figure.caption.40}}
-\newlabel{fig:errorLJTest}{{8.3}{92}{Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }{figure.caption.40}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{93}{figure.caption.41}}
-\newlabel{fig:errorBackPropTest}{{8.4}{93}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.41}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Many-neighbour Lennard-Jones}{93}{subsection.8.2.1}}
-\newlabel{zoomedOut}{{8.5a}{94}{Zoomed out\relax }{figure.caption.42}{}}
-\newlabel{sub@zoomedOut}{{a}{94}{Zoomed out\relax }{figure.caption.42}{}}
-\newlabel{zoomedIn}{{8.5b}{94}{Zoomed in\relax }{figure.caption.42}{}}
-\newlabel{sub@zoomedIn}{{b}{94}{Zoomed in\relax }{figure.caption.42}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.5}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{94}{figure.caption.42}}
-\newlabel{fig:trainingManyNeighbourNN}{{8.5}{94}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.42}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.6}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{97}{figure.caption.43}}
-\newlabel{fig:errorManyNeighbourNN}{{8.6}{97}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.43}{}}
-\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Results and discussion}{99}{part.3}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {9}NN potential for Si}{101}{chapter.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Time usage}{97}{section.8.1}}
+\newlabel{sec:timeUsage}{{8.1}{97}{Time usage}{section.8.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }}{98}{figure.caption.40}}
+\newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{8.1}{98}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }{figure.caption.40}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }}{99}{figure.caption.41}}
+\newlabel{fig:timeComparisonEvaluateNetwork2}{{8.2}{99}{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }{figure.caption.41}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{99}{section.8.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }}{100}{figure.caption.42}}
+\newlabel{fig:errorLJTest}{{8.3}{100}{Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }{figure.caption.42}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{101}{figure.caption.43}}
+\newlabel{fig:errorBackPropTest}{{8.4}{101}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.43}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Many-neighbour Lennard-Jones}{101}{subsection.8.2.1}}
+\newlabel{zoomedOut}{{8.5a}{102}{Zoomed out\relax }{figure.caption.44}{}}
+\newlabel{sub@zoomedOut}{{a}{102}{Zoomed out\relax }{figure.caption.44}{}}
+\newlabel{zoomedIn}{{8.5b}{102}{Zoomed in\relax }{figure.caption.44}{}}
+\newlabel{sub@zoomedIn}{{b}{102}{Zoomed in\relax }{figure.caption.44}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.5}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{102}{figure.caption.44}}
+\newlabel{fig:trainingManyNeighbourNN}{{8.5}{102}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.44}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.6}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{105}{figure.caption.45}}
+\newlabel{fig:errorManyNeighbourNN}{{8.6}{105}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.45}{}}
+\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Results and discussion}{107}{part.3}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}NN potential for Si}{109}{chapter.9}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{sec:SiPotentialResults}{{9}{101}{NN potential for Si}{chapter.9}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {10}NN potential for SiO2}{103}{chapter.10}}
+\newlabel{sec:SiPotentialResults}{{9}{109}{NN potential for Si}{chapter.9}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}NN potential for SiO2}{111}{chapter.10}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{Appendices}{105}{section*.44}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{107}{Appendix.1.A}}
+\@writefile{toc}{\contentsline {chapter}{Appendices}{113}{section*.46}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{115}{Appendix.1.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:appendixA1}{{A}{107}{Symmetry functions derivatives}{Appendix.1.A}{}}
-\newlabel{cutOffFunctionDerivative}{{A.3}{107}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.4}{107}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.5}{107}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.7}{107}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.8}{108}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
-\newlabel{G4Derivative}{{A.16}{108}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
+\newlabel{app:appendixA1}{{A}{115}{Symmetry functions derivatives}{Appendix.1.A}{}}
+\newlabel{cutOffFunctionDerivative}{{A.3}{115}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.4}{115}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.5}{115}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.7}{115}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.8}{116}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
+\newlabel{G4Derivative}{{A.16}{116}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
 \bibcite{Behler11general}{1}
 \bibcite{Behler11symmetry}{2}
 \bibcite{Dragly14}{3}
@@ -348,5 +368,11 @@
   default.pygstyle,
   borland.pygstyle,
   default-pyg-prefix.pygstyle,
+  07E5BCD4BB70BA9368B69A6D2EBBEB08B1CFE32A756649A7B3EA379BE3962DF9.pygtex,
+  8FFEE2B7E646C9CB93160A4E393FED99B1CFE32A756649A7B3EA379BE3962DF9.pygtex,
+  BBB954BDA323F884008F1770DA6A25CDB1CFE32A756649A7B3EA379BE3962DF9.pygtex,
+  65855A335FC7E9A31E1F2A68AE6F9F51B1CFE32A756649A7B3EA379BE3962DF9.pygtex,
+  AE37967E17E8CF1C078485BBDA7D452DB1CFE32A756649A7B3EA379BE3962DF9.pygtex,
+  32356922E3125AD5A6783150D17503A8B1CFE32A756649A7B3EA379BE3962DF9.pygtex,
   B96A2F9C2C21DC9B6C0E9E12BC3292C5B1CFE32A756649A7B3EA379BE3962DF9.pygtex,
   44891C627509FD12201166A00012ABEDB1CFE32A756649A7B3EA379BE3962DF9.pygtex}

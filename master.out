@@ -33,10 +33,10 @@
 \BOOKMARK [2][-]{subsection.4.1.2}{Symmetry functions and forces}{section.4.1}% 33
 \BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 34
 \BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 35
-\BOOKMARK [1][-]{subsection.5.0.1}{Installing LAMMPS}{chapter.5}% 36
-\BOOKMARK [2][-]{subsection.5.0.2}{LAMMPS input script}{subsection.5.0.1}% 37
-\BOOKMARK [2][-]{subsection.5.0.3}{LAMMPS structure}{subsection.5.0.1}% 38
-\BOOKMARK [2][-]{subsection.5.0.4}{Extending LAMMPS}{subsection.5.0.1}% 39
+\BOOKMARK [1][-]{section.5.1}{Installing LAMMPS}{chapter.5}% 36
+\BOOKMARK [1][-]{section.5.2}{LAMMPS input script}{chapter.5}% 37
+\BOOKMARK [1][-]{section.5.3}{LAMMPS structure}{chapter.5}% 38
+\BOOKMARK [1][-]{section.5.4}{Extending LAMMPS}{chapter.5}% 39
 \BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 40
 \BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 41
 \BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 42
@@ -56,5 +56,5 @@
 \BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 56
 \BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.3}% 57
 \BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.3}% 58
-\BOOKMARK [0][-]{section*.44}{Appendices}{part.3}% 59
+\BOOKMARK [0][-]{section*.46}{Appendices}{part.3}% 59
 \BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 60

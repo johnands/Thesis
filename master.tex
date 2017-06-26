@@ -9,19 +9,23 @@
 \usepackage{minted}
 \usepackage{xcolor}
 \usepackage{amssymb}
+\usepackage{mdframed}
 
 \sisetup{range-phrase=-}
 
 \usemintedstyle{borland}
 
-\definecolor{box}{RGB}{218, 218, 218}
+%\definecolor{box}{RGB}{218, 218, 218}
+\definecolor{LightGray}{gray}{0.9}
 
-\setminted
-{
- frame=lines, 
- fontsize=\footnotesize, 
- bgcolor=box,
+\setminted{ %
+ %frame=lines, 
+ fontsize=\footnotesize 
+ %bgcolor=LightGray,
 }
+
+\surroundwithmdframed{minted}
+\mdfsetup{backgroundcolor=LightGray}
 
 % define lammps code listing
 \lstdefinestyle{lammps}
@@ -1270,6 +1274,7 @@ training set.
  \begin{align}
   \vec{u}_l &= W_l\vec{y}_{l-1} + \vec{b}_l \\
   \vec{y}_l &= f_l(\vec{u}_l)
+  \label{forwardPropMatrix}
  \end{align}
  Store all vectors $\vec{u}_l$ and $\vec{y}_l$.
  \item Calculate the error in the output layer:
@@ -1279,6 +1284,7 @@ training set.
  \item Backpropagate the error: for $l = L, L-1, \dots ,1$:
  \begin{equation}
  \vec{\delta}_l = \vec{y}^\prime_l \odot (W^T_{l+1}\vec{\delta}_{l+1}) \cdot 
+ \label{backPropMatrix}
  \end{equation}
  Store all errors $\vec{\delta}_l$. 
  \item Compute weight and bias gradients: 
@@ -1523,7 +1529,7 @@ necesseraly result in a lower RMSE.
 However, it is important to use at least as many symmetry functions as there are degrees of freedom in the system.
 If this is not the case, the NN will recieve insufficient information and will not be able to fit the data properly. 
 
-\subsection{Symmetry functions and forces}
+\subsection{Symmetry functions and forces} \label{sec:symmAndForces}
 To integrate Newton's laws in MD simulations we need the forces on all the atoms. The force field associated with a PES
 was introduced in section \ref{sec:potentialEnergySurfaces} and is restated here for reference:
 \begin{equation}
@@ -1588,16 +1594,16 @@ the origin. Effectively, we are making a change of coordinates to the neighbours
 This is in accordance with the Behler symmetry functions, which only operate with relative coordinates. 
 It is however not trivial how this affects the above equations for the forces, which are not written in 
 an atom-centered way. The process of obtaining the forces can be illustrated with an example system
-consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{threeAtoms}.
-\begin{comment}\begin{figure}[H]
+consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{fig:threeAtoms}.
+\begin{figure}[H]
 \begin{center}
-  \includegraphics[width = 0.9\linewidth]{Figures/Implementation/3atoms.pdf}
+  \includegraphics[width = 0.7\linewidth]{Figures/Implementation/3atoms.pdf}
   \caption{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to 
 	   take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type,
 	   they have identical atomic NNs and symmetry function sets.}
   \label{fig:threeAtoms}
   \end{center}
-\end{figure}\end{comment}
+\end{figure}
 We want to find the force on atom 1 in the $x$-direction. Atom 0 is outside the cutoff sphere of atom 1, 
 so according to \eqref{forceAtomk} the force is,
 \begin{equation}
@@ -1703,7 +1709,7 @@ a walkthrough of an example input script. We also describe its
 class hierarchy and how we can add our own functionality
 to the package.
 
-\subsection{Installing LAMMPS}
+\section{Installing LAMMPS}
 We have chosen to install LAMMPS by cloning
 the Github repository and compile the source
 code by running \texttt{make} in the source directory. 
@@ -1728,7 +1734,7 @@ can be installed. This can be done by running
 e.g. \texttt{manybody} to install many-body potentials
 like Stillinger-Weber and Vashishta. 
 
-\subsection{LAMMPS input script}
+\section{LAMMPS input script}
 LAMMPS is run by providing an input script as 
 argument to the excecutable. This input script
 is read line by line and has its own syntax. 
@@ -1960,35 +1966,44 @@ funcionality of LAMMPS through several comments
 on a simple input script. Now we move on to
 how class hierarchy of LAMMPS is structured. 
 
-\subsection{LAMMPS structure}
+\section{LAMMPS structure}
 LAMMPS is written in \texttt{C++} in an object-oriented
 fashion. The class hierarchy is shown schematically
-in figure (MAKE MY OWN FIGURE IN INKSCAPE). 
-The blue classes are the core classes, these
+in \autoref{fig:lammpsClasses}. 
+The top-level classes (blue)
 are visible anywhere in LAMMPS.
-Most of these have subclasses, of which the red ones
-are called style classes. We recognize many 
-of the input script commands among the style
+Some selected sub-classes (green and yellow) are displayed. We recognize many 
+of the input script commands among these sub-classes
 classes; a rule of thumb is that every input script
 command has a corresponding class and a
 corresponding file name in the source directory. 
-For instance, the cutoff Lennard-Jones potential
+For instance, we observe that the cutoff Lennard-Jones potential
 used in our input script is a subclass of Pair,
 and is evoked by the command
 \texttt{pair\_style lj/cut} and the source file is named
 \texttt{pair\_lj\_cut}. 
+\begin{figure}
+\begin{center}
+ \includegraphics[width = 0.8\linewidth]{Figures/Implementation/lammpsClasses.pdf}
+  \caption{Class hierarchy of LAMMPS. The inheritance is from left to right. 
+	   The top-level classes (blue) are visible everywhere in the code. Only a selected set 
+	   of sub-classes (green and yellow) is displayed, where we recognize many of the input script
+	   commands.}
+  \label{fig:lammpsClasses}
+  \end{center}
+\end{figure}
 
 We will not go into detail about the functionality
 and communication of these classes. The one
 that is the most relevant for this work is the \texttt{Pair} class. 
 This is the parent class of non-bonded or pair-wise potentials, which
 in LAMMPS includes many-body potentials like Stillinger-Weber and 
-the Tersoff 3-body potential. The NN potential in this thesis falls 
+Vashishta. The NN potential in this thesis falls 
 under this category, and thus inherits from \texttt{Pair}. 
 In the following section we will describe how 
 LAMMPS can be extended with such a new \texttt{pair\_style}.
 
-\subsection{Extending LAMMPS} \label{sec:extendingLammps}
+\section{Extending LAMMPS} \label{sec:extendingLammps}
 To extend LAMMPS with a new component, we 
 simply add a new \texttt{*.cpp} and \texttt{*.h} file to the 
 source directory and re-compile. The new class
@@ -2012,26 +2027,225 @@ To use our new NN potential in a simulation we simply write,
  pair_style 	nn/manybody
 \end{lstlisting}
 in the input script. This command evokes two functions that need to be implemnted: \texttt{settings}
-and \texttt{init\_style}. The former assures that no additional arguments are provided to 
-\texttt{pair\_style} (I SHOULD MAYBE CHANGE THIS TO PROVIDE GLOBAL CUTOFF LATER???), while the latter
-decides what kind of neighbour lists that LAMMPS should operate with. Our NN potential needs 
+and \texttt{init\_style}. The former controls the number of arguments to 
+\texttt{pair\_style}, which in our case is zero, while the latter
+decides what kind of neighbour lists that LAMMPS should provide to the potential. Our NN potential needs 
 full neighbour lists to be able to compute three-body terms, something which applies to all many-body potentials. 
 
-The parent class \texttt{Pair} has three \textit{pure virtual member functions}, i.e. functions that is required
+The parent class \texttt{Pair} has three \textit{pure virtual member functions}, i.e. functions that are required
 to be implemented by a derived class: \texttt{compute}, \texttt{coeff} and the aforementioned \texttt{settings}. 
 The \texttt{compute} method is where the forces and energies are calculated. This function is called
 once each time step by the Verlet algorithm and the resulting forces are used to integrate Newton's equations
 of motion. The coefficients of the employed potential are set in \texttt{coeff}, which in the case of a NN potential
-is the weights and biases. These are read from file, and based on information on the architecture of the NN and 
+is the weights, biases and symmetry function parameters. 
+These are read from file, and based on information on the architecture of the NN and 
 choice of activation function, the network is reconstructed as a set of Armadillo matrices and 
 vectors. This is achieved with the input script command,
 \begin{lstlisting}[style=lammps]
  pair_coeff		* * <path-to-saved-NN> <cutoff> 
 \end{lstlisting}
-where the wildcard asterisks signify that the coefficients should be given to all pairs of atom types. 
-THIS IS ONLY VALID FOR ONE ATOM TYPE. WRITE ABOUT MORE THAN ONE TYPE LATER. ALSO WRITE ABOUT
-HOW THE ENERGIES AND FORCES ARE CALCULATED WHEN I HAVE TWO ATOM TYPES
-UP AND RUNNING.
+where the wildcard asterisks signify that the coefficients span all atom types and are read from file. 
+Note that also the symmetry parameters employed during training are read 
+If there are more than one element, a seperate NN file is read for each one. 
+An example is $\mathrm{SiO}_2$,
+\begin{lstlisting}[style=lammps]
+ pair_coeff 		* * <path-1> <path-2> Si O <cutoff>
+\end{lstlisting}
+The process of employing the NN to calculate the forces and energies of all atoms in the system 
+is described as follows,
+\begin{enumerate}
+ \item Access various variables like the vector of atom coordinates and the neighbour lists of each atom.
+ \item Loop through all atoms. For each atom $i$:
+ \begin{enumerate}
+  \item Construct input vector to the NN by evaluating the symmetry functions for all pairs and triplets below the cutoff radius. 
+	The coordinates, types, angles etc. of all pairs and triplets must be stored for later force calculations. 
+  \item Evaluate the NN corresponding to the element of atom $i$ to obtain its total atomic energy.
+  \item Calculate the gradient of the energy w.r.t. the symmetry function values by backpropagation.
+  \item Differentiate the symmetry functions w.r.t. to the coordinates of all neighbours to obtain the total force on atom $i$.
+ \end{enumerate}
+\end{enumerate}
+This process determines the structure of the \texttt{nn/manybody} \texttt{compute} function. 
+We start out by accessing various variables needed to compute the forces,
+\begin{minted}{c++}
+double **x = atom->x;      // atom coordinates
+double **f = atom->f;      // forces
+int *type = atom->type;    // type of each atom	
+int nlocal = atom->nlocal; // no. of atoms belonging to current processor  
+
+int inum = list->inum;     // length of list containing all neighbour lists
+int *ilist = list->ilist;  // local indicies of all local atoms
+int *numneigh = list->numneigh; // lengths of each neighbour list
+int **firstneigh = list->firstneigh; // all neighbour lists
+\end{minted}
+Next, we loop through all atoms in \texttt{ilist}. For each atom, we evaluate 
+the two-body and three-body symmetry functions with the symmetry parameters read from file. 
+We also store certain information on all neighbours. 
+\begin{minted}{c++}
+for (int ii = 0; ii < inum; ii++) {
+  int i = ilist[ii];
+  int itype = map[type[i]];
+
+  double xtmp = x[i][0];
+  double ytmp = x[i][1];
+  double ztmp = x[i][2];
+
+  // neighbour list of atom i
+  int *jlist = firstneigh[i];
+  int jnum = numneigh[i];
+  
+  // collect all pairs
+  for (int jj = 0; jj < jnum; jj++) {
+    int j = jlist[jj];
+    j &= NEIGHMASK;
+    tagint jtag = tag[j];
+    int jtype = map[type[j]];
+
+    double delxj = x[j][0] - xtmp;
+    double delyj = x[j][1] - ytmp;
+    double delzj = x[j][2] - ztmp;
+    double rsq1 = delxj*delxj + delyj*delyj + delzj*delzj;
+
+    if (rsq1 >= cutoffSquared) continue;   
+    double rij = sqrt(rsq1);
+    
+    // store relative coordinates (delxj, delyj, delzj), distance rij, 
+    // index j and type jtype
+    
+    // apply two-body symmetry...
+    
+    // collect all triplets
+    for (int kk = jj+1; kk < jnum; kk++) {
+      // apply three-body symmetry and 
+      // store configurations of all triplets...
+\end{minted}
+We are now ready to evalute the NN with the input vector of symmetry values. 
+The NN is implemented as a function, shown here in the monatomic case for brevity,
+\begin{minted}{c++}
+double PairNNManyBody::network(arma::mat inputVector) {
+
+  // no activation for input layer
+  m_preActivations[0] = inputVector;
+  m_activations[0] = m_preActivations[0];
+
+  // hidden layers
+  for (int i=0; i < nLayers; i++) {
+    m_preActivations[i+1] = m_activations[i]*m_weights[i] + m_biases[i];
+    m_activations[i+1] = sigmoid(m_preActivations[i+1]);
+  }
+
+  // identity activation for output layer
+  m_preActivations[nLayers+1] = m_activations[nLayers]*m_weights[nLayers] + 
+				m_biases[nLayers];
+  m_activations[nLayers+1] = m_preActivations[nLayers+1];
+
+  // return activation of output neuron
+  return m_activations[nLayers+1](0,0);
+}
+\end{minted}
+where \texttt{sigmoid(A)} is a function that returns the sigmoid \eqref{sigmoidActivationFunction} 
+of each element of a matrix \texttt{A}. 
+Each variable with the \texttt{m\_} prefix is an \texttt{std::vector} containing a set of Armadillo matrices. 
+For instance, \texttt{m\_weights[0]} is a matrix of all weights connecting the input layer 
+and the first hidden layer. This results in highly readable code that is very similar to the mathematical 
+description \eqref{forwardPropMatrix}, 
+\footnote{The weight-activation multiplication is in reverse order in the code because we use row vectors instead of column vectors.
+Also, the indexing of the weight and bias vectors are different than in \eqref{forwardPropMatrixLammpsChapter}, as 
+the activation and preactivation vectors also include the input layer. This also applies to the implementation
+of backpropagation.}
+\begin{equation}
+ \begin{aligned}
+  \vec{u}_l &= W_l\vec{y}_{l-1} + \vec{b}_l \\
+  \vec{y}_l &= f_l(\vec{u}_l)
+  \label{forwardPropMatrixLammpsChapter}
+\end{aligned}
+\end{equation}
+The NN is differentiated by employing backpropagation according to the procedure oulined in \autoref{sec:symmAndForces},
+\begin{minted}{c++}
+arma::mat PairNNManyBody::backPropagation() {
+
+  // derivative of output neuron is 1
+  arma::mat output(1,1); output.fill(1);
+  m_derivatives[nLayers+1] = output;
+
+  // we can thus compute the error vectors for the other layers
+  for (int i=nLayers; i > 0; i--) {
+      m_derivatives[i] = 
+	  ( m_derivatives[i+1]*m_weightsTransposed[i] ) %
+          sigmoidDerivative(m_preActivations[i]);
+  }
+
+  // no activation function for input layer
+  m_derivatives[0] = m_derivatives[1] * m_weightsTransposed[0];
+
+  return m_derivatives[0];
+\end{minted}
+and we compare to \eqref{backPropMatrix},
+\begin{equation}
+ \vec{\delta}_l = \vec{y}^\prime_l \odot (W^T_{l+1}\vec{\delta}_{l+1}) \cdot 
+ \label{backPropMatrixLammpsChapter}
+\end{equation}
+Consequentially, the output and gradient of the NN is obtained simply by the two function calls,
+\begin{minted}{c++}
+evdwl = network(inputVector);
+arma::mat dEdG = backPropagation();
+\end{minted}
+We remember from \autoref{sec:symmAndForces} that the force is the product of the gradient of the NN and 
+the symmetry functions \eqref{forceAtomkChainRule},
+\begin{equation}
+ F_{i,\alpha} = -\sum_{j=1}^{N_i+1}\frac{\partial E_j}{\partial R_{i,\alpha}} = 
+ -\sum_{j=1}^{N_j+1}\sum_{s=1}^{M_j}\frac{\partial E_j}{\partial G_{j,s}}\frac{\partial G_{j,s}}{\partial R_{i,\alpha}}
+ \label{forceAtomkChainRuleLammpsChapter}
+\end{equation}
+Here the NN potential differs from ordinary many-body potentials, which 
+compute forces from each neighbour on-the-fly: The potential energy of atom $i$
+can only be calculated w.r.t all neighbours \textit{simultaneously}. We therefore have to loop over the neighbours once more
+to calculate the forces, which is why we store the configurations of all pairs and triplets below the cutoff; to 
+avoid recalculations. We show an excerpt of the code that implements \eqref{forceAtomkChainRuleLammpsChapter},
+\begin{minted}{c++}
+for (int s=0; s < m_numberOfSymmFunc; s++) {
+
+  // G2
+  if ( m_parameters[s].size() == 3 ) {
+    arma::mat dG2(1,neighbours);
+
+    // calculate cerivative of G2 for all pairs
+    dG2dR(Rij, m_parameters[s][0],
+	  m_parameters[s][1], m_parameters[s][2], dG2);
+
+    // chain rule: all pair forces
+    arma::mat fpairs = -dEdG(0,s) * dG2 / Rij;
+
+    // loop through all pairs
+    for (int l=0; l < neighbours; l++) {
+      double fpair = fpairs(0,l);
+
+      // force on atom i
+      fx2 -= fpair*drij(0,l);
+      fy2 -= fpair*drij(1,l);
+      fz2 -= fpair*drij(2,l);
+
+      // N3L: force on neighbour
+      f[tagsj[l]][0] += fpair*drij(0,l);
+      f[tagsj[l]][1] += fpair*drij(1,l);
+      f[tagsj[l]][2] += fpair*drij(2,l);
+    }
+  }
+
+  // G4/G5
+  else {
+    for (int l=0; l < neighbours-1; l++) {
+      // calculate derivative of G4 or G5 for all triplets (i,j,k)
+      // and assign forces to all three atoms
+\end{minted}
+The vectors \texttt{Rij} and \texttt{drij} contain the distances to and relative coordinates of all 
+pairs. Note that we assign each pair force $\vec{F}_{ij}$ both to atom $i$ and neighbour $j$, in accordance with 
+Newton's third law. This is a requirement for our implementation 
+to work: \eqref{forceAtomkChainRuleLammpsChapter} states that
+the force on atom $i$ is the derivative of the energies of all neighbours and $i$ itself. This also applies to all neighbours $j$
+of atom $i$: each neighbour experiences a force contribution  $\partial E_i / \partial R_{j,\alpha}$. To avoid 
+having to store all atomic energies $E_i$, we therefore take care of this contribution when $E_i$ is available. 
+The alternative is to compute and store the energies and the environments of all atoms before calculating the forces, but this
+is tedious and requires too much storage for large systems. 
 
 
 
