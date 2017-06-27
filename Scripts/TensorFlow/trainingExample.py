@@ -44,7 +44,7 @@ with tf.Session() as sess:
     sess.run(initOperation)
     
     # write summaries
-    tf.summary.FileWriter('Summaries', sess.graph)
+    #tf.summary.FileWriter('Summaries', sess.graph)
     
     # get data
     #xBatch, yBatch = getNextBatch()

@@ -28,33 +28,38 @@
 \BOOKMARK [2][-]{subsection.3.6.2}{Optimization algorithms}{section.3.6}% 28
 \BOOKMARK [2][-]{subsection.3.6.3}{Backpropagation}{section.3.6}% 29
 \BOOKMARK [0][-]{chapter.4}{Neural networks in molecular dynamics}{part.1}% 30
-\BOOKMARK [1][-]{section.4.1}{High-dimensional NNPs}{chapter.4}% 31
-\BOOKMARK [2][-]{subsection.4.1.1}{Symmetry functions}{section.4.1}% 32
-\BOOKMARK [2][-]{subsection.4.1.2}{Symmetry functions and forces}{section.4.1}% 33
-\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 34
-\BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 35
-\BOOKMARK [1][-]{section.5.1}{Installing LAMMPS}{chapter.5}% 36
-\BOOKMARK [1][-]{section.5.2}{LAMMPS input script}{chapter.5}% 37
-\BOOKMARK [1][-]{section.5.3}{LAMMPS structure}{chapter.5}% 38
-\BOOKMARK [1][-]{section.5.4}{Extending LAMMPS}{chapter.5}% 39
-\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 40
-\BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 41
-\BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 42
-\BOOKMARK [2][-]{subsection.6.2.1}{Hello world}{section.6.2}% 43
-\BOOKMARK [2][-]{subsection.6.2.2}{Creating a neural network}{section.6.2}% 44
-\BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 45
-\BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 46
-\BOOKMARK [0][-]{chapter.7}{Training procedure}{part.2}% 47
-\BOOKMARK [1][-]{section.7.1}{Selecting the training data}{chapter.7}% 48
-\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 49
-\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 50
-\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 51
-\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 52
-\BOOKMARK [1][-]{section.8.1}{Time usage}{chapter.8}% 53
-\BOOKMARK [1][-]{section.8.2}{Training Lennard-Jones potential}{chapter.8}% 54
-\BOOKMARK [2][-]{subsection.8.2.1}{Many-neighbour Lennard-Jones}{section.8.2}% 55
-\BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 56
-\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.3}% 57
-\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.3}% 58
-\BOOKMARK [0][-]{section*.46}{Appendices}{part.3}% 59
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 60
+\BOOKMARK [1][-]{section.4.1}{What properties should a PES have?}{chapter.4}% 31
+\BOOKMARK [1][-]{section.4.2}{Neural network potentials}{chapter.4}% 32
+\BOOKMARK [2][-]{subsection.4.2.1}{Potentials using single neural network}{section.4.2}% 33
+\BOOKMARK [2][-]{subsection.4.2.2}{Potentials using multiple neural networks}{section.4.2}% 34
+\BOOKMARK [1][-]{section.4.3}{High-dimensional NNPs}{chapter.4}% 35
+\BOOKMARK [2][-]{subsection.4.3.1}{Symmetry functions}{section.4.3}% 36
+\BOOKMARK [2][-]{subsection.4.3.2}{should this come at the end?}{section.4.3}% 37
+\BOOKMARK [2][-]{subsection.4.3.3}{Symmetry functions and forces}{section.4.3}% 38
+\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 39
+\BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 40
+\BOOKMARK [1][-]{section.5.1}{Installing LAMMPS}{chapter.5}% 41
+\BOOKMARK [1][-]{section.5.2}{LAMMPS input script}{chapter.5}% 42
+\BOOKMARK [1][-]{section.5.3}{LAMMPS structure}{chapter.5}% 43
+\BOOKMARK [1][-]{section.5.4}{Extending LAMMPS}{chapter.5}% 44
+\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 45
+\BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 46
+\BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 47
+\BOOKMARK [2][-]{subsection.6.2.1}{Hello world}{section.6.2}% 48
+\BOOKMARK [2][-]{subsection.6.2.2}{Creating a neural network}{section.6.2}% 49
+\BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 50
+\BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 51
+\BOOKMARK [0][-]{chapter.7}{Training procedure}{part.2}% 52
+\BOOKMARK [1][-]{section.7.1}{Selecting the training data}{chapter.7}% 53
+\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 54
+\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 55
+\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 56
+\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 57
+\BOOKMARK [1][-]{section.8.1}{Time usage}{chapter.8}% 58
+\BOOKMARK [1][-]{section.8.2}{Training Lennard-Jones potential}{chapter.8}% 59
+\BOOKMARK [2][-]{subsection.8.2.1}{Many-neighbour Lennard-Jones}{section.8.2}% 60
+\BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 61
+\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.3}% 62
+\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.3}% 63
+\BOOKMARK [0][-]{section*.47}{Appendices}{part.3}% 64
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 65

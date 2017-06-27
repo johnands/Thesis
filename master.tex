@@ -129,7 +129,7 @@ update the PES during the simulation, resulting in better performance. The cost 
 systems it is fully possible to construct a predefined PES that yields the correct thermodynamics properties. 
 In this thesis, we present a method to construct potential energy surfaces for classical MD.  
 
-\subsection{From quantum mechanics to classical potentials}
+\subsection{From quantum mechanics to classical potentials} \label{sec:bornOppenheimer}
 It it not obvious how an ensemble of atoms, which is a quantum mechanical system, can be simulated using 
 laws from classical mechanics. To be able to do this,
 we must make the assumption that the motion of atomic nuclei and electrons in a molecule
@@ -140,7 +140,7 @@ for the nuclear motion. In this way, the positions and velocities of the electro
 allowing us to model the atomic nuclei as point particles that follow Newtonian dynamics. 
 
 
-\subsection{Constructing potential energy surfaces}
+\subsection{Constructing potential energy surfaces} \label{sec:constructingPES}
 As mentioned above, we represent the PES by a predefined functional form in classical MD. We assume that this
 function can be constructed as a sum of $n$-body terms $V_n$,
 \begin{equation}
@@ -409,7 +409,7 @@ not including a cutoff is unfeasible except for small systems.
 
 
 
-\chapter{Machine learning}
+\chapter{Machine learning} \label{sec:machineLearning}
 Machine learning is the science of giving computers the ability to learn without being explicitly programmed. 
 The idea is that there exist generic algorithms which can be used to find patterns in a broad class of data sets without 
 having to write code specifically for each problem. The algorithm will build its own logic based on the data.  
@@ -724,6 +724,7 @@ $\vec{x} \in \mathbb{R}^n \rightarrow \vec{y} \in \mathbb{R}^m$. In this thesis,
 specific linear activation function for the output neuron $o$, namely the identity function $f(x) = x$,
 \begin{equation}
  f_o = f(u_o) = u_o
+ \label{outputActivation}
 \end{equation}
 
 
@@ -861,7 +862,7 @@ This is a restatement of the observation made in \autoref{sec:MLPmodel}: the num
 to the number of input and output values of the function we are trying to fit. 
 
 
-\subsection{Cost functions}
+\subsection{Cost functions} \label{costFunctions}
 To minimize the error, we need a way to \textit{define} it. 
 As in mathematical optimization, the error is represented by an objective function, also called \textit{loss} function
 or \textit{cost} function. Training a NN therefore amounts to the minimization of this function, which can be written in the 
@@ -911,7 +912,7 @@ Also, the obatained minimum is generally local, not global.
 Different ways to update $\gamma$ is discussed below.
 
 
-\subsection{Gradient descent variants}
+\subsection{Gradient descent variants} \label{gradientDescentVariants}
 There are three versions of gradient descent \cite{Ruder16}, which differ in 
 the number of training examples we present to the NN before updating the parameters. 
 According to neural network terminology, the process of adjusting the parameters based on all the training examples,
@@ -1271,11 +1272,13 @@ training set.
   \vec{y}_0 = \vec{x}
  \end{equation}
  \item Propagate the activity forward: for $l = 1,\dots,L+1$:
- \begin{align}
+ \begin{equation}
+ \begin{aligned}
   \vec{u}_l &= W_l\vec{y}_{l-1} + \vec{b}_l \\
   \vec{y}_l &= f_l(\vec{u}_l)
   \label{forwardPropMatrix}
- \end{align}
+ \end{aligned}
+ \end{equation}
  Store all vectors $\vec{u}_l$ and $\vec{y}_l$.
  \item Calculate the error in the output layer:
  \begin{equation}
@@ -1296,53 +1299,78 @@ training set.
 
 
 \chapter{Neural networks in molecular dynamics}
-Following \cite{Behler15} and \cite{Behler11symmetry}.
-All the dynamics of a molecular system is determined by the multidimensional potential-energy surface (PES), which
-in general is a real-valued function depending on all atomic coordinates in the system. Using the Born-Oppenheimer approximation
-(FORKLARE ELLER REFERERE), 
-various quantum mechanical methods like Hartree-Fock and density functional theory (DFT) are available to directly calculate
-the PES and forces for a given configuration. Calculating the energies for all relevant configurations of a system is
-demanding and time-consuming, and only a limited number of energies can be computed and stored. 
-Consequentially, during a \textit{ab inito} molecular dynamics (MD) simulations, the energies and forces for all configurations visited
-are not available beforehand. In \textit{ab inito} MD, energies and forces are therefore calculated on-the-fly, typically using DFT.
-This is however a very inefficient approach. A more efficient method is to construct an analytical PES to use in simulations, 
-but this can only be done for very simple systems.
+ADVANTAGES AND DISADVANTAGES OF NNPS - DIFFERENT METHODS TO CONSTRUCT NNPS IN THE LITERATURE - 
+DESCRIPTION OF BEHLER-PARINELLO METHOD. 
 
-A solution to this problem is the introduction of approximate PESs, and there are two fundamental approaches. 
-The most widely used and convential method is to replace the solution of the Schrödinger equation by a simplified
-energy expression based on physical considerations and reasonable approximations. These functions are not obtained
-by ab inito methods, but can in many cases be sufficiently accurate to be used in simulations (BØR HA EN EGEN SEKSJON
-OM DE VANLIGSTE POTENSIALENE).
+In \autoref{sec:constructingPES} we discussed various ways to construct a PES for use in molecular dynamics, and
+stated that this thesis deales with neural network potentials (NNP). Then, in \autoref{sec:machineLearning}
+we outlined the basic theory of MLPs, which is our choice of neural network type. In this chapter, 
+we discuss the pros and cons of NNPs, and different properties such potentials should possess to 
+fulfill important physical symmetries. We start out with a brief discussion on what properties that
+are favourable for any PES, irregardles of circumstances. 
 
-An alternative approach is to employ machine learning (ML) potentials that have no direct physical meaning. 
-The aim of these purely mathematical functions is to fit an analytic expression to a set of reference data
-obtained by quantum mechanical calulations. There are various methods (REFERENCES). 
-ML potentials are particularly useful
-\begin{itemize}
- \item if long MD simulations are required
- \item if many MD trajectories are needed
- \item if the systems are too large for the application of QM methods
-\end{itemize}
-Physical and ML potentials thus enables us to extend the time and length scales of MD simulations
-beyond the realm of ab inito methods. 
+\section{What properties should a PES have?}
+When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
+should possess. These serve as a guide during the construction process, and is also a good 
+starting point for comparing different types of potentials. Behler \cite{Behler15} lists 10 requirements
+that the ideal potential should meet, repeated here for reference:
+\begin{enumerate}\itemsep1pt
+ \item The potential should be accurate, i.e. produce results that are in good agreement with experiments. 
+       Ideally, it should be constructed using \textit{ab inito} methods. 
+ \item There should be ways to systematically detect situations where the potential is not suffientently accurate, 
+       and improve it without too much effort. 
+ \item The potential should be unbiased and applicable to all types of systems and chemical bonding. 
+ \item The potential should enable the breaking and making of bonds. 
+ \item The potential should be high-dimensional, i.e. depend on all degress of freedom of the system. 
+ \item The construction of the potential should be as automated as possible. 
+ \item The potential should be predictive, i.e. be reliable for atomic configurations that have not been used in the 
+       construction. 
+ \item The potential should be fast to evaluate. 
+ \item The construction of the potential should not require much computation time. 
+ \item To compute forces, analytic derivatives of the potential should be available. 
+\end{enumerate}
+None of the potentials currently available meet all the above requirements to a satisfactory degree. 
+At the end of this chapter, we will discuss which of these requirements that are met by our NNPs. 
 
-Feed-forward neural networks (FFNN) have been demonstrated to be useful for the construction of PESs because
-they are universal function approximators. There is no restriction in the accuracy that can be achieved when 
-constructing neural network potentials (NNP). Unlike physical potentials, they are not restricted by any \textit{ad hoc}
-functional form. NNPs offer a number of advantages for the construction of PESs:
-\begin{itemize}
- \item Energies can be fitted to very high accuracy, leaving only
- the underlying error of the reference data
- \item Evaluation of NNPs require much less CPU time than QM methods
- \item The NNP expression is unbiased and generally applicable to all types of bonding
-\end{itemize}
-Still, there are disadvantages one should be aware of:
-\begin{itemize}
- \item The evaluation of NNPs are notably slower compared to the use of classical force fields
- \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities
- \item NNPs are, for the time being, only applicable to systems containing only a few
- different chemical elements (but many atoms)
-\end{itemize}
+\section{Neural network potentials}
+NNPs are constructed by fitting an analytic function to a set of reference data
+obtained by quantum mechanical calulations.
+The main goal of the NN approach to constructing a PES, is to create a potential that has the accuracy of \textit{ab inito}
+methods and the speed of empirical potentials (or at least of the same order).
+
+Several different methods have been developed to construct NNPs. A comprehensive review of many of these 
+was written by Behler in 2011 \cite{Behler11general}. They mainly differ in the number of NNs that are employed 
+to represent the total energy of the system, the dimensionality of each NN and the choice of input coordinates. 
+By dimensionality we mean the number of input nodes, as the number of output nodes is assumed to be 1 if not specified otherwise. 
+
+\subsection{Potentials using single neural network}
+In the literature, the dominant part of NN potentials employ a single feed-forward NN to calculate the total energy of the system.
+This is the most straightforward approach and is the easiest to implement.
+For instance, Agrawal et al. \cite{Agrawal06} have used a single, three-dimensional NN to study the dissociation of the 
+$\mathrm{SiO}_2$ molecule. However, these types of NNPs suffer from a number of limitations. Most importantly, 
+they have a fixed dimensionality. This is a general property of FFNNs where the atomic coordinates are fed directly 
+to the network without any transformations: once fitted, the NNP can only be applied to systems with the same number of atoms
+as the number of inputs. Further, a large number of input nodes requires many hidden neurons, and there comes a point 
+where the number of parameters of the NN makes training unfeasible. Thus, the number of degrees of freedom of the system 
+must be small. 
+
+\subsection{Potentials using multiple neural networks}
+For NNPs to be recognized as competitive potentials in molecular dynamics, they should be applicable to large systems
+of various sizes, containing thousands of atoms. This can not be achieved by employing only one NN to 
+represent the total energy of the system. A solution is to replace the single NN by a set of \textit{atomic} NNs, where 
+each NN provides the contribution $E_i$ of \textit{one} atom to the total energy $E_s$ of the system, 
+\begin{equation}
+ E_s = \sum_{i=1}^N E_i
+ \label{systemEnergy}
+\end{equation}
+Two methods using this approach have been developed in parallel by Bholoa et al. \cite{Bholoa07}, and Behler and Parinello 
+\cite{Behler07}. The two methods differ in the way each atomic NN is structured. 
+
+In the first method, each atomic energy $E_i$ is computed by a NN of variable size, using a set of 
+vectors of atomic chains as input, representing the environment of each atom. In the Behler-Parinello (BP) method, 
+
+
+
 
 \section{High-dimensional NNPs}
 The use of a single FFNN to represent complicated systems containing many atoms of different types is not possible for several reasons.
@@ -1354,9 +1382,9 @@ changing the order of the input coordinates to the NN will result in a different
 by a different choice of input coordinates, discussed below. The third problem in using a single FFNN is that it is 
 only applicable to the system size that has been used during the training. If the NN has been trained with 5 inputs, 
 it can not be used for a system containing any other number of atoms. 
-\begin{figure}[H]
+\begin{figure}
 \begin{center}
-  \includegraphics[width = 100mm]{Figures/Theory/cutOffHighDimNN.jpeg}
+  \includegraphics[width = 0.7\linewidth]{Figures/Theory/cutOffHighDimNN.jpeg}
   \caption{}
   \label{fig:cutOffNeighbours}
   \end{center}
@@ -1529,6 +1557,24 @@ necesseraly result in a lower RMSE.
 However, it is important to use at least as many symmetry functions as there are degrees of freedom in the system.
 If this is not the case, the NN will recieve insufficient information and will not be able to fit the data properly. 
 
+\subsection{should this come at the end?}
+NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
+\begin{itemize}
+ \item Energies can be fitted to arbitrary accuracy, leaving only
+ the underlying error of the reference data. Consequentially, NNPs can be categorized as \textit{ab inito} potentials. 
+ \item Evaluation of NNPs require much less CPU time than QM methods.
+ \item The NNP expression is unbiased and generally applicable to any system.
+\end{itemize}
+In other words, the overarching vision is to create a PES that have the accuracy of \textit{ab inito} potentials, 
+while simultaneously being able to simulate large systems over considerable time scales. 
+Still, there are disadvantages to be aware of:
+\begin{itemize}
+ \item The evaluation of NNPs are notably slower compared to empirical potentials.
+ \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities.
+ \item NNPs are, for the time being, only applicable to systems containing only a few
+ different chemical elements, but many atoms.
+\end{itemize}
+
 \subsection{Symmetry functions and forces} \label{sec:symmAndForces}
 To integrate Newton's laws in MD simulations we need the forces on all the atoms. The force field associated with a PES
 was introduced in section \ref{sec:potentialEnergySurfaces} and is restated here for reference:
@@ -1597,7 +1643,7 @@ an atom-centered way. The process of obtaining the forces can be illustrated wit
 consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{fig:threeAtoms}.
 \begin{figure}[H]
 \begin{center}
-  \includegraphics[width = 0.7\linewidth]{Figures/Implementation/3atoms.pdf}
+  \includegraphics[width = 0.4\linewidth]{Figures/Implementation/3atoms.pdf}
   \caption{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to 
 	   take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type,
 	   they have identical atomic NNs and symmetry function sets.}
@@ -2264,11 +2310,18 @@ with a number of \textit{nodes} that is connected by
 mathematical operations, while the edges represent
 the multidimensional data arrays (tensors) 
 communicated between them.
+\begin{figure}
+\centering
+  \includegraphics[width=0.4\linewidth]{Figures/Implementation/DFG.pdf}
+  \caption{Data flow graph for the solutions \eqref{quadraticEquationSolution} of a 
+	   quadratic equation \eqref{quadraticEquation}. The nodes (green circles) are mathematical 
+	   operations connected by edges (arrows) that show the data flow direction. Inputs and outputs
+	   are marked as rectangular boxes. Reproduced from:
+  \href{http://web.cecs.pdx.edu/mperkows/temp/JULY/data-flow-graph.pdf}{http://web.cecs.pdx.edu/mperkows/temp/JULY/data-flow-graph.pdf}} 
+  \label{fig:DFG}
+\end{figure}
 
-A simple example of a DFG is displayed in Figure (LAGE
-EN FIGUR BASERT PÅ EKSEMPLET 
-http://web.cecs.pdx.edu/~mperkows/temp/JULY/data-flow-graph.pdf
-, which is a visualization of the flow of data
+A simple example of a DFG is displayed in \autoref{fig:DFG}, which is a visualization of the flow of data
 for the (real) solutions 
 \begin{align}
  x_1 &= \frac{-b + \sqrt{b^2 - 4ac}}{2a} \\
@@ -2278,13 +2331,14 @@ for the (real) solutions
 of a quadratic equation
 \begin{equation}
  ax^2 + bx + c = 0
+ \label{quadraticEquation}
 \end{equation}
-We observe that each node (circles)
+We observe that each node (green circles)
 contain the mathematical operations needed to compute
 \eqref{quadraticEquationSolution}, while the arrows
 (edges) show what data each node recieve and where
 the output is sent. The inputs and outputs
-of the computation is marked with rectangular
+of the graph is marked with rectangular
 boxes. 
 
 TensorFlow was originally developed by 
@@ -2312,12 +2366,10 @@ tips on how to install the software.
 The easiest way to install TensorFlow on Ubuntu
 \footnote{\href{https://www.tensorflow.org/install/install\_linux}
 {https://www.tensorflow.org/install/installlinux}}
-(CHANGE LINK, IT IS WRONG BECAUSE OF UNDERSCORE...)
 is to use pip, \footnote{\href{https://pip.pypa.io/en/stable/}
 {https://pip.pypa.io/en/stable/}}
 a package management system for software written in 
-Python. Pip can be installed with the 
-command
+Python, installed with the command
 \begin{lstlisting}[language=bash]
  $ sudo apt-get install python-pip python-dev
 \end{lstlisting}
@@ -2389,26 +2441,47 @@ We will now look at how to construct a neural network with TF and
 visualize the corresponding DFG. 
 
 \subsection{Creating a neural network} \label{sec:TensorFlowCreatingNN}
-In \autoref{sec:ANN} we saw how an artifical neural network could be written as a nested sum 
-of activation functions \eqref{completeNN} where the weights connecting layer $l-1$ and $l$ were represented as
-a matrix $W_l$, while the biases of layer $l$ were represented as a vector $\vec{b}_l$. The input vector $\vec{x}$ to 
-the neurons in layer $l$, also called the \textit{preactivation}, can then be written
+In \autoref{sec:backprop} we demonstrated that a NN can be constructed 
+as a set of matrix-vector multiplications and additions which are input to certain activation functions. 
+The equations for evaluting a NN were \eqref{forwardPropMatrix},
 \begin{equation}
- \vec{x}_l = W_l \vec{y}_{l-1}  + \vec{b}_l
- \label{preActivationLayer}
+ \begin{aligned}
+  \vec{u}_l &= W_l\vec{y}_{l-1} + \vec{b}_l \\
+  \vec{y}_l &= f_l(\vec{u}_l)
+  \label{forwardPropMatrix}
+ \end{aligned}
 \end{equation}
-where $\vec{y}$ is the output vector of layer $l-1$. The activations of layer $l$ is thus
-\begin{equation}
- \vec{y}_l = f(\vec{x})
- \label{activationLayer}
-\end{equation}
-where $f$ is the chosen activation function. This demonstrates that a NN can be constructed 
-as a set of matrix-vector multiplications and additions which are input to a chosen activation function. 
 We now want to construct a NN with 3 inputs neurons, one hidden layer with 10 neurons and 1 output neuron. 
 We use the sigmoid \eqref{sigmoidActivationFunction} activation function for the hidden layer, while 
-the output layer have the linear activation function (REF).
+the output layer have the identity activation function \eqref{outputActivation}.
 This can be achieved with the following \texttt{python} script,
-\lstinputlisting[language=Python]{Scripts/TensorFlow/networkExample.py}
+\begin{minted}{python}
+import tensorflow as tf
+
+# NN parameters
+inputs 	= 3
+nodes 	= 10
+outputs = 1
+
+# declare input tensor
+inputLayer = tf.placeholder( tf.float32, [None,inputs] )
+
+# weights input layer -> hidden layer and biases hidden layer
+W1 = tf.Variable( tf.random_normal([inputs,nodes]) )
+b1 = tf.Variable( tf.constant(0.1, shape=[nodes]) )
+
+# activation hidden layer
+preAct1 = tf.add( tf.matmul(inputLayer, W1), b1 ) 
+act1 = tf.nn.sigmoid(preAct1)
+
+# weights hidden layer -> output layer and bias output layer
+W2 = tf.Variable( tf.random_normal([nodes,outputs]) )
+b2 = tf.Variable( tf.constant(0.1, shape=[outputs]) )
+
+# activation output layer
+preActOutput = tf.add( tf.matmul(act1, W2), b2 ) 
+activationOutput = preActOutput
+\end{minted}
 There are several aspects of the TensorFlow \texttt{python} API to comment on here. 
 We observe that the input layer is declared as a TF \texttt{placeholder}. This is a special
 type of TF tensor that is not initialized with any values, but is rather fed with data on its execution.
@@ -2420,9 +2493,8 @@ explained in more detail below.
 The weights and biases are declared as TF \texttt{Variables}. These are the trainable parameters 
 of the computational graph, and are normally constructed as random numbers. In the present case,
 the weights are normally distributed numbers while the biases are all set to the same value 0.1. 
-We note that the shapes of the weight matrices and bias vectors depend on the number of nodes in each layer.
-If $n_l$ stands for the number of neurons in layer $l$, we have in general that the weight matrix connecting
-layer $l-1$ and $l$ is of shape $n_{l-1} \times n_l$, while the bias vector of layer $l$ has $n_l$ number of elements. 
+We note that the shapes of the weight matrices and bias vectors are in accordance with the description in 
+\autoref{sec:MLPmodel}.
 
 The activations (outputs) of each layer are calculated according to \eqref{preActivationLayer} and \eqref{activationLayer}. 
 Together with the input \texttt{placeholder}, these are of type \texttt{tf.Tensor}, i.e. nodes in the computational 
@@ -2447,7 +2519,46 @@ which results in the following names,
 Additionally, TensorBoard will group the two variables together under \texttt{layer1}. 
 To save the graph to file we have to start a TF session. The following script 
 deploys name scoping, initiates a session and writes the DFG to file,
-\lstinputlisting[language=python]{Scripts/TensorFlow/tensorBoardExample.py}\label{lst:tensorBoardExample}
+\begin{minted}{python}
+import tensorflow as tf
+
+# NN parameters
+inputs = 3
+nodes = 10
+outputs = 1
+
+with tf.name_scope('inputLayer'):
+    inputData = tf.placeholder(tf.float32, [None,inputs], name='inputData')
+
+with tf.name_scope('layer1'):
+    
+    W1 = tf.Variable( tf.random_normal([inputs,nodes]), name='weights' )
+    b1 = tf.Variable( tf.constant(0.1, shape=[nodes]), name='biases' )
+ 
+    preAct1 = tf.add( tf.matmul(inputData, W1), b1, name='preActivation' ) 
+    act1 = tf.nn.sigmoid(preAct1, name='activation')
+
+with tf.name_scope('outputLayer'):
+    
+    W2 = tf.Variable( tf.random_normal([nodes,outputs]), name='weights' )
+    b2 = tf.Variable( tf.constant(0.1, shape=[outputs]), name='biases' )
+
+    preActOutput = tf.add( tf.matmul(act1, W2), b2, name='preActivation' ) 
+    actOutput = tf.identity(preActOutput, name='activation')
+    
+# initialization node
+initOperation = tf.global_variables_initializer()
+
+# start session
+with tf.Session() as sess:
+    
+    # initialize all variables
+    sess.run(initOperation)
+    
+    # write summaries
+    tf.summary.FileWriter('Summaries', sess.graph)
+ 
+\end{minted}
 There are two new TF function calls to comment on in this script. First, we have the line
 \begin{lstlisting}[language=Python]
  initOperation = tf.global_variables_initializer()
@@ -2470,7 +2581,7 @@ each containing more nodes. The edges show how the nodes are connected.
 \textit{read} operations. See TF API for more information.}
 \begin{figure}[H]
 \centering
-  \includegraphics[width=\linewidth]{Figures/Implementation/tensorBoardExample.pdf}
+  \includegraphics[width=0.7\linewidth]{Figures/Implementation/tensorBoardExample.pdf}
   \caption{Example of a computational graph in TensorBoard of a NN consisting of an input layer, one 
 	   hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces
 	   containing several nodes.} 
@@ -2480,47 +2591,46 @@ Next, we will demonstrate how to train a NN with TensorFlow.
 
 \subsection{Training a NN with TensorFlow}
 To train the NN described in the previous section, we need two additional components:
-a cost function and an optimizer. The cost function expresses the error of the NN fit, while
-the optimizer employs an algorithm to minimize this error. The most widely used cost function
-for regression with NNs is the L2 norm \eqref{quadraticCostFunction}, which is available as a 
+a cost function and an optimizer. The mean-square-error cost function \eqref{quadraticCost} is available as a 
 built-in function in TF, \texttt{tf.nn.l2\_loss}. To compute the error, we need to supply known 
 target values that is fed into a new \texttt{placeholder},
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
  outputData = tf.placeholder(tf.float32, [None,outputs], name='outputData')
-\end{lstlisting}
+\end{minted}
 The cost function is now defined as
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
  trainCost = tf.nn.l2_loss( tf.subtract(actOutput, outputData), name='cost')
-\end{lstlisting}
-This adds an operation to the graph that calculates the L2 norm of the error between the NN prediction \texttt{actOutput}
+\end{minted}
+This adds an operation to the graph that calculates the mean-square-error between the NN prediction \texttt{actOutput}
 on the training data 
 and the known target values \texttt{outputData}. In this work, the training data is configurations of atoms, 
 while the target values are the atomic energies of these configurations. 
 
 A number of gradient descent-based optimizers are implemented in TensorFlow, including
-vanilla gradient descent, Momentum \cite{Qian99}, Adagrad \cite{Duchi11}, Adadelta \cite{Zeiler12} and Adam \cite{Kingma14}.
-To add an Adam optimizer operation to the graph, we simply write
-\begin{lstlisting}[language=Python]
+vanilla gradient descent \eqref{gradientDescent}, Momentum \cite{Qian99}, Adagrad \cite{Duchi11}, 
+Adadelta \cite{Zeiler12} and Adam \cite{Kingma14}.
+To add the Adam optimizer operation to the graph, we simply write
+\begin{minted}{python}
 optimizer = tf.train.AdamOptimizer()
 trainStep = optimizer.minimize(trainCost)
-\end{lstlisting}
+\end{minted}
 To sum up, we have added the following to the script in the previous section (now with name scoping),
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 outputData = tf.placeholder(tf.float32, [None,outputs], name='outputData')
 
 # cost function
 with tf.name_scope('cost'):
     error = tf.subtract(actOutput, outputData, name='deviation')
-    trainCost = tf.nn.l2_loss( error, name='L2norm')
+    trainCost = tf.nn.l2_loss(error, name='L2norm')
 
 # optimizer
 with tf.name_scope('optimizer'):
     optimizer = tf.train.AdamOptimizer(learning_rate=0.001, name='Adam')
     trainStep = optimizer.minimize(trainCost, name='trainStep')
-\end{lstlisting}
-\begin{figure}[H]
+\end{minted}
+\begin{figure}[h]
 \centering
-  \includegraphics[width=\linewidth]{Figures/Implementation/tensorBoardTraining.pdf}
+  \includegraphics[width=0.8\linewidth]{Figures/Implementation/tensorBoardTraining.pdf}
   \caption{Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one 
 	   hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces
 	   containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes
@@ -2537,10 +2647,50 @@ to compute the derivative of the cost function with respect to all the weights a
 performed by the \texttt{gradients} operation, that in turn sends the total gradient to \texttt{trainStep}, 
 which implements the Adam algorithm for updating the NN parameters. 
 
-We are now ready to launch this graph in a training session. 
-\begin{lstlisting}[language=Python]
- 	
-\end{lstlisting}
+We are now ready to launch this graph in a training session. We assume that training data
+and target values are available as \texttt{NumPy} arrays \texttt{xTrain} and \texttt{yTrain} respectively. 
+The code example implements the different variants of gradient descent described in \autoref{sec:gradientDescentVariants}. 
+\begin{minted}{python}.
+for epoch in xrange(numberOfEpochs+1): 
+    
+    # for shuffling the training set
+    indicies = np.random.choice(trainSize, trainSize, replace=False)
+    
+    # offline learning / batch gradient descent
+    if batchSize == trainSize:    
+	
+	# pick whole set in random order               
+	xBatch = xTrain[indicies]
+	yBatch = yTrain[indicies]
+	
+	# train
+	sess.run(trainStep, feed_dict={inputLayer: xBatch, outputData: yBatch})
+	
+    # online learning / mini-batch gradient descent
+    else:                      
+	# loop through whole set, train each iteration
+	for b in xrange(numberOfBatches):
+	    batch = indicies[b*batchSize:(b+1)*batchSize]
+	    xBatch = xTrain[batch]
+	    yBatch = yTrain[batch]
+	    
+	    # train
+	    sess.run(trainStep, feed_dict={inputLayer: xBatch, outputData: yBatch})
+	    
+    trainError = sess.run(trainCost, feed_dict={inputLayer: xBatch, outputData: yBatch})
+\end{minted}
+We observe that the training step is performed with the single line,
+\begin{minted}{python}
+sess.run(trainStep, feed_dict={inputLayer: xBatch, outputData: yBatch})
+\end{minted}
+which runs the \texttt{trainStep} operation defined above. This operation initiates a series of
+calculations that is performed automatically by TensorFlow. 
+First, the NN is evaluated on the training batch \texttt{xBatch} and the output is compared to the corresponding
+batch of target values \texttt{yBatch}. The training batch is fed to the NN through the placeholder
+\texttt{inputLayer}, while \texttt{outputData} receives the target batch. Next, the cost function 
+is calculated, and the error is backpropagated through the DFG to obtain its gradient. Finally, 
+the Adam update rule is applied and the weights and biases adjusted. 
+
 
 
 \chapter{Training procedure}
@@ -3639,9 +3789,31 @@ and
  In: \textit{Journal of Applied Physics} 101. (2007), 103515. 
  
 \bibitem{Frenkel01}
-D. Frenkel and B. Smit. 
-''Understanding molecular simulation: from algorithms to applications.''
-Academic Press, 2001.
+ D. Frenkel and B. Smit. 
+ ''Understanding molecular simulation: from algorithms to applications.''
+ Academic Press, 2001.
+
+\bibitem{Agrawal06}
+ P. M. Agrawal, L. M. Raff, M. T. Hagan, and R. Komanduri. 
+ ''Molecular dynamics investigations of the dissociation of $\mathrm{SiO}_2$ on an \textit{ab inito}
+ potential energy surface obtained using neural network methods.'' 
+ In: \textit{The Journal of Chemical Phyics} 124. (2006), 134306. 
+ DOI: \href{http://dx.doi.org/10.1063/1.2185638}{10.1063/1.2185638}
+ 
+\bibitem{Bholoa07}
+ A. Bholoa, S. D. Kenny, and R. Smith.
+ ''A new approach to potential fitting using neural networks''.
+ In: \textit{Nuclear Instruments and Methods in Physics Research Section B: 
+ Beam Interactions with Materials and Atoms} 255. (2007) 1.
+ DOI: \href{https://doi.org/10.1016/j.nimb.2006.11.040}{10.1016/j.nimb.2006.11.040}
+ 
+\bibitem{Behler07}
+ J. Behler and Michele Parinello. 
+ ''Generalized Neural-Network Representation of High-Dimensional Potential-Energy Surfaces''.
+ In: \textit{Physical Review Letters} 98. (2007), 146401. 
+ DOI: \href{http://dx.doi.org/10.1103/PhysRevLett.98.146401}{10.1103/PhysRevLett.98.146401}
+ 
+ 
  
 \end{thebibliography}
 

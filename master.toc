@@ -42,9 +42,14 @@
 \contentsline {subsubsection}{Matrix notation}{39}{section*.26}
 \contentsline {subsubsection}{Training algorithm}{40}{section*.27}
 \contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}
-\contentsline {section}{\numberline {4.1}High-dimensional NNPs}{44}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Symmetry functions}{46}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Symmetry functions and forces}{51}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.1}What properties should a PES have?}{43}{section.4.1}
+\contentsline {section}{\numberline {4.2}Neural network potentials}{44}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Potentials using single neural network}{44}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Potentials using multiple neural networks}{45}{subsection.4.2.2}
+\contentsline {section}{\numberline {4.3}High-dimensional NNPs}{45}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Symmetry functions}{47}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}should this come at the end?}{52}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Symmetry functions and forces}{52}{subsection.4.3.3}
 \contentsline {part}{II\hspace {1em}Implementation and validation}{57}{part.2}
 \contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}
 \contentsline {section}{\numberline {5.1}Installing LAMMPS}{59}{section.5.1}
@@ -53,25 +58,25 @@
 \contentsline {section}{\numberline {5.4}Extending LAMMPS}{64}{section.5.4}
 \contentsline {chapter}{\numberline {6}TensorFlow}{73}{chapter.6}
 \contentsline {section}{\numberline {6.1}Installing TensorFlow}{74}{section.6.1}
-\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{74}{section.6.2}
+\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{75}{section.6.2}
 \contentsline {subsection}{\numberline {6.2.1}Hello world}{75}{subsection.6.2.1}
-\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{75}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{76}{subsection.6.2.2}
 \contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{77}{subsection.6.2.3}
-\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{80}{subsection.6.2.4}
-\contentsline {chapter}{\numberline {7}Training procedure}{85}{chapter.7}
-\contentsline {section}{\numberline {7.1}Selecting the training data}{85}{section.7.1}
-\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{86}{subsection.7.1.1}
-\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{87}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{88}{section*.36}
-\contentsline {subsubsection}{Iterative sampling}{92}{section*.38}
-\contentsline {subsubsection}{Summary}{93}{section*.39}
-\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{94}{section.7.2}
-\contentsline {chapter}{\numberline {8}Validation}{97}{chapter.8}
-\contentsline {section}{\numberline {8.1}Time usage}{97}{section.8.1}
-\contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{99}{section.8.2}
-\contentsline {subsection}{\numberline {8.2.1}Many-neighbour Lennard-Jones}{101}{subsection.8.2.1}
-\contentsline {part}{III\hspace {1em}Results and discussion}{107}{part.3}
-\contentsline {chapter}{\numberline {9}NN potential for Si}{109}{chapter.9}
-\contentsline {chapter}{\numberline {10}NN potential for SiO2}{111}{chapter.10}
-\contentsline {chapter}{Appendices}{113}{section*.46}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{115}{Appendix.1.A}
+\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{79}{subsection.6.2.4}
+\contentsline {chapter}{\numberline {7}Training procedure}{83}{chapter.7}
+\contentsline {section}{\numberline {7.1}Selecting the training data}{83}{section.7.1}
+\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{84}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{85}{subsection.7.1.2}
+\contentsline {subsubsection}{Initial sampling}{86}{section*.37}
+\contentsline {subsubsection}{Iterative sampling}{90}{section*.39}
+\contentsline {subsubsection}{Summary}{91}{section*.40}
+\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}
+\contentsline {chapter}{\numberline {8}Validation}{95}{chapter.8}
+\contentsline {section}{\numberline {8.1}Time usage}{95}{section.8.1}
+\contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{97}{section.8.2}
+\contentsline {subsection}{\numberline {8.2.1}Many-neighbour Lennard-Jones}{99}{subsection.8.2.1}
+\contentsline {part}{III\hspace {1em}Results and discussion}{105}{part.3}
+\contentsline {chapter}{\numberline {9}NN potential for Si}{107}{chapter.9}
+\contentsline {chapter}{\numberline {10}NN potential for SiO2}{109}{chapter.10}
+\contentsline {chapter}{Appendices}{111}{section*.47}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{113}{Appendix.1.A}
