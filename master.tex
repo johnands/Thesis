@@ -374,7 +374,7 @@ our goal is not to reproduce the exact trajectories of the particles.
 Velocity-Verlet is the integrator of choice in LAMMPS (\autoref{sec:lammps}), and thus the 
 only scheme used in this work. 
 
-\section{Force calculations and cutoff radius}
+\section{Force calculations and cutoff radius} \label{sec:forceCutoff}
 We need the force on each atom to compute the acceleration that is integrated in the equations of motion
 \eqref{equationsOfMotion1}\eqref{equationsOfMotion2}. 
 Using the Lennard-Jones potential as an example, 
@@ -1330,7 +1330,8 @@ that the ideal potential should meet, repeated here for reference:
  \item To compute forces, analytic derivatives of the potential should be available. 
 \end{enumerate}
 None of the potentials currently available meet all the above requirements to a satisfactory degree. 
-At the end of this chapter, we will discuss which of these requirements that are met by our NNPs. 
+At the end of this chapter, we will discuss which of these requirements that are met by the NNPs constructed
+in this thesis. 
 
 \section{Neural network potentials}
 NNPs are constructed by fitting an analytic function to a set of reference data
@@ -1364,59 +1365,72 @@ each NN provides the contribution $E_i$ of \textit{one} atom to the total energy
  \label{systemEnergy}
 \end{equation}
 Two methods using this approach have been developed in parallel by Bholoa et al. \cite{Bholoa07}, and Behler and Parinello 
-\cite{Behler07}. The two methods differ in the way each atomic NN is structured. 
+\cite{Behler07}.
+Both methods compute $E_i$ based on the chemical environment of atom $i$, but they differ in how 
+the environment is represented and also how the atomic NNs are structured. 
 
-In the first method, each atomic energy $E_i$ is computed by a NN of variable size, using a set of 
-vectors of atomic chains as input, representing the environment of each atom. In the Behler-Parinello (BP) method, 
+Bholoa et al. compute each atomic energy $E_i$ by a NN of variable size, using a set of 
+vectors as input to the NN. Each vector specifies the geometry of a four atom chain $i-j-k-l$ describing the chemical 
+environment. The input layer and first hidden layer are replicated once for each vector, thus the problem 
+of fixed dimensionality is solved. 
 
+Behler and Parinello have developed a different approach to constructing a NNP. 
+We have chosen to use the Behler-Parinello (BP) method in this thesis, and this will be the topic of the 
+rest of the chapter. 
 
+\section{The Behler-Parinello method}
+In the Behler-Parinello (BP) method, the architecture of each NN is fixed, and
+the atomic energies $E_i$ depend on the local chemical environments up to a cutoff radius $R_c$. 
+This is analogous to the introduction of a cutoff radius in MD simulations
+(\autoref{sec:forceCutoff}). Thus, the NNP can be applied to MD simlulations in excactly the same way 
+as ordinary, empirical potentials: it is simply an analytic function that yields the potential energy of a central atom
+in the presence of neighbouring atoms contained in a cutoff sphere of radius $R_c$. 
+In other words, the BP method employs an \textit{atom-centered} approach. 
+In the following we will refer to all atoms inside the cutoff sphere of an atom $i$ as \textit{neighbours}.
 
+The cutoff is introduced by a set of so-called symmetry functions. 
+These functions
+describe the local chemical environment of an atom $i$ by transforming the cartesian coordinates of \textit{all} its neighbours to 
+a predefined number of function values, forming a symmetry vector. 
+The symmetry vector is used as input to the atomic NN of atom $i$, that in turn calculates its potential energy $E_i$.
+The length of this vector must therefore be equal to the number of NN inputs. 
 
-\section{High-dimensional NNPs}
-The use of a single FFNN to represent complicated systems containing many atoms of different types is not possible for several reasons.
-First of all, the deegrees of freedom (the number of weight parameters) will be very many, making the training and evaluation
-of the network slow. Secondly, the NN has a symmetry problem. It does not take into account that exchanging two or more atoms
-can lead to an energetically equivalent configuration. For example, exchanging the positions of both hydrogen atoms
-in a water molecule will not alter the configuration energy. However, noting that all weights have numerically different values,
-changing the order of the input coordinates to the NN will result in a different energy value. This problem can be solved
-by a different choice of input coordinates, discussed below. The third problem in using a single FFNN is that it is 
-only applicable to the system size that has been used during the training. If the NN has been trained with 5 inputs, 
-it can not be used for a system containing any other number of atoms. 
-\begin{figure}
-\begin{center}
-  \includegraphics[width = 0.7\linewidth]{Figures/Theory/cutOffHighDimNN.jpeg}
-  \caption{}
-  \label{fig:cutOffNeighbours}
-  \end{center}
-\end{figure}
-A solution to all these problems is to construct the system energy $E_s$ as a sum of $N$ atomic energy contributions
-$E_i$, which are provided by a set of individual atomic NNs,
+Each atom has an individual atomic NN along with a fixed set of symmetry functions, but
+all atoms of the same element have identical 
+atomic NNs and symmetry functions sets. Thus, for a diatomic system, only two unique NNs need to be trained. 
+
+As an example, let us look at a system containing two different elements: Si and O. 
+All Si atoms have idential atomic NNs and symmetry function sets, the former represented by the function $N_{\mathrm{Si}}$. 
+A given Si atom $i$ has at a given time $n$ neighbours, including both Si and O atoms.  
+We define $\vec{R}_{ij} = (r_{i1}, r_{i2}, \dots, r_{in})$ as the vector containing the distances from
+atom $i$ to all neighbours $j \in 1,\dots,n$, where $r_{ij} = |\vec{r}_j - \vec{r}_i|$. 
+Further, $\vec{G}_\mathrm{Si}(\vec{R}_{ij}) = \{G_{\mathrm{Si},s}(\vec{R}_{ij})\}$ is the vector of Si symmetry functions
+$s \in 1,\dots,M_\mathrm{Si}$. 
+The process of calculating the potential energy $E_i$ described above can then be written,
 \begin{equation}
- E_s = \sum_{i=1}^N E_i
- \label{systemEnergy}
+ \vec{R}_{ij} \rightarrow \vec{G}_\mathrm{Si}(\vec{R}_{ij}) \rightarrow \mathrm{N}_\mathrm{Si}[\vec{G}_\mathrm{Si}(\vec{R}_{ij})] 
+ \rightarrow E_i
+ \label{BPatomicEnergy}
 \end{equation}
-The atomic energies $E_i$ depend on the local chemical environment up to a cutoff radius $R_c$ as shown in figure
-\ref{fig:cutOffNeighbours} (STJÅLET FRA PAPER, MÅ LAGE EGEN?). 
-This is analogous to MD simulations with neighbour lists, thus making it possible to 
-obtain the energies and forces of an atom and all its neighbours simultaneously. The positions of the neighbouring atoms within 
-the cutoff sphere are described by a set of many-body symmetry functions discussed below. As the order of the summation does not 
-change the total energy $E_s$, the symmetry problem above is solved. Each chemical element have seperate types of
-NNs with their own architecture and weights, but for a given element all atomic NNs are equal. Such a system of NNs are also 
-applicable to different system sizes: To add an atom of a given type, we simply extend the set of NNs by another network
-identical to the other NNs of the same type, and if an atom is removed, we delete the respective NN. 
-\begin{itemize}
- \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
- of the problem, which allows to use NNs of tractable size
- \item The total energy is invariant with respect to the order of the atoms
- \item The NNP can be used for systems of different sizes
- \item We 
-\end{itemize}
-We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
-should be invariant with respect to these operations. 
+To obtain the corresponding expression for an O atom, we simply substitute $\mathrm{Si} \rightarrow \mathrm{O}$. 
+While the symmetry function vector of an element $e$ is of a fixed size equal to the number of inputs to $N_e$,
+the length of $\vec{R}_{ij}$ can be arbitrary. This is enabled by the functional form of the symmetry functions, 
+which is the topic of the next section. 
+
 
 \subsection{Symmetry functions} \label{sec:symmetryFunctions}
-To construct adequate symmetry functions, we need to have a cutoff function that defines the atomic environments. 
-One such function is \cite{Behler15},
+We have mentioned two requirements that the symmetry function set have to meet. First, they must contain a cutoff $R_c$
+that defines a chemical environment. Secondly, since we employ atomic NNs with a fixed number of inputs,
+they have to be able to produce a constant 
+number of function values independent of the number of neighbours, which can change during MD simulations. 
+
+In addition to this, the NN has a symmetry problem. It does not take into account that exchanging two or more atoms
+can lead to an energetically equivalent configuration. For example, exchanging the positions of both hydrogen atoms
+in a water molecule will not alter the energy. However, noting that all weights have numerically different values,
+changing the order of the input coordinates to the NN will result in a different energy value. This problem can be solved
+by employing symmetry functions that are invariant with respect to the order of the atoms.  
+
+We start with defining the chemical environments by introducing a cutoff funciton \cite{Behler11symmetry},
 \begin{equation}
  f_c(R_{ij}) = 
 \begin{cases}
@@ -1425,8 +1439,8 @@ One such function is \cite{Behler15},
 \end{cases}
 \label{cutoffFunction}
 \end{equation}
-which is the monotonically decreasing part of a cosine function on $R_{ij} \in [0,R_c]$, seen in \autoref{fig:cutoffFunction}. 
-\begin{figure}[H]
+which is the monotonically decreasing part of a cosine function on $R_{ij} \in [0,R_c]$ (\autoref{fig:cutoffFunction}). 
+\begin{figure}[h]
 \begin{center}
   \includegraphics[width = 0.9\linewidth]{Figures/Theory/cutoffFunction.pdf}
   \caption{Plot of the cutoff function \eqref{cutoffFunction} applied in this thesis. 
@@ -1443,37 +1457,45 @@ to avoid discontinuities when computing energies and forces. Atoms beyond the cu
 atom's chemical environment and therfore do not contribute to its energy. 
 
 Several types of many-body symmetry functions can be
-constructed based on these cutoff functions. They can be divided into two classes: \textit{radial} symmetry functions, describing 
+constructed based on the cutoff function \cite{cutoffFunction}. 
+They can be divided into two classes: \textit{radial} symmetry functions, describing 
 the radial distribution of neighbours up to the cutoff radius, and \textit{angular} symmetry functions, specifying their
-angular arrangement. All symmetry functions depend on the positions of all the atoms inside the cutoff spheres. They make
-it possible to obtain a constant number of function values independent of the number of neighbours, which can change
-during MD simulations. 
+angular arrangement. The symmetry functions discussed in this section are all suggested by Behler \cite{Behler11symmetry}. 
 
-The most basic radial symmetry function is simply the sum of the cutoff functions for all the neighbours $j$ to 
+\subsubsection{Radial symmetry functions}
+The most basic radial symmetry function is simply the sum of the cutoff functions for all the neighbours $j$ of 
 atom $i$,
 \begin{equation}
  G_i^1 = \sum_{j=1}^N f_c(R_{ij})
  \label{G1}
 \end{equation}
-We need a set of such functions with different cutoff radii to describe the radial arrangement of the neighbouring atoms. 
-A better alternative is to use a sum of products of Gaussians and the cutoff function,
+We immidiately realize that this simple function meets the symmetry requirement stated above: the value 
+of the sum is independent of the order of neighbours $j$. This is the case for each of the following symmetry functions, as they 
+are all defined as sums over neighbours. 
+
+Physically, \label{G1} can be thought of as a ''coordination number'' on $R_{ij} \in [0,R_c]$.
+A set of such functions with different cutoff radii can be used to describe the radial arrangement of the neighbouring atoms by
+yielding coordination numbers on distance intervals of varying length. 
+A better alternative is to use a sum of products of Gaussians and the cutoff function, 
 \begin{equation}
  G_i^2 = \sum_{j=1}^N \exp[-\eta(R_{ij}-R_s)^2] \cdot f_c(R_{ij})
  \label{G2}
 \end{equation}
 We now have two parameters that can be adjusted to probe different radii. The width parameter $\eta$ determines the 
 radial extension of the symmetry functions, while the shifting parameter $R_s$ displaces the Gaussians to improve
-the sensitivity of the symmetry functions at specific radii. A third option is 
+the sensitivity at specific radii. A third option is 
 \begin{equation}
  G_i^3 = \sum_{j=1}^N \cos(\kappa R_{ij}) \cdot f_c(R_{ij})
  \label{G3}
 \end{equation}
 which are damped cosine functions with a period length adjusted by parameter $\kappa$. We will however not use 
-this function because of the existence of negative function values which can lead to atoms canceling each other's
-contribution to the sum. In \autoref{fig:radialSymmetriFunctions} we see the radial symmetry functions for several
-different parameters. It is clear that a set of such functions have a large flexibility when we tune the parameters
-in different ways. This is what makes them able to represent the radial distribution of neighbours around a central atom. 
-\begin{figure}[H] 
+this function because of the existence of negative function values, which can lead to atoms canceling each other's
+contribution to the sum. 
+
+In \autoref{fig:radialSymmetriFunctions} we see the radial symmetry functions for several
+different parameters. It is clear that a set of such functions can exhibit a large flexibility by tuning the parameters,
+enabling us to adequately represent the radial distribution of neighbours around a central atom. 
+\begin{figure}[h] 
   \begin{subfigure}[b]{0.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{Figures/Theory/G1.pdf} 
@@ -1501,25 +1523,27 @@ in different ways. This is what makes them able to represent the radial distribu
 	   For $G^2$ and $G^3$ a cutoff $R_c = \SI{11.0}{\angstrom}$ has been used.}
   \label{fig:radialSymmetriFunctions} 
 \end{figure}
+
+\subsubsection{Angular symmetry functions}
 To obtain a suitable structural fingerprint of the atomic environments, we also need the angular distribution
 of neighbouring atoms. This can be achieved by using functions depending on $\theta_{ijk}$, which
 is the angle formed by the central atom $i$ and the two interatomic distances $R_{ij}$ and $R_{ik}$. 
 The potential is periodic with respect to this angle, so we can use the cosine of $\theta_{ijk}$ instead. 
-We thus define an angular symmetry function as a sum over all cosines with respect to any possible pair of 
-neighbours $j$ and $k$, multiplied by Gaussians of the three interatomic distances and the respective cutoff functions,
+We thus define an angular symmetry function as a sum over all cosines with respect to any possible triplet
+($i$, $j$, $i$), multiplied by Gaussians of the three interatomic distances and the respective cutoff functions,
 \begin{align}
- G_i^4 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
+ G_i^4 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &\bigr[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
  \exp(-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)) \cdot \\
- &f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})]
+ &f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})\bigr]
  \label{G4}
 \end{align}
-This function becomes zero if any of the interatomic distances is larger than $R_c$. The parameter $\eta$ takes here
+This function is zeroed out if any of the interatomic distances is larger than $R_c$. The parameter $\eta$ takes here
 into account that the angular contribution depends on the atomic seperations. The angular arrangement can be 
 investigated by using different values for $\zeta$ while the normalization factor $2^{1-\zeta}$ ensures that the range of 
 values is independent of the choice of $\zeta$. The parameter $\lambda \in {-1,1}$ can be used to invert the shape of the 
 cosine function: for $\lambda = +1$ the maxima of the cosine terms are at $\theta_{ijk} = 0^\circ$, 
-while for $\lambda=-1$ they are located at $\theta_{ijk} = 180^\circ$. The cutoff function $R_{jk}$
-is included to ensure that only triplets where all three inter-atomic distances are within the cutoff radius. 
+while for $\lambda=-1$ they are located at $\theta_{ijk} = 180^\circ$. The presence of the cutoff function $R_{jk}$
+ensures that only triplets where all three inter-atomic distances are within the cutoff radius are included. 
 Another function can be defined that has no constraint on $R_{jk}$,
 \begin{align}
   G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
@@ -1527,8 +1551,8 @@ Another function can be defined that has no constraint on $R_{jk}$,
  &f_c(R_{ij}) f_c(R_{ik})]
  \label{G5}
 \end{align}
-\eqref{G5} will generally have larger function values than \eqref{G4} because the lack of constraint on $R_{jk}$ results in 
-a larger number of non-zero terms in the summation. The angular part of $G^4$ and $G^5$ is identical, shown in 
+which will generally lead to larger function values than \eqref{G4} because the lack of constraint on $R_{jk}$ results in 
+a larger number of non-zero terms in the summation. The angular parts of $G^4$ and $G^5$ are identical, shown in 
 \autoref{fig:angularSymmetryFunctions} for different values of $\zeta$. 
 \begin{figure}[H]
   \begin{subfigure}[b]{0.5\linewidth}
@@ -1551,29 +1575,11 @@ a larger number of non-zero terms in the summation. The angular part of $G^4$ an
 The parameter values $R_c, \eta, R_s, \zeta$ and $\lambda$ are not automatically optimized, like the weights. 
 Once a set of symmetry functions has been determined, they remain fixed during the training of the NN. They are therefore
 an integral part of the NN, and need to be evaluated together with the NN itself when applied in simulations. 
-The symmetry function set have to be customized for different systems, but in our experience the quality of the fit 
-is not very sensitive to the choice of parameters. An adequate set will shorten the convergence time, but it will not 
-necesseraly result in a lower RMSE. 
-However, it is important to use at least as many symmetry functions as there are degrees of freedom in the system.
-If this is not the case, the NN will recieve insufficient information and will not be able to fit the data properly. 
+The symmetry function set have to be customized for different systems, and different strategies regarding this
+is described in \autoref{sec:constructingSymmetry}. A minimum requirement is
+to use at least as many symmetry functions as there are degrees of freedom in the system.
+If this is not the case, the NN recieves insufficient information and will not be able to fit the data properly. 
 
-\subsection{should this come at the end?}
-NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
-\begin{itemize}
- \item Energies can be fitted to arbitrary accuracy, leaving only
- the underlying error of the reference data. Consequentially, NNPs can be categorized as \textit{ab inito} potentials. 
- \item Evaluation of NNPs require much less CPU time than QM methods.
- \item The NNP expression is unbiased and generally applicable to any system.
-\end{itemize}
-In other words, the overarching vision is to create a PES that have the accuracy of \textit{ab inito} potentials, 
-while simultaneously being able to simulate large systems over considerable time scales. 
-Still, there are disadvantages to be aware of:
-\begin{itemize}
- \item The evaluation of NNPs are notably slower compared to empirical potentials.
- \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities.
- \item NNPs are, for the time being, only applicable to systems containing only a few
- different chemical elements, but many atoms.
-\end{itemize}
 
 \subsection{Symmetry functions and forces} \label{sec:symmAndForces}
 To integrate Newton's laws in MD simulations we need the forces on all the atoms. The force field associated with a PES
@@ -1641,7 +1647,7 @@ This is in accordance with the Behler symmetry functions, which only operate wit
 It is however not trivial how this affects the above equations for the forces, which are not written in 
 an atom-centered way. The process of obtaining the forces can be illustrated with an example system
 consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{fig:threeAtoms}.
-\begin{figure}[H]
+\begin{figure}[h]
 \begin{center}
   \includegraphics[width = 0.4\linewidth]{Figures/Implementation/3atoms.pdf}
   \caption{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to 
@@ -1715,7 +1721,33 @@ This large effective range of atomic interactions is however not of great import
 that the interaction strength falls rapidly with distance for most systems where Coulomb forces are not included. 
 
 
+\subsection{should this come at the end?}
+NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
+\begin{itemize}
+ \item Energies can be fitted to arbitrary accuracy, leaving only
+ the underlying error of the reference data. Consequentially, NNPs can be categorized as \textit{ab inito} potentials. 
+ \item Evaluation of NNPs require much less CPU time than QM methods.
+ \item The NNP expression is unbiased and generally applicable to any system.
+\end{itemize}
+In other words, the overarching vision is to create a PES that have the accuracy of \textit{ab inito} potentials, 
+while simultaneously being able to simulate large systems over considerable time scales. 
+Still, there are disadvantages to be aware of:
+\begin{itemize}
+ \item The evaluation of NNPs are notably slower compared to empirical potentials.
+ \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities.
+ \item NNPs are, for the time being, only applicable to systems containing only a few
+ different chemical elements, but many atoms.
+\end{itemize}
 
+\begin{itemize}
+ \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
+ of the problem, which allows to use NNs of tractable size
+ \item The total energy is invariant with respect to the order of the atoms
+ \item The NNP can be used for systems of different sizes
+ \item We 
+\end{itemize}
+We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
+should be invariant with respect to these operations. 
 
 
 
@@ -3049,7 +3081,7 @@ from have also been carefully considered, described in more detail in \autoref{s
 
 
 
-\section{Constructing the symmetry function sets}
+\section{Constructing the symmetry function sets} \label{sec:constructingSymmetry}
 The choice of symmetry functions is important to achieve a good fit to the reference data. 
 They need to be able to sufficiently distinct inequivalent structures to avoid fitting 
 contradictory data. If this distinction is not possible, different reference structures with 
