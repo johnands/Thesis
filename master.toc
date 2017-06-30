@@ -49,9 +49,10 @@
 \contentsline {section}{\numberline {4.3}The Behler-Parinello method}{45}{section.4.3}
 \contentsline {subsection}{\numberline {4.3.1}Symmetry functions}{46}{subsection.4.3.1}
 \contentsline {subsubsection}{Radial symmetry functions}{48}{section*.29}
-\contentsline {subsubsection}{Angular symmetry functions}{48}{section*.31}
-\contentsline {subsection}{\numberline {4.3.2}Symmetry functions and forces}{51}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}should this come at the end?}{54}{subsection.4.3.3}
+\contentsline {subsubsection}{Angular symmetry functions}{49}{section*.31}
+\contentsline {subsection}{\numberline {4.3.2}Symmetry functions and forces}{50}{subsection.4.3.2}
+\contentsline {subsubsection}{Change of coordinates}{52}{section*.33}
+\contentsline {subsection}{\numberline {4.3.3}Summary}{55}{subsection.4.3.3}
 \contentsline {part}{II\hspace {1em}Implementation and validation}{57}{part.2}
 \contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}
 \contentsline {section}{\numberline {5.1}Installing LAMMPS}{59}{section.5.1}
@@ -69,9 +70,9 @@
 \contentsline {section}{\numberline {7.1}Selecting the training data}{83}{section.7.1}
 \contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{84}{subsection.7.1.1}
 \contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{85}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{86}{section*.38}
-\contentsline {subsubsection}{Iterative sampling}{90}{section*.40}
-\contentsline {subsubsection}{Summary}{91}{section*.41}
+\contentsline {subsubsection}{Initial sampling}{86}{section*.39}
+\contentsline {subsubsection}{Iterative sampling}{90}{section*.41}
+\contentsline {subsubsection}{Summary}{91}{section*.42}
 \contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}
 \contentsline {chapter}{\numberline {8}Validation}{95}{chapter.8}
 \contentsline {section}{\numberline {8.1}Time usage}{95}{section.8.1}
@@ -80,5 +81,5 @@
 \contentsline {part}{III\hspace {1em}Results and discussion}{105}{part.3}
 \contentsline {chapter}{\numberline {9}NN potential for Si}{107}{chapter.9}
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{109}{chapter.10}
-\contentsline {chapter}{Appendices}{111}{section*.48}
+\contentsline {chapter}{Appendices}{111}{section*.49}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{113}{Appendix.1.A}

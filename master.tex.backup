@@ -1330,7 +1330,8 @@ that the ideal potential should meet, repeated here for reference:
  \item To compute forces, analytic derivatives of the potential should be available. 
 \end{enumerate}
 None of the potentials currently available meet all the above requirements to a satisfactory degree. 
-At the end of this chapter, we will discuss which of these requirements that are met by our NNPs. 
+At the end of this chapter, we will discuss which of these requirements that are met by the NNPs constructed
+in this thesis. 
 
 \section{Neural network potentials}
 NNPs are constructed by fitting an analytic function to a set of reference data
@@ -1399,22 +1400,36 @@ all atoms of the same element have identical
 atomic NNs and symmetry functions sets. Thus, for a diatomic system, only two unique NNs need to be trained. 
 
 As an example, let us look at a system containing two different elements: Si and O. 
-All Si atoms have idential atomic NNs and symmetry function sets, the former represented by the function $N_{\mathrm{Si}}$. 
+All Si atoms have idential atomic NNs and symmetry function sets, the former represented by the function $F_{\mathrm{Si}}$. 
 A given Si atom $i$ has at a given time $n$ neighbours, including both Si and O atoms.  
 We define $\vec{R}_{ij} = (r_{i1}, r_{i2}, \dots, r_{in})$ as the vector containing the distances from
-atom $i$ to all neighbours $j \in 1,\dots,n$, where $r_{ij} = |\vec{r}_j - \vec{r}_i|$. 
+atom $i$ to all neighbours $j = 1,\dots,n$, where $r_{ij} = |\vec{r}_j - \vec{r}_i|$. 
 Further, $\vec{G}_\mathrm{Si}(\vec{R}_{ij}) = \{G_{\mathrm{Si},s}(\vec{R}_{ij})\}$ is the vector of Si symmetry functions
-$s \in 1,\dots,M_\mathrm{Si}$. 
+$s = 1,\dots,M_\mathrm{Si}$. \footnote{This notation signifies that each symmetry function, i.e. each element of 
+the symmetry vector, depends on the coordinates of all atoms in the cutoff sphere. However, it does not say anything about
+the form of the dependence, e.g. if it involves triplets or just pairs of atoms etc.}
 The process of calculating the potential energy $E_i$ described above can then be written,
 \begin{equation}
- \vec{R}_{ij} \rightarrow \vec{G}_\mathrm{Si}(\vec{R}_{ij}) \rightarrow \mathrm{N}_\mathrm{Si}[\vec{G}_\mathrm{Si}(\vec{R}_{ij})] 
+ \vec{R}_{ij} \rightarrow \vec{G}_\mathrm{Si}(\vec{R}_{ij}) \rightarrow F_\mathrm{Si}[\vec{G}_\mathrm{Si}(\vec{R}_{ij})] 
+ \rightarrow E_i
+ \label{BPatomicEnergySi}
+\end{equation}
+To obtain the corresponding expression for an O atom, we simply substitute $\mathrm{Si} \rightarrow \mathrm{O}$. 
+The expression is valid for any element e, and for a system with an arbitrary number of elements,
+\begin{equation}
+  \vec{R}_{ij} \rightarrow \vec{G}_\mathrm{e}(\vec{R}_{ij}) \rightarrow F_\mathrm{e}[\vec{G}_\mathrm{e}(\vec{R}_{ij})] 
  \rightarrow E_i
  \label{BPatomicEnergy}
 \end{equation}
-To obtain the corresponding expression for an O atom, we simply substitute $\mathrm{Si} \rightarrow \mathrm{O}$. 
-While the symmetry function vector of an element $e$ is of a fixed size equal to the number of inputs to $N_e$,
+While the symmetry function vector of an element e is of a fixed size equal to the number of inputs to $F_\mathrm{e}$,
 the length of $\vec{R}_{ij}$ can be arbitrary. This is enabled by the functional form of the symmetry functions, 
 which is the topic of the next section. 
+
+We note that although the NNs and the symmetry vectors
+are identical for all atoms of the same element, the resulting energies $E_i$ are not equal since 
+they depend on the unique atomic environments $\vec{R}_{ij}$ of each atom. 
+
+
 
 
 \subsection{Symmetry functions} \label{sec:symmetryFunctions}
@@ -1461,6 +1476,8 @@ They can be divided into two classes: \textit{radial} symmetry functions, descri
 the radial distribution of neighbours up to the cutoff radius, and \textit{angular} symmetry functions, specifying their
 angular arrangement. The symmetry functions discussed in this section are all suggested by Behler \cite{Behler11symmetry}. 
 
+In the following we will 
+
 \subsubsection{Radial symmetry functions}
 The most basic radial symmetry function is simply the sum of the cutoff functions for all the neighbours $j$ of 
 atom $i$,
@@ -1472,9 +1489,12 @@ We immidiately realize that this simple function meets the symmetry requirement 
 of the sum is independent of the order of neighbours $j$. This is the case for each of the following symmetry functions, as they 
 are all defined as sums over neighbours. 
 
-Physically, \label{G1} can be thought of as a ''coordination number'' on $R_{ij} \in [0,R_c]$.
+Physically, \eqref{G1} can be thought of as a ''coordination number'' on $R_{ij} \in [0,R_c]$.
 A set of such functions with different cutoff radii can be used to describe the radial arrangement of the neighbouring atoms by
-yielding coordination numbers on distance intervals of varying length. 
+yielding coordination numbers on distance intervals of varying length. Thus, a symmetry function is defined by 
+its parameter values, 
+and a set of symmetry functions with different parameters form a symmetry vector $\vec{G}$. 
+
 A better alternative is to use a sum of products of Gaussians and the cutoff function, 
 \begin{equation}
  G_i^2 = \sum_{j=1}^N \exp[-\eta(R_{ij}-R_s)^2] \cdot f_c(R_{ij})
@@ -1530,13 +1550,15 @@ is the angle formed by the central atom $i$ and the two interatomic distances $R
 The potential is periodic with respect to this angle, so we can use the cosine of $\theta_{ijk}$ instead. 
 We thus define an angular symmetry function as a sum over all cosines with respect to any possible triplet
 ($i$, $j$, $i$), multiplied by Gaussians of the three interatomic distances and the respective cutoff functions,
-\begin{align}
+\begin{equation}
+\begin{aligned}
  G_i^4 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &\bigr[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
  \exp(-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)) \cdot \\
  &f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})\bigr]
  \label{G4}
-\end{align}
-This function becomes zero if any of the interatomic distances is larger than $R_c$. The parameter $\eta$ takes here
+\end{aligned}
+\end{equation}
+This function is zeroed out if any of the interatomic distances is larger than $R_c$. The parameter $\eta$ takes here
 into account that the angular contribution depends on the atomic seperations. The angular arrangement can be 
 investigated by using different values for $\zeta$ while the normalization factor $2^{1-\zeta}$ ensures that the range of 
 values is independent of the choice of $\zeta$. The parameter $\lambda \in {-1,1}$ can be used to invert the shape of the 
@@ -1544,16 +1566,18 @@ cosine function: for $\lambda = +1$ the maxima of the cosine terms are at $\thet
 while for $\lambda=-1$ they are located at $\theta_{ijk} = 180^\circ$. The presence of the cutoff function $R_{jk}$
 ensures that only triplets where all three inter-atomic distances are within the cutoff radius are included. 
 Another function can be defined that has no constraint on $R_{jk}$,
-\begin{align}
+\begin{equation}
+\begin{aligned}
   G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} &[(1 + \lambda \cos\theta_{ijk})^\zeta \cdot
  \exp(-\eta (R_{ij}^2 + R_{ik}^2)) \cdot \\
  &f_c(R_{ij}) f_c(R_{ik})]
  \label{G5}
-\end{align}
-\eqref{G5} will generally have larger function values than \eqref{G4} because the lack of constraint on $R_{jk}$ results in 
-a larger number of non-zero terms in the summation. The angular part of $G^4$ and $G^5$ is identical, shown in 
+\end{aligned}
+\end{equation}
+which will generally lead to larger function values than \eqref{G4} because the lack of constraint on $R_{jk}$ results in 
+a larger number of non-zero terms in the summation. The angular parts of $G^4$ and $G^5$ are identical, shown in 
 \autoref{fig:angularSymmetryFunctions} for different values of $\zeta$. 
-\begin{figure}[H]
+\begin{figure}[h]
   \begin{subfigure}[b]{0.5\linewidth}
     \centering
     \includegraphics[width=\linewidth]{Figures/Theory/G4G5angular1.pdf}
@@ -1574,39 +1598,11 @@ a larger number of non-zero terms in the summation. The angular part of $G^4$ an
 The parameter values $R_c, \eta, R_s, \zeta$ and $\lambda$ are not automatically optimized, like the weights. 
 Once a set of symmetry functions has been determined, they remain fixed during the training of the NN. They are therefore
 an integral part of the NN, and need to be evaluated together with the NN itself when applied in simulations. 
-The symmetry function set have to be customized for different systems, but in our experience the quality of the fit 
-is not very sensitive to the choice of parameters. An adequate set will shorten the convergence time, but it will not 
-necesseraly result in a lower RMSE. 
-However, it is important to use at least as many symmetry functions as there are degrees of freedom in the system.
-If this is not the case, the NN will recieve insufficient information and will not be able to fit the data properly. 
+The symmetry function set have to be customized for different systems, and different strategies regarding this
+is described in \autoref{sec:constructingSymmetry}. A minimum requirement is
+to use at least as many symmetry functions as there are degrees of freedom
+If this is not the case, the NN recieves insufficient information and will not be able to fit the data properly. 
 
-\subsection{should this come at the end?}
-NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
-\begin{itemize}
- \item Energies can be fitted to arbitrary accuracy, leaving only
- the underlying error of the reference data. Consequentially, NNPs can be categorized as \textit{ab inito} potentials. 
- \item Evaluation of NNPs require much less CPU time than QM methods.
- \item The NNP expression is unbiased and generally applicable to any system.
-\end{itemize}
-In other words, the overarching vision is to create a PES that have the accuracy of \textit{ab inito} potentials, 
-while simultaneously being able to simulate large systems over considerable time scales. 
-Still, there are disadvantages to be aware of:
-\begin{itemize}
- \item The evaluation of NNPs are notably slower compared to empirical potentials.
- \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities.
- \item NNPs are, for the time being, only applicable to systems containing only a few
- different chemical elements, but many atoms.
-\end{itemize}
-
-\begin{itemize}
- \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
- of the problem, which allows to use NNs of tractable size
- \item The total energy is invariant with respect to the order of the atoms
- \item The NNP can be used for systems of different sizes
- \item We 
-\end{itemize}
-We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
-should be invariant with respect to these operations. 
 
 \subsection{Symmetry functions and forces} \label{sec:symmAndForces}
 To integrate Newton's laws in MD simulations we need the forces on all the atoms. The force field associated with a PES
@@ -1638,8 +1634,14 @@ of the atoms. To calculate the force \eqref{forceAtomk} we therefore need to app
  \label{forceAtomkChainRule}
 \end{equation}
 where $M_i$ is the number of symmetry functions of atom $i$. In other words, we need to sum over all the symmetry functions
-of all the neighbours $i$ of atom $k$ and $k$ itself (IS THIS CORRECT???) Looking at Fiure (MAKE A FIGURE ILLUSTRATING
-THE SYMMETRY TRANSFORMATION OF THE CARTESIAN COORDINATES THAT IS SENT TO THE NN), we realize that the first term
+of all the neighbours $i$ of atom $k$ and $k$ itself. This is the reverse process of \eqref{BPatomicEnergy},
+\begin{equation}
+ E_i \rightarrow F_\mathrm{e}[\vec{G}_\mathrm{e}(\vec{R}_{ij})] \rightarrow
+ \vec{G}_\mathrm{e}(\vec{R}_{ij}) \rightarrow  \vec{R}_{ij}   
+ \label{BPatomicForce}
+\end{equation}
+where the differentiation is perfomed in the direction of the arrows. 
+We realize that the first term
 $\partial E_i\partial G_{i,s}$ is the derivative of the output of the atomic NN of atom $i$ with respect to the inputs,
 i.e. the gradient of the NN. This is an analytical gradient
 which is given by the architecture of the NN, including the values of the weights and biases.
@@ -1647,8 +1649,10 @@ We recall from \ref{sec:backprop} that the backpropagation algorithm calculates 
 the amount of which each weight and bias should be adjusted during training. We can thus use a slightly modified version
 of this algorithm to compute the gradient of a NN,
 \begin{enumerate}
- \item Instead of backpropagating the \textit{error} of the output neuron, 
- we backpropagate the \textit{derivative} of the output neuron's activation function.
+ \item Instead of backpropagating the derivative of the cost function, 
+ we backpropagate the derivative of the output neuron itself.
+ For output neurons with the identity activation function \eqref{outputActivation}, 
+ this derivative is 1. 
  \item The derivative is propagated all the way back to the input nodes. During training, the propagation
  stops at the weights connecting the input layer and the first hidden layer. 
 \end{enumerate}
@@ -1659,9 +1663,9 @@ all nodes in each layer are connected to all nodes in the following layer.
 The second term $\partial G_{i,s}/\partial R_{k,\alpha}$ in \eqref{forceAtomkChainRule} is given by the 
 definition of the employed symmetry functions. 
 The derivatives of the Behler symmetry functions given in \autoref{sec:symmetryFunctions} are listed in \autoref{app:appendixA1}.
-WRITE ABOUT DIFFERENTIATION WITH SYMPY AND TENSORFLOW ETC. 
 
-In an MD simulation we only work with relative or inter-atomic coordinates and potentials. 
+\subsubsection{Change of coordinates}
+In a MD simulation we only work with relative or inter-atomic coordinates and potentials. 
 The training of neural networks is also based on an atom-centered approach; the cartesian coordinates
 that is given as input to the symmetry functions are always atom-centered. This means that the atom
 in question is placed at the origin and the positions of all neighbouring atoms are measured relative to 
@@ -1674,7 +1678,7 @@ This is in accordance with the Behler symmetry functions, which only operate wit
 It is however not trivial how this affects the above equations for the forces, which are not written in 
 an atom-centered way. The process of obtaining the forces can be illustrated with an example system
 consisting of three atoms of the same element with positions $\vec{r}_i$ where $i = 0,1,2$, shown in \autoref{fig:threeAtoms}.
-\begin{figure}[H]
+\begin{figure}[h]
 \begin{center}
   \includegraphics[width = 0.4\linewidth]{Figures/Implementation/3atoms.pdf}
   \caption{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to 
@@ -1691,16 +1695,16 @@ so according to \eqref{forceAtomk} the force is,
 For simplicity, we assume that each atom only have two different symmetry functions describing their atomic environment;
 one $G_{i,0}^2$ function describing the radial arrangement of neighbours and one $G_{i,1}^4$ dealing with the angular distribution.
 Each atomic NN thus have two inputs and one output. 
-Since the three atoms are all of the same type, they will have identical NNs and symmetry vectors. We will therefore 
+Since the three atoms are all of the same type, they will have identical NNs $F$ and symmetry vectors. We will therefore 
 denote the the two symmetry functions simply as $G^2$ and $G^4$. In the following we apply the notation
 $r_{ij} = |\vec{r}_j - \vec{r}_i|$. 
-The expressions for $E_1$ and $E_2$ then are,
+The expressions for $E_1$ and $E_2$ are,
 \begin{equation}
- E_1 = \textrm{NN}\bigr[G^2(r_{10}) + G^4(r_{10},0,0)\bigr] = \textrm{NN}\bigr[G^2(r_{10})\bigr]
+ E_1 = F\bigr[G^2(r_{12}) + G^4(r_{12},0,0)\bigr] = F\bigr[G^2(r_{12})\bigr]
 \end{equation}
-where NN denotes the atomic neural network of the atoms. $G^4$ is zero because atom 1 only has one neighbour. Further, 
+$G^4$ is zero because atom 1 only has one neighbour. Further, 
 \begin{equation}
- E_2 = \textrm{NN}\bigr[G^2(r_{20}, r_{21}) + G^4(r_{20},r_{21},\theta_{021})\bigr]
+ E_2 = F\bigr[G^2(r_{20}, r_{21}) + G^4(r_{20},r_{21},\theta_{021})\bigr]
 \end{equation}
 We note that atom 2 receives an energy contribution from both atom 0 and 1. 
 To compute the derivatives of these energies with respect to the $x$-coordinate of atom 1, we
@@ -1719,36 +1723,65 @@ and
 \end{equation}
 This symmetry enables us to calculate the derivatives above. Applying the chain rule we get,
 \begin{equation}
- \frac{\partial E_1}{\partial x_1} = \frac{\partial \textrm{NN}}{\partial G^2(r_{10})}
- \frac{\partial G^2(r_{10})}{\partial x_1} = 
- -\frac{\partial \textrm{NN}}{\partial G^2(r_{10})}\frac{\partial G^2(r_{10})}{\partial x_{10}}
+ \frac{\partial E_1}{\partial x_1} = \frac{\partial F}{\partial G^2(r_{12})}
+ \frac{\partial G^2(r_{12})}{\partial x_1} = 
+ -\frac{\partial F}{\partial G^2(r_{12})}\frac{\partial G^2(r_{12})}{\partial x_{12}}
 \end{equation}
 where we have applied the above change of coordinates \eqref{changeOfCoordsSymmetry1}.
 Using \eqref{changeOfCoordsSymmetry2}, the derivative of $E_2$ can be calculated correspondingly,
+\begin{subequations}
 \begin{align}
  \frac{\partial E_2}{\partial x_1} &= 
- \frac{\partial \textrm{NN}}{\partial G^2(r_{20}, r_{21})}\frac{\partial G^2(r_{20}, r_{21})}{\partial x_1} + 
- \frac{\partial \textrm{NN}}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_1} \\
- &= \frac{\partial \textrm{NN}}{\partial G^2(r_{20}, r_{21})}\frac{\partial G^2(r_{20}, r_{21})}{\partial x_{21}} + 
- \frac{\partial \textrm{NN}}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_{21}}
+ \frac{\partial F}{\partial G^2(r_{20}, r_{21})}\frac{\partial G^2(r_{20}, r_{21})}{\partial x_1} + 
+ \frac{\partial F}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_1} \\
+ &= \frac{\partial F}{\partial G^2(r_{21})}\frac{\partial G^2(r_{21})}{\partial x_{21}} + 
+ \frac{\partial F}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_{21}}
 \end{align}
-Based on these expressions we can do an observation that at first might seem strange. 
-From the definition of $G_2$ \eqref{G2} we see that the sum contains two terms
+\end{subequations} 
+From the definition of $G^2$ \eqref{G2} we see that the sum contains two terms
 in the case of atom 2, one for each pair interaction between atom 2 and its two neighbours. 
-The interaction term between atom 0 and 2 will 
-disappear when differentiated with respect to atom 1's coordinates, and is thus not included in the force on atom 1. 
-The sum in $G_4$ \eqref{G4} however, consists of only one term corresponding to the only unique triplet with atom 2
+The interaction term between atom 0 and 2
+cancels when differentiated with respect to the coordinates of atom 1, and is thus not included in the force on atom 1. 
+ 
+The sum in $G^4$ \eqref{G4} however, consists of only one term corresponding to the only unique triplet with atom 2
 as the central atom. This term is directly dependent on the coordinates of atom 0, which means that 
 an atom which is outside the cutoff sphere of atom 1 still contributes to the force. This is an artefact of many-body potentials
-like the NN potentials employed in this thesis: The force acting on an atom $i$ depends on the positions of the atoms as 
-far as $2R_c$ away because neighbours $k$ of the neighbours $j$ of $i$ are included in the 
-energies $E_j$ that is differentiated. 
-
-This large effective range of atomic interactions is however not of great importance taking into account
+like the NNPs employed in this thesis: The force acting on an atom $i$ depends on the positions of the atoms as 
+far as $2R_c$ away because \textit{neighbours of neighbours} are included in the
+energies that are differentiated to obtain the force. 
+This large effective range of atomic interactions is however not of great importance, taking into account
 that the interaction strength falls rapidly with distance for most systems where Coulomb forces are not included. 
 
+Further, at first s
 
 
+\subsection{should this come at the end?}
+NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
+\begin{itemize}
+ \item Energies can be fitted to arbitrary accuracy, leaving only
+ the underlying error of the reference data. Consequentially, NNPs can be categorized as \textit{ab inito} potentials. 
+ \item Evaluation of NNPs require much less CPU time than QM methods.
+ \item The NNP expression is unbiased and generally applicable to any system.
+\end{itemize}
+In other words, the overarching vision is to create a PES that have the accuracy of \textit{ab inito} potentials, 
+while simultaneously being able to simulate large systems over considerable time scales. 
+Still, there are disadvantages to be aware of:
+\begin{itemize}
+ \item The evaluation of NNPs are notably slower compared to empirical potentials.
+ \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities.
+ \item NNPs are, for the time being, only applicable to systems containing only a few
+ different chemical elements, but many atoms.
+\end{itemize}
+
+\begin{itemize}
+ \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
+ of the problem, which allows to use NNs of tractable size
+ \item The total energy is invariant with respect to the order of the atoms
+ \item The NNP can be used for systems of different sizes
+ \item We 
+\end{itemize}
+We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
+should be invariant with respect to these operations. 
 
 
 
@@ -3082,7 +3115,7 @@ from have also been carefully considered, described in more detail in \autoref{s
 
 
 
-\section{Constructing the symmetry function sets}
+\section{Constructing the symmetry function sets} \label{sec:constructingSymmetry}
 The choice of symmetry functions is important to achieve a good fit to the reference data. 
 They need to be able to sufficiently distinct inequivalent structures to avoid fitting 
 contradictory data. If this distinction is not possible, different reference structures with 
