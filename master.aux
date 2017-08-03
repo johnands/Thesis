@@ -168,68 +168,70 @@
 \@writefile{toc}{\contentsline {subsubsection}{Training algorithm}{40}{section*.27}}
 \newlabel{forwardPropMatrix}{{3.58}{40}{Training algorithm}{equation.3.6.58}{}}
 \newlabel{backPropMatrix}{{3.60}{40}{Training algorithm}{equation.3.6.60}{}}
-\citation{Behler15}
+\citation{Behler11general}
+\citation{Agrawal06}
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}What properties should a PES have?}{43}{section.4.1}}
-\citation{Behler11general}
-\citation{Agrawal06}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Neural network potentials}{44}{section.4.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Potentials using single neural network}{44}{subsection.4.2.1}}
+\newlabel{sec:NNsAndMD}{{4}{43}{Neural networks in molecular dynamics}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Neural network potentials}{43}{section.4.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Potentials using single neural network}{43}{subsection.4.1.1}}
 \citation{Bholoa07}
 \citation{Behler07}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Potentials using multiple neural networks}{45}{subsection.4.2.2}}
-\newlabel{systemEnergy}{{4.1}{45}{Potentials using multiple neural networks}{equation.4.2.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}The Behler-Parinello method}{45}{section.4.3}}
-\newlabel{BPatomicEnergySi}{{4.2}{46}{The Behler-Parinello method}{equation.4.3.2}{}}
-\newlabel{BPatomicEnergy}{{4.3}{46}{The Behler-Parinello method}{equation.4.3.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Symmetry functions}{46}{subsection.4.3.1}}
-\newlabel{sec:symmetryFunctions}{{4.3.1}{46}{Symmetry functions}{subsection.4.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Potentials using multiple neural networks}{44}{subsection.4.1.2}}
+\newlabel{systemEnergy}{{4.1}{44}{Potentials using multiple neural networks}{equation.4.1.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}The Behler-Parinello method}{44}{section.4.2}}
+\newlabel{BPatomicEnergySi}{{4.2}{45}{The Behler-Parinello method}{equation.4.2.2}{}}
+\newlabel{BPatomicEnergy}{{4.3}{45}{The Behler-Parinello method}{equation.4.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Symmetry functions}{45}{subsection.4.2.1}}
+\newlabel{sec:symmetryFunctions}{{4.2.1}{45}{Symmetry functions}{subsection.4.2.1}{}}
 \citation{Behler11symmetry}
-\newlabel{cutoffFunction}{{4.4}{47}{Symmetry functions}{equation.4.3.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Plot of the cutoff function \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {cutoffFunction}\unskip \@@italiccorr )}} applied in this thesis. This function is used to define a chemical environment around a central atom: only the atoms within the cutoff radius $R_c$ contribute to its energy. These are called neighbouring atoms. The closer a neighbouring atom is, the larger the energy contribution, as is the case for most physical systems.\relax }}{47}{figure.caption.28}}
-\newlabel{fig:cutoffFunction}{{4.1}{47}{Plot of the cutoff function \eqref {cutoffFunction} applied in this thesis. This function is used to define a chemical environment around a central atom: only the atoms within the cutoff radius $R_c$ contribute to its energy. These are called neighbouring atoms. The closer a neighbouring atom is, the larger the energy contribution, as is the case for most physical systems.\relax }{figure.caption.28}{}}
 \citation{cutoffFunction}
 \citation{Behler11symmetry}
-\@writefile{toc}{\contentsline {subsubsection}{Radial symmetry functions}{48}{section*.29}}
-\newlabel{G1}{{4.5}{48}{Radial symmetry functions}{equation.4.3.5}{}}
-\newlabel{G2}{{4.6}{48}{Radial symmetry functions}{equation.4.3.6}{}}
-\newlabel{G3}{{4.7}{48}{Radial symmetry functions}{equation.4.3.7}{}}
-\newlabel{fig:radialSymmetriFunctions:a}{{\caption@xref {fig:radialSymmetriFunctions:a}{ on input line 1521}}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{sub@fig:radialSymmetriFunctions:a}{{}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{fig:radialSymmetriFunctions:b}{{\caption@xref {fig:radialSymmetriFunctions:b}{ on input line 1527}}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{sub@fig:radialSymmetriFunctions:b}{{}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{fig:radialSymmetriFunctions:c}{{\caption@xref {fig:radialSymmetriFunctions:c}{ on input line 1533}}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{sub@fig:radialSymmetriFunctions:c}{{}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{fig:radialSymmetriFunctions:d}{{\caption@xref {fig:radialSymmetriFunctions:d}{ on input line 1538}}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\newlabel{sub@fig:radialSymmetriFunctions:d}{{}{49}{Radial symmetry functions}{figure.caption.30}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such functions represents the radial distrubution of neighbours around a central atom placed at the origin. For $G^2$ and $G^3$ a cutoff $R_c = \SI {11.0}{\angstrom }$ has been used.\relax }}{49}{figure.caption.30}}
-\newlabel{fig:radialSymmetriFunctions}{{4.2}{49}{Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such functions represents the radial distrubution of neighbours around a central atom placed at the origin. For $G^2$ and $G^3$ a cutoff $R_c = \SI {11.0}{\angstrom }$ has been used.\relax }{figure.caption.30}{}}
+\newlabel{cutoffFunction}{{4.4}{46}{Symmetry functions}{equation.4.2.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Radial symmetry functions}{46}{section*.29}}
+\newlabel{G1}{{4.5}{46}{Radial symmetry functions}{equation.4.2.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Plot of the cutoff function \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {cutoffFunction}\unskip \@@italiccorr )}} applied in this thesis. This function is used to define a chemical environment around a central atom: only the atoms within the cutoff radius $R_c$ contribute to its energy. These are called neighbouring atoms. The closer a neighbouring atom is, the larger the energy contribution, as is the case for most physical systems.\relax }}{47}{figure.caption.28}}
+\newlabel{fig:cutoffFunction}{{4.1}{47}{Plot of the cutoff function \eqref {cutoffFunction} applied in this thesis. This function is used to define a chemical environment around a central atom: only the atoms within the cutoff radius $R_c$ contribute to its energy. These are called neighbouring atoms. The closer a neighbouring atom is, the larger the energy contribution, as is the case for most physical systems.\relax }{figure.caption.28}{}}
+\newlabel{G2}{{4.6}{47}{Radial symmetry functions}{equation.4.2.6}{}}
+\newlabel{G3}{{4.7}{48}{Radial symmetry functions}{equation.4.2.7}{}}
+\newlabel{fig:radialSymmetriFunctions:a}{{\caption@xref {fig:radialSymmetriFunctions:a}{ on input line 1493}}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{sub@fig:radialSymmetriFunctions:a}{{}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:b}{{\caption@xref {fig:radialSymmetriFunctions:b}{ on input line 1499}}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{sub@fig:radialSymmetriFunctions:b}{{}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:c}{{\caption@xref {fig:radialSymmetriFunctions:c}{ on input line 1505}}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{sub@fig:radialSymmetriFunctions:c}{{}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{fig:radialSymmetriFunctions:d}{{\caption@xref {fig:radialSymmetriFunctions:d}{ on input line 1510}}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\newlabel{sub@fig:radialSymmetriFunctions:d}{{}{48}{Radial symmetry functions}{figure.caption.30}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such functions represents the radial distrubution of neighbours around a central atom placed at the origin. For $G^2$ and $G^3$ a cutoff $R_c = \SI {11.0}{\angstrom }$ has been used.\relax }}{48}{figure.caption.30}}
+\newlabel{fig:radialSymmetriFunctions}{{4.2}{48}{Radial symmetry functions $G^1$, $G^2$ and $G^3$ for an atom with one neighbour only. A set of such functions represents the radial distrubution of neighbours around a central atom placed at the origin. For $G^2$ and $G^3$ a cutoff $R_c = \SI {11.0}{\angstrom }$ has been used.\relax }{figure.caption.30}{}}
 \@writefile{toc}{\contentsline {subsubsection}{Angular symmetry functions}{49}{section*.31}}
+\newlabel{G4}{{4.8}{49}{Angular symmetry functions}{equation.4.2.8}{}}
+\newlabel{G5}{{4.9}{49}{Angular symmetry functions}{equation.4.2.9}{}}
 \citation{Behler11symmetry}
-\newlabel{G4}{{4.8}{50}{Angular symmetry functions}{equation.4.3.8}{}}
-\newlabel{G5}{{4.9}{50}{Angular symmetry functions}{equation.4.3.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Symmetry functions and forces}{50}{subsection.4.3.2}}
-\newlabel{sec:symmAndForces}{{4.3.2}{50}{Symmetry functions and forces}{subsection.4.3.2}{}}
-\newlabel{forcePES2}{{4.10}{50}{Symmetry functions and forces}{equation.4.3.10}{}}
-\newlabel{fig:angularSymmetryFunctions:a}{{4.3a}{51}{\relax }{figure.caption.32}{}}
-\newlabel{sub@fig:angularSymmetryFunctions:a}{{a}{51}{\relax }{figure.caption.32}{}}
-\newlabel{fig:angularSymmetryFunctions:b}{{4.3b}{51}{\relax }{figure.caption.32}{}}
-\newlabel{sub@fig:angularSymmetryFunctions:b}{{b}{51}{\relax }{figure.caption.32}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such functions represents the angular distrubution of neighbours around a central atom placed at the origin. $\lambda = +1$ for \autoref  {fig:angularSymmetryFunctions:a}, $\lambda =-1$ for \autoref  {fig:angularSymmetryFunctions:b}.\relax }}{51}{figure.caption.32}}
-\newlabel{fig:angularSymmetryFunctions}{{4.3}{51}{Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such functions represents the angular distrubution of neighbours around a central atom placed at the origin. $\lambda = +1$ for \autoref {fig:angularSymmetryFunctions:a}, $\lambda =-1$ for \autoref {fig:angularSymmetryFunctions:b}.\relax }{figure.caption.32}{}}
-\newlabel{forceAtomk}{{4.11}{51}{Symmetry functions and forces}{equation.4.3.11}{}}
-\newlabel{forceAtomkChainRule}{{4.12}{51}{Symmetry functions and forces}{equation.4.3.12}{}}
-\newlabel{BPatomicForce}{{4.13}{51}{Symmetry functions and forces}{equation.4.3.13}{}}
-\@writefile{toc}{\contentsline {subsubsection}{Change of coordinates}{52}{section*.33}}
-\newlabel{changeOfCoordinates}{{4.14}{52}{Change of coordinates}{equation.4.3.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type, they have identical atomic NNs and symmetry function sets.\relax }}{53}{figure.caption.34}}
-\newlabel{fig:threeAtoms}{{4.4}{53}{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type, they have identical atomic NNs and symmetry function sets.\relax }{figure.caption.34}{}}
-\newlabel{changeOfCoordsSymmetry1}{{4.18}{53}{Change of coordinates}{equation.4.3.18}{}}
-\newlabel{changeOfCoordsSymmetry2}{{4.19}{53}{Change of coordinates}{equation.4.3.19}{}}
+\newlabel{fig:angularSymmetryFunctions:a}{{4.3a}{50}{\relax }{figure.caption.32}{}}
+\newlabel{sub@fig:angularSymmetryFunctions:a}{{a}{50}{\relax }{figure.caption.32}{}}
+\newlabel{fig:angularSymmetryFunctions:b}{{4.3b}{50}{\relax }{figure.caption.32}{}}
+\newlabel{sub@fig:angularSymmetryFunctions:b}{{b}{50}{\relax }{figure.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such functions represents the angular distrubution of neighbours around a central atom placed at the origin. $\lambda = +1$ for \autoref  {fig:angularSymmetryFunctions:a}, $\lambda =-1$ for \autoref  {fig:angularSymmetryFunctions:b}.\relax }}{50}{figure.caption.32}}
+\newlabel{fig:angularSymmetryFunctions}{{4.3}{50}{Angular part of symmetry functions $G^4$ and $G^5$ for an atom with one neighbour only. A set of such functions represents the angular distrubution of neighbours around a central atom placed at the origin. $\lambda = +1$ for \autoref {fig:angularSymmetryFunctions:a}, $\lambda =-1$ for \autoref {fig:angularSymmetryFunctions:b}.\relax }{figure.caption.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Symmetry functions and forces}{50}{subsection.4.2.2}}
+\newlabel{sec:symmAndForces}{{4.2.2}{50}{Symmetry functions and forces}{subsection.4.2.2}{}}
+\newlabel{forcePES2}{{4.10}{50}{Symmetry functions and forces}{equation.4.2.10}{}}
+\newlabel{forceAtomk}{{4.11}{50}{Symmetry functions and forces}{equation.4.2.11}{}}
+\newlabel{forceAtomkChainRule}{{4.12}{51}{Symmetry functions and forces}{equation.4.2.12}{}}
+\newlabel{BPatomicForce}{{4.13}{51}{Symmetry functions and forces}{equation.4.2.13}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Change of coordinates}{51}{section*.33}}
+\newlabel{changeOfCoordinates}{{4.14}{52}{Change of coordinates}{equation.4.2.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type, they have identical atomic NNs and symmetry function sets.\relax }}{52}{figure.caption.34}}
+\newlabel{fig:threeAtoms}{{4.4}{52}{Example system of three atoms of the same type. Only atom 2 is inside the cutoff sphere of atom 1, thus we only need to take the energy of atom 1 and 2 into account to find the force on atom 1. Since the atoms are of the same type, they have identical atomic NNs and symmetry function sets.\relax }{figure.caption.34}{}}
+\newlabel{forceOnAtom1}{{4.15}{52}{Change of coordinates}{equation.4.2.15}{}}
+\newlabel{energyAtom1}{{4.16}{53}{Change of coordinates}{equation.4.2.16}{}}
+\newlabel{energyAtom2}{{4.17}{53}{Change of coordinates}{equation.4.2.17}{}}
+\newlabel{changeOfCoordsSymmetry1}{{4.18}{53}{Change of coordinates}{equation.4.2.18}{}}
+\newlabel{changeOfCoordsSymmetry2}{{4.19}{53}{Change of coordinates}{equation.4.2.19}{}}
 \citation{Behler11general}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Summary}{55}{subsection.4.3.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Summary}{54}{subsection.4.2.3}}
 \@writefile{toc}{\contentsline {part}{II\hspace  {1em}Implementation and validation}{57}{part.2}}
 \citation{Plimpton95}
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}}
@@ -289,37 +291,42 @@
 \zref@newlabel{mdf@pagelabel-17}{\default{6.2.4}\page{81}\abspage{91}\mdf@pagevalue{81}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes this error is included in the graph. The optimizer namespace is expanded to display its contents: \texttt  {gradients} computes the gradient of all nodes in the graph, \texttt  {trainStep} implements the algorithm for updating the NN parameters, while \texttt  {beta1\_power} and \texttt  {beta2\_power} are the parameters of the Adam optimizer algorithm.\relax }}{82}{figure.caption.38}}
 \newlabel{fig:tensorBoardTraining}{{6.3}{82}{Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one hidden layer and an output layer. Nodes are marked by ellipses, the rectangles are namespaces containing several nodes. A cost function describing the error of the NN fit and an optimizer that minimizes this error is included in the graph. The optimizer namespace is expanded to display its contents: \texttt {gradients} computes the gradient of all nodes in the graph, \texttt {trainStep} implements the algorithm for updating the NN parameters, while \texttt {beta1\_power} and \texttt {beta2\_power} are the parameters of the Adam optimizer algorithm.\relax }{figure.caption.38}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Training procedure}{83}{chapter.7}}
+\citation{Behler15}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Constructing a neural network potential}{83}{chapter.7}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Selecting the training data}{83}{section.7.1}}
-\newlabel{sec:selectingTrainingData}{{7.1}{83}{Selecting the training data}{section.7.1}{}}
+\newlabel{sec:trainingProcedure}{{7}{83}{Constructing a neural network potential}{chapter.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}What properties should a PES have?}{83}{section.7.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Selecting the training data}{84}{section.7.2}}
+\newlabel{sec:selectingTrainingData}{{7.2}{84}{Selecting the training data}{section.7.2}{}}
 \citation{Behler11general}
 \citation{Behler15}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{84}{subsection.7.1.1}}
-\newlabel{sample}{{1}{84}{Iterative molecular dynamics sampling}{Item.35}{}}
-\newlabel{refEnergies}{{2}{84}{Iterative molecular dynamics sampling}{Item.36}{}}
-\newlabel{NNPalgorithm}{{7}{84}{Iterative molecular dynamics sampling}{Item.41}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Iterative molecular dynamics sampling}{85}{subsection.7.2.1}}
+\newlabel{sample}{{1}{85}{Iterative molecular dynamics sampling}{Item.35}{}}
+\newlabel{refEnergies}{{2}{85}{Iterative molecular dynamics sampling}{Item.36}{}}
+\newlabel{NNPalgorithm}{{7}{85}{Iterative molecular dynamics sampling}{Item.41}{}}
 \citation{Ischtwan94}
 \citation{Raff05}
 \citation{Raff05}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{85}{subsection.7.1.2}}
 \citation{Raff12}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Sampling algorithms}{86}{subsection.7.2.2}}
 \citation{Pukrittayakamee09}
-\@writefile{toc}{\contentsline {subsubsection}{Initial sampling}{86}{section*.39}}
-\newlabel{variableIntervalSampling}{{7.1}{86}{Initial sampling}{equation.7.1.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Initial sampling}{87}{section*.39}}
+\newlabel{variableIntervalSampling}{{7.1}{87}{Initial sampling}{equation.7.2.1}{}}
 \citation{Pukrittayakamee09}
-\zref@newlabel{mdf@pagelabel-18}{\default{\caption@xref {??}{ on input line 2938}}\page{87}\abspage{97}\mdf@pagevalue{87}}
-\newlabel{samplingAlgorithmModified}{{7.2}{87}{Initial sampling}{equation.7.1.2}{}}
-\zref@newlabel{mdf@pagelabel-19}{\default{\caption@xref {??}{ on input line 3006}}\page{88}\abspage{98}\mdf@pagevalue{88}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Distribution of forces for one Si atom in a quartz $\textrm  {SiO}_2$ crystal with and withouth the use of the sampling algorithm \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {samplingAlgorithmModified}\unskip \@@italiccorr )}}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm  {max} = 10$.\relax }}{89}{figure.caption.40}}
-\newlabel{fig:forceDistSamplingAlgo}{{7.1}{89}{Distribution of forces for one Si atom in a quartz $\textrm {SiO}_2$ crystal with and withouth the use of the sampling algorithm \eqref {samplingAlgorithmModified}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm {max} = 10$.\relax }{figure.caption.40}{}}
+\zref@newlabel{mdf@pagelabel-18}{\default{\caption@xref {??}{ on input line 2946}}\page{88}\abspage{98}\mdf@pagevalue{88}}
+\newlabel{samplingAlgorithmModified}{{7.2}{88}{Initial sampling}{equation.7.2.2}{}}
+\zref@newlabel{mdf@pagelabel-19}{\default{\caption@xref {??}{ on input line 3014}}\page{89}\abspage{99}\mdf@pagevalue{89}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Distribution of forces for one Si atom in a quartz $\textrm  {SiO}_2$ crystal with and withouth the use of the sampling algorithm \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {samplingAlgorithmModified}\unskip \@@italiccorr )}}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm  {max} = 10$.\relax }}{90}{figure.caption.40}}
+\newlabel{fig:forceDistSamplingAlgo}{{7.1}{90}{Distribution of forces for one Si atom in a quartz $\textrm {SiO}_2$ crystal with and withouth the use of the sampling algorithm \eqref {samplingAlgorithmModified}. The crystal consists of 576 atoms, with an initial temperature $T= \SI {1000}{\kelvin }$, run for $N = 10000$ time steps. The atoms are sampled from the microcanonical ensemble with periodic boundary conditions. Sampling algorithm parameters: $\alpha =3.0$ and $\tau _\textrm {max} = 10$.\relax }{figure.caption.40}{}}
 \citation{Raff05}
 \citation{Behler11general}
-\@writefile{toc}{\contentsline {subsubsection}{Iterative sampling}{90}{section*.41}}
-\@writefile{toc}{\contentsline {subsubsection}{Summary}{91}{section*.42}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}}
-\newlabel{sec:constructingSymmetry}{{7.2}{92}{Constructing the symmetry function sets}{section.7.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Iterative sampling}{91}{section*.41}}
+\@writefile{toc}{\contentsline {subsubsection}{Summary}{92}{section*.42}}
+\citation{Behler15}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Constructing the symmetry function sets}{93}{section.7.3}}
+\newlabel{sec:constructingSymmetry}{{7.3}{93}{Constructing the symmetry function sets}{section.7.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}Summary}{94}{section.7.4}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {8}Validation}{95}{chapter.8}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}

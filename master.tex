@@ -1298,40 +1298,12 @@ training set.
 \end{enumerate}
 
 
-\chapter{Neural networks in molecular dynamics}
-ADVANTAGES AND DISADVANTAGES OF NNPS - DIFFERENT METHODS TO CONSTRUCT NNPS IN THE LITERATURE - 
-DESCRIPTION OF BEHLER-PARINELLO METHOD. 
-
+\chapter{Neural networks in molecular dynamics} \label{sec:NNsAndMD}
 In \autoref{sec:constructingPES} we discussed various ways to construct a PES for use in molecular dynamics, and
 stated that this thesis deales with neural network potentials (NNP). Then, in \autoref{sec:machineLearning}
 we outlined the basic theory of MLPs, which is our choice of neural network type. In this chapter, 
 we discuss the pros and cons of NNPs, and different properties such potentials should possess to 
-fulfill important physical symmetries. We start out with a brief discussion on what properties that
-are favourable for any PES, irregardles of circumstances. 
-
-\section{What properties should a PES have?}
-When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
-should possess. These serve as a guide during the construction process, and is also a good 
-starting point for comparing different types of potentials. Behler \cite{Behler15} lists 10 requirements
-that the ideal potential should meet, repeated here for reference:
-\begin{enumerate}\itemsep1pt
- \item The potential should be accurate, i.e. produce results that are in good agreement with experiments. 
-       Ideally, it should be constructed using \textit{ab inito} methods. 
- \item There should be ways to systematically detect situations where the potential is not suffientently accurate, 
-       and improve it without too much effort. 
- \item The potential should be unbiased and applicable to all types of systems and chemical bonding. 
- \item The potential should enable the breaking and making of bonds. 
- \item The potential should be high-dimensional, i.e. depend on all degress of freedom of the system. 
- \item The construction of the potential should be as automated as possible. 
- \item The potential should be predictive, i.e. be reliable for atomic configurations that have not been used in the 
-       construction. 
- \item The potential should be fast to evaluate. 
- \item The construction of the potential should not require much computation time. 
- \item To compute forces, analytic derivatives of the potential should be available. 
-\end{enumerate}
-None of the potentials currently available meet all the above requirements to a satisfactory degree. 
-At the end of this chapter, we will discuss which of these requirements that are met by the NNPs constructed
-in this thesis. 
+fulfill important physical symmetries. 
 
 \section{Neural network potentials}
 NNPs are constructed by fitting an analytic function to a set of reference data
@@ -1691,6 +1663,7 @@ We want to find the force on atom 1 in the $x$-direction. Atom 0 is outside the 
 so according to \eqref{forceAtomk} the force is,
 \begin{equation}
  F_{1,x} = \frac{\partial E_1}{\partial x_1} + \frac{\partial E_2}{\partial x_1}
+ \label{forceOnAtom1}
 \end{equation}
 For simplicity, we assume that each atom only have two different symmetry functions describing their atomic environment;
 one $G_{i,0}^2$ function describing the radial arrangement of neighbours and one $G_{i,1}^5$ dealing with the angular distribution.
@@ -1701,32 +1674,38 @@ $r_{ij} = |\vec{r}_j - \vec{r}_i|$.
 The expressions for $E_1$ and $E_2$ are,
 \begin{equation}
  E_1 = F\bigr[G^2(r_{12}) + G^5(r_{12},0,0)\bigr] = F\bigr[G^2(r_{12})\bigr]
+ \label{energyAtom1}
 \end{equation}
 $G^4$ is zero because atom 1 only has one neighbour. Further, 
 \begin{equation}
  E_2 = F\bigr[G^2(r_{20}, r_{21}) + G^5(r_{20},r_{21},\theta_{021})\bigr]
+ \label{energyAtom2}
 \end{equation}
-We note that atom 2 receives an energy contribution from both atom 0 and 1. 
+We note that atom 2 receives an energy contribution from both atom 0 and 1, so that 
+its $G^2$ function is a sum containing two terms. 
 To compute the derivatives of these energies with respect to the $x$-coordinate of atom 1, we
 must take into account the change of coordinates \eqref{changeOfCoordinates}. We have that
 \begin{equation}
- \frac{\partial G^n(x_{ij})}{\partial x_j} = \frac{\partial G^n(x_{ij})}{\partial x_{ij}}\frac{\partial x_{ij}}{\partial x_j}
- = \frac{\partial G^n(x_{ij})}{\partial x_{ij}}\frac{\partial (x_j-x_i)}{\partial x_j} = 
- \frac{\partial G^n(x_{ij})}{\partial x_{ij}}
+ \frac{\partial G^2(x_{ij})}{\partial x_j} = \frac{\partial G^2(x_{ij})}{\partial x_{ij}}\frac{\partial x_{ij}}{\partial x_j}
+ = \frac{\partial G^2(x_{ij})}{\partial x_{ij}}\frac{\partial (x_j-x_i)}{\partial x_j} = 
+ \frac{\partial G^2(x_{ij})}{\partial x_{ij}}
  \label{changeOfCoordsSymmetry1}
 \end{equation}
 and
 \begin{equation}
- \frac{\partial G^n(x_{ij})}{\partial x_i} = \frac{\partial G^n(x_{ij})}{\partial x_{ij}}\frac{\partial (x_j-x_i)}{\partial x_i} =
- -\frac{\partial G^n(x_{ij})}{\partial x_{ij}}
+ \frac{\partial G^2(x_{ij})}{\partial x_i} = \frac{\partial G^2(x_{ij})}{\partial x_{ij}}\frac{\partial (x_j-x_i)}{\partial x_i} =
+ -\frac{\partial G^2(x_{ij})}{\partial x_{ij}}
  \label{changeOfCoordsSymmetry2}
 \end{equation}
+which is also valid for the other radial symmetry functions $G^1$ and $G^3$.   
 This symmetry, which is a manifestation of Newton's third law,
-enable us to calculate the derivatives above. 
-WRITE ABOUT THAT THIS IS VALID ALSO SEPERATELY VALID FOR G4 AND G5, AKA. TRIPLETS:
+enable us to calculate the derivatives in \eqref{forceOnAtom1}. For radial symmetry functions
+dependent on several atom pairs, \eqref{changeOfCoordsSymmetry1} and \eqref{changeOfCoordsSymmetry2} 
+apply to each term in the sum seperately. Further, the symmetry is also present for each atom in a triplet,
 \begin{equation}
- \frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_i} = -\frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_{ij}} - 
- \frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_{ik}}
+ \frac{\partial G^5(x_{ij}, x_{ik}, \theta_{jik})}{\partial x_i} = 
+ -\frac{\partial G^5(x_{ij}, x_{ik}, \theta_{jik})}{\partial x_{ij}} - 
+ \frac{\partial G^5(x_{ij}, x_{ik}, \theta_{jik})}{\partial x_{ik}}
 \end{equation}
 and 
 \begin{subequations}
@@ -1735,12 +1714,10 @@ and
  \frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_k} &= \frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_{ik}}
 \end{align}
 \end{subequations}
-i.e. the derivative w.r.t. $i$ is the negative sum of the derivatives w.r.t. $j$ and $k$. This is a symmetry that we
-have exploited in our code. MAYBE SHOW THIS FOR THE SPECIFIC SYMMETRY FUNCTIONS, BUT THIS SHOULD BE 
-A MORE GENERAL SYMMETRY THAT NOT ONLY IS DUE TO THEIR FUNCTIONAL FORM?
+i.e. the derivative w.r.t. $i$ is the negative sum of the derivatives w.r.t. $j$ and $k$. This is a symmetry we
+have exploited in our code, see \autoref{sec:extendingLammps}. 
 
-
-Applying the chain rule we get,
+To obtain the derivatives of the energies \eqref{energyAtom1} and \eqref{energyAtom2}, we apply the chain rule
 \begin{equation}
  \frac{\partial E_1}{\partial x_1} = \frac{\partial F}{\partial G^2(r_{12})}
  \frac{\partial G^2(r_{12})}{\partial x_1} = 
@@ -1754,7 +1731,7 @@ Using \eqref{changeOfCoordsSymmetry1}, the derivative of $E_2$ can be calculated
  \frac{\partial F}{\partial G^2(r_{20}, r_{21})}\frac{\partial G^2(r_{20}, r_{21})}{\partial x_1} + 
  \frac{\partial F}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_1} \\
  &= \frac{\partial F}{\partial G^2(r_{21})}\frac{\partial G^2(r_{21})}{\partial x_{21}} + 
- \frac{\partial F}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_1}
+ \frac{\partial F}{\partial G^4(r_{20},r_{21},\theta_{021})}\frac{G^4(r_{20},r_{21},\theta_{021})}{\partial x_{21}}
 \end{align}
 \end{subequations} 
 From the definition of $G^2$ \eqref{G2} we see that the sum contains two terms
@@ -1771,10 +1748,13 @@ energies that are differentiated to obtain the force.
 This large effective range of atomic interactions is however not of great importance, taking into account
 that the interaction strength falls rapidly with distance for most systems where Coulomb forces are not included. 
 
-Further, at first sight 
-
 
 \subsection{Summary}
+In the beginning of this chapter we listed 10 properties that an ideal potential should possess. 
+
+
+
+
 NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
 \begin{itemize}
  \item Energies can be fitted to arbitrary accuracy, leaving only
@@ -2778,15 +2758,43 @@ the Adam update rule is applied and the weights and biases adjusted.
 
 
 
-\chapter{Training procedure}
+\chapter{Constructing a neural network potential} \label{sec:trainingProcedure}
 In this chapter we present the general workflow for constructing a high-dimensional NNP 
 intended for a specific physical application. We describe different ways of assembling 
 an adequate training set for the NN, which is the most crucial factor for the performance of 
 the final potential. Some of the outlined procedures are primarily used to construct 
 \textit{ab inito} NNPs, but are included for reference. 
 
-Next, we discuss how to find a symmetry function set that fits the system under study. 
-The specifics of different training teqhniques are found elsewhere. (WHERE?).
+Next, we discuss how to find a symmetry function set that fits the system under study.
+The form of the symmetry functions are found in \autoref{sec:NNsAndMD}, while
+the mathematical groundwork of neural networks and various training algorithms are presented in \autoref{sec:machineLearning}.
+
+We start out with a brief discussion on what properties that
+are favourable for any PES, irregardless of circumstances. 
+
+\section{What properties should a PES have?}
+When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
+should possess. These serve as a guide during the construction process, and is also a good 
+starting point for comparing different types of potentials. Behler \cite{Behler15} lists 10 requirements
+that the ideal potential should meet, repeated here for reference:
+\begin{enumerate}\itemsep1pt
+ \item The potential should be accurate, i.e. produce results that are in good agreement with experiments. 
+       Ideally, it should be constructed using \textit{ab inito} methods. 
+ \item There should be ways to systematically detect situations where the potential is not suffientently accurate, 
+       and improve it without too much effort. 
+ \item The potential should be unbiased and applicable to all types of systems and chemical bonding. 
+ \item The potential should enable the breaking and making of bonds. 
+ \item The potential should be high-dimensional, i.e. depend on all degress of freedom of the system. 
+ \item The construction of the potential should be as automated as possible. 
+ \item The potential should be predictive, i.e. be reliable for atomic configurations that have not been used in the 
+       construction. 
+ \item The potential should be fast to evaluate. 
+ \item The construction of the potential should not require much computation time. 
+ \item To compute forces, analytic derivatives of the potential should be available. 
+\end{enumerate}
+None of the potentials currently available meet all the above requirements to a satisfactory degree. 
+At the end of this chapter, we will discuss which of these requirements that are fulfilled by the NNPs constructed
+in this thesis. 
 
 
 \section{Selecting the training data} \label{sec:selectingTrainingData}
@@ -3132,8 +3140,6 @@ from have also been carefully considered, described in more detail in \autoref{s
 
 
 
-
-
 \section{Constructing the symmetry function sets} \label{sec:constructingSymmetry}
 The choice of symmetry functions is important to achieve a good fit to the reference data. 
 They need to be able to sufficiently distinct inequivalent structures to avoid fitting 
@@ -3146,6 +3152,17 @@ is adjusted ''automatically'' when trained, while the symmetry function set has 
 This observation does however not change the fact that the high-dimensional neural network approach to
 constructing potentials used in this work is general, and can in principle be applied to any system. The training data
 and symmetry function sets have to be customized to each system, but the overarching procedure is the same. 
+
+There are some general rules that guide the construction of the symmetry function set. \cite{Behler15}
+\begin{enumerate}
+ \item The symmetry function set should cover the configuration space in an unbiased way. 
+ \item The symmetry function set should be as small as possible.
+ \item For each symmetry function, the range of function values should be as large as possible. 
+ \item The range of the various symmetry parameters should correspond to the range of inter-atomic distances 
+ and angles in the data set
+ \item The set of values of two different symmetry functions on a given data set should not be strongly correlated. 
+\end{enumerate}
+
 
 There are a number of analyses that can be carried out to investigate if we have an adequate
 symmetry function set,
@@ -3161,8 +3178,6 @@ symmetry function set,
  and smallest function value is too small, it will not be able to identify distinct structures properly. 
  Symmetry functions which have a value of zero for all configurations should be avoided, as these will not contribute
  to the description of the chemical environment. 
- \item SEARCH FOR CONTRADICTORY DATA? THEN I MUST HAVE ACCESS TO THE FORCES? BUT IS HE TALKING ABOUT DIFFERENT 
- ATOM TYPES? MAYBE CHOOSE A NEIGHBOUR LIST (ATOM), FIND $\Delta G$ AND $\Delta F$ TO ALL OTHER LISTS AND PLOT?
  \item There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
  the efficiency of the calculation of the NN energy output. The number of symmetry functions can be kept as low as
  possible by investigating the correlations between the values of two different symmetry functions for the whole
@@ -3174,6 +3189,9 @@ These tests provide a framework for constructing suitable symmetry function sets
 We note that they all depend on the composition of the available data set, including its size. 
 When the iterative approach to constructing data sets are used, the size will increase step by step, 
 and we are required to add more symmetry functions as we go. 
+
+
+\section{Summary}
 
 
 

@@ -42,17 +42,16 @@
 \contentsline {subsubsection}{Matrix notation}{39}{section*.26}
 \contentsline {subsubsection}{Training algorithm}{40}{section*.27}
 \contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}
-\contentsline {section}{\numberline {4.1}What properties should a PES have?}{43}{section.4.1}
-\contentsline {section}{\numberline {4.2}Neural network potentials}{44}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Potentials using single neural network}{44}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Potentials using multiple neural networks}{45}{subsection.4.2.2}
-\contentsline {section}{\numberline {4.3}The Behler-Parinello method}{45}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Symmetry functions}{46}{subsection.4.3.1}
-\contentsline {subsubsection}{Radial symmetry functions}{48}{section*.29}
+\contentsline {section}{\numberline {4.1}Neural network potentials}{43}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Potentials using single neural network}{43}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Potentials using multiple neural networks}{44}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}The Behler-Parinello method}{44}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Symmetry functions}{45}{subsection.4.2.1}
+\contentsline {subsubsection}{Radial symmetry functions}{46}{section*.29}
 \contentsline {subsubsection}{Angular symmetry functions}{49}{section*.31}
-\contentsline {subsection}{\numberline {4.3.2}Symmetry functions and forces}{50}{subsection.4.3.2}
-\contentsline {subsubsection}{Change of coordinates}{52}{section*.33}
-\contentsline {subsection}{\numberline {4.3.3}Summary}{55}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.2.2}Symmetry functions and forces}{50}{subsection.4.2.2}
+\contentsline {subsubsection}{Change of coordinates}{51}{section*.33}
+\contentsline {subsection}{\numberline {4.2.3}Summary}{54}{subsection.4.2.3}
 \contentsline {part}{II\hspace {1em}Implementation and validation}{57}{part.2}
 \contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}
 \contentsline {section}{\numberline {5.1}Installing LAMMPS}{59}{section.5.1}
@@ -66,14 +65,16 @@
 \contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{76}{subsection.6.2.2}
 \contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{77}{subsection.6.2.3}
 \contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{79}{subsection.6.2.4}
-\contentsline {chapter}{\numberline {7}Training procedure}{83}{chapter.7}
-\contentsline {section}{\numberline {7.1}Selecting the training data}{83}{section.7.1}
-\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{84}{subsection.7.1.1}
-\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{85}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{86}{section*.39}
-\contentsline {subsubsection}{Iterative sampling}{90}{section*.41}
-\contentsline {subsubsection}{Summary}{91}{section*.42}
-\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}
+\contentsline {chapter}{\numberline {7}Constructing a neural network potential}{83}{chapter.7}
+\contentsline {section}{\numberline {7.1}What properties should a PES have?}{83}{section.7.1}
+\contentsline {section}{\numberline {7.2}Selecting the training data}{84}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Iterative molecular dynamics sampling}{85}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}Sampling algorithms}{86}{subsection.7.2.2}
+\contentsline {subsubsection}{Initial sampling}{87}{section*.39}
+\contentsline {subsubsection}{Iterative sampling}{91}{section*.41}
+\contentsline {subsubsection}{Summary}{92}{section*.42}
+\contentsline {section}{\numberline {7.3}Constructing the symmetry function sets}{93}{section.7.3}
+\contentsline {section}{\numberline {7.4}Summary}{94}{section.7.4}
 \contentsline {chapter}{\numberline {8}Validation}{95}{chapter.8}
 \contentsline {section}{\numberline {8.1}Time usage}{95}{section.8.1}
 \contentsline {section}{\numberline {8.2}Training Lennard-Jones potential}{97}{section.8.2}
