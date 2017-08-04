@@ -3153,15 +3153,45 @@ This observation does however not change the fact that the high-dimensional neur
 constructing potentials used in this work is general, and can in principle be applied to any system. The training data
 and symmetry function sets have to be customized to each system, but the overarching procedure is the same. 
 
+In this thesis we have mainly employed $G^2$ as the radial symmetry function and $G^5$ as the angular counterpart. 
+Therefore, we only discuss these two functions in the following. 
+
+\subsection{General rules}
 There are some general rules that guide the construction of the symmetry function set. \cite{Behler15}
 \begin{enumerate}
  \item The symmetry function set should cover the configuration space in an unbiased way. 
+ \item The range of the radial symmetry parameters should correspond to the range of inter-atomic distances in the data set.
  \item The symmetry function set should be as small as possible.
- \item For each symmetry function, the range of function values should be as large as possible. 
- \item The range of the various symmetry parameters should correspond to the range of inter-atomic distances 
- and angles in the data set
+ \item For each symmetry function, the range of function values should be as large as possible.  
  \item The set of values of two different symmetry functions on a given data set should not be strongly correlated. 
 \end{enumerate}
+1. can be realized by simply choosing an equidistant set of initial radial symmetry functions.
+Further, the distribution of inter-atomic distances in the data set may be investigated to aquire a 
+lower and upper bound on the range of radial parameter values (2.). For $G^2$, a rule of thumb is that, for each element, 
+the width (standard deviation) of the Gaussian
+with the largest $\eta$ value should correspond to the shortest inter-atomic distance present in the data set 
+and vice versa. Also, a set of symmetry functions with equidistant $R_s$ parameters should be present in the initial set.
+These should all have the same (large) $\eta$ value. An example of such an initial radial symmetry function set is displayed
+in \autoref{fig:radialParams}. 
+\begin{figure}
+\centering
+  \includegraphics[width = 0.7\linewidth]{Figures/Implementation/radialParams.pdf}
+  \caption{Example of an initial radial symmetry function set. The parameters $\eta$ and $R_s$ are varied to 
+  probe the radial arrangement of neighbouring atoms.
+  All symmetry functions have the same cutoff $R_c = 6.0$. 
+  $R_{ij}$, $R_s$ and $R_c$ are in units of $\SI{}{\angstrom}$, while $\eta$ have units $\SI{}{\angstrom}^{-2}$.}
+  \label{fig:radialParams}
+\end{figure}
+A set of initial angular symmetry functions can be made in a similar way. To probe different angles we vary 
+$\zeta$ and $\lambda$. These angles can be probed at different radii, by adjusting either $\eta$ or $R_c$. 
+We have found from empirical investigations that fixing $\eta$, while varying $R_c$ yield the best results. 
+In contrast to the radial parameters, the set of $\zeta$ parameters should not be equidistant. Instead, the values of $\zeta$
+should increase exponentially to ensure that the symmetry functions are sufficiently dissimilar. 
+
+
+
+Thus, 1. and 2. can be used as a framework for constructing an initial 
+
 
 
 There are a number of analyses that can be carried out to investigate if we have an adequate
