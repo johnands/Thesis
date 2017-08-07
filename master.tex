@@ -3156,14 +3156,14 @@ and symmetry function sets have to be customized to each system, but the overarc
 In this thesis we have mainly employed $G^2$ as the radial symmetry function and $G^5$ as the angular counterpart. 
 Therefore, we only discuss these two functions in the following. 
 
-\subsection{General rules}
+\subsection{Initial set}
 There are some general rules that guide the construction of the symmetry function set. \cite{Behler15}
 \begin{enumerate}
  \item The symmetry function set should cover the configuration space in an unbiased way. 
  \item The range of the radial symmetry parameters should correspond to the range of inter-atomic distances in the data set.
- \item The symmetry function set should be as small as possible.
- \item For each symmetry function, the range of function values should be as large as possible.  
  \item The set of values of two different symmetry functions on a given data set should not be strongly correlated. 
+ \item The symmetry function set should be as small as possible.
+ \item For each symmetry function, the range of function values should be as large as possible.   
 \end{enumerate}
 1. can be realized by simply choosing an equidistant set of initial radial symmetry functions.
 Further, the distribution of inter-atomic distances in the data set may be investigated to aquire a 
@@ -3182,15 +3182,42 @@ in \autoref{fig:radialParams}.
   $R_{ij}$, $R_s$ and $R_c$ are in units of $\SI{}{\angstrom}$, while $\eta$ have units $\SI{}{\angstrom}^{-2}$.}
   \label{fig:radialParams}
 \end{figure}
-A set of initial angular symmetry functions can be made in a similar way. To probe different angles we vary 
-$\zeta$ and $\lambda$. These angles can be probed at different radii, by adjusting either $\eta$ or $R_c$. 
+
+A set of initial angular symmetry functions can be made in a similar way. 
+The angular distribution of neighbours is probed by varying $\zeta$ and $\lambda$ at differing radii, i.e. for 
+several values of $\eta$ and/or $R_c$. 
 We have found from empirical investigations that fixing $\eta$, while varying $R_c$ yield the best results. 
 In contrast to the radial parameters, the set of $\zeta$ parameters should not be equidistant. Instead, the values of $\zeta$
-should increase exponentially to ensure that the symmetry functions are sufficiently dissimilar. 
+should increase exponentially to ensure that the symmetry functions are sufficiently dissimilar (3.). An example is shown in 
+\autoref{fig:angularParams}. 
+\begin{figure}
+\centering
+  \includegraphics[width = 0.7\linewidth]{Figures/Implementation/angularParams1.pdf}
+  \caption{Example of an initial angular symmetry function set
+  with $\eta = \SI{0.01}{\angstrom}^{-2}$ and 
+  $\lambda = 1$. A corresponding set of functions with $\lambda = -1$ should also be added to make the set more complete. 
+  The $\zeta$ parameter is increased in a non-linear way to avoid excessively overlapping functions. }
+  \label{fig:angularParams}
+\end{figure}
+
+\subsection{Analyzing the set}
+Thus, 1., 2. and 3. can be used as a framework for constructing an initial set of symmetry functions.
+Then, we carry out various analyses to investigate whether our chosen symmetry functions 
+adequately probe the configuration space defined by the data set. Item 3., 4. and 5. above serve as the
+guiding principles for the analyses. 
+
+Using 5., the range of values for each symmetry function should be obtained.  Each symmetry function
+assigns \textit{one} numerical value to each training example. If the range of a symmetry function is too small, 
+the difference between the function values for distinct structures will also be small. Consequentially, 
+the NN will try to assign substantial energy changes to tiny changes in the symmetry function, which 
+can lead to numerical instability. The symmetry function will not able to identify distinct structures properly. 
+This can be avoided by analyzing the distribution of values of each symmetry function on the data set. If the difference 
+between the maximum and the minimum function value is too small, the symmetry function should be removed or its parameters changed.
 
 
 
-Thus, 1. and 2. can be used as a framework for constructing an initial 
+
+
 
 
 

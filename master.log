@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.29)  4 AUG 2017 15:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.29)  7 AUG 2017 15:27
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1710,60 +1710,72 @@ File: Figures/Implementation/radialParams.pdf Graphic file (type pdf)
 Package pdftex.def Info: Figures/Implementation/radialParams.pdf used on input 
 line 3178.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
- [94 <./Figures/Implementation/radialParams.pdf>] [95] [96
 
-]
+<Figures/Implementation/angularParams1.pdf, id=2042, 578.16pt x 433.62pt>
+File: Figures/Implementation/angularParams1.pdf Graphic file (type pdf)
+
+<use Figures/Implementation/angularParams1.pdf>
+Package pdftex.def Info: Figures/Implementation/angularParams1.pdf used on inpu
+t line 3195.
+(pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [94 <./Figures/Implementation/radialParams.pdf>] [95 <./Figures/Implementation
+/angularParams1.pdf>] [96]
 Chapter 8.
 
-Overfull \hbox (7.3953pt too wide) in paragraph at lines 3234--3237
+Overfull \hbox (7.3953pt too wide) in paragraph at lines 3250--3253
 \OT1/cmr/m/n/12 The main ap-pli-ca-tion pro-gram-ming in-ter-face (API) for Ten
 -sor-Flow (TF) is Python.
  []
 
 
-<Figures/Tests/timeComparisonNetworkTotalScatter.pdf, id=2096, 578.16pt x 433.6
+<Figures/Tests/timeComparisonNetworkTotalScatter.pdf, id=2144, 578.16pt x 433.6
 2pt>
 File: Figures/Tests/timeComparisonNetworkTotalScatter.pdf Graphic file (type pd
 f)
  <use Figures/Tests/timeComparisonNetworkTotalScatter.pdf>
 Package pdftex.def Info: Figures/Tests/timeComparisonNetworkTotalScatter.pdf us
-ed on input line 3253.
+ed on input line 3269.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
 
-<Figures/Tests/timeComparisonNetwork3.pdf, id=2097, 578.16pt x 433.62pt>
+<Figures/Tests/timeComparisonNetwork3.pdf, id=2145, 578.16pt x 433.62pt>
 File: Figures/Tests/timeComparisonNetwork3.pdf Graphic file (type pdf)
 
 <use Figures/Tests/timeComparisonNetwork3.pdf>
 Package pdftex.def Info: Figures/Tests/timeComparisonNetwork3.pdf used on input
- line 3264.
+ line 3280.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
- [97]
+ [97
+
+]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [98 <./Figures/Tests/timeComparisonNetworkTotalScatter.pdf>]
-<Figures/Tests/errorLJ.pdf, id=2159, 578.16pt x 433.62pt>
+<Figures/Tests/errorLJ.pdf, id=2207, 578.16pt x 433.62pt>
 File: Figures/Tests/errorLJ.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorLJ.pdf>
-Package pdftex.def Info: Figures/Tests/errorLJ.pdf used on input line 3281.
+Package pdftex.def Info: Figures/Tests/errorLJ.pdf used on input line 3297.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Tests/errorLJC.pdf, id=2160, 578.16pt x 433.62pt>
+<Figures/Tests/errorLJC.pdf, id=2208, 578.16pt x 433.62pt>
 File: Figures/Tests/errorLJC.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorLJC.pdf>
-Package pdftex.def Info: Figures/Tests/errorLJC.pdf used on input line 3285.
+Package pdftex.def Info: Figures/Tests/errorLJC.pdf used on input line 3301.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [99 <./Figures/Tests/timeComparisonNetwork3.pdf>]
-<Figures/Tests/errorDerivative.pdf, id=2200, 578.16pt x 433.62pt>
+<Figures/Tests/errorDerivative.pdf, id=2248, 578.16pt x 433.62pt>
 File: Figures/Tests/errorDerivative.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorDerivative.pdf>
 Package pdftex.def Info: Figures/Tests/errorDerivative.pdf used on input line 3
-311.
+327.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1772,29 +1784,29 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/errorLJC.pdf): PDF incl
 usion: multiple pdfs with page group included in a single page
->] <Figures/Tests/trainingManyNeighbourNN1.pdf, id=2264, 578.16pt x 433.62pt>
+>] <Figures/Tests/trainingManyNeighbourNN1.pdf, id=2312, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN1.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN1.pdf>
 Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN1.pdf used on inp
-ut line 3351.
+ut line 3367.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
-<Figures/Tests/trainingManyNeighbourNN2.pdf, id=2265, 578.16pt x 433.62pt>
+<Figures/Tests/trainingManyNeighbourNN2.pdf, id=2313, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN2.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN2.pdf>
 Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN2.pdf used on inp
-ut line 3352.
+ut line 3368.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
 
 LaTeX Warning: Reference `quadraticCostFunction' on page 101 undefined on input
- line 3358.
+ line 3374.
 
 
 LaTeX Warning: Reference `quadraticCostFunction' on page 101 undefined on input
- line 3358.
+ line 3374.
 
 [101 <./Figures/Tests/errorDerivative.pdf>]
 Overfull \vbox (7.74113pt too high) has occurred while \output is active []
@@ -1809,7 +1821,7 @@ pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/trainingManyNeighbourNN
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no … in font cmr12!
  [103]
-Overfull \hbox (20.86179pt too wide) in paragraph at lines 3435--3437
+Overfull \hbox (20.86179pt too wide) in paragraph at lines 3451--3453
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
@@ -1818,20 +1830,20 @@ Overfull \hbox (20.86179pt too wide) in paragraph at lines 3435--3437
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [104]
-<Figures/Tests/manyNeighbourEnergyError.pdf, id=2454, 578.16pt x 433.62pt>
+<Figures/Tests/manyNeighbourEnergyError.pdf, id=2503, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourEnergyError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourEnergyError.pdf>
 Package pdftex.def Info: Figures/Tests/manyNeighbourEnergyError.pdf used on inp
-ut line 3471.
+ut line 3487.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Tests/manyNeighbourForceError.pdf, id=2455, 578.16pt x 433.62pt>
+<Figures/Tests/manyNeighbourForceError.pdf, id=2504, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourForceError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourForceError.pdf>
 Package pdftex.def Info: Figures/Tests/manyNeighbourForceError.pdf used on inpu
-t line 3475.
+t line 3491.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
  [105 <./Figures/Tests/manyNeighbourEnergyError.pdf> <./Figures/Tests/manyNeigh
 bourForceError.pdf
@@ -1859,7 +1871,7 @@ Appendix A.
 ] [116] [117] [118] [119] [120
 
 ]
-Underfull \hbox (badness 1194) in paragraph at lines 3722--3726
+Underfull \hbox (badness 1194) in paragraph at lines 3738--3742
 []\OT1/cmr/m/n/12 J. Behler. ''Atom-centered sym-me-try func-tions for con-stru
 ct-ing high-
  []
@@ -1870,25 +1882,25 @@ Missing character: There is no © in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no © in font cmr12!
 
-Underfull \hbox (badness 2012) in paragraph at lines 3814--3818
+Underfull \hbox (badness 2012) in paragraph at lines 3830--3834
 []\OT1/cmr/m/n/12 J. Duchi, E. Hazan, and Y. Singer. ''Adap-tive Sub-gra-di-ent
  Meth-
  []
 
 
-Underfull \hbox (badness 7558) in paragraph at lines 3814--3818
+Underfull \hbox (badness 7558) in paragraph at lines 3830--3834
 \OT1/cmr/m/n/12 ods for On-line Learn-ing and Stochas-tic Op-ti-miza-tion''. In
  \OT1/cmr/m/it/12 The
  []
 
 
-Underfull \hbox (badness 2205) in paragraph at lines 3814--3818
+Underfull \hbox (badness 2205) in paragraph at lines 3830--3834
 \OT1/cmr/m/it/12 Jour-nal of Ma-chine Learn-ing Re-search \OT1/cmr/m/n/12 12. (
 2011) 2121-2159. URL:
  []
 
 [122]
-Underfull \hbox (badness 1221) in paragraph at lines 3862--3865
+Underfull \hbox (badness 1221) in paragraph at lines 3878--3881
 []\OT1/cmr/m/n/12 D. Kriesel. ''A Breif In-tro-duc-tion to Neu-ral Net-works'' 
 Avail-able at
  []
@@ -1896,16 +1908,22 @@ Avail-able at
 [123]
 runsystem(rm "master.pyg")...executed.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3950.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3966.
  [124]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 3950.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 3966.
  (./master.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3950.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3950.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3966.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3966.
 
-Package rerunfilecheck Info: File `master.out' has not changed.
-(rerunfilecheck)             Checksum: 970E34960E651AB073340B4C74E24381;4680.
 
+
+Package rerunfilecheck Warning: File `master.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `master.out':
+(rerunfilecheck)             Before: 8738A9D138109D990A2B6D450ADE4040;4680
+(rerunfilecheck)             After:  2D4849D01A6895B1FD1F8EF7F7A7E8CF;4749.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -1915,14 +1933,14 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3950.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3966.
  )
 (\end occurred when \ifx on line 2718 was incomplete) 
 Here is how much of TeX's memory you used:
- 24249 strings out of 494953
- 450583 string characters out of 6180977
- 650424 words of memory out of 5000000
- 26425 multiletter control sequences out of 15000+600000
+ 24257 strings out of 494953
+ 450836 string characters out of 6180977
+ 651742 words of memory out of 5000000
+ 26430 multiletter control sequences out of 15000+600000
  21828 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  44i,16n,60p,10388b,2243s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1950,10 +1968,10 @@ b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on master.pdf (134 pages, 1718621 bytes).
+Output written on master.pdf (134 pages, 1739994 bytes).
 PDF statistics:
- 2957 PDF objects out of 2984 (max. 8388607)
- 2139 compressed objects within 22 object streams
- 720 named destinations out of 1000 (max. 500000)
- 717 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3007 PDF objects out of 3580 (max. 8388607)
+ 2162 compressed objects within 22 object streams
+ 722 named destinations out of 1000 (max. 500000)
+ 722 words of extra memory for PDF output out of 10000 (max. 10000000)
 
