@@ -1750,40 +1750,23 @@ that the interaction strength falls rapidly with distance for most systems where
 
 
 \subsection{Summary}
-In the beginning of this chapter we listed 10 properties that an ideal potential should possess. 
+In this chapter we have introduced the Behler-Parinello method for constructing NNPs to be used in MD simulations. 
+This scheme employs certain symmetry functions that have the following desirable properties,
+\begin{enumerate}
+ \item They are atom-centered and have an inherent cutoff $R_c$ that defines a chemical environment of tractable size. 
+ \item They yield the same number of outputs independent of the number of inputs. 
+ \item The order of the inputs is irrelevant. 
+ \item They are invariant with respect to translation and rotation.
+ \item They have analytic derivatives.
+\end{enumerate}
+1. and 2. solves the technical issues of the limited and fixed dimensionality of MLPs respectively.
+3. and 4. deals with physical symmetries, namely that the energy of an atomic system does not change
+if two identical atoms are exhanged, or if the system undergoes a translation or a rotation. 
+5. is a wanted property because the symmetry functions are differentiated to obtain forces. 
 
-
-
-
-NNPs offer a number of advantages for the construction of PESs \cite{Behler11general}. 
-\begin{itemize}
- \item Energies can be fitted to arbitrary accuracy, leaving only
- the underlying error of the reference data. Consequentially, NNPs can be categorized as \textit{ab inito} potentials. 
- \item Evaluation of NNPs require much less CPU time than QM methods.
- \item The NNP expression is unbiased and generally applicable to any system.
-\end{itemize}
-In other words, the overarching vision is to create a PES that have the accuracy of \textit{ab inito} potentials, 
-while simultaneously being able to simulate large systems over considerable time scales. 
-Still, there are disadvantages to be aware of:
-\begin{itemize}
- \item The evaluation of NNPs are notably slower compared to empirical potentials.
- \item NNP expressions have no physical interpretation, and have very limited extrapolation capabilities.
- \item NNPs are, for the time being, only applicable to systems containing only a few
- different chemical elements, but many atoms.
-\end{itemize}
-
-\begin{itemize}
- \item The introduction of the cutoff $R_c$ reduces the effective dimensionality
- of the problem, which allows to use NNs of tractable size
- \item The total energy is invariant with respect to the order of the atoms
- \item The NNP can be used for systems of different sizes
- \item We 
-\end{itemize}
-We know that the energy of a molcule does not change under a translation or a rotation. Thus our symmetry functions
-should be invariant with respect to these operations. 
-
-
-
+In \autoref{sec:constructingNNP} we present the complete workflow for constructing a NNP, 
+including a description of how to assemble a symmetry function set, found in 
+\autoref{sec:constructingSymmetry}.
 
 
 
@@ -1797,7 +1780,7 @@ REFERENCE TO MANUAL - FOOTNOTE OF REFERNCE?
 LAMMPS (Large-scale Atomic/Molecular Massively Parallel Simulator)
 is a classical molecular dynamics simulation package 
 developed at Sandia National Laboratories \cite{Plimpton95}. It is written
-in highly portable and extendable objected-oriented c++. 
+in highly portable and extendable objected-oriented \texttt{C++}. 
 The package's functionality encompasses a wide variety of 
 potentials, atom types, integrators, thermostats and 
 ensembles and are able to simulate a large number
@@ -2758,7 +2741,7 @@ the Adam update rule is applied and the weights and biases adjusted.
 
 
 
-\chapter{Constructing a neural network potential} \label{sec:trainingProcedure}
+\chapter{Constructing a neural network potential} \label{sec:constructingNNP}
 In this chapter we present the general workflow for constructing a high-dimensional NNP 
 intended for a specific physical application. We describe different ways of assembling 
 an adequate training set for the NN, which is the most crucial factor for the performance of 
@@ -2827,7 +2810,7 @@ the dynamics. We thus need some kind of importance sampling method that adequate
 We realize that the obvious way to achieve this is to sample configurations from molecular dynamics simulations, which
 yields precisely the subset we are looking for. 
 
-\subsection{Iterative molecular dynamics sampling}
+\subsection{Iterative molecular dynamics sampling} \label{sec:iterativeMDsampling}
 The method for constructing a NN PES with data sampled from MD simulations is as follows \cite{Behler11general}
 \cite{Behler15},
 \begin{enumerate}
@@ -3153,9 +3136,6 @@ This observation does however not change the fact that the high-dimensional neur
 constructing potentials used in this work is general, and can in principle be applied to any system. The training data
 and symmetry function sets have to be customized to each system, but the overarching procedure is the same. 
 
-In this thesis we have mainly employed $G^2$ as the radial symmetry function and $G^5$ as the angular counterpart. 
-Therefore, we only discuss these two functions in the following. 
-
 \subsection{Initial set}
 There are some general rules that guide the construction of the symmetry function set. \cite{Behler15}
 \begin{enumerate}
@@ -3200,55 +3180,71 @@ should increase exponentially to ensure that the symmetry functions are sufficie
   \label{fig:angularParams}
 \end{figure}
 
-\subsection{Analyzing the set}
+\subsection{Adjusting the set}
 Thus, 1., 2. and 3. can be used as a framework for constructing an initial set of symmetry functions.
 Then, we carry out various analyses to investigate whether our chosen symmetry functions 
 adequately probe the configuration space defined by the data set. Item 3., 4. and 5. above serve as the
 guiding principles for the analyses. 
 
-Using 5., the range of values for each symmetry function should be obtained.  Each symmetry function
+\subsubsection{The range of each symmetry function}
+Using 5., the range of values for each symmetry function should be obtained. Each symmetry function
 assigns \textit{one} numerical value to each training example. If the range of a symmetry function is too small, 
 the difference between the function values for distinct structures will also be small. Consequentially, 
 the NN will try to assign substantial energy changes to tiny changes in the symmetry function, which 
-can lead to numerical instability. The symmetry function will not able to identify distinct structures properly. 
+can lead to numerical instability. 
+
 This can be avoided by analyzing the distribution of values of each symmetry function on the data set. If the difference 
-between the maximum and the minimum function value is too small, the symmetry function should be removed or its parameters changed.
+between the maximum and the minimum function value is below a certain threshold
+the symmetry function should be removed or its parameters changed. Specifically, 
+symmetry functions which have a value of zero for all configurations should be avoided, as these will not contribute
+to the description of the chemical environments. 
 
+\subsubsection{Correlations}
+There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
+the efficiency of the calculation of the NN energy output. The number of symmetry functions can be kept as low as 
+possible (4.) by calculating the correlation between the values of two different symmetry functions for the whole 
+training set (5.). If there is a large correlation, the two symmetry functions are almost linearly dependent, 
+and we have a redundancy of information. Consequentially, one of them should be removed, or the parameters adjusted
+to decrease the correlation.
 
-
-
-
-
-
-
-There are a number of analyses that can be carried out to investigate if we have an adequate
-symmetry function set,
-\begin{itemize}
- \item The symmetry functions should cover the configuration space evenly. 
- A reasonable initial choice for the radial symmetry functions is to use an equidistant set to ensure 
- that the whole range of distances in the reference set are probed. Also, it is a good idea 
- to have some knowledge about the radial and angular distribution of atoms for the system we are looking at. 
- This information can be extracted from MD runs with semi-empirical potentials or from experiments and will enable
- us to identify high-density regions of configuration space that should be covered by a larger number
- of symmetry functions than low-density regions. HMMMM, THIS IS VERY BIASED?????????? BEHLER SAYS ''IN AND UNBIASED WAY''.
- \item The range of values for each symmetry function should be analyzed. If the difference between the largest
- and smallest function value is too small, it will not be able to identify distinct structures properly. 
- Symmetry functions which have a value of zero for all configurations should be avoided, as these will not contribute
- to the description of the chemical environment. 
- \item There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
- the efficiency of the calculation of the NN energy output. The number of symmetry functions can be kept as low as
- possible by investigating the correlations between the values of two different symmetry functions for the whole
- reference set. If there is a large correlation, the two symmetry functions are almost linearly dependent, 
- and we have a redundancy of information. Consequentially, one of them should be removed, or the parameters adjusted
- to decrease the correlation. WRITE ABOUT CORRELATIONS AND TRAINING. 
-\end{itemize}
-These tests provide a framework for constructing suitable symmetry function sets. 
-We note that they all depend on the composition of the available data set, including its size. 
-When the iterative approach to constructing data sets are used, the size will increase step by step, 
-and we are required to add more symmetry functions as we go. 
+To demonstrate how the correlations can be calculated, we remember that in 
+\autoref{sec:training} the training set was represented as a matrix $X$, where
+each row is a training example, in this case the values of all the symmetry functions for a single atomic configuration.
+We can calculate the correlations between each pair of symmetry functions with the \texttt{NumPy} method \texttt{corrcoef}, 
+\begin{minted}{python}
+  R = np.corrcoef(np.transpose(X))
+\end{minted}
+The training set matrix $X$ is transposed because \texttt{corrcoef} expects each \textit{row} to represent all the samples of one
+variable (function), while each \textit{column} is a single observation of all the variables.
+A matrix $R$ is returned where the $(i,j)$-th element is the Pearson correlation coefficient between 
+symmetry function $i$ and $j$,
+\begin{equation}
+ R_{ij} = \frac{C_{ij}}{\sigma_i\sigma_j}
+\end{equation}
+where $C$ is the covariance matrix and $\sigma_i$ is the standard deviation of the values of symmetry function $i$ for 
+the whole training set. Pair of functions which are strongly correlated can thus be identified and altered. 
 
 
 \section{Summary}
+In the beginning of this chapter we listed 10 properties that an ideal potential should possess. 
+We are now in a position to evalute the NNPs constructed in this thesis in the light of these requirements. 
+\begin{enumerate}
+ \item The NNP can be fitted to \textit{ab inito} data to arbitrary accuracy, and 
+       can therefore be considered to have \textit{ab inito} accuracy.  
+ \item The NNP can be systematically improved by employing the iterative scheme proposed in \autoref{sec:iterativeMDsampling}.
+ \item The potential is unbiased, and its applications are unlimited as long as the production of \textit{ab inito} reference energies
+       is feasible. 
+ \item The potential is able to model the breaking and making of bonds as long as the training set is sufficiently comprehensive.  
+ \item The potential is high-dimensional because it depends on all the degrees of freedom of the chemical environment of each atom. 
+ \item The training of the NN is automated, but there are a number of parameters that needs to be set manually. 
+       The training set must also be assembled with care. 
+ \item The potential is generally not able to extrapolate. 
+ \item The potential is several orders of magnitude faster to evalute than e.g. DFT or Hartree-Fock potentials, but notably 
+ slower compared to empirical potentials like Lennard-Jones or Stillinger-Weber. 
+ \item Training does not require much computation time, but calculating reference energies for thousands of configurations
+ is time consuming. 
+ \item Analytic derivatives for force computations are readily available. 
+\end{enumerate}
 
 
 
