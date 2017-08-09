@@ -35,7 +35,7 @@
 \BOOKMARK [2][-]{subsection.4.2.1}{Symmetry functions}{section.4.2}% 35
 \BOOKMARK [2][-]{subsection.4.2.2}{Symmetry functions and forces}{section.4.2}% 36
 \BOOKMARK [2][-]{subsection.4.2.3}{Summary}{section.4.2}% 37
-\BOOKMARK [-1][-]{part.2}{II Implementation and validation}{}% 38
+\BOOKMARK [-1][-]{part.2}{II Implementation and results}{}% 38
 \BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 39
 \BOOKMARK [1][-]{section.5.1}{Installing LAMMPS}{chapter.5}% 40
 \BOOKMARK [1][-]{section.5.2}{LAMMPS input script}{chapter.5}% 41
@@ -49,20 +49,21 @@
 \BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 49
 \BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 50
 \BOOKMARK [0][-]{chapter.7}{Constructing a neural network potential}{part.2}% 51
-\BOOKMARK [1][-]{section.7.1}{What properties should a PES have?}{chapter.7}% 52
-\BOOKMARK [1][-]{section.7.2}{Selecting the training data}{chapter.7}% 53
-\BOOKMARK [2][-]{subsection.7.2.1}{Iterative molecular dynamics sampling}{section.7.2}% 54
-\BOOKMARK [2][-]{subsection.7.2.2}{Sampling algorithms}{section.7.2}% 55
-\BOOKMARK [1][-]{section.7.3}{Constructing the symmetry function sets}{chapter.7}% 56
-\BOOKMARK [2][-]{subsection.7.3.1}{Initial set}{section.7.3}% 57
-\BOOKMARK [2][-]{subsection.7.3.2}{Adjusting the set}{section.7.3}% 58
-\BOOKMARK [1][-]{section.7.4}{Summary}{chapter.7}% 59
-\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 60
-\BOOKMARK [1][-]{section.8.1}{Time usage}{chapter.8}% 61
-\BOOKMARK [1][-]{section.8.2}{Training Lennard-Jones potential}{chapter.8}% 62
-\BOOKMARK [2][-]{subsection.8.2.1}{Many-neighbour Lennard-Jones}{section.8.2}% 63
-\BOOKMARK [-1][-]{part.3}{III Results and discussion}{}% 64
-\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.3}% 65
-\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.3}% 66
-\BOOKMARK [0][-]{section*.53}{Appendices}{part.3}% 67
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 68
+\BOOKMARK [1][-]{section.7.1}{Selecting the training data}{chapter.7}% 52
+\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 53
+\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 54
+\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 55
+\BOOKMARK [2][-]{subsection.7.2.1}{Initial set}{section.7.2}% 56
+\BOOKMARK [2][-]{subsection.7.2.2}{Adjusting the set}{section.7.2}% 57
+\BOOKMARK [0][-]{chapter.8}{Details on training}{part.2}% 58
+\BOOKMARK [1][-]{section.8.1}{Training parameters}{chapter.8}% 59
+\BOOKMARK [1][-]{section.8.2}{Transfer NN from Python to C++}{chapter.8}% 60
+\BOOKMARK [0][-]{chapter.9}{Validation}{part.2}% 61
+\BOOKMARK [1][-]{section.9.1}{Training Lennard-Jones potential}{chapter.9}% 62
+\BOOKMARK [2][-]{subsection.9.1.1}{Many-neighbour Lennard-Jones}{section.9.1}% 63
+\BOOKMARK [0][-]{chapter.10}{NN potential for Si}{part.2}% 64
+\BOOKMARK [0][-]{chapter.11}{NN potential for SiO2}{part.2}% 65
+\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 66
+\BOOKMARK [0][-]{chapter.12}{The quality of the NNP}{part.3}% 67
+\BOOKMARK [0][-]{section*.53}{Appendices}{part.3}% 68
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 69

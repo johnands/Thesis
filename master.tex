@@ -1771,9 +1771,7 @@ including a description of how to assemble a symmetry function set, found in
 
 
 
-
-
-\part{Implementation and validation}
+\part{Implementation and results}
 
 \chapter{LAMMPS} \label{sec:lammps}
 REFERENCE TO MANUAL - FOOTNOTE OF REFERNCE?
@@ -2752,32 +2750,6 @@ Next, we discuss how to find a symmetry function set that fits the system under 
 The form of the symmetry functions are found in \autoref{sec:NNsAndMD}, while
 the mathematical groundwork of neural networks and various training algorithms are presented in \autoref{sec:machineLearning}.
 
-We start out with a brief discussion on what properties that
-are favourable for any PES, irregardless of circumstances. 
-
-\section{What properties should a PES have?}
-When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
-should possess. These serve as a guide during the construction process, and is also a good 
-starting point for comparing different types of potentials. Behler \cite{Behler15} lists 10 requirements
-that the ideal potential should meet, repeated here for reference:
-\begin{enumerate}\itemsep1pt
- \item The potential should be accurate, i.e. produce results that are in good agreement with experiments. 
-       Ideally, it should be constructed using \textit{ab inito} methods. 
- \item There should be ways to systematically detect situations where the potential is not suffientently accurate, 
-       and improve it without too much effort. 
- \item The potential should be unbiased and applicable to all types of systems and chemical bonding. 
- \item The potential should enable the breaking and making of bonds. 
- \item The potential should be high-dimensional, i.e. depend on all degress of freedom of the system. 
- \item The construction of the potential should be as automated as possible. 
- \item The potential should be predictive, i.e. be reliable for atomic configurations that have not been used in the 
-       construction. 
- \item The potential should be fast to evaluate. 
- \item The construction of the potential should not require much computation time. 
- \item To compute forces, analytic derivatives of the potential should be available. 
-\end{enumerate}
-None of the potentials currently available meet all the above requirements to a satisfactory degree. 
-At the end of this chapter, we will discuss which of these requirements that are fulfilled by the NNPs constructed
-in this thesis. 
 
 
 \section{Selecting the training data} \label{sec:selectingTrainingData}
@@ -3225,32 +3197,12 @@ where $C$ is the covariance matrix and $\sigma_i$ is the standard deviation of t
 the whole training set. Pair of functions which are strongly correlated can thus be identified and altered. 
 
 
-\section{Summary}
-In the beginning of this chapter we listed 10 properties that an ideal potential should possess. 
-We are now in a position to evalute the NNPs constructed in this thesis in the light of these requirements. 
-\begin{enumerate}
- \item The NNP can be fitted to \textit{ab inito} data to arbitrary accuracy, and 
-       can therefore be considered to have \textit{ab inito} accuracy.  
- \item The NNP can be systematically improved by employing the iterative scheme proposed in \autoref{sec:iterativeMDsampling}.
- \item The potential is unbiased, and its applications are unlimited as long as the production of \textit{ab inito} reference energies
-       is feasible. 
- \item The potential is able to model the breaking and making of bonds as long as the training set is sufficiently comprehensive.  
- \item The potential is high-dimensional because it depends on all the degrees of freedom of the chemical environment of each atom. 
- \item The training of the NN is automated, but there are a number of parameters that needs to be set manually. 
-       The training set must also be assembled with care. 
- \item The potential is generally not able to extrapolate. 
- \item The potential is several orders of magnitude faster to evalute than e.g. DFT or Hartree-Fock potentials, but notably 
- slower compared to empirical potentials like Lennard-Jones or Stillinger-Weber. 
- \item Training does not require much computation time, but calculating reference energies for thousands of configurations
- is time consuming. 
- \item Analytic derivatives for force computations are readily available. 
-\end{enumerate}
+\chapter{Details on training}
+
+\section{Training parameters}
 
 
-
-\chapter{Validation}
-
-\section{Time usage} \label{sec:timeUsage}
+\section{Transfer NN from Python to C++} \label{sec:timeUsage}
 The workflow when training a NN and using it in MD is as follows: 
 \begin{enumerate}
  \item Generate training data
@@ -3296,6 +3248,9 @@ for small NNs, but seems to converge to 1 for large networks. The convergence ra
 can be that the \textit{Session} environment in TF has lot of overhead. However, the main computational strength of TF resides 
 in GPUs, which will be tested out later on. 
 
+
+
+\chapter{Validation}
 
 \section{Training Lennard-Jones potential}
 To verify that the implementation of the NN and the backpropagation algorithm with Armadillo in our MD code is correct, 
@@ -3512,7 +3467,6 @@ will magnify for each time step, resulting in inaccurate statistical properties 
 Therefore it is a better idea to have the NN only output the total energy, and find the forces by analytically
 differentiating the NN for each time step. $\SI{4}{\angstrom}$
 
-\part{Results and discussion}
 
 \chapter{NN potential for Si} \label{sec:SiPotentialResults}
 Construct an NN potential for Si that works in a certain temperature range (only solid, or liquid too?)
@@ -3523,6 +3477,74 @@ with experiments and with results with Stillinger-Weber.
 Construct an NN potential for SiO2 that works in a certain temperature range (only solid, or liquid too?). 
 Can use various potentials as the black box, e.g. Vashishta or ReaxFF. 
 ReaxFF would be great, because then we would maybe get a speed-up. 
+
+
+\part{Conclusions and future work}
+
+\chapter{The quality of the NNP}
+How well does the NNP described in this thesis perform compared to other potentials? 
+When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
+should possess. These serve as a guide during the construction process, and is also a good 
+starting point for comparing different types of potentials. Behler \cite{Behler11general} lists 10 requirements
+that the ideal potential should meet. We will now evaluate our NNP in the light of these requirements. 
+\begin{enumerate}
+ \item \textit{The potential should be accurate, i.e. produce results that are in good agreement with experiments. 
+       Ideally, it should be constructed using \textit{ab inito} methods.} 
+       
+       The NNP can be fitted to \textit{ab inito} data to arbitrary accuracy, and 
+       can therefore be considered to have \textit{ab inito} accuracy.  
+ \item \textit{There should be ways to systematically detect situations where the potential is not suffientently accurate, 
+       and improve it without too much effort.} 
+       
+       The NNP can be systematically improved by employing the iterative scheme proposed in \autoref{sec:selectingTrainingData}.
+ \item \textit{The potential should be unbiased and applicable to all types of systems and chemical bonding.} 
+       
+       The NNP has no pre-defined functional form, and its applications are unlimited as 
+       long as the production of \textit{ab inito} reference energies is feasible. 
+ \item \textit{The potential should enable the breaking and making of bonds.}
+       
+       The NNP is able to model the breaking and making of bonds as long as the training set contains
+       configurations that are relevant for these processes.  
+ \item \textit{The potential should be high-dimensional, i.e. depend on all degress of freedom of the system.}
+       
+       The NNP is high-dimensional because it depends on all the degrees of freedom of the chemical environment of each atom. 
+ \item \textit{The construction of the potential should be as automated as possible.} 
+       
+       The NN parameters, and hence the functional form of the NNP, is automatically optimized. However, 
+       symmetry parameters, optimization parameters and the NN architecture must be adjusted manually. 
+       Further, training data can be automatically produced by MD simulations, but the physical conditions 
+       of each simulation and the sampling of configurations must be carefully considered. 
+ \item \textit{The potential should be predictive, i.e. be reliable for atomic configurations that have not been used in the 
+       construction.}
+       
+       The NNP is generally not able to extrapolate, and is thus reliable only for configurations that are present in 
+       the training set. 
+       
+ \item \textit{The potential should be fast to evaluate.}
+ 
+       The NNP is several orders of magnitude faster to evalute than e.g. DFT or Hartree-Fock potentials, 
+       and thus enables MD simulations with \textit{ab inito} accuracy on larger scales of space and time.  
+       It is however notably slower compared to empirical potentials like Lennard-Jones or Stillinger-Weber. 
+ \item \textit{The construction of the potential should not require much computation time.}
+ 
+       Training does not require much computation time, but calculating reference energies for thousands of configurations
+       is time consuming. 
+ \item \textit{To compute forces, analytic derivatives of the potential should be available.}
+       Analytic derivatives of both the NN and the symmetry functions are readily available. 
+\end{enumerate}
+We observe that our NNP fulfills the majority of the 10 requirements stated above.  
+However, none of the potentials currently available, including NNPs, are ideal potentials.
+The most crucial flaw is probably the NNPs unreliability for configurations that has not been included in its training. 
+On the other hand, NNPs are an excellent tool for multi-scale physics. They connect the realms of quantum mechanics 
+and molecular dynamics by enabling \textit{ab inito} simulations on a larger scale of space and time than what is feasible 
+for convential \textit{ab inito} MD. This property, in addition to the unbiased and transferable nature of the approach, 
+signifiy that research in this field will be increasingly important in the future. 
+
+
+
+
+
+
 
 
 \begin{appendices}
