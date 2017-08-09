@@ -55,15 +55,16 @@
 \BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 55
 \BOOKMARK [2][-]{subsection.7.2.1}{Initial set}{section.7.2}% 56
 \BOOKMARK [2][-]{subsection.7.2.2}{Adjusting the set}{section.7.2}% 57
-\BOOKMARK [0][-]{chapter.8}{Details on training}{part.2}% 58
-\BOOKMARK [1][-]{section.8.1}{Training parameters}{chapter.8}% 59
-\BOOKMARK [1][-]{section.8.2}{Transfer NN from Python to C++}{chapter.8}% 60
-\BOOKMARK [0][-]{chapter.9}{Validation}{part.2}% 61
-\BOOKMARK [1][-]{section.9.1}{Training Lennard-Jones potential}{chapter.9}% 62
-\BOOKMARK [2][-]{subsection.9.1.1}{Many-neighbour Lennard-Jones}{section.9.1}% 63
-\BOOKMARK [0][-]{chapter.10}{NN potential for Si}{part.2}% 64
-\BOOKMARK [0][-]{chapter.11}{NN potential for SiO2}{part.2}% 65
-\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 66
-\BOOKMARK [0][-]{chapter.12}{The quality of the NNP}{part.3}% 67
-\BOOKMARK [0][-]{section*.53}{Appendices}{part.3}% 68
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 69
+\BOOKMARK [1][-]{section.7.3}{Details on training}{chapter.7}% 58
+\BOOKMARK [2][-]{subsection.7.3.1}{Preconditioning the input data}{section.7.3}% 59
+\BOOKMARK [1][-]{section.7.4}{Training parameters}{chapter.7}% 60
+\BOOKMARK [1][-]{section.7.5}{Transfer NN from Python to C++}{chapter.7}% 61
+\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 62
+\BOOKMARK [1][-]{section.8.1}{Training Lennard-Jones potential}{chapter.8}% 63
+\BOOKMARK [2][-]{subsection.8.1.1}{Many-neighbour Lennard-Jones}{section.8.1}% 64
+\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.2}% 65
+\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.2}% 66
+\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 67
+\BOOKMARK [0][-]{chapter.11}{The quality of the NNP}{part.3}% 68
+\BOOKMARK [0][-]{section*.53}{Appendices}{part.3}% 69
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 70

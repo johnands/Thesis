@@ -1293,6 +1293,7 @@ training set.
  \item Compute weight and bias gradients: 
  \begin{equation}
   G_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \vec{H}_l = \vec{\delta}_l
+  \label{weightUpdate}
  \end{equation}
  \item Update weights and biases using an update rule of choice
 \end{enumerate}
@@ -2784,7 +2785,7 @@ yields precisely the subset we are looking for.
 
 \subsection{Iterative molecular dynamics sampling} \label{sec:iterativeMDsampling}
 The method for constructing a NN PES with data sampled from MD simulations is as follows \cite{Behler11general}
-\cite{Behler15},
+\cite{Raff12},
 \begin{enumerate}
  \item Sample an initial data set from MD simulations. \label{sample} 
  \item Calculate the energies and optionally the forces of this initial data set with a chosen method. \label{refEnergies}
@@ -2793,7 +2794,7 @@ The method for constructing a NN PES with data sampled from MD simulations is as
  \item Carry out simulations using the NNP to find new relevant structures. 
  \item Compute the energies (and forces) of the new structures with the method from 2. and add them to the data set
  \item Train a NN on the extended data set to improve the NNP
- \item Repeat 4.-6. until a stopping criteria is met
+ \item Repeat 4.-6. until no new relevant configurations are found. 
   \label{NNPalgorithm}
 \end{enumerate}
 The idea is to improve the NN potential iteratively and in a self-consistent 
@@ -3095,7 +3096,7 @@ from have also been carefully considered, described in more detail in \autoref{s
 
 
 
-\section{Constructing the symmetry function sets} \label{sec:constructingSymmetry}
+\section{Constructing the symmetry function sets} \label{sec:constructingSymmetry}g
 The choice of symmetry functions is important to achieve a good fit to the reference data. 
 They need to be able to sufficiently distinct inequivalent structures to avoid fitting 
 contradictory data. If this distinction is not possible, different reference structures with 
@@ -3194,10 +3195,38 @@ symmetry function $i$ and $j$,
  R_{ij} = \frac{C_{ij}}{\sigma_i\sigma_j}
 \end{equation}
 where $C$ is the covariance matrix and $\sigma_i$ is the standard deviation of the values of symmetry function $i$ for 
-the whole training set. Pair of functions which are strongly correlated can thus be identified and altered. 
+the whole training set. Pair of functions which are strongly correlated can thus be identified and altered.
 
 
-\chapter{Details on training}
+
+\section{Details on training}
+In \autoref{sec:training} and \autoref{sec:optimization} we presented the theory on how a MLP is trained 
+by optimizing the weights and biases using an optimization algorithm of choice. 
+This section deals with implementational details to consider when training a MLP, and some advanced theory on the subject. 
+
+\subsection{Preconditioning the input data}
+As stated in the previous section, the individual symmetry functions may have very different ranges of values. 
+For a given configuration, each node in the first hidden layer receives as input a weighted sum of all the symmetry function values.
+Symmetry functions with large absolute values will have a signicantly stronger impact on the output of these nodes than 
+functions with small absolute values. Consequentially, the areas of configuration space covered by the latter functions
+may take a longer time for the NN to learn. The importance of the different symmetry functions can be balanced
+by normalizing the values \cite{Behler15} of each symmetry function $G_s$, 
+\begin{equation}
+ G_s^{\mathrm{scaled}} = \frac{2(G_s - G_{s,\min})}{G_{s,\max} - G_{s,\min}} - 1
+\end{equation}
+where $G_{s,\min}$ and $G_{s,\max}$ are the smallest and largest values of function $G_s$ in the data set respectively.
+
+Further, convergence is usually faster if the average of each input variable to a NN over the 
+training set is close to zero \cite{LeCun98}.
+This is because the update of a weight to a node in the first hidden layer is proportional 
+to $\delta G_s$ \eqref{weightUpdate} where $\delta$ is the error of the node and $G_s$ is the value of an input node. 
+Osvosv..
+
+
+
+As stated in the previous section, the input data to the NN is a set of vectors of symmetry function values, represented by a matrix $X$.
+We discussed 
+
 
 \section{Training parameters}
 
@@ -3990,6 +4019,11 @@ and
  ''Generalized Neural-Network Representation of High-Dimensional Potential-Energy Surfaces''.
  In: \textit{Physical Review Letters} 98. (2007), 146401. 
  DOI: \href{http://dx.doi.org/10.1103/PhysRevLett.98.146401}{10.1103/PhysRevLett.98.146401}
+ 
+\bibitem{LeCun98}
+ Y. LeCun, L. Bottou, G. B. Orr, and K. Müller.
+ ''Neural Networks: Tricks of the Trade.''
+ Springer, 1998. 
  
  
  

@@ -77,15 +77,16 @@
 \contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{91}{subsection.7.2.2}
 \contentsline {subsubsection}{The range of each symmetry function}{92}{section*.45}
 \contentsline {subsubsection}{Correlations}{92}{section*.46}
-\contentsline {chapter}{\numberline {8}Details on training}{95}{chapter.8}
-\contentsline {section}{\numberline {8.1}Training parameters}{95}{section.8.1}
-\contentsline {section}{\numberline {8.2}Transfer NN from Python to C++}{95}{section.8.2}
-\contentsline {chapter}{\numberline {9}Validation}{99}{chapter.9}
-\contentsline {section}{\numberline {9.1}Training Lennard-Jones potential}{99}{section.9.1}
-\contentsline {subsection}{\numberline {9.1.1}Many-neighbour Lennard-Jones}{101}{subsection.9.1.1}
-\contentsline {chapter}{\numberline {10}NN potential for Si}{107}{chapter.10}
-\contentsline {chapter}{\numberline {11}NN potential for SiO2}{109}{chapter.11}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{111}{part.3}
-\contentsline {chapter}{\numberline {12}The quality of the NNP}{113}{chapter.12}
-\contentsline {chapter}{Appendices}{115}{section*.53}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{117}{Appendix.1.A}
+\contentsline {section}{\numberline {7.3}Details on training}{93}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{93}{subsection.7.3.1}
+\contentsline {section}{\numberline {7.4}Training parameters}{94}{section.7.4}
+\contentsline {section}{\numberline {7.5}Transfer NN from Python to C++}{94}{section.7.5}
+\contentsline {chapter}{\numberline {8}Validation}{97}{chapter.8}
+\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{97}{section.8.1}
+\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{99}{subsection.8.1.1}
+\contentsline {chapter}{\numberline {9}NN potential for Si}{105}{chapter.9}
+\contentsline {chapter}{\numberline {10}NN potential for SiO2}{107}{chapter.10}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{109}{part.3}
+\contentsline {chapter}{\numberline {11}The quality of the NNP}{111}{chapter.11}
+\contentsline {chapter}{Appendices}{113}{section*.53}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{115}{Appendix.1.A}
