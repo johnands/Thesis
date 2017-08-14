@@ -1293,6 +1293,7 @@ training set.
  \item Compute weight and bias gradients: 
  \begin{equation}
   G_l = \vec{\delta}_l \vec{y}_{l-1}^T, \quad \vec{H}_l = \vec{\delta}_l
+  \label{weightUpdate}
  \end{equation}
  \item Update weights and biases using an update rule of choice
 \end{enumerate}
@@ -3217,13 +3218,14 @@ where $G_{s,\min}$ and $G_{s,\max}$ are the smallest and largest values of funct
 
 Further, convergence is usually faster if the average of each input variable to a NN over the 
 training set is close to zero \cite{LeCun98}.
+This is because the update of a weight to a node in the first hidden layer is proportional 
+to $\delta y_0 = \delta G_s$ \eqref{weightUpdate} where $\delta$ is the error of the node,
+and $y_0 = G_s$ is the value of an input node. 
+Since all the input values $G_s$ are always positive, the weight updates will all have the same sign, namely $\mathrm{sign}(\delta)$. 
+As a result, these weights can only increase or decrease \textit{together} for a given input vector, leading to slow convergence.  
 
-To realize this
+INVESTIGATE THIS BRIEFLY AND PRESENT SOME RESULTS. 
 
-
-
-As stated in the previous section, the input data to the NN is a set of vectors of symmetry function values, represented by a matrix $X$.
-We discussed 
 
 
 \section{Training parameters}
