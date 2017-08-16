@@ -49,44 +49,45 @@
 \contentsline {subsection}{\numberline {4.2.1}Symmetry functions}{45}{subsection.4.2.1}
 \contentsline {subsubsection}{Radial symmetry functions}{46}{section*.29}
 \contentsline {subsubsection}{Angular symmetry functions}{49}{section*.31}
+\contentsline {subsubsection}{Setting the symmetry parameters}{49}{section*.33}
 \contentsline {subsection}{\numberline {4.2.2}Symmetry functions and forces}{50}{subsection.4.2.2}
-\contentsline {subsubsection}{Change of coordinates}{51}{section*.33}
+\contentsline {subsubsection}{Change of coordinates}{52}{section*.34}
 \contentsline {subsection}{\numberline {4.2.3}Summary}{54}{subsection.4.2.3}
-\contentsline {part}{II\hspace {1em}Implementation and results}{55}{part.2}
-\contentsline {chapter}{\numberline {5}LAMMPS}{57}{chapter.5}
-\contentsline {section}{\numberline {5.1}Installing LAMMPS}{57}{section.5.1}
-\contentsline {section}{\numberline {5.2}LAMMPS input script}{58}{section.5.2}
-\contentsline {section}{\numberline {5.3}LAMMPS structure}{62}{section.5.3}
-\contentsline {section}{\numberline {5.4}Extending LAMMPS}{62}{section.5.4}
-\contentsline {chapter}{\numberline {6}TensorFlow}{71}{chapter.6}
-\contentsline {section}{\numberline {6.1}Installing TensorFlow}{72}{section.6.1}
-\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{73}{section.6.2}
-\contentsline {subsection}{\numberline {6.2.1}Hello world}{73}{subsection.6.2.1}
-\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{74}{subsection.6.2.2}
-\contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{75}{subsection.6.2.3}
-\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{77}{subsection.6.2.4}
-\contentsline {chapter}{\numberline {7}Constructing a neural network potential}{81}{chapter.7}
-\contentsline {section}{\numberline {7.1}Selecting the training data}{81}{section.7.1}
-\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{82}{subsection.7.1.1}
-\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{83}{subsection.7.1.2}
-\contentsline {subsubsection}{Initial sampling}{84}{section*.39}
-\contentsline {subsubsection}{Iterative sampling}{88}{section*.41}
-\contentsline {subsubsection}{Summary}{89}{section*.42}
-\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{90}{section.7.2}
-\contentsline {subsection}{\numberline {7.2.1}Initial set}{90}{subsection.7.2.1}
-\contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{91}{subsection.7.2.2}
-\contentsline {subsubsection}{The range of each symmetry function}{92}{section*.45}
-\contentsline {subsubsection}{Correlations}{92}{section*.46}
-\contentsline {section}{\numberline {7.3}Details on training}{93}{section.7.3}
-\contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{93}{subsection.7.3.1}
-\contentsline {section}{\numberline {7.4}Training parameters}{94}{section.7.4}
-\contentsline {section}{\numberline {7.5}Transfer NN from Python to C++}{94}{section.7.5}
-\contentsline {chapter}{\numberline {8}Validation}{97}{chapter.8}
-\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{97}{section.8.1}
-\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{99}{subsection.8.1.1}
-\contentsline {chapter}{\numberline {9}NN potential for Si}{105}{chapter.9}
-\contentsline {chapter}{\numberline {10}NN potential for SiO2}{107}{chapter.10}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{109}{part.3}
-\contentsline {chapter}{\numberline {11}The quality of the NNP}{111}{chapter.11}
-\contentsline {chapter}{Appendices}{113}{section*.53}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{115}{Appendix.1.A}
+\contentsline {part}{II\hspace {1em}Implementation and results}{57}{part.2}
+\contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}
+\contentsline {section}{\numberline {5.1}Installing LAMMPS}{59}{section.5.1}
+\contentsline {section}{\numberline {5.2}LAMMPS input script}{60}{section.5.2}
+\contentsline {section}{\numberline {5.3}LAMMPS structure}{64}{section.5.3}
+\contentsline {section}{\numberline {5.4}Extending LAMMPS}{64}{section.5.4}
+\contentsline {chapter}{\numberline {6}TensorFlow}{73}{chapter.6}
+\contentsline {section}{\numberline {6.1}Installing TensorFlow}{74}{section.6.1}
+\contentsline {section}{\numberline {6.2}TensorFlow basic usage}{75}{section.6.2}
+\contentsline {subsection}{\numberline {6.2.1}Hello world}{75}{subsection.6.2.1}
+\contentsline {subsection}{\numberline {6.2.2}Creating a neural network}{76}{subsection.6.2.2}
+\contentsline {subsection}{\numberline {6.2.3}Visualizing the graph}{77}{subsection.6.2.3}
+\contentsline {subsection}{\numberline {6.2.4}Training a NN with TensorFlow}{79}{subsection.6.2.4}
+\contentsline {chapter}{\numberline {7}Constructing a neural network potential}{83}{chapter.7}
+\contentsline {section}{\numberline {7.1}Selecting the training data}{83}{section.7.1}
+\contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{84}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{85}{subsection.7.1.2}
+\contentsline {subsubsection}{Initial sampling}{86}{section*.40}
+\contentsline {subsubsection}{Iterative sampling}{90}{section*.42}
+\contentsline {subsubsection}{Summary}{91}{section*.43}
+\contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Initial set}{92}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{93}{subsection.7.2.2}
+\contentsline {subsubsection}{The range of each symmetry function}{94}{section*.46}
+\contentsline {subsubsection}{Correlations}{94}{section*.47}
+\contentsline {section}{\numberline {7.3}Details on training}{95}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{95}{subsection.7.3.1}
+\contentsline {section}{\numberline {7.4}Determine hyperparameters}{96}{section.7.4}
+\contentsline {section}{\numberline {7.5}Transfer NN from Python to C++}{97}{section.7.5}
+\contentsline {chapter}{\numberline {8}Validation}{101}{chapter.8}
+\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{101}{section.8.1}
+\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{103}{subsection.8.1.1}
+\contentsline {chapter}{\numberline {9}NN potential for Si}{109}{chapter.9}
+\contentsline {chapter}{\numberline {10}NN potential for SiO2}{111}{chapter.10}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{113}{part.3}
+\contentsline {chapter}{\numberline {11}The quality of the NNP}{115}{chapter.11}
+\contentsline {chapter}{Appendices}{117}{section*.54}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{119}{Appendix.1.A}
