@@ -3226,7 +3226,7 @@ by normalizing the values \cite{Behler15} of each symmetry function $G_s$,
 where $G_{s,\min}$ and $G_{s,\max}$ are the smallest and largest values of function $G_s$ in the data set respectively.
 
 Further, convergence is usually faster if the average of each input variable to a NN over the 
-training set is close to zero \cite{LeCun98}.
+training set is close to zero \cite{LeCun12}.
 This is because the update of a weight to a node in the first hidden layer is proportional 
 to $\delta y_0 = \delta G_s$ \eqref{weightUpdate} where $\delta$ is the error of the node,
 and $y_0 = G_s$ is the value of an input node. 
@@ -3252,9 +3252,47 @@ from a single simulation of Si with the Stillinger-Weber potential. This fitting
 scaling and shifting, with the exact same training parameters. The result can be seen in \autoref{fig:testScalingShifting}. 
 
 
-\section{Determine hyperparameters} \label{sec:determineHyperparameters}
+\subsection{Hyperparameters} \label{sec:determineHyperparameters}
 At the end of \autoref{sec:symmetryFunctions}, we briefly mentioned that a number of so-called hyperparameters must be set
-prior to the actual optimization of 
+prior to the actual weight optimization. These include, among others, the learning rate and 
+the architecture of the NN, i.e. the number of layers and nodes. Choosing hyperparameter values can be treated as a
+kind of \textit{model selection}. One set of parameters defines one model, and the goal is to pick the most appropriate 
+among a family of such models. The choice can have significant impact on the quality of the fit. 
+
+We distinguish between two kinds of hyperparameters: those that specify the structure of the 
+network itself, and those that determine how the network is trained. 
+The first type contains parameters that are an integral part of the NN and must be included in the evaluation of the eventual NNP, 
+while the second are parameters that are only used during training. The former includes the number of layers and nodes, 
+the choice of activation function(s), and the symmetry function parameters. The second includes 
+the learning rate, the mini-batch size, the number of training iterations, the choice of loss function and any additional 
+parameters associated with the optimization algorithm and weight initialization.
+
+In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
+
+\subsubsection{Network architecture}
+
+\subsubsection{Activation function and saturation}
+
+\subsubsection{Symmetry functions}
+
+\subsubsection{Cost function}
+
+\subsubsection{Learning rate and mini-batch size}
+
+\subsubsection{Number of iterations and overfitting}
+
+\subsubsection{Weight initialization}
+
+\subsubsection{Other techniques}
+
+
+
+
+
+
+
+
+
 
 
 LEARNING RATE, ARCHITECTURE, ACTIVATION FUNCTION (SATURATION), ONLINE VS OFFLINE LEARNING. 
@@ -3276,7 +3314,7 @@ nodes for training) and variables (weights and activation functions) as binary f
 These files can then be read and the NN evaluated using the TF C++ API. This API is however quite under-developed
 and the documentation is very sparse. Another alternative is to manually save the weights and biases
 as a text file, along with information on which activation function(s) that has been used. This file 
-file can then be used to reconstruct the NN in the same way that it is made in Python: By representing
+can then be used to reconstruct the NN in the same way that it is made in Python: By representing
 the connection weights between layers as matrices and the biases as vectors. The activation functions
 must be coded manually. A linear algebra library should
 be utilized for speed and simplicity; we have chosen to use Armadillo. 
@@ -4049,10 +4087,18 @@ and
  In: \textit{Physical Review Letters} 98. (2007), 146401. 
  DOI: \href{http://dx.doi.org/10.1103/PhysRevLett.98.146401}{10.1103/PhysRevLett.98.146401}
  
-\bibitem{LeCun98}
- Y. LeCun, L. Bottou, G. B. Orr, and K. Müller.
- ''Neural Networks: Tricks of the Trade.''
- Springer, 1998. 
+\bibitem{LeCun12}
+ Y. LeCun, L. Bottou, G. B. Orr, and K.-R. Müller.
+ ''Efficient backprop''. 
+ In: G. Montavon, G. B. Orr, K.-R. Müller (Eds.), \textit{Neural Networks: Tricks of the Trade} (2nd edition, pp. 9-48).
+ Springer, 2012. 
+ 
+\bibitem{Bengio12}
+ Y. Bengio. 
+ ''Practical Recommendations for Gradient-Based Training of Deep Architectures.''
+ In: G. Montavon, G. B. Orr, K.-R. Müller (Eds.), \textit{Neural Networks: Tricks of the Trade} (2nd edition, pp. 437-478). 
+ Springer, 2012. 
+ arXiv: \href{arxiv.org/abs/1206.5533v2}{1206.5533v2}
  
  
  

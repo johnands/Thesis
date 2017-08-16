@@ -80,8 +80,16 @@
 \contentsline {subsubsection}{Correlations}{94}{section*.47}
 \contentsline {section}{\numberline {7.3}Details on training}{95}{section.7.3}
 \contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{95}{subsection.7.3.1}
-\contentsline {section}{\numberline {7.4}Determine hyperparameters}{96}{section.7.4}
-\contentsline {section}{\numberline {7.5}Transfer NN from Python to C++}{97}{section.7.5}
+\contentsline {subsection}{\numberline {7.3.2}Hyperparameters}{96}{subsection.7.3.2}
+\contentsline {subsubsection}{Network architecture}{97}{section*.48}
+\contentsline {subsubsection}{Activation function and saturation}{97}{section*.49}
+\contentsline {subsubsection}{Symmetry functions}{97}{section*.50}
+\contentsline {subsubsection}{Cost function}{97}{section*.51}
+\contentsline {subsubsection}{Learning rate and mini-batch size}{97}{section*.52}
+\contentsline {subsubsection}{Number of iterations and overfitting}{97}{section*.53}
+\contentsline {subsubsection}{Weight initialization}{97}{section*.54}
+\contentsline {subsubsection}{Other techniques}{97}{section*.55}
+\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{97}{section.7.4}
 \contentsline {chapter}{\numberline {8}Validation}{101}{chapter.8}
 \contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{101}{section.8.1}
 \contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{103}{subsection.8.1.1}
@@ -89,5 +97,5 @@
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{111}{chapter.10}
 \contentsline {part}{III\hspace {1em}Conclusions and future work}{113}{part.3}
 \contentsline {chapter}{\numberline {11}The quality of the NNP}{115}{chapter.11}
-\contentsline {chapter}{Appendices}{117}{section*.54}
+\contentsline {chapter}{Appendices}{117}{section*.62}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{119}{Appendix.1.A}
