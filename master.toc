@@ -82,14 +82,14 @@
 \contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{95}{subsection.7.3.1}
 \contentsline {subsection}{\numberline {7.3.2}Hyperparameters}{96}{subsection.7.3.2}
 \contentsline {subsubsection}{Network architecture}{97}{section*.48}
-\contentsline {subsubsection}{Activation function and saturation}{97}{section*.49}
-\contentsline {subsubsection}{Symmetry functions}{97}{section*.50}
-\contentsline {subsubsection}{Cost function}{97}{section*.51}
-\contentsline {subsubsection}{Learning rate and mini-batch size}{97}{section*.52}
-\contentsline {subsubsection}{Number of iterations and overfitting}{97}{section*.53}
-\contentsline {subsubsection}{Weight initialization}{97}{section*.54}
-\contentsline {subsubsection}{Other techniques}{97}{section*.55}
-\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{97}{section.7.4}
+\contentsline {subsubsection}{Activation function and saturation}{98}{section*.49}
+\contentsline {subsubsection}{Symmetry functions}{98}{section*.50}
+\contentsline {subsubsection}{Cost function}{98}{section*.51}
+\contentsline {subsubsection}{Learning rate and mini-batch size}{98}{section*.52}
+\contentsline {subsubsection}{Number of iterations and overfitting}{98}{section*.53}
+\contentsline {subsubsection}{Weight initialization}{98}{section*.54}
+\contentsline {subsubsection}{Other techniques}{98}{section*.55}
+\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{98}{section.7.4}
 \contentsline {chapter}{\numberline {8}Validation}{101}{chapter.8}
 \contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{101}{section.8.1}
 \contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{103}{subsection.8.1.1}

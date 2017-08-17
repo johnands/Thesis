@@ -820,7 +820,9 @@ In later years, the rectifier function (\autoref{fig:reluActivationFunction})
 \begin{equation}
  f(x) = \max(0,x)
 \end{equation}
-has become the most popular \cite{LeCun15} for \textit{deep neural networks}, i.e. NNs with a large number of hidden layers.
+has become the most popular \cite{LeCun15} for \textit{deep neural networks}, i.e. NNs with several hidden layers.
+\footnote{There is no consensus in the literature on how many hidden layers a NN must possess in order to qualify as ''deep'', 
+but there seems to be a tendency towards setting the minimum number of layers to three.}
 It has been argued to be even more biologically plausible than the sigmoid and also perform better
 than the hyperbolic tangent, especially for deep, convolutional NNs \cite{Glorot11}. Even though the rectifier is a
 piecewise \textit{linear} function, it effectively behaves as a non-linearity. However, it does not have an upper bound, and
@@ -3269,6 +3271,56 @@ parameters associated with the optimization algorithm and weight initialization.
 
 In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
 
+\subsubsection{Network architecture}
+There is no standard and accepted method for finding the optimal size of a NN for a specific data set, but 
+we do have some general ground rules.
+In this work, the input layer is a set of symmetry functions that acts as descriptors of atomic configurations.
+(SHOULD THE DISCUSSION ON THE INPUT LAYER BE MOVED TO THE SECTION ON CONSTRUCTIONS OF SYMMETRY FUNCTION SETS?)
+The number of symmetry functions must be large enough for the NNP to be able to distinguish distinct atomic structures that
+should yield different total energies. This distinction is more difficult for configurations of a large number of atoms, because
+e.g. removing one atom from an atomic environment containing 100 atoms only results in a small relative 
+perturbation of the symmetry function values. Thus, we should obtain information on how many input atoms 
+the eventual NNP is expected to experience in simulations. 
+
+In our case this is an easy task: we simply run MD simulations 
+of the system under investigation with an empirical potential of choice, and measure coordination numbers. When the 
+target potential is unknown, the information can be extracted from empirical knowledge of the system. 
+From experimenting, we have found that a rule of thumb is to use at least as many radial symmetry functions
+as the mean number of expected neighbours. The number of angular symmetry functions should in general be larger because
+there are more atomic triplets than pairs for a given ensemble of atoms. One could immidiately conclude that we
+should have at least as many radial and angular functions as there are atomic pairs and triplets respectively, but this is overkill
+considering that each function describes the \textit{whole} cutoff sphere. 
+
+The output layer only consists of \textit{one} neuron that represents the total energy of an atomic 
+configuration. Additionaly, we can have an arbitrary number of hidden layers and nodes. 
+Many nodes means many parameters that can be tuned to the training set, resulting in a better fit.
+However, too many parameters may lead to \textit{overfitting}, in which the NN gets biased towards the  
+
+According to Larochelle et al. \cite{Larochelle09}, having the same number of nodes in each hidden layer give the best results. 
+Further, in the literature we have studied concerning NNPs, such as \cite{Behler07} \cite{Raff05} \cite{Witkoskie05}, 
+only one or two hidden layers are used. 
+
+
+
+\subsubsection{Activation function and saturation}
+
+\subsubsection{Symmetry functions}
+
+\subsubsection{Cost function}
+
+\subsubsection{Learning rate and mini-batch size}
+
+\subsubsection{Number of iterations and overfitting}
+
+\subsubsection{Weight initialization}
+
+\subsubsection{Other techniques}
+
+
+
+
+
+
 
 
 
@@ -4078,6 +4130,18 @@ and
  In: G. Montavon, G. B. Orr, K.-R. Müller (Eds.), \textit{Neural Networks: Tricks of the Trade} (2nd edition, pp. 437-478). 
  Springer, 2012. 
  arXiv: \href{arxiv.org/abs/1206.5533v2}{1206.5533v2}
+ 
+\bibitem{Larochelle09}
+ H. Larochelle, Y. Bengio, J. Louradour, and P. Lamblin. 
+ ''Exploring Strategies for Training Deep Neural Networks''. 
+ In: \textit{Journal of Machine Learning Research} 10. (2009), 1-40. 
+ DOI: \href{http://doi.org/10.1145/1577069.1577070}{10.1145/1577069.1577070}
+ 
+\bibitem{Witkoskie05}
+ J. B. Witkoskie, and D. J. Doren. 
+ ''Neural Network Models of Potential Energy Surfaces: Prototypical Examples''. 
+ In: \textit{Journal of Chemical Theory and Computation} 1. (2005), 14-23. 
+ DOI: \href{http://doi.org/10.1021/ct049976i}{10.1021/ct049976i}
  
  
  
