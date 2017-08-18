@@ -841,8 +841,9 @@ should not be used as an absolute guideline for the construction of activation f
 
 \section{Training} \label{sec:training}
 In the beginning of this chapter we defined machine learning as the ''science of giving computers the ability to learn without
-being explicitly programmed.'' In the neural network case, this learning is achieved by iteratively adjusting 
-the parameters, i.e. the weights and biases (in the following, ''weights'' will often be equivalent to all 
+being explicitly programmed.'' In the neural network case, this learning is achieved by iteratively feeding the network with data. 
+With the help of certain learning algorithms, the network will then automatically adjust its parameters, i.e. the weights and biases, 
+to find patterns in this data (in the following, ''weights'' will often be equivalent to all 
 the NN parameters, including the biases).
 The procedure depends on what learning paradigm we work with
 (unsupervised or supervised learning), and the type of NN we use. 
@@ -854,9 +855,11 @@ the weights are typically initialized as random numbers, and then modified itera
 to a set of expected output values, in our case energies. 
 This procedure is called \textit{training}. 
 
-The input values to the function that we want to fit
-are called the \textit{training set}, while the output values are called the \textit{reference set} or the \textit{target values}.
-The training set $X$ and reference set $Y$ are represented as matrices, where the $i$-th row of $X$ and $Y$, 
+Thus, the input values to the function that we want to fit are atomic configurations,
+while the output values are the total energies of these configurations. 
+Together they form what we refer to as a \textit{data set} or a \textit{reference set}. 
+The output values are also known as the \textit{target values}. 
+The input data $X$ and output data $Y$ are represented as matrices, where the $i$-th row of $X$ and $Y$, 
 denoted $X_{i*}$ and $Y_{i*}$ respectively, 
 together form a \textit{training example}. The combined data set consists of $N$ such training examples. 
 Note that the number of columns of $X$ and $Y$ are equal to the number of inputs and outputs of our MLP respectively. 
@@ -3192,7 +3195,7 @@ as the mean number of expected neighbours. The number of angular symmetry functi
 there are more atomic triplets than pairs for a given ensemble of atoms.  
 
 
-\subsection{Adjusting the set}
+\subsection{Adjusting the set} \label{sec:adjustSymmSet}
 When the initial set is assembled, we carry out various analyses to investigate whether our chosen symmetry functions 
 adequately probe the configuration space defined by the training data. There are two requirements
 that serve as the guiding principles for the analyses.
@@ -3256,7 +3259,7 @@ parameters associated with the optimization algorithm and weight initialization.
 In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
 
 \subsection{Preconditioning the input data}
-As stated in the previous section, the individual symmetry functions may have very different ranges of values. 
+As stated in \autoref{sec:adjustSymmSet}, the individual symmetry functions may have very different ranges of values. 
 For a given configuration, each node in the first hidden layer receives as input a weighted sum of all the symmetry function values.
 Symmetry functions with large absolute values will have a signicantly stronger impact on the output of these nodes than 
 functions with small absolute values. Consequentially, the areas of configuration space covered by the latter functions
@@ -3304,7 +3307,10 @@ configuration. Additionaly, we can have an arbitrary number of hidden layers and
 Many nodes means many parameters that can be tuned to the training set, resulting in a better fit.
 However, if the number of neurons is too large, the network will \textit{overfit} the training data. 
 In this case, the network fits the training set very well, but interpolation between the training points is poor. Thus, 
-the NNP becomes less predictive, and will not perform well in simulations. This problem is addressed below \autoref{sec:overfitting}.  
+the NNP becomes less predictive, and will not perform well in simulations.
+
+A common method to detect overfitting is \textit{early stopping}. Here, the reference data is randomly split into 
+a training set, which is employed for the optimization of the weights, and a test set, which 
 
 
 According to Larochelle et al. \cite{Larochelle09}, having the same number of nodes in each hidden layer give the best results. 
@@ -3641,7 +3647,7 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
        long as the production of \textit{ab inito} reference energies is feasible. 
  \item \textit{The potential should enable the breaking and making of bonds.}
        
-       The NNP is able to model the breaking and making of bonds as long as the training set contains
+       The NNP is able to model the breaking and making of bonds as long as the reference set contains
        configurations that are relevant for these processes.  
  \item \textit{The potential should be high-dimensional, i.e. depend on all degress of freedom of the system.}
        

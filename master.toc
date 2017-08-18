@@ -32,14 +32,14 @@
 \contentsline {subsection}{\numberline {3.6.1}Gradient descent variants}{32}{subsection.3.6.1}
 \contentsline {subsection}{\numberline {3.6.2}Optimization algorithms}{33}{subsection.3.6.2}
 \contentsline {subsubsection}{Momentum}{33}{section*.18}
-\contentsline {subsubsection}{Adagrad}{33}{section*.19}
+\contentsline {subsubsection}{Adagrad}{34}{section*.19}
 \contentsline {subsubsection}{Adadelta}{34}{section*.20}
 \contentsline {subsubsection}{Adam}{35}{section*.21}
-\contentsline {subsubsection}{Which optimizer to use?}{35}{section*.22}
+\contentsline {subsubsection}{Which optimizer to use?}{36}{section*.22}
 \contentsline {subsection}{\numberline {3.6.3}Backpropagation}{36}{subsection.3.6.3}
-\contentsline {subsubsection}{1. Forward propagation}{36}{section*.23}
+\contentsline {subsubsection}{1. Forward propagation}{37}{section*.23}
 \contentsline {subsubsection}{2. Backward propagation}{37}{section*.24}
-\contentsline {subsubsection}{Matrix notation}{39}{section*.26}
+\contentsline {subsubsection}{Matrix notation}{40}{section*.26}
 \contentsline {subsubsection}{Training algorithm}{40}{section*.27}
 \contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}
 \contentsline {section}{\numberline {4.1}Neural network potentials}{43}{section.4.1}
