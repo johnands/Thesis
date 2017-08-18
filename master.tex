@@ -3120,22 +3120,24 @@ This observation does however not change the fact that the high-dimensional neur
 constructing potentials used in this work is general, and can in principle be applied to any system. The training data
 and symmetry function sets have to be customized to each system, but the overarching procedure is the same. 
 
-\subsection{Initial set}
-There are some general rules that guide the construction of the symmetry function set. \cite{Behler15}
-\begin{enumerate}
- \item The symmetry function set should cover the configuration space in an unbiased way. 
- \item The range of the radial symmetry parameters should correspond to the range of inter-atomic distances in the data set.
- \item The set of values of two different symmetry functions on a given data set should not be strongly correlated. 
- \item The symmetry function set should be as small as possible.
- \item For each symmetry function, the range of function values should be as large as possible.   
-\end{enumerate}
-1. can be realized by simply choosing an equidistant set of initial radial symmetry functions.
-Further, the distribution of inter-atomic distances in the data set may be investigated to aquire a 
-lower and upper bound on the range of radial parameter values (2.). For $G^2$, a rule of thumb is that, for each element, 
+In this section we discuss various teqhniques for building a suitable symmetry function set. 
+A good strategy is to start out with an initial set that satisfies certain criteria, and then customize this set to 
+fit the training data at hand. We follow and extend upon the discussions in \cite{Behler11symmetry} and \cite{Behler15}. 
+
+\subsection{Initial set} \label{sec:initialSymmSet}
+There are some general rules that guide the construction of the initial symmetry function set.
+First, \textit{The symmetry function set should cover the configuration space in an unbiased way}.
+This can be realized by simply choosing an equidistant set of initial radial symmetry functions (the angular
+functions are discussed below). Further, the distribution of inter-atomic distances in the data set may be investigated to aquire a 
+lower and upper bound on the range of radial parameter values. For $G^2$, a rule of thumb is that, for each element, 
 the width (standard deviation) of the Gaussian
 with the largest $\eta$ value should correspond to the shortest inter-atomic distance present in the data set 
-and vice versa. Also, a set of symmetry functions with equidistant $R_s$ parameters should be present in the initial set.
-These should all have the same (large) $\eta$ value. An example of such an initial radial symmetry function set is displayed
+and vice versa. 
+
+Also, a set of symmetry functions with equidistant $R_s$ parameters should be present in the initial set to improve 
+the sensitivity at various radii. 
+These should all have the same, large $\eta$ value to prevent too much overlap. 
+An example of an initial radial symmetry function set is displayed
 in \autoref{fig:radialParams}. 
 \begin{figure}
 \centering
@@ -3147,13 +3149,14 @@ in \autoref{fig:radialParams}.
   \label{fig:radialParams}
 \end{figure}
 
+\subsubsection{Angular symmetry functions}
 A set of initial angular symmetry functions can be made in a similar way. 
 The angular distribution of neighbours is probed by varying $\zeta$ and $\lambda$ at differing radii, i.e. for 
 several values of $\eta$ and/or $R_c$. 
 We have found from empirical investigations that fixing $\eta$, while varying $R_c$ yield the best results. 
 In contrast to the radial parameters, the set of $\zeta$ parameters should not be equidistant. Instead, the values of $\zeta$
-should increase exponentially to ensure that the symmetry functions are sufficiently dissimilar (3.). An example is shown in 
-\autoref{fig:angularParams}. 
+should increase exponentially to ensure that the symmetry functions are sufficiently dissimiliar. i.e. to \textit{avoid
+strong correlations} (discussed further below).  An example is shown in \autoref{fig:angularParams}. 
 \begin{figure}
 \centering
   \includegraphics[width = 0.7\linewidth]{Figures/Implementation/angularParams1.pdf}
@@ -3164,14 +3167,38 @@ should increase exponentially to ensure that the symmetry functions are sufficie
   \label{fig:angularParams}
 \end{figure}
 
-\subsection{Adjusting the set}
-Thus, 1., 2. and 3. can be used as a framework for constructing an initial set of symmetry functions.
-Then, we carry out various analyses to investigate whether our chosen symmetry functions 
-adequately probe the configuration space defined by the data set. Item 3., 4. and 5. above serve as the
-guiding principles for the analyses. 
+\subsubsection{Number of symmetry functions}
+How many symmetry functions should the initial set consist of?
+There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
+the efficiency of the calculation of the NN energy output. The key is to select enough functions to capture 
+all regions of configuratiton space without having any redundancies. 
 
-\subsubsection{The range of each symmetry function}
-Using 5., the range of values for each symmetry function should be obtained. Each symmetry function
+Further, the number of functions must be large enough for the NNP to be able to distinguish distinct atomic structures that
+should yield different total energies. This distinction is more difficult for configurations of a large number of atoms, because
+e.g. removing one atom from an atomic environment containing 100 atoms only results in a small relative 
+perturbation of the symmetry function values. Thus, we should obtain information on how many input atoms 
+the eventual NNP is expected to experience in simulations. 
+
+In our case this is an easy task: we simply run MD simulations 
+of the system under investigation with the empirical potential to be fitted, and measure coordination numbers. When the 
+target potential is unknown, the information can be extracted from empirical knowledge of the system. The number of 
+neighbouring atoms will obviously depend on the force cutoffs being used. 
+
+One could immidiately conclude that we
+should have at least as many radial and angular functions as there are atomic pairs and triplets respectively, but this is overkill
+considering that each one is a function of \textit{all} the atoms inside the cutoff sphere.
+From experimenting, we have found that a rule of thumb is to use at least as many radial symmetry functions
+as the mean number of expected neighbours. The number of angular symmetry functions should in general be larger because
+there are more atomic triplets than pairs for a given ensemble of atoms.  
+
+
+\subsection{Adjusting the set}
+When the initial set is assembled, we carry out various analyses to investigate whether our chosen symmetry functions 
+adequately probe the configuration space defined by the training data. There are two requirements
+that serve as the guiding principles for the analyses.
+
+\subsubsection{For each symmetry function, the range of function values should be as large as possible}
+Each symmetry function
 assigns \textit{one} numerical value to each training example. If the range of a symmetry function is too small, 
 the difference between the function values for distinct structures will also be small. Consequentially, 
 the NN will try to assign substantial energy changes to tiny changes in the symmetry function, which 
@@ -3179,17 +3206,15 @@ can lead to numerical instability.
 
 This can be avoided by analyzing the distribution of values of each symmetry function on the data set. If the difference 
 between the maximum and the minimum function value is below a certain threshold
-the symmetry function should be removed or its parameters changed. Specifically, 
+the symmetry function should be removed or its parameters adjusted. Specifically, 
 symmetry functions which have a value of zero for all configurations should be avoided, as these will not contribute
 to the description of the chemical environments. 
 
-\subsubsection{Correlations}
-There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
-the efficiency of the calculation of the NN energy output. The number of symmetry functions can be kept as low as 
-possible (4.) by calculating the correlation between the values of two different symmetry functions for the whole 
-training set (5.). If there is a large correlation, the two symmetry functions are almost linearly dependent, 
+\subsubsection{The set of values of two different symmetry functions on a given data set should not be strongly correlated}
+If there is a large correlation, the two symmetry functions are almost linearly dependent, 
 and we have a redundancy of information. Consequentially, one of them should be removed, or the parameters adjusted
-to decrease the correlation.
+to decrease the correlation. Removing functions in this way contributes to keeping the symmetry function set as 
+small as possible.
 
 To demonstrate how the correlations can be calculated, we remember that in 
 \autoref{sec:training} the training set was represented as a matrix $X$, where
@@ -3210,10 +3235,25 @@ the whole training set. Pair of functions which are strongly correlated can thus
 
 
 
-\section{Details on training}
+
+\section{Setting hyperparameters}
 In \autoref{sec:training} and \autoref{sec:optimization} we presented the theory on how a MLP is trained 
 by optimizing the weights and biases using an optimization algorithm of choice. 
-This section deals with implementational details to consider when training a MLP, and some advanced theory on the subject. 
+At the end of \autoref{sec:symmetryFunctions}, we briefly mentioned that a number of so-called hyperparameters must be set
+prior to the actual weight optimization, such as the size of the network. 
+Choosing hyperparameter values can be treated as a
+kind of \textit{model selection}. One set of parameters defines one model, and the goal is to pick the most appropriate 
+among a family of such models. The choice can have significant impact on the quality of the fit. 
+
+We distinguish between two kinds of hyperparameters: those that specify the structure of the 
+network itself, and those that determine how the network is trained. 
+The first type contains parameters that are an integral part of the NN and must be included in the evaluation of the eventual NNP, 
+while the second are parameters that are only used during training. The former includes the number of layers and nodes, 
+the choice of activation function(s), and the symmetry function parameters. The second includes 
+the learning rate, the mini-batch size, the number of training iterations, the choice of loss function and any additional 
+parameters associated with the optimization algorithm and weight initialization.
+
+In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
 
 \subsection{Preconditioning the input data}
 As stated in the previous section, the individual symmetry functions may have very different ranges of values. 
@@ -3254,42 +3294,10 @@ from a single simulation of Si with the Stillinger-Weber potential. This fitting
 scaling and shifting, with the exact same training parameters. The result can be seen in \autoref{fig:testScalingShifting}. 
 
 
-\subsection{Hyperparameters} \label{sec:determineHyperparameters}
-At the end of \autoref{sec:symmetryFunctions}, we briefly mentioned that a number of so-called hyperparameters must be set
-prior to the actual weight optimization. These include, among others, the learning rate and 
-the architecture of the NN, i.e. the number of layers and nodes. Choosing hyperparameter values can be treated as a
-kind of \textit{model selection}. One set of parameters defines one model, and the goal is to pick the most appropriate 
-among a family of such models. The choice can have significant impact on the quality of the fit. 
-
-We distinguish between two kinds of hyperparameters: those that specify the structure of the 
-network itself, and those that determine how the network is trained. 
-The first type contains parameters that are an integral part of the NN and must be included in the evaluation of the eventual NNP, 
-while the second are parameters that are only used during training. The former includes the number of layers and nodes, 
-the choice of activation function(s), and the symmetry function parameters. The second includes 
-the learning rate, the mini-batch size, the number of training iterations, the choice of loss function and any additional 
-parameters associated with the optimization algorithm and weight initialization.
-
-In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
-
-\subsubsection{Network architecture}
-There is no standard and accepted method for finding the optimal size of a NN for a specific data set, but 
-we do have some general ground rules.
+\subsection{Network architecture and overfitting}
+There is no standard and accepted method for finding the optimal size of a NN for a specific data set. 
 In this work, the input layer is a set of symmetry functions that acts as descriptors of atomic configurations.
-(SHOULD THE DISCUSSION ON THE INPUT LAYER BE MOVED TO THE SECTION ON CONSTRUCTIONS OF SYMMETRY FUNCTION SETS?)
-The number of symmetry functions must be large enough for the NNP to be able to distinguish distinct atomic structures that
-should yield different total energies. This distinction is more difficult for configurations of a large number of atoms, because
-e.g. removing one atom from an atomic environment containing 100 atoms only results in a small relative 
-perturbation of the symmetry function values. Thus, we should obtain information on how many input atoms 
-the eventual NNP is expected to experience in simulations. 
-
-In our case this is an easy task: we simply run MD simulations 
-of the system under investigation with an empirical potential of choice, and measure coordination numbers. When the 
-target potential is unknown, the information can be extracted from empirical knowledge of the system. 
-From experimenting, we have found that a rule of thumb is to use at least as many radial symmetry functions
-as the mean number of expected neighbours. The number of angular symmetry functions should in general be larger because
-there are more atomic triplets than pairs for a given ensemble of atoms. One could immidiately conclude that we
-should have at least as many radial and angular functions as there are atomic pairs and triplets respectively, but this is overkill
-considering that each function describes the \textit{whole} cutoff sphere. 
+The size of this set thus decides the number of neurons in the input layer, which is discussed in \autoref{sec:initialSymmSet}. 
 
 The output layer only consists of \textit{one} neuron that represents the total energy of an atomic 
 configuration. Additionaly, we can have an arbitrary number of hidden layers and nodes. 
@@ -3305,19 +3313,19 @@ only one or two hidden layers are used.
 
 
 
-\subsubsection{Activation function and saturation}
+\subsection{Activation function and saturation}
 
-\subsubsection{Symmetry functions}
+\subsection{Symmetry functions}
 
-\subsubsection{Cost function}
+\subsection{Cost function}
 
-\subsubsection{Learning rate and mini-batch size}
+\subsection{Learning rate and mini-batch size}
 
-\subsubsection{Number of iterations and overfitting} \label{sec:overfitting}
+\subsection{Number of iterations and overfitting} \label{sec:overfitting}
 
-\subsubsection{Weight initialization}
+\subsection{Weight initialization}
 
-\subsubsection{Other techniques}
+\subsection{Other techniques}
 
 
 

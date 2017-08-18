@@ -75,20 +75,21 @@
 \contentsline {subsubsection}{Summary}{91}{section*.43}
 \contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}
 \contentsline {subsection}{\numberline {7.2.1}Initial set}{92}{subsection.7.2.1}
-\contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{93}{subsection.7.2.2}
-\contentsline {subsubsection}{The range of each symmetry function}{94}{section*.46}
-\contentsline {subsubsection}{Correlations}{94}{section*.47}
-\contentsline {section}{\numberline {7.3}Details on training}{95}{section.7.3}
-\contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{95}{subsection.7.3.1}
-\contentsline {subsection}{\numberline {7.3.2}Hyperparameters}{96}{subsection.7.3.2}
-\contentsline {subsubsection}{Network architecture}{97}{section*.48}
-\contentsline {subsubsection}{Activation function and saturation}{98}{section*.49}
-\contentsline {subsubsection}{Symmetry functions}{98}{section*.50}
-\contentsline {subsubsection}{Cost function}{98}{section*.51}
-\contentsline {subsubsection}{Learning rate and mini-batch size}{98}{section*.52}
-\contentsline {subsubsection}{Number of iterations and overfitting}{98}{section*.53}
-\contentsline {subsubsection}{Weight initialization}{98}{section*.54}
-\contentsline {subsubsection}{Other techniques}{98}{section*.55}
+\contentsline {subsubsection}{Angular symmetry functions}{93}{section*.45}
+\contentsline {subsubsection}{Number of symmetry functions}{93}{section*.47}
+\contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{95}{subsection.7.2.2}
+\contentsline {subsubsection}{For each symmetry function, the range of function values should be as large as possible}{95}{section*.48}
+\contentsline {subsubsection}{The set of values of two different symmetry functions on a given data set should not be strongly correlated}{95}{section*.49}
+\contentsline {section}{\numberline {7.3}Setting hyperparameters}{96}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{96}{subsection.7.3.1}
+\contentsline {subsection}{\numberline {7.3.2}Network architecture and overfitting}{97}{subsection.7.3.2}
+\contentsline {subsection}{\numberline {7.3.3}Activation function and saturation}{98}{subsection.7.3.3}
+\contentsline {subsection}{\numberline {7.3.4}Symmetry functions}{98}{subsection.7.3.4}
+\contentsline {subsection}{\numberline {7.3.5}Cost function}{98}{subsection.7.3.5}
+\contentsline {subsection}{\numberline {7.3.6}Learning rate and mini-batch size}{98}{subsection.7.3.6}
+\contentsline {subsection}{\numberline {7.3.7}Number of iterations and overfitting}{98}{subsection.7.3.7}
+\contentsline {subsection}{\numberline {7.3.8}Weight initialization}{98}{subsection.7.3.8}
+\contentsline {subsection}{\numberline {7.3.9}Other techniques}{98}{subsection.7.3.9}
 \contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{98}{section.7.4}
 \contentsline {chapter}{\numberline {8}Validation}{101}{chapter.8}
 \contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{101}{section.8.1}
@@ -97,5 +98,5 @@
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{111}{chapter.10}
 \contentsline {part}{III\hspace {1em}Conclusions and future work}{113}{part.3}
 \contentsline {chapter}{\numberline {11}The quality of the NNP}{115}{chapter.11}
-\contentsline {chapter}{Appendices}{117}{section*.62}
+\contentsline {chapter}{Appendices}{117}{section*.56}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{119}{Appendix.1.A}
