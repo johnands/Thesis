@@ -770,7 +770,7 @@ TensorFlow, which is discussed in \autoref{sec:TensorFlowCreatingNN}.
 
 
 
-\section{Activation functions}
+\section{Activation functions} \label{sec:activationFunctions}
 A property that characterizes a NN, other than its connectivity, is the choice of activation function(s). 
 As described in \autoref{sec:whyMLP}, the following restrictions are imposed on an activation function for a FFNN
 to fulfill the universal approximation theorem \cite{Hornik89}:
@@ -924,7 +924,7 @@ According to neural network terminology, the process of adjusting the parameters
 either in batches or all at once, is called an \textit{epoch}. 
 
 In \textit{batch} gradient descent, 
-we compute the gradient of the cost function for the \textit{whole} training set before updating, also called 
+we compute the gradient of the cost function for the \textit{whole} data set before updating, also called 
 \textit{offline learning}. 
 This approach can be very slow and is intractable for datasets that do not fit in memory. Furthermore, there is a risk
 of performing redundant computations if many similar examples are present in the data set.
@@ -934,7 +934,7 @@ SDG avoids redundant gradient calculations and is therefore faster than batch gr
 of each update is lower, which can lead to quite large error oscillations. The concept of having  
 more than one parameter update per epoch is called \textit{online learning}. 
 
-Finally, we have \textit{mini-batch} gradient descent, which is a mix of the two other approaches. The training set 
+Finally, we have \textit{mini-batch} gradient descent, which is a mix of the two other approaches. The reference set 
 is divided into $n$ equally sized mini-batches and a parameter update is performed for each mini-batch. This is usually the
 algorithm of choice, as it has the optimal trade-off between speed and accuracy. Normal mini-batch sizes range
 between 50 and 256, but should in some degree be tailored to each problem. 
@@ -1270,7 +1270,7 @@ The set $\{G_l, \vec{H}_l\}$ for $l=1,\dots,L+1$ thus make up the total gradient
 \subsubsection{Training algorithm}
 We are now ready to express the complete training algorithm for a MLP with backpropagation using
 matrix-vector notation. The below process is performed for each training example $\vec{x} = X_{i*}$ in the whole
-training set.
+data set.
 \begin{enumerate}
  \item Initialize the input layer:
  \begin{equation}
@@ -2663,8 +2663,8 @@ The cost function is now defined as
  trainCost = tf.nn.l2_loss( tf.subtract(actOutput, outputData), name='cost')
 \end{minted}
 This adds an operation to the graph that calculates the mean-square-error between the NN prediction \texttt{actOutput}
-on the training data 
-and the known target values \texttt{outputData}. In this work, the training data is configurations of atoms, 
+on the data set
+and the known target values \texttt{outputData}. In this work, the input data is configurations of atoms, 
 while the target values are the atomic energies of these configurations. 
 
 A number of gradient descent-based optimizers are implemented in TensorFlow, including
@@ -2708,13 +2708,13 @@ to compute the derivative of the cost function with respect to all the weights a
 performed by the \texttt{gradients} operation, that in turn sends the total gradient to \texttt{trainStep}, 
 which implements the Adam algorithm for updating the NN parameters. 
 
-We are now ready to launch this graph in a training session. We assume that training data
+We are now ready to launch this graph in a training session. We assume that input data
 and target values are available as \texttt{NumPy} arrays \texttt{xTrain} and \texttt{yTrain} respectively. 
 The code example implements the different variants of gradient descent described in \autoref{sec:gradientDescentVariants}. 
 \begin{minted}{python}.
 for epoch in xrange(numberOfEpochs+1): 
     
-    # for shuffling the training set
+    # for shuffling the data set
     indicies = np.random.choice(trainSize, trainSize, replace=False)
     
     # offline learning / batch gradient descent
@@ -2757,7 +2757,7 @@ the Adam update rule is applied and the weights and biases adjusted.
 \chapter{Constructing a neural network potential} \label{sec:constructingNNP}
 In this chapter we present the general workflow for constructing a high-dimensional NNP 
 intended for a specific physical application. We describe different ways of assembling 
-an adequate training set for the NN, which is the most crucial factor for the performance of 
+an adequate reference set for the NN, which is the most crucial factor for the performance of 
 the final potential. Some of the outlined procedures are primarily used to construct 
 \textit{ab inito} NNPs, but are included for reference. 
 
@@ -2767,7 +2767,7 @@ the mathematical groundwork of neural networks and various training algorithms a
 
 
 
-\section{Selecting the training data} \label{sec:selectingTrainingData}
+\section{Selecting the reference set} \label{sec:selectingTrainingData}
 The number of possible configurations of atomic or molecular systems quickly grows very large. 
 Consider for instance water $\textrm{H}_2\textrm{O}$, which is a three-body molecule. The configuration of the
 three atoms can be described by three internal coordinates, each with a certain range of values. 
@@ -2819,7 +2819,7 @@ or reproducing known, empirical MD potentials.
 
 For the latter, we construct the initial data set by sampling configurations from MD simulations that is relevant
 for the intended applications of the NNP. Furthermore, we are extracting both coordinates and energies from the simulations, i.e.
-we get both the training data in step 1 and the reference data in step 2 simultaneously. To compute the energies in
+we get both the input data in step 1 and the target values in step 2 simultaneously. To compute the energies in
 step 4, we simply run a pseudo-simulation on the new structures. This is easily done in LAMMPS by using 
 the \texttt{rerun} command, which tells LAMMPS to compute the energies and forces of atomic configurations 
 supplied from file without doing any integration. 
@@ -2857,7 +2857,7 @@ We have seen that MD simulations supply the data that is needed to construct a N
 also have to consider how this sampling should be performed to identify new relevant structures.
 NNs have a very flexible functional form which makes them able to accurately fit data sets, 
 but they can also yield potentially large energy and force errors 
-when evaluated for configurations that are very different from the ones included in the training set.
+when evaluated for configurations that are very different from the ones included in the data set.
 It is therefore of vital importance to include all structures that are relevant for the intended
 application of the NNP.
 
@@ -2929,7 +2929,7 @@ of the energies of these clusters, and computes $\tau$ based on the maximum acce
 Our strategy is to select a few atoms, usually 1-10, and compute $\tau$ seperately for each of these atoms. When 
 the sampling criterium is met, the coordinates of all neighbours relative to the central atom is written to file, 
 as well as the atomic energy the central atom experiences in the presence of its neighbours. These coordinates
-and energies make up the training data and reference values, respectively, for a NN to interpolate. 
+and energies make up the input data and target values, respectively, for a NN to interpolate. 
 Our modified sampling algorithm is thus as follows (written in a less convoluted way than above),
 \begin{equation}
  \tau = 
@@ -3039,7 +3039,7 @@ will ''naturally present themselves'', and the NNP will iteratively improve in a
 
 The obvious way to identify new structures not already in the initial data set is to evalate both the NNP and 
 the PES we are trying to fit for each structure in an NNP MD simulation and compare the energies (and eventually 
-the forces). If the energy deviation is above a certain treshold, the structure is added to the training set.
+the forces). If the energy deviation is above a certain treshold, the structure is added to the data set.
 The simulations should be carried out under the conditions of the intended application of the NNP to ensure
 that the relevant parts of configuration space are sampled.
 After a certain amount of new data is added, 
@@ -3069,23 +3069,23 @@ In this work we use the Behler symmetry functions to transform atomic cartesian 
 These functions act as descriptors of chemical environments, and should therefore be excellent candidates
 to identify relevant structures during MD simulations without computing additional target energies. 
 Behler has suggested two methods \cite{Behler11general} where these symmetry functions are employed to improve the NNP. 
-The first and simplest method identifies structures that fall outside of the range of input values spanned by the training data. 
+The first and simplest method identifies structures that fall outside of the range of input values spanned by the data set. 
 This is achieved by comparing the symmetry function vector of each atom during the MD simulation with 
 the minimum and maximum values of each symmetry function in the database for the respective element. 
 When such configurations are encountered, a warning can be issued and the structure sampled.  
 
 The other method developed by Behler is called the \textit{multiple-NN method} and are used to identify 
 structures that are within the range of existing symmetry values, but located
-in parts of configuration space that are poorly represented in the training set.
+in parts of configuration space that are poorly represented in the reference set.
 The idea is to use the high flexibility and reasonably fast training and evaluation of NNs to validate 
 the potential. The procedure is as follows,
 \begin{enumerate}
- \item Fit several NNs with different architectures to the same training set. All the NNs should be trained
+ \item Fit several NNs with different architectures to the same data set. All the NNs should be trained
  to the same accuracy. 
  \item Generate a large number of trajectories and corresponding energies using one of these NNPs in MD simulations.
  \item Recalculate the energies of the obtained trajectories using the other NNPs
  \item Structures for which the energy disagreement between the different NNPs is significant should be added to 
- the training set.
+ the data set.
 \end{enumerate}
 This method takes advantage of the poor extrapolation abilites of NNs: the energy predictions of the different NNPs will
 be more or less random on structures that are far away from the training points. Thus, missing structures can 
@@ -3096,14 +3096,14 @@ no problematic structures are found, the NNP should be reliable and ready for us
 
 \subsubsection{Summary}
 In this section we have presented the workflow for constructing a NNP, including several procedures to 
-assemble the training set for the NN, which depends on how the target energies are computed. 
+assemble the data set for the NN, which depends on how the target energies are computed. 
 In this work, we know the PES we are trying to fit, which are well-known empirical MD potentials. 
 Therefore, the NNP is validated simply by comparing its predictions to the target PES.  
 On the other hand, if an \textit{ab inito} NNP is to be constructed, the underlying target PES is not known, 
 and computing energies and forces of eventual new structures are expensive. Two methods circumventing
 this problem has been described, but they are not used in this thesis. 
 
-Still, there are several factors to consider when constructing the training set, irrelevant of how the target PES looks like.  
+Still, there are several factors to consider when constructing the reference set, irrelevant of how the target PES looks like.  
 We have implemented and employed the sampling algorithm \eqref{samplingAlgorithmModified} in this thesis to obtain a more uniform
 distribution of forces in the data set. The thermodynamical properties of the MD simulations that we sample configurations 
 from have also been carefully considered, described in more detail in \autoref{sec:SiPotentialResults}.  
@@ -3120,12 +3120,12 @@ Although a NN potential is general and unbiased because it has no pre-defined fu
 construction of the symmetry function sets is to some extent empirical. The functional form of the NN
 is adjusted ''automatically'' when trained, while the symmetry function set has to be constructed manually.
 This observation does however not change the fact that the high-dimensional neural network approach to
-constructing potentials used in this work is general, and can in principle be applied to any system. The training data
+constructing potentials used in this work is general, and can in principle be applied to any system. The data set
 and symmetry function sets have to be customized to each system, but the overarching procedure is the same. 
 
 In this section we discuss various teqhniques for building a suitable symmetry function set. 
 A good strategy is to start out with an initial set that satisfies certain criteria, and then customize this set to 
-fit the training data at hand. We follow and extend upon the discussions in \cite{Behler11symmetry} and \cite{Behler15}. 
+fit the reference data at hand. We follow and extend upon the discussions in \cite{Behler11symmetry} and \cite{Behler15}. 
 
 \subsection{Initial set} \label{sec:initialSymmSet}
 There are some general rules that guide the construction of the initial symmetry function set.
@@ -3197,7 +3197,7 @@ there are more atomic triplets than pairs for a given ensemble of atoms.
 
 \subsection{Adjusting the set} \label{sec:adjustSymmSet}
 When the initial set is assembled, we carry out various analyses to investigate whether our chosen symmetry functions 
-adequately probe the configuration space defined by the training data. There are two requirements
+adequately probe the configuration space defined by the data set. There are two requirements
 that serve as the guiding principles for the analyses.
 
 \subsubsection{For each symmetry function, the range of function values should be as large as possible}
@@ -3220,13 +3220,13 @@ to decrease the correlation. Removing functions in this way contributes to keepi
 small as possible.
 
 To demonstrate how the correlations can be calculated, we remember that in 
-\autoref{sec:training} the training set was represented as a matrix $X$, where
+\autoref{sec:training} the data set was represented as a matrix $X$, where
 each row is a training example, in this case the values of all the symmetry functions for a single atomic configuration.
 We can calculate the correlations between each pair of symmetry functions with the \texttt{NumPy} method \texttt{corrcoef}, 
 \begin{minted}{python}
   R = np.corrcoef(np.transpose(X))
 \end{minted}
-The training set matrix $X$ is transposed because \texttt{corrcoef} expects each \textit{row} to represent all the samples of one
+The data set matrix $X$ is transposed because \texttt{corrcoef} expects each \textit{row} to represent all the samples of one
 variable (function), while each \textit{column} is a single observation of all the variables.
 A matrix $R$ is returned where the $(i,j)$-th element is the Pearson correlation coefficient between 
 symmetry function $i$ and $j$,
@@ -3234,7 +3234,7 @@ symmetry function $i$ and $j$,
  R_{ij} = \frac{C_{ij}}{\sigma_i\sigma_j}
 \end{equation}
 where $C$ is the covariance matrix and $\sigma_i$ is the standard deviation of the values of symmetry function $i$ for 
-the whole training set. Pair of functions which are strongly correlated can thus be identified and altered.
+the whole data set. Pair of functions which are strongly correlated can thus be identified and altered.
 
 
 
@@ -3258,7 +3258,7 @@ parameters associated with the optimization algorithm and weight initialization.
 
 In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
 
-\subsection{Preconditioning the input data}
+\subsection{Preconditioning the input data} \label{sec:transformInputData}
 As stated in \autoref{sec:adjustSymmSet}, the individual symmetry functions may have very different ranges of values. 
 For a given configuration, each node in the first hidden layer receives as input a weighted sum of all the symmetry function values.
 Symmetry functions with large absolute values will have a signicantly stronger impact on the output of these nodes than 
@@ -3271,14 +3271,14 @@ by normalizing the values \cite{Behler15} of each symmetry function $G_s$,
 where $G_{s,\min}$ and $G_{s,\max}$ are the smallest and largest values of function $G_s$ in the data set respectively.
 
 Further, convergence is usually faster if the average of each input variable to a NN over the 
-training set is close to zero \cite{LeCun12}.
+data set is close to zero \cite{LeCun12}.
 This is because the update of a weight to a node in the first hidden layer is proportional 
 to $\delta y_0 = \delta G_s$ \eqref{weightUpdate} where $\delta$ is the error of the node,
 and $y_0 = G_s$ is the value of an input node. 
 Since all the input values $G_s$ are always positive, the weight updates will all have the same sign, namely $\mathrm{sign}(\delta)$. 
 As a result, these weights can only increase or decrease \textit{together} for a given input vector, leading to slow convergence.
 
-Thus, both scaling and shifting of the training data can be performed to speed up the fitting process.  
+Thus, both scaling and shifting of the reference set can be performed to speed up the fitting process.  
 Note that the these operations can be applied to the target values as well.  
 \footnote{The observations on scaling and shifting of input variables are valid for most 
 types of input and output data. Scaling of target values are more important 
@@ -3304,22 +3304,68 @@ The size of this set thus decides the number of neurons in the input layer, whic
 
 The output layer only consists of \textit{one} neuron that represents the total energy of an atomic 
 configuration. Additionaly, we can have an arbitrary number of hidden layers and nodes. 
-Many nodes means many parameters that can be tuned to the training set, resulting in a better fit.
-However, if the number of neurons is too large, the network will \textit{overfit} the training data. 
-In this case, the network fits the training set very well, but interpolation between the training points is poor. Thus, 
+Many nodes means many parameters that can be tuned to the data set, resulting in a better fit.
+However, if the number of neurons is too large, the network will \textit{overfit} the reference data. 
+In this case, the network fits the data set very well, but interpolation between the training points is poor. Thus, 
 the NNP becomes less predictive, and will not perform well in simulations.
 
-A common method to detect overfitting is \textit{early stopping}. Here, the reference data is randomly split into 
-a training set, which is employed for the optimization of the weights, and a test set, which 
+\textit{Regularization} is a number of processes from statistical learning theory that deals with ill-posed optimization
+problems and overfitting. A well-known method to prevent the latter is \textit{early stopping}. 
+Here, the reference data is randomly split into 
+a \textit{training set}, which is employed for the optimization of the weights, and a \textit{test set}, whose error is monitored
+during the fit but which is not used to adjust the weights. If the errors of these two sets are similar, we know that the NN
+generalizes to data that has not been used in its training. On the other hand, if the test set error is significantly larger
+than the training set error, overfitting is occuring, and training should be stopped. 
+A typical test set size is 10-20 \% of the reference data. 
+\begin{figure}
+\centering
+  \includegraphics[width = 0.8\linewidth]{Figures/Implementation/overfitting.pdf}
+  \caption{Demonstration of overfitting. Both figures show the RMSE of a NN evaluated on both the training set and 
+	   the test set. The training set consists of 5578 training examples from a Si Stillinger-Weber simulation.
+	   In a), the NN has been trained on 
+	   the whole training set, while in b) only the first 300 training examples were used. The test set is 
+	   identical in both cases. We clearly see that overfitting occurs in b).}
+  \label{fig:overfitting}
+\end{figure}
 
+Thus, the early stopping method automatically determines another hyperparameter, namely the number of epochs to train. 
+However, it does not give us the optimal NN architecture. Overfitting can also be caused by an incomplete data set, 
+and reducing the number of neurons is not necessarily the best solution. Often, more data should be added instead, 
+and the current NN size may fit the extended data set better. 
 
+Early stopping is in other words not a reliable method to decide if a NN is of a suitable size or not. 
+The only way to find the optimal architecture is by training several networks of different sizes and choose the one that yields
+the lowest error while simultaneously not overfitting. The problem with this strategy is that the possibilities are very many. 
+We can however make a few observations to narrow down the search. 
 According to Larochelle et al. \cite{Larochelle09}, having the same number of nodes in each hidden layer give the best results. 
-Further, in the literature we have studied concerning NNPs, such as \cite{Behler07} \cite{Raff05} \cite{Witkoskie05}, 
-only one or two hidden layers are used. 
+Further, in the literature we have studied concerning NNPs, e.g. \cite{Behler07} \cite{Raff05} \cite{Witkoskie05}, 
+only one or two hidden layers are used, and we know from the universal approximation theorem (\autoref{sec:whyMLP})
+that one hidden layer is sufficient to represent any function. For typical AI tasks, deeper architectures are required 
+\cite{Bengio07}, but in this thesis we will limit ourselves to maximum three hidden layers. 
 
 
+\subsection{Activation functions and saturation}
+In \autoref{sec:activationFunctions} we stated that the logistic function \eqref{sigmoidActivationFunction} and 
+the hyperbolic tangent \eqref{tanhActivationFunction} are the most common activation functions for regression
+with neural networks. They are both \textit{saturating} functions because they map real numbers into the restricted intervals 
+[0,1] and [-1,1] respectively. This property keeps the outputs of neurons from diverging, but it also contributes to 
+the problem of \textit{vanishing gradients}. We know from \autoref{sec:backprop} that
+weight updates are proportional to the derivatives of neurons \eqref{backprop},
+\begin{equation}
+ y^\prime = f^\prime(u)
+\end{equation}
+where $f$ is the activation function. We see from \autoref{fig:sigmoidActivationFunctions} that the sigmoid and hyperbolic
+tangent have very small gradients for all inputs except those in the non-linear region around zero.
+Large positive or negative inputs therefore results in vanishing gradients and tiny updates, slowing down learning. 
+This is yet another reason for shifting the mean of the input training data to zero, and it also has 
+directs the initialization of the weights. 
 
-\subsection{Activation function and saturation}
+
+The sigmoid is one-sided and therefore more akin to 
+biological neurons, and it is also less computationally expensive than the hyperbolic tangent. 
+The sigmoid does however have a problem with \textit{satured} neurons, which is a phenomenon that occurs with 
+all bounded activation functions. 
+
 
 \subsection{Symmetry functions}
 
@@ -3327,7 +3373,6 @@ only one or two hidden layers are used.
 
 \subsection{Learning rate and mini-batch size}
 
-\subsection{Number of iterations and overfitting} \label{sec:overfitting}
 
 \subsection{Weight initialization}
 
@@ -4159,6 +4204,12 @@ and
  ''Neural Network Models of Potential Energy Surfaces: Prototypical Examples''. 
  In: \textit{Journal of Chemical Theory and Computation} 1. (2005), 14-23. 
  DOI: \href{http://doi.org/10.1021/ct049976i}{10.1021/ct049976i}
+ 
+\bibitem{Bengio07}
+ Y. Bengio, and Y. LeCun. 
+ ''Scaling learning algorithms towards AI''. 
+ In: L. Bottou, O. Chapelle, D. DeCoste, and J. Weston (Eds.), 
+ \textit{Large-scale kernel machines}. MIT Press, 2007. 
  
  
  

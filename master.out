@@ -49,7 +49,7 @@
 \BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 49
 \BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 50
 \BOOKMARK [0][-]{chapter.7}{Constructing a neural network potential}{part.2}% 51
-\BOOKMARK [1][-]{section.7.1}{Selecting the training data}{chapter.7}% 52
+\BOOKMARK [1][-]{section.7.1}{Selecting the reference set}{chapter.7}% 52
 \BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 53
 \BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 54
 \BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 55
@@ -58,20 +58,19 @@
 \BOOKMARK [1][-]{section.7.3}{Setting hyperparameters}{chapter.7}% 58
 \BOOKMARK [2][-]{subsection.7.3.1}{Preconditioning the input data}{section.7.3}% 59
 \BOOKMARK [2][-]{subsection.7.3.2}{Network architecture and overfitting}{section.7.3}% 60
-\BOOKMARK [2][-]{subsection.7.3.3}{Activation function and saturation}{section.7.3}% 61
+\BOOKMARK [2][-]{subsection.7.3.3}{Activation functions and saturation}{section.7.3}% 61
 \BOOKMARK [2][-]{subsection.7.3.4}{Symmetry functions}{section.7.3}% 62
 \BOOKMARK [2][-]{subsection.7.3.5}{Cost function}{section.7.3}% 63
 \BOOKMARK [2][-]{subsection.7.3.6}{Learning rate and mini-batch size}{section.7.3}% 64
-\BOOKMARK [2][-]{subsection.7.3.7}{Number of iterations and overfitting}{section.7.3}% 65
-\BOOKMARK [2][-]{subsection.7.3.8}{Weight initialization}{section.7.3}% 66
-\BOOKMARK [2][-]{subsection.7.3.9}{Other techniques}{section.7.3}% 67
-\BOOKMARK [1][-]{section.7.4}{Transfer NN from Python to C++}{chapter.7}% 68
-\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 69
-\BOOKMARK [1][-]{section.8.1}{Training Lennard-Jones potential}{chapter.8}% 70
-\BOOKMARK [2][-]{subsection.8.1.1}{Many-neighbour Lennard-Jones}{section.8.1}% 71
-\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.2}% 72
-\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.2}% 73
-\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 74
-\BOOKMARK [0][-]{chapter.11}{The quality of the NNP}{part.3}% 75
-\BOOKMARK [0][-]{section*.56}{Appendices}{part.3}% 76
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 77
+\BOOKMARK [2][-]{subsection.7.3.7}{Weight initialization}{section.7.3}% 65
+\BOOKMARK [2][-]{subsection.7.3.8}{Other techniques}{section.7.3}% 66
+\BOOKMARK [1][-]{section.7.4}{Transfer NN from Python to C++}{chapter.7}% 67
+\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 68
+\BOOKMARK [1][-]{section.8.1}{Training Lennard-Jones potential}{chapter.8}% 69
+\BOOKMARK [2][-]{subsection.8.1.1}{Many-neighbour Lennard-Jones}{section.8.1}% 70
+\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.2}% 71
+\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.2}% 72
+\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 73
+\BOOKMARK [0][-]{chapter.11}{The quality of the NNP}{part.3}% 74
+\BOOKMARK [0][-]{section*.57}{Appendices}{part.3}% 75
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 76
