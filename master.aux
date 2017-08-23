@@ -343,71 +343,82 @@
 \zref@newlabel{mdf@pagelabel-20}{\default{7.2.2}\page{95}\abspage{105}\mdf@pagevalue{95}}
 \citation{Bengio12}
 \citation{Behler15}
-\citation{LeCun12}
 \@writefile{toc}{\contentsline {section}{\numberline {7.3}Setting hyperparameters}{96}{section.7.3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{96}{subsection.7.3.1}}
 \newlabel{sec:transformInputData}{{7.3.1}{96}{Preconditioning the input data}{subsection.7.3.1}{}}
+\newlabel{scalingInputData}{{7.5}{96}{Preconditioning the input data}{equation.7.3.5}{}}
+\citation{LeCun12}
+\citation{LeCun12}
 \citation{LeCun99}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Network architecture and overfitting}{97}{subsection.7.3.2}}
+\newlabel{shiftInputData}{{7.6}{97}{Preconditioning the input data}{equation.7.3.6}{}}
+\newlabel{scaleVariance}{{7.7}{97}{Preconditioning the input data}{equation.7.3.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Convergence speed vs evaluation speed}{97}{section*.50}}
 \citation{Larochelle09}
 \citation{Behler07}
 \citation{Raff05}
 \citation{Witkoskie05}
 \citation{Bengio07}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Demonstration of overfitting. Both figures show the RMSE of a NN evaluated on both the training set and the test set. The training set consists of 5578 training examples from a Si Stillinger-Weber simulation. In a), the NN has been trained on the whole training set, while in b) only the first 300 training examples were used. The test set is identical in both cases. We clearly see that overfitting occurs in b).\relax }}{98}{figure.caption.50}}
-\newlabel{fig:overfitting}{{7.4}{98}{Demonstration of overfitting. Both figures show the RMSE of a NN evaluated on both the training set and the test set. The training set consists of 5578 training examples from a Si Stillinger-Weber simulation. In a), the NN has been trained on the whole training set, while in b) only the first 300 training examples were used. The test set is identical in both cases. We clearly see that overfitting occurs in b).\relax }{figure.caption.50}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.3}Activation functions and saturation}{99}{subsection.7.3.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.4}Symmetry functions}{100}{subsection.7.3.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.5}Cost function}{100}{subsection.7.3.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.6}Learning rate and mini-batch size}{100}{subsection.7.3.6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.7}Weight initialization}{100}{subsection.7.3.7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.8}Other techniques}{100}{subsection.7.3.8}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{100}{section.7.4}}
-\newlabel{sec:timeUsage}{{7.4}{100}{Transfer NN from Python to C++}{section.7.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }}{101}{figure.caption.51}}
-\newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{7.5}{101}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }{figure.caption.51}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }}{102}{figure.caption.52}}
-\newlabel{fig:timeComparisonEvaluateNetwork2}{{7.6}{102}{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }{figure.caption.52}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Validation}{103}{chapter.8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Network architecture and overfitting}{98}{subsection.7.3.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Demonstration of overfitting. Both figures show the RMSE of a NN evaluated on both the training set and the test set. The training set consists of 5578 training examples from a Si Stillinger-Weber simulation. In a), the NN has been trained on the whole training set, while in b) only the first 300 training examples were used. The test set is identical in both cases. We clearly see that overfitting occurs in b).\relax }}{99}{figure.caption.51}}
+\newlabel{fig:overfitting}{{7.4}{99}{Demonstration of overfitting. Both figures show the RMSE of a NN evaluated on both the training set and the test set. The training set consists of 5578 training examples from a Si Stillinger-Weber simulation. In a), the NN has been trained on the whole training set, while in b) only the first 300 training examples were used. The test set is identical in both cases. We clearly see that overfitting occurs in b).\relax }{figure.caption.51}{}}
+\citation{Karlik11}
+\citation{Glorot10}
+\citation{Bengio12}
+\citation{LeCun12}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.3}Activation functions and weight initialization}{100}{subsection.7.3.3}}
+\newlabel{sec:hyperParamsActFunctions}{{7.3.3}{100}{Activation functions and weight initialization}{subsection.7.3.3}{}}
+\citation{Glorot10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.4}Symmetry functions}{101}{subsection.7.3.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.5}Cost function}{101}{subsection.7.3.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.6}Learning rate and mini-batch size}{101}{subsection.7.3.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.7}Weight initialization}{101}{subsection.7.3.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.8}Other techniques}{101}{subsection.7.3.8}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{101}{section.7.4}}
+\newlabel{sec:timeUsage}{{7.4}{101}{Transfer NN from Python to C++}{section.7.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }}{103}{figure.caption.52}}
+\newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{7.5}{103}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate how large the time difference is for very small NNs.\relax }{figure.caption.52}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }}{104}{figure.caption.53}}
+\newlabel{fig:timeComparisonEvaluateNetwork2}{{7.6}{104}{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.\relax }{figure.caption.53}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Validation}{105}{chapter.8}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{103}{section.8.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }}{103}{figure.caption.53}}
-\newlabel{fig:errorLJTest}{{8.1}{103}{Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }{figure.caption.53}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{104}{figure.caption.54}}
-\newlabel{fig:errorBackPropTest}{{8.2}{104}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.54}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{105}{subsection.8.1.1}}
-\newlabel{zoomedOut}{{8.3a}{106}{Zoomed out\relax }{figure.caption.55}{}}
-\newlabel{sub@zoomedOut}{{a}{106}{Zoomed out\relax }{figure.caption.55}{}}
-\newlabel{zoomedIn}{{8.3b}{106}{Zoomed in\relax }{figure.caption.55}{}}
-\newlabel{sub@zoomedIn}{{b}{106}{Zoomed in\relax }{figure.caption.55}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{106}{figure.caption.55}}
-\newlabel{fig:trainingManyNeighbourNN}{{8.3}{106}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.55}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{109}{figure.caption.56}}
-\newlabel{fig:errorManyNeighbourNN}{{8.4}{109}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.56}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {9}NN potential for Si}{111}{chapter.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{105}{section.8.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }}{105}{figure.caption.54}}
+\newlabel{fig:errorLJTest}{{8.1}{105}{Error of a network trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and the error on the training data interval is calculated, shown on the left. The NN is also written to file for evaluation in C++, shown on the right.\relax }{figure.caption.54}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{106}{figure.caption.55}}
+\newlabel{fig:errorBackPropTest}{{8.2}{106}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.55}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{107}{subsection.8.1.1}}
+\newlabel{zoomedOut}{{8.3a}{108}{Zoomed out\relax }{figure.caption.56}{}}
+\newlabel{sub@zoomedOut}{{a}{108}{Zoomed out\relax }{figure.caption.56}{}}
+\newlabel{zoomedIn}{{8.3b}{108}{Zoomed in\relax }{figure.caption.56}{}}
+\newlabel{sub@zoomedIn}{{b}{108}{Zoomed in\relax }{figure.caption.56}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{108}{figure.caption.56}}
+\newlabel{fig:trainingManyNeighbourNN}{{8.3}{108}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.56}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{111}{figure.caption.57}}
+\newlabel{fig:errorManyNeighbourNN}{{8.4}{111}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.57}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}NN potential for Si}{113}{chapter.9}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{sec:SiPotentialResults}{{9}{111}{NN potential for Si}{chapter.9}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {10}NN potential for SiO2}{113}{chapter.10}}
+\newlabel{sec:SiPotentialResults}{{9}{113}{NN potential for Si}{chapter.9}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}NN potential for SiO2}{115}{chapter.10}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Conclusions and future work}{115}{part.3}}
+\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Conclusions and future work}{117}{part.3}}
 \citation{Behler11general}
-\@writefile{toc}{\contentsline {chapter}{\numberline {11}The quality of the NNP}{117}{chapter.11}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {11}The quality of the NNP}{119}{chapter.11}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{Appendices}{119}{section*.57}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{121}{Appendix.1.A}}
+\@writefile{toc}{\contentsline {chapter}{Appendices}{121}{section*.58}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{123}{Appendix.1.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:appendixA1}{{A}{121}{Symmetry functions derivatives}{Appendix.1.A}{}}
-\newlabel{cutOffFunctionDerivative}{{A.3}{121}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.4}{121}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.5}{121}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.7}{121}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.8}{122}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
-\newlabel{G4Derivative}{{A.16}{122}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
+\newlabel{app:appendixA1}{{A}{123}{Symmetry functions derivatives}{Appendix.1.A}{}}
+\newlabel{cutOffFunctionDerivative}{{A.3}{123}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.4}{123}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.5}{123}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.7}{123}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.8}{124}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
+\newlabel{G4Derivative}{{A.16}{124}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
 \bibcite{Behler11general}{1}
 \bibcite{Behler11symmetry}{2}
 \bibcite{Dragly14}{3}
@@ -450,6 +461,7 @@
 \bibcite{Larochelle09}{40}
 \bibcite{Witkoskie05}{41}
 \bibcite{Bengio07}{42}
+\bibcite{Glorot10}{43}
 \gdef\minted@oldcachelist{,
   default.pygstyle,
   borland.pygstyle,

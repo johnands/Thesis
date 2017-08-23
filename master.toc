@@ -82,20 +82,21 @@
 \contentsline {subsubsection}{The set of values of two different symmetry functions on a given data set should not be strongly correlated}{95}{section*.49}
 \contentsline {section}{\numberline {7.3}Setting hyperparameters}{96}{section.7.3}
 \contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{96}{subsection.7.3.1}
-\contentsline {subsection}{\numberline {7.3.2}Network architecture and overfitting}{97}{subsection.7.3.2}
-\contentsline {subsection}{\numberline {7.3.3}Activation functions and saturation}{99}{subsection.7.3.3}
-\contentsline {subsection}{\numberline {7.3.4}Symmetry functions}{100}{subsection.7.3.4}
-\contentsline {subsection}{\numberline {7.3.5}Cost function}{100}{subsection.7.3.5}
-\contentsline {subsection}{\numberline {7.3.6}Learning rate and mini-batch size}{100}{subsection.7.3.6}
-\contentsline {subsection}{\numberline {7.3.7}Weight initialization}{100}{subsection.7.3.7}
-\contentsline {subsection}{\numberline {7.3.8}Other techniques}{100}{subsection.7.3.8}
-\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{100}{section.7.4}
-\contentsline {chapter}{\numberline {8}Validation}{103}{chapter.8}
-\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{103}{section.8.1}
-\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{105}{subsection.8.1.1}
-\contentsline {chapter}{\numberline {9}NN potential for Si}{111}{chapter.9}
-\contentsline {chapter}{\numberline {10}NN potential for SiO2}{113}{chapter.10}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{115}{part.3}
-\contentsline {chapter}{\numberline {11}The quality of the NNP}{117}{chapter.11}
-\contentsline {chapter}{Appendices}{119}{section*.57}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{121}{Appendix.1.A}
+\contentsline {subsubsection}{Convergence speed vs evaluation speed}{97}{section*.50}
+\contentsline {subsection}{\numberline {7.3.2}Network architecture and overfitting}{98}{subsection.7.3.2}
+\contentsline {subsection}{\numberline {7.3.3}Activation functions and weight initialization}{100}{subsection.7.3.3}
+\contentsline {subsection}{\numberline {7.3.4}Symmetry functions}{101}{subsection.7.3.4}
+\contentsline {subsection}{\numberline {7.3.5}Cost function}{101}{subsection.7.3.5}
+\contentsline {subsection}{\numberline {7.3.6}Learning rate and mini-batch size}{101}{subsection.7.3.6}
+\contentsline {subsection}{\numberline {7.3.7}Weight initialization}{101}{subsection.7.3.7}
+\contentsline {subsection}{\numberline {7.3.8}Other techniques}{101}{subsection.7.3.8}
+\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{101}{section.7.4}
+\contentsline {chapter}{\numberline {8}Validation}{105}{chapter.8}
+\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{105}{section.8.1}
+\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{107}{subsection.8.1.1}
+\contentsline {chapter}{\numberline {9}NN potential for Si}{113}{chapter.9}
+\contentsline {chapter}{\numberline {10}NN potential for SiO2}{115}{chapter.10}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{117}{part.3}
+\contentsline {chapter}{\numberline {11}The quality of the NNP}{119}{chapter.11}
+\contentsline {chapter}{Appendices}{121}{section*.58}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{123}{Appendix.1.A}

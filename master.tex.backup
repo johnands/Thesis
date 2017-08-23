@@ -3126,6 +3126,9 @@ and symmetry function sets have to be customized to each system, but the overarc
 In this section we discuss various teqhniques for building a suitable symmetry function set. 
 A good strategy is to start out with an initial set that satisfies certain criteria, and then customize this set to 
 fit the reference data at hand. We follow and extend upon the discussions in \cite{Behler11symmetry} and \cite{Behler15}. 
+Note that each symmetry function 
+can be treated as a variable that is assigned a unique value for each training example in the data set. 
+Thus we occasionaly refer to a single symmetry function as an \textit{input variable}.  
 
 \subsection{Initial set} \label{sec:initialSymmSet}
 There are some general rules that guide the construction of the initial symmetry function set.
@@ -3266,9 +3269,12 @@ functions with small absolute values. Consequentially, the areas of configuratio
 may take a longer time for the NN to learn. The importance of the different symmetry functions can be balanced
 by normalizing the values \cite{Behler15} of each symmetry function $G_s$, 
 \begin{equation}
- G_s^{\mathrm{scaled}} = \frac{2(G_s - G_{s,\min})}{G_{s,\max} - G_{s,\min}} - 1
+ G_{i,s}^\prime = \frac{2(G_{i,s} - G^{\min}_s)} {G^{\max}_s - G^{\min}_s} - 1
+ \label{scalingInputData}
 \end{equation}
-where $G_{s,\min}$ and $G_{s,\max}$ are the smallest and largest values of function $G_s$ in the data set respectively.
+where $G_{i,s}$ is the value of symmetry function number $s$ in the $i$-th training example 
+\footnote{corresponding to element $X_{ij}$ of the input data matrix.} and
+$G_s^{\min}$ and $G_s^{\max}$ are the smallest and largest values of function $G_s$ in the data set respectively.
 
 Further, convergence is usually faster if the average of each input variable to a NN over the 
 data set is close to zero \cite{LeCun12}.
@@ -3277,9 +3283,28 @@ to $\delta y_0 = \delta G_s$ \eqref{weightUpdate} where $\delta$ is the error of
 and $y_0 = G_s$ is the value of an input node. 
 Since all the input values $G_s$ are always positive, the weight updates will all have the same sign, namely $\mathrm{sign}(\delta)$. 
 As a result, these weights can only increase or decrease \textit{together} for a given input vector, leading to slow convergence.
+The mean of each symmetry function can be shifted to zero by subtracting the mean $\overline{G}_s$ over the data set from 
+all function values,
+\begin{equation}
+ G_{i,s}^\prime = G_{i,s} - \overline{G}_s =  G_{i,s} - \frac{1}{N}\sum_{j=1}^N G_{j,s}
+ \label{shiftInputData}
+\end{equation}
+where $N$ is the number of training examples. Note that scaling \eqref{scalingInputData} and shifting \eqref{shiftInputData}
+can also be combined. 
 
-Thus, both scaling and shifting of the reference set can be performed to speed up the fitting process.  
-Note that the these operations can be applied to the target values as well.  
+For reasons outlined in \autoref{sec:hyperParamsActFunctions},
+another operation that can speed up training is variance scaling \cite{LeCun12}.
+This is combined with shifting of means, such that each symmetry function e.g. has zero-mean and unit-variance,
+called \textit{standardization},
+\begin{equation}
+ G_{i,s}^\prime = \frac{G_{i,s} - \overline{G}_s}{\sigma_s} 
+ \label{scaleVariance}
+\end{equation}
+where $\sigma_s$ is the standard deviation of symmetry function $G_s$. 
+
+\subsubsection{Convergence speed vs evaluation speed}
+We have seen that a number of operations can be performed on the input data to speed up the fitting process.  
+Note that the these can be applied to the target values as well.  
 \footnote{The observations on scaling and shifting of input variables are valid for most 
 types of input and output data. Scaling of target values are more important 
 for classification, where the output is binary (e.g. \{-1,1\}), than for regression.} However, for the construction of NNPs, 
@@ -3288,11 +3313,11 @@ often thousands of NN parameters are needed \cite{LeCun99}, NNPs usually require
 the data set to be fitted can be quite extensive, the duration of the training is rarely more than 30 minutes to 1 hour before 
 an acceptable error is achieved.
 
-Further, there is a trade-off between the training speed and the evaluation speed of the resulting NNP. 
-As for the symmetry transformations, scaling and shifting become an integral part of the NNP, and must be performed 
+Further, there is a trade-off between the convergence speed and the evaluation speed of the resulting NNP. 
+As for the symmetry transformations, the above operations become an integral part of the NNP, and must be performed 
 when the potential is to be applied in simulations. Considering the importance of computational performance in MD simulations,
 an increase in training speed at the cost of evaluation speed is not to be preferred, as long as the \textit{quality} of the fit 
-is not influenced by scaling and/or shifting. To investigate this, we have fitted a NN to a data set of 2000 configurations
+is not influenced by these operations. To investigate this, we have fitted a NN to a data set of 2000 configurations
 from a single simulation of Si with the Stillinger-Weber potential. This fitting has been done five times both with and without 
 scaling and shifting, with the exact same training parameters. The result can be seen in \autoref{fig:testScalingShifting}. 
 
@@ -3344,19 +3369,46 @@ that one hidden layer is sufficient to represent any function. For typical AI ta
 \cite{Bengio07}, but in this thesis we will limit ourselves to maximum three hidden layers. 
 
 
-\subsection{Activation functions and saturation}
-In \autoref{sec:activationFunctions} we stated that the logistic function \eqref{sigmoidActivationFunction} and 
+\subsection{Activation functions and weight initialization} \label{sec:hyperParamsActFunctions}
+In \autoref{sec:activationFunctions} we stated that the sigmoid \eqref{sigmoidActivationFunction} and 
 the hyperbolic tangent \eqref{tanhActivationFunction} are the most common activation functions for regression
 with neural networks. They are both \textit{saturating} functions because they map real numbers into the restricted intervals 
 [0,1] and [-1,1] respectively. This property keeps the outputs of neurons from diverging, but it also contributes to 
 the problem of \textit{vanishing gradients}. We know from \autoref{sec:backprop} that
-weight updates are proportional to the derivatives of neurons \eqref{backprop},
+weight updates are proportional to the derivatives of neuron outputs $y$ \eqref{backprop},
 \begin{equation}
  y^\prime = f^\prime(u)
 \end{equation}
+where $f$ is the activation function and $u$ is the input. 
+We see from \autoref{fig:sigmoidActivationFunctions} that the sigmoid and hyperbolic
+tangent have very small gradients for all inputs except those in the small non-linear region around zero, corresponding 
+to about [-4,4] and [-2,2] respectively. 
+Large positive or negative inputs therefore results in vanishing gradients and tiny updates, slowing down learning.
 
+Note that saturation occurs naturally if a network is absolutely correct on all training examples and 
+hence does not need to change its weights. However, premature saturation is a common problem in neural network training, and may slow
+down or even prevent learning. It can be avoided by restricting neuron inputs $u$ to the non-linear region of their 
+activation functions, with the help of two different procedures. 
 
-They both have pros and cons. 
+First, scaling/standardization (\autoref{sec:transformInputData}) of the input data helps to achieve this for
+the neurons in the first hidden layer. The distribution of inputs to the next layer depend on the choice of activation function, and 
+here the sigmoid and the tangent differ: The former have mean 1/2, while the latter is symmetric around zero. 
+Obviously, zero-mean is preferred, as any positive or negative bias inevitably have a larger risk of pushing the activations 
+towards saturation. Thus, the hyperbolic tangent is generally preferred over the sigmoid, which have also been demonstrated 
+empirically \cite{Karlik11} \cite{Glorot10}. 
+
+Secondly, since the weights and biases also contribute to the sum $u$, they should be initialized as small numbers centered around zero. 
+A common scheme is to 
+set all biases to zero, and assign weight values according to some probability distribution with zero-mean and 
+a suitable (small) variance. A frequently used heuristic is to initialize the weights $W_{ij}$ at each layer by 
+\cite{Bengio12} \cite{LeCun12},
+\begin{equation}
+ W_{ij} \in U\left[-\frac{1}{\sqrt{n}}, \frac{1}{\sqrt{n}}\right]
+\end{equation}
+where $U[-a, a]$ is the uniform distribution in the interval $[-a,a]$ and $n$ is the size of the previous layer.
+This method gives rise to a layer-dependent weight variance, which might result in saturated upper layers
+if the size of the input and output layers are very different from the size of the hidden layers. 
+Glorot and Bengio \cite{Glorot10} have suggested a modification of this method that 
 
 
 The sigmoid is one-sided and therefore more akin to 
@@ -4208,6 +4260,11 @@ and
  ''Scaling learning algorithms towards AI''. 
  In: L. Bottou, O. Chapelle, D. DeCoste, and J. Weston (Eds.), 
  \textit{Large-scale kernel machines}. MIT Press, 2007. 
+ 
+\bibitem{Glorot10}
+ X. Glorot, and Y. Bengio. 
+ ''Understanding the difficulty of training deep feedforward neural networks.''
+ In: \textit{Proceedings of AISTATS} 9. (2010), 249-256. 
  
  
  
