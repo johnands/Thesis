@@ -3254,8 +3254,9 @@ among a family of such models. The choice can have significant impact on the qua
 We distinguish between two kinds of hyperparameters: those that specify the structure of the 
 network itself, and those that determine how the network is trained. 
 The first type contains parameters that are an integral part of the NN and must be included in the evaluation of the eventual NNP, 
-while the second are parameters that are only used during training. The former includes the number of layers and nodes, 
-the choice of activation function(s), and the symmetry function parameters. The second includes 
+while the second are parameters that are only used during training. The former includes the symmetry function parameters
+and any other parameters related to transformations of the input data, the number of layers and nodes, and the choice of 
+activation function(s). The second includes 
 the learning rate, the mini-batch size, the number of training iterations, the choice of loss function and any additional 
 parameters associated with the optimization algorithm and weight initialization.
 
@@ -3317,12 +3318,68 @@ Further, there is a trade-off between the convergence speed and the evaluation s
 As for the symmetry transformations, the above operations become an integral part of the NNP, and must be performed 
 when the potential is to be applied in simulations. Considering the importance of computational performance in MD simulations,
 an increase in training speed at the cost of evaluation speed is not to be preferred, as long as the \textit{quality} of the fit 
-is not influenced by these operations. To investigate this, we have fitted a NN to a data set of 2000 configurations
+is not influenced by these operations. This will be investigated in later sections (WHERE?). 
+
+FLYTTE DETTE TIL RESULTATSEKSJON? To investigate this, we have fitted a NN to a data set of 2000 configurations
 from a single simulation of Si with the Stillinger-Weber potential. This fitting has been done five times both with and without 
 scaling and shifting, with the exact same training parameters. The result can be seen in \autoref{fig:testScalingShifting}. 
 
 
-\subsection{Network architecture and overfitting}
+
+\subsection{Activation functions and weight initialization} \label{sec:hyperParamsActFunctions}
+In \autoref{sec:activationFunctions} we stated that the sigmoid \eqref{sigmoidActivationFunction} and 
+the hyperbolic tangent \eqref{tanhActivationFunction} are the most common activation functions for regression
+with neural networks. They are both \textit{saturating} functions because they map real numbers into the restricted intervals 
+[0,1] and [-1,1] respectively. This property keeps the outputs of neurons from diverging, but it also contributes to 
+the problem of \textit{vanishing gradients}. We know from \autoref{sec:backprop} that
+weight updates are proportional to the derivatives of neuron outputs $y$ \eqref{backprop},
+\begin{equation}
+ y^\prime = f^\prime(u)
+\end{equation}
+where $f$ is the activation function and $u$ is the input. 
+We see from \autoref{fig:sigmoidActivationFunctions} that the sigmoid and hyperbolic
+tangent have very small gradients for all inputs except those in the small non-linear region around zero, corresponding 
+to about [-4,4] and [-2,2] respectively. 
+Large positive or negative inputs therefore result in vanishing gradients and tiny updates, slowing down learning. 
+
+Note that saturation occurs naturally if a network is absolutely correct on all training examples and 
+hence does not need to change its weights. However, premature saturation is a common problem in neural network training, and may slow
+down or even prevent learning. It can be avoided by restricting neuron inputs $u$ to the non-linear region of their 
+activation functions, with the help of two different procedures. 
+
+First, scaling/standardization (\autoref{sec:transformInputData}) of the input data helps to achieve this for
+the neurons in the first hidden layer. The distribution of inputs to the next layer depend on the choice of activation function, and 
+here the sigmoid and the tangent differ: The former have mean 1/2, while the latter is symmetric around zero. 
+Obviously, zero-mean is preferred, as any positive or negative bias inevitably have a larger risk of pushing the activations 
+towards saturation. Thus, the hyperbolic tangent is generally preferred over the sigmoid, which have also been demonstrated 
+empirically \cite{Karlik11} \cite{Glorot10}. 
+
+Secondly, since the weights and biases also contribute to the sum $u$, they should be initialized as small numbers centered around zero. 
+A common scheme is to 
+set all biases to zero, and assign weight values according to some probability distribution with zero-mean and 
+a suitable (small) variance. Assuming standardized input data, 
+a frequently used heuristic is to initialize the weights $W_{ij}$ at each layer by 
+\cite{Bengio12} \cite{LeCun12},
+\begin{equation}
+ W_l \in U\left[-\frac{1}{\sqrt{n_{l-1}}}, \frac{1}{\sqrt{n_{l-1}}}\right]
+\end{equation}
+where $U[-a, a]$ is the uniform distribution in the interval $[-a,a]$, $n_l$ is the size of layer $l$, and 
+$W_l$ is the weight matrix connecting layer $l-1$ and $l$. 
+A disadvantage of this method is that a layer-dependent weight variance might result in saturated upper layers 
+if the layer size changes through the network.  
+Glorot and Bengio \cite{Glorot10} have suggested a modification of this scheme that gives rise to variance that 
+is equal through the whole network. The idea is to 
+conserve the input signal when propagated through the network by preventing it from shrinking or growing too much,  
+\begin{equation}
+ W_l \in U\left[-\frac{\sqrt{6}}{\sqrt{n_{l-1}+n_{l}}}, \frac{\sqrt{6}}{\sqrt{n_{l-1}+n_{l}}}  \right]
+\end{equation}
+This is only valid for an activation function that is symmetric and has a unit derivative at 0 ($f^\prime(0) = 1$), i.e. only 
+for the hyperbolic tangent. Further, all input variables are assumed to have the same variance.
+
+
+
+
+\subsection{Network architecture and overfitting} \label{sec:overfitting}
 There is no standard and accepted method for finding the optimal size of a NN for a specific data set. 
 In this work, the input layer is a set of symmetry functions that acts as descriptors of atomic configurations.
 The size of this set thus decides the number of neurons in the input layer, which is discussed in \autoref{sec:initialSymmSet}. 
@@ -3368,83 +3425,87 @@ only one or two hidden layers are used, and we know from the universal approxima
 that one hidden layer is sufficient to represent any function. For typical AI tasks, deeper architectures are required 
 \cite{Bengio07}, but in this thesis we will limit ourselves to maximum three hidden layers. 
 
-
-\subsection{Activation functions and weight initialization} \label{sec:hyperParamsActFunctions}
-In \autoref{sec:activationFunctions} we stated that the sigmoid \eqref{sigmoidActivationFunction} and 
-the hyperbolic tangent \eqref{tanhActivationFunction} are the most common activation functions for regression
-with neural networks. They are both \textit{saturating} functions because they map real numbers into the restricted intervals 
-[0,1] and [-1,1] respectively. This property keeps the outputs of neurons from diverging, but it also contributes to 
-the problem of \textit{vanishing gradients}. We know from \autoref{sec:backprop} that
-weight updates are proportional to the derivatives of neuron outputs $y$ \eqref{backprop},
+\subsubsection{Other regularization teqhniques}
+There exist other regularization techniques in addition to early stopping that reduce overfitting. 
+\textit{Weight decay} or \textit{L2 regularization} adds an extra term to the cost function, called 
+the \textit{regularization term}, which is the sum of squares of all weights in the network \cite{Krogh1992},
 \begin{equation}
- y^\prime = f^\prime(u)
+ \Gamma = \Gamma_0 + \frac{\lambda}{2N}\sum_w w^2
 \end{equation}
-where $f$ is the activation function and $u$ is the input. 
-We see from \autoref{fig:sigmoidActivationFunctions} that the sigmoid and hyperbolic
-tangent have very small gradients for all inputs except those in the small non-linear region around zero, corresponding 
-to about [-4,4] and [-2,2] respectively. 
-Large positive or negative inputs therefore results in vanishing gradients and tiny updates, slowing down learning.
+where $\Gamma_0$ is the original, unregularized cost function, $N$ is the size of the training set and 
+$\lambda$ is the \textit{regularization parameter}. The idea is to penalize large weights, and the modified 
+cost function can be viewed as a compromise between finding small weights and minimizing the original cost function.
+The parameter $\lambda$ determines the relative importance of these two elements. 
+Keeping the weights small makes the output of the NN more resistant to outliers and noise in the input data, thus
+putting more emphasis on the frequent input patterns. 
+The hope is that this will force the NN to see \textit{the bigger picture}, 
+and hence generalize better. 
 
-Note that saturation occurs naturally if a network is absolutely correct on all training examples and 
-hence does not need to change its weights. However, premature saturation is a common problem in neural network training, and may slow
-down or even prevent learning. It can be avoided by restricting neuron inputs $u$ to the non-linear region of their 
-activation functions, with the help of two different procedures. 
+Another more recent technique to reduce overfitting is \textit{dropout} \cite{Srivastava14}. Here, the key idea 
+is to randomly remove neurons from the NN during training. This prevents nodes from co-adapting too much and 
+also decreases the size of the network. We will not go into further detail on this subject here. 
 
-First, scaling/standardization (\autoref{sec:transformInputData}) of the input data helps to achieve this for
-the neurons in the first hidden layer. The distribution of inputs to the next layer depend on the choice of activation function, and 
-here the sigmoid and the tangent differ: The former have mean 1/2, while the latter is symmetric around zero. 
-Obviously, zero-mean is preferred, as any positive or negative bias inevitably have a larger risk of pushing the activations 
-towards saturation. Thus, the hyperbolic tangent is generally preferred over the sigmoid, which have also been demonstrated 
-empirically \cite{Karlik11} \cite{Glorot10}. 
-
-Secondly, since the weights and biases also contribute to the sum $u$, they should be initialized as small numbers centered around zero. 
-A common scheme is to 
-set all biases to zero, and assign weight values according to some probability distribution with zero-mean and 
-a suitable (small) variance. A frequently used heuristic is to initialize the weights $W_{ij}$ at each layer by 
-\cite{Bengio12} \cite{LeCun12},
-\begin{equation}
- W_{ij} \in U\left[-\frac{1}{\sqrt{n}}, \frac{1}{\sqrt{n}}\right]
-\end{equation}
-where $U[-a, a]$ is the uniform distribution in the interval $[-a,a]$ and $n$ is the size of the previous layer.
-A disadvantage of this method is that a layer-dependent weight variance might result in saturated upper layers
-if the size of the input and output layers are very different from the size of the hidden layers. 
-Glorot and Bengio \cite{Glorot10} have suggested a modification of this method that gives rise to variance that 
-is equal through the whole network, 
-\begin{equation}
- dd
-\end{equation}
+We have decided to employ early stopping only to prevent overfitting, as more training data is easily obtained from MD 
+simulations with empirical potentials, making overfitting not a pressing issue. 
 
 
+\subsection{Optimizer parameters}
+There are several optimization hyperparameters that need to be decided, namely the learning rate, the mini-batch size
+(if we employ mini-batch gradient descent) and parameters inherent to the update rule of choice. 
+We restrict ourselves to optimization algorithms that use adaptive learning rates, thus only an \textit{initial}
+learning rate needs to be set. According to Bengio \cite{Bengio12}, a default value of 0.01 is appropriate, but 
+a set of different values should be tested (REF TO SECTION ON GRID SEARCH), 
+as the optimal value may depend strongly on the data set and the NN architecture. 
 
-The sigmoid is one-sided and therefore more akin to 
-biological neurons, and it is also less computationally expensive than the hyperbolic tangent. 
-The sigmoid does however have a problem with \textit{satured} neurons, which is a phenomenon that occurs with 
-all bounded activation functions. 
+In \autoref{sec:gradientDescentVariants} we discussed different types of gradient descent learning, and 
+declared that mini-batch gradient descent usually is the preferred scheme. The main reason for this is that data sampled from molecular 
+dynamics simulations, even with a good sampling algorithm, often contain redundant information: many configurations 
+are similar because the system tends to stay near equilibrium. \footnote{This is of course not the case if the intended
+application of the NNP is for non-equilibrium molecular dynamics.} Thus, batch learning, where the weights are updated 
+only after the complete training set have been fed to the network, is wasteful because it recomputes nearly the same outputs
+several times before updating the weights \cite{LeCun99}. 
 
+However, to employ mini-batch gradient descent, we have to determine another 
+hyperparameter, namely the mini-batch size. According to Bengio \cite{Bengio12}, 32 is a good default value. Further, it is argued 
+that the mini-batch size should mainly impact the training time and not so much the eventual error of the fit.
+Therefore, we will not discuss this parameter any further, and refer to \autoref{sec:optimizingHyperparameters} for a discussion
+on how to optimize hyperparameters.
 
-\subsection{Symmetry functions}
-
-\subsection{Cost function}
-
-\subsection{Learning rate and mini-batch size}
-
-
-\subsection{Weight initialization}
-
-\subsection{Other techniques}
-
-
-
-
-
-
-
-
-
+Some optimizers, like Adam \eqref{AdamOptimizer}, contain other hyperparameters in addition to a learning rate.  
+Each of these algorithms has a set of default values that are well justified, and we have decided not to alter these. 
 
 
-LEARNING RATE, ARCHITECTURE, ACTIVATION FUNCTION (SATURATION), ONLINE VS OFFLINE LEARNING. 
-GJØRE NOEN ENKLE TESTER. 
+\subsection{Hyperparameter space exploration} \label{sec:optimizingHyperparameters}
+In this section we have discussed various tricks of the trade regarding hyperparameters for training neural networks. 
+We realize that there are a substantial number of choices to be made, corresponding to a large parameter space, and 
+that many (if not all) of these choices are vital for a successful outcome. Even though the above discussions narrows down the search 
+for suitable hyperparameters, it is still a difficult task. 
+
+An alternative is to treat hyperparameter selection as an optimization problem, i.e. to train the NN for many different 
+parameter sets and choose the set that yields the best fit. To perform this task, it is common to split the data set 
+into three parts: a training set, a test set, and a \textit{validation set}. The first two sets have the same 
+purpose as before (\autoref{sec:overfitting}), while the validation set is used to test the model during hyperparameter 
+optimization. This is done so that we do not overfit the hyperparameters to the test set, which is only used to assess 
+the performance of the final NN model of choice.
+
+In the following we will describe various hyperparameter optimization schemes. 
+
+\subsubsection{Coordinate descent}
+In coordinate descent, we keep all hyperparameters fixed except for one. Then we adjust this single parameter and train the NN
+for each value to minimize the validation error  .
+
+\subsubsection{Grid search}
+Grid search is the most simple and brute-force way to optimize hyperparameters: we simply try every hyperparameter setting 
+over a specified range of values and choose the set with the lowest validation error. This is obviously very computationally 
+expensive, and is often infeasible in practice. 
+
+\subsubsection{Random search}
+Instead of performing a grid search, we can sample the hyperparameter space randomly. This is usually a better option because 
+a grid search may take a long time to reach sensible combinations of parameters, and because only a few parameters
+tend to be vital for the result. 
+
+
+
 
 \section{Transfer NN from Python to C++} \label{sec:timeUsage}
 The workflow when training a NN and using it in MD is as follows: 
@@ -4270,6 +4331,18 @@ and
  X. Glorot, and Y. Bengio. 
  ''Understanding the difficulty of training deep feedforward neural networks.''
  In: \textit{Proceedings of AISTATS} 9. (2010), 249-256. 
+ 
+\bibitem{Krogh1992}
+ A. Krogh, and J. A. Hertz. 
+ ''A simple weight decay can improve generalization''.
+ In: D. S. Lippman, J. E. Moody, and D. S. Touretzky (Eds.)
+ \textit{Advances in neural information processing systems vol. 4} (pp. 950-957). 
+ Morgan Kaufmann. 
+ 
+\bibitem{Srivastava14}
+ N Srivastava, G. Hinton, A. Krizhevsky, I. Sutskever, R. Salakhutdinov. 
+ ''Dropout: A Simple Way to Prevent Neural Networks from Overfitting.''
+ In: \textit{Journal of Machine Learning Research} 15. (2014), 1929-1958. 
  
  
  
