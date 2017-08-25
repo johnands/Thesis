@@ -91,7 +91,8 @@
 \contentsline {subsubsection}{Coordinate descent}{102}{section*.53}
 \contentsline {subsubsection}{Grid search}{103}{section*.54}
 \contentsline {subsubsection}{Random search}{103}{section*.55}
-\contentsline {section}{\numberline {7.4}Transfer NN from Python to C++}{103}{section.7.4}
+\contentsline {subsection}{\numberline {7.3.6}Summary}{103}{subsection.7.3.6}
+\contentsline {section}{\numberline {7.4}Applying the neural network potential}{103}{section.7.4}
 \contentsline {chapter}{\numberline {8}Validation}{107}{chapter.8}
 \contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{107}{section.8.1}
 \contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{109}{subsection.8.1.1}
@@ -99,5 +100,5 @@
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{117}{chapter.10}
 \contentsline {part}{III\hspace {1em}Conclusions and future work}{119}{part.3}
 \contentsline {chapter}{\numberline {11}The quality of the NNP}{121}{chapter.11}
-\contentsline {chapter}{Appendices}{123}{section*.62}
+\contentsline {chapter}{Appendices}{123}{section*.61}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{125}{Appendix.1.A}

@@ -10,6 +10,7 @@
 \usepackage{xcolor}
 \usepackage{amssymb}
 \usepackage{mdframed}
+\usepackage{booktabs}
 
 \sisetup{range-phrase=-}
 
@@ -2451,7 +2452,7 @@ A simple
 \end{lstlisting}
 will test if the installation was succesful. 
 
-\section{TensorFlow basic usage}
+\section{TensorFlow basic usage} \label{sec:TensorFlowBasic}
 TensorFlow relies on highly-optimized
 \texttt{C++} for its computations, but offers
 APIs \footnote{\href{https://www.tensorflow.org/api_docs/}
@@ -3471,7 +3472,7 @@ that the mini-batch size should mainly impact the training time and not so much 
 Therefore, we will not discuss this parameter any further, and refer to \autoref{sec:optimizingHyperparameters} for a discussion
 on how to optimize hyperparameters.
 
-Some optimizers, like Adam \eqref{AdamOptimizer}, contain other hyperparameters in addition to a learning rate.  
+Some optimizers, like Adam \eqref{Adam}, contain other hyperparameters in addition to a learning rate.  
 Each of these algorithms has a set of default values that are well justified, and we have decided not to alter these. 
 
 
@@ -3504,54 +3505,78 @@ Instead of performing a grid search, we can sample the hyperparameter space rand
 a grid search may take a long time to reach sensible combinations of parameters, and because only a few parameters
 tend to be vital for the result. 
 
+\subsection{Summary}
+We have in this section discussed all hyperparameters that needs to be chosen to construct a NNP. 
+It must be stressed that many of the above recommendations for hyperparameter choices may not be suitable 
+for all problems, and that the only way to find unbiased, optimal values is by an extensive search 
+in hyperparameter space. However, the quality of the fit may be insensitive to some parameters, which makes their 
+determination less important. 
+We refer to \autoref{sec:SiPotentialResults} for a demonstration on how 
+a combination of qualitative arguments and optimization can be performed to find suitable parameters 
+for a specific case. 
 
 
 
-\section{Transfer NN from Python to C++} \label{sec:timeUsage}
-The workflow when training a NN and using it in MD is as follows: 
+\section{Applying the neural network potential} \label{sec:applyingNNP}
+The quality of a NNP is measured by its test set error, but that does not necessarily mean it performs 
+well in MD simulations. To properly validate the NNP, we have to apply it in simulations, measure thermodynamic quantites, 
+and see if we reproduce known, experimental results. 
+The general workflow for constructing and applying a NNP is as follows: 
 \begin{enumerate}
  \item Generate training data
  \item Train a NN to fit the data
- \item Use the analytical expression for the trained NN as a potential in MD
+ \item Use the analytical expression for the eventual NNP as a potential in MD simulations
 \end{enumerate}
-The main application programming interface (API) for TensorFlow (TF) is Python. The NN is therefore
-trained using Python scripts, while C++ is utilized to run the MD simulations for speed purposes. Thus
-we need a way to transfer the NN from Python to C++. 
+In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C++, is
+employed to run MD simulations for speed purposes. 
+We therefore need a way to transfer the NNP from Python to C++. 
 
 There are built-in functions in TF that automatically saves computational graphs (architecture of network plus
 nodes for training) and variables (weights and activation functions) as binary files.
 These files can then be read and the NN evaluated using the TF C++ API. This API is however quite under-developed
 and the documentation is very sparse. Another alternative is to manually save the weights and biases
-as a text file, along with information on which activation function(s) that has been used. This file 
+as a text file, along with the necessary hyperparameter values, such as choice of activation function and 
+symmetry function parameters. This file 
 can then be used to reconstruct the NN in the same way that it is made in Python: By representing
-the connection weights between layers as matrices and the biases as vectors. The activation functions
-must be coded manually. A linear algebra library should
-be utilized for speed and simplicity; we have chosen to use Armadillo. 
+the connection weights between layers as matrices and the biases as vectors 
+(\autoref{sec:MLPmodel} and \autoref{sec:TensorFlowCreatingNN}. 
+The activation functionsmust be implemented manually. A linear algebra library can
+be utilized for speed and simplicity; we have chosen to use Armadillo
+\footnote{\href{http://arma.sourceforge.net/}{Armadillo}}. 
 
-To find out which alternative is the most efficient for evaluating a NN, we compare the 
-time usage in three cases: with TF in Python, with TF in C++ and with Armadillo. 
+To find out which alternative is the most computationally efficient, we compare the 
+CPU time usage between evaluating a NN with TensorFlow and Armadillo in C++. We also compare with TF in Python to 
+investigate if any differences between TF and Armadillo in C++ is caused by an under-developed C++ TF API, or 
+if the cause is inherent to the TF implementation of neural networks.
+The evaluation time 
+is measured for a range of different NN sizes, and for each size an average of 50 evaluations have been computed.
 The results are shown in \autoref{fig:timeComparisonEvaluateNetworkTotalScatter}.
-\begin{figure}[H]
+\begin{figure}
 \centering
-  \includegraphics[width = 0.9\linewidth]{Figures/Tests/timeComparisonNetworkTotalScatter.pdf}
+  \includegraphics[width = 0.9\linewidth]{Figures/Tests/timeComparisonNetworkNew.pdf}
   \caption{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions
-	   using the TF Python API ($T_{TFP}$), the TF C++ API ($T_{TFC}$) and Armadillo ($T_{ARMA}$). 
-	   $L$ is the number of layers, $N$ is the number of nodes in each hidden layer. All the NNs
+	   using the TF Python API ($T_{\mathrm{TFP}}$), the TF C++ API ($T_{\mathrm{TFC}}$) and Armadillo ($T_{\mathrm{ARMA}}$). 
+	   $L$ is the number of hidden layers, $n$ is the number of nodes in each hidden layer. All the NNs
 	   have one input and one output. The time has been found by averaging over 50 evaluations
-	   for each NN architecture. $T_{TFC}/T_{ARMA}$ is also shown in an uncut version to demonstrate
-	   how large the time difference is for very small NNs.}
+	   for each NN architecture.}
 \label{fig:timeComparisonEvaluateNetworkTotalScatter}
 \end{figure}
-\begin{figure}[H]
+\begin{comment}\begin{figure}
 \centering
   \includegraphics[width = 0.9\linewidth]{Figures/Tests/timeComparisonNetwork3.pdf}
   \caption{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.} 
   \label{fig:timeComparisonEvaluateNetwork2}
-\end{figure}
-As we can see, evaluation of an NN with the built-in TF methods are notably slower than with Armadillo 
-for small NNs, but seems to converge to 1 for large networks. The convergence rate is however surpisingly low. One reason for this
-can be that the \textit{Session} environment in TF has lot of overhead. However, the main computational strength of TF resides 
-in GPUs, which will be tested out later on. 
+\end{figure}\end{comment}
+
+The two top figures displays the ratio $T_{\mathrm{TFC}}/T_{\mathrm{ARMA}}$ for NN sizes up to 200. The left one shows the 
+whole picture, while right right on 
+
+As we can see, NN evaluation with the built-in TF methods are notably slower both in Python and C++ than with Armadillo 
+for small NNs, but the ratio seems to converge to 1 for large networks. 
+The convergence rate is however surpisingly low. One reason for this
+may be that the \texttt{Session} environment in TF has a lot of overhead. Considering that we 
+will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
+is definitively the best choice. 
 
 
 
