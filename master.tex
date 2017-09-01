@@ -67,28 +67,71 @@ This is an abstract text.
 \tableofcontents
 
 \chapter{Introduction}
-The field of artifical intelligence research has experienced a surge of interest in 
+GENERELT OM ANNS I FORSKNING
+The field of artifical intelligence (AI) research has experienced a surge of interest in 
 the new millenium, mainly due to the recent success of artifical neural networks (ANNs). 
-ANNs are computer programs that mimic the human brain
+ANNs are computer programs that try to mimic biological brains
 by giving computers the ability to learn without being explicitly programmed. 
-They have beaten previous records in image recognition \cite{Krizhevsky12}, speech recognition
-\cite{Hinton12} 
+They have beaten previous records in typical AI tasks like image recognition \cite{Krizhevsky12} and speech recognition
+\cite{Hinton12}, and have also shown great promise in natural language understanding \cite{Collobert11}. 
  
+In later years, ANNs have also been employed in the natural sciences, where they have outperformed other machine learning
+teqhniques at analyzing particle accelerator data \cite{Ciodaro12} and reconstructing brain circuits
+\cite{Helmstaedter13}. Further, physicists have developed ANNs that can solve the quantum many-body problem
+\cite{Carleo17} and even automatically search for new quantum physics experiments \cite{Krenn16}. 
 
-Generelt om maskinlæring. 
-Om maskinlæring i fysikk. 
+\section{Potentials in molecular dynamics}
+OM ANNS I MD
+The main strength of ANNs is their ability to learn features and find patterns in data sets. 
+This has led to their application in the construction of inter-atomic potentials for molecular dynamics (MD) simulations, 
+which is the topic of this thesis.
 
-\section{Neural network potentials}
+HVORFOR ER PES VIKTIG FOR MD?
+In classical MD, we are able to simulate thousands or even millions of atoms over considerable 
+time scales (in a microscopic perspective). This is made possible by modelling the atomic interaction forces 
+as the gradient of a pre-determined potential energy surface (PES), and integrate the atom trajectories according 
+to Newton's equations of motion. The PES thus determines the dynamics of the system, and is the 
+key factor for a MD simulation to be physically plausible.
+
+MÅTER Å KONSTRUERE POTENSIALER PÅ
+Atomic interactions are governed by the laws of quantum mechanics (QM). 
+The most accurate approach to MD simulations is to calculate the PES on-the-fly with a QM method like 
+Hartree-Fock or Density Functional Theory. 
+This \textit{ab inito} approach to MD is however very computationally expensive, 
+and severely restricts the feasible space and time scales of the simulation.   
+
+In \textit{classical} MD, the PES is approximated by a \textit{pre-defined} mathematical function. 
+The traditional strategy is to start out with a functional form 
+that incorporates some of the known physics of the system under investigation. 
+The function has a set of parameters that are then fitted to experimental data. 
+These \textit{empirical} potentials usually have a quite simple form containing only 
+a few parameters, making them fast to evaluate, but also biased and possibly inaccurate.  
+Examples are the Lennard-Jones \cite{Jones24} and the Stillinger-Weber 
+\cite{Stillinger85} potentials. 
+
+A third option, which is used in this work, is to employ a QM method to produce a data set of atomic configurations and 
+their corresponding energies. Then, a general functional form containing many parameters are fitted to this data set.
+The resulting PES will be much faster to evaluate compared to computing energies and forces on-the-fly, but considerably slower than 
+most empirical potentials. Further, if the fitting error is small, only the error of the underlying QM method is present. 
+Thus, this scheme can be viewed as a multi-scale physics tool that bridges the gap between the quantum realm and the classical realm, 
+enabling large-scale MD simulations with \textit{ab inito} accuracy. 
+
+\section{Neural Network potentials}
+To construct an adequate PES, we need a suitable fitting method to interpolate
+atomic configurations and energies. The functional form that is to be fitted should be unbiased, contain the 
+right amount of parameters
+
+Several methods have been proposed, like interpolating moving least squares \cite{Dawes08} 
+and modified Sheppard interpolation \cite{Ischtwan94}. In the past two decades, also ANNs have been employed for this purpose.
+ANNs are purely mathematical functions that have a very flexible functional form. 
+
 
 \section{Goals}
 The main goal of this thesis is to use artificial neural networks to
-construct many-body potential energy surfaces (PES) to be used in molecular dyanmics (MD) simulations.  
+construct many-body potential energy surfaces (PES) and apply them in molecular dynamics (MD) simulations.
 This goal can be split into the following intermediate objecives:
 \begin{itemize}
- \item Train an one-dimensional ANN with the machine learning library TensorFlow (TF) 
- to reproduce the shifted Lennard-Jones (LJ) potential.
- As a first test case, we will train the NN on random data and investigate
- how different NN architectures and activation functions influence the quality of the potential fit. 
+ \item 
  \item Train a many-body NN to reproduce the Stillinger-Weber (SW) potential for Si. 
  Training data (configurations of particles and energies) will be sampled from SW LAMMPS simulations. 
  The resulting NNP will then be used to simulate Si with LAMMPS. 
@@ -96,6 +139,15 @@ This goal can be split into the following intermediate objecives:
  \item Construct a many-body NNP that will be able to simulate a system consisting of several atom types. 
  The method will be tested on the Vashishta potential for SiO2.
 \end{itemize}
+
+\section{Structure of the thesis}
+This thesis has four parts: The first part is an introduction to the theories of 
+molecular dynamics, ANNs, and the application of neural network potentials in molecular dynamics. 
+The second part provides introductions to LAMMPS and TensorFlow including implementational details, 
+advanced theory on the construction of NNPs, and results demonstrating the complete method. 
+The fourth part concludes the text and contains a discussion of possible future work and applications. 
+
+
 
 
 \part{Theory}
@@ -4390,6 +4442,35 @@ and
  G. Hinton, et al. 
  ''Deep neural networks for acoustic modeling in speechrecognition.'' 
  In: \textit{IEEE Signal Processing Magazine} 29, (2012), 82–97.
+ 
+\bibitem{Collobert11}
+ R. Collobert, J. Weston, L. Bottou, M. Karlen, K. Kavukcuoglu, and P. Kuksa. 
+ ''Natural Language Processing (Almost) from Scratch''.
+ In: \textit{Journal of Machine Learning Research} 12. (2011), 2493-2537. 
+ arXiv: \href{https://arxiv.org/abs/1103.0398}{1103.0398}
+ 
+\bibitem{Ciodaro12}
+ T. Ciodaro, D. Deva, J. M. de Seixas, and D. Damazio. 
+ ''Online particle detection with Neural Networks based on topological calorimetry information''. 
+ In: \textit{Journal of Physics: Conference Series}, 368. (2012), 012030. 
+ 
+\bibitem{Helmstaedter13}
+ M. Helmstaedter, K. L. Briggman, S. C. Turaga, V. Jain, H. S. Seung, W. Denk. 
+ ''Connectomic reconstruction of the inner plexiform layer in the mouse retina''. 
+ In: \textit{Nature} 500. (2013), 168-174. 
+ DOI: \href{http://doi.org/10.1038/nature12346}{10.1038/nature12346}
+ 
+ \bibitem{Carleo17}
+ G. Carleo, and M. Troyer. 
+ ''Solving the quantum many-body problem with artifical neural networks''. 
+ In: \textit{Science} 355. (2017), 602-606. 
+ DOI: \href{http://doi.org/10.1126/science.aag2302}{10.1126/science.aag2302}
+ 
+\bibitem{Krenn16}
+ M. Krenn, M. Malik, R. Fickler, R. Lapkiewicz, and A. Zeilinger. 
+ ''Automated Search for new Quantum Experiments''. 
+ In: \textit{Physical Review Letters} 116. (2016), 090405. 
+ DOI: \href{http://doi.org/10.1103/PhysRevLett.116.090405}{10.1103/PhysRevLett.116.090405}
  
  
  
