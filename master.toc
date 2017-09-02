@@ -1,7 +1,7 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Potentials in molecular dynamics}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Neural Network potentials}{2}{section.1.2}
-\contentsline {section}{\numberline {1.3}Goals}{2}{section.1.3}
+\contentsline {section}{\numberline {1.3}Goals}{3}{section.1.3}
 \contentsline {section}{\numberline {1.4}Structure of the thesis}{3}{section.1.4}
 \contentsline {part}{I\hspace {1em}Theory}{5}{part.1}
 \contentsline {chapter}{\numberline {2}Molecular dynamics}{9}{chapter.2}

@@ -11,6 +11,7 @@
 \usepackage{amssymb}
 \usepackage{mdframed}
 \usepackage{booktabs}
+\usepackage{enumitem}
 
 \sisetup{range-phrase=-}
 
@@ -67,78 +68,104 @@ This is an abstract text.
 \tableofcontents
 
 \chapter{Introduction}
-GENERELT OM ANNS I FORSKNING
 The field of artifical intelligence (AI) research has experienced a surge of interest in 
-the new millenium, mainly due to the recent success of artifical neural networks (ANNs). 
-ANNs are computer programs that try to mimic biological brains
+the new millenium, mainly due to the recent success of artifical neural networks (NNs). 
+NNs are computer programs that try to mimic biological brains
 by giving computers the ability to learn without being explicitly programmed. 
 They have beaten previous records in typical AI tasks like image recognition \cite{Krizhevsky12} and speech recognition
 \cite{Hinton12}, and have also shown great promise in natural language understanding \cite{Collobert11}. 
  
 In later years, ANNs have also been employed in the natural sciences, where they have outperformed other machine learning
 teqhniques at analyzing particle accelerator data \cite{Ciodaro12} and reconstructing brain circuits
-\cite{Helmstaedter13}. Further, physicists have developed ANNs that can solve the quantum many-body problem
+\cite{Helmstaedter13}. Further, physicists have developed NNs that can solve the quantum many-body problem
 \cite{Carleo17} and even automatically search for new quantum physics experiments \cite{Krenn16}. 
 
 \section{Potentials in molecular dynamics}
-OM ANNS I MD
-The main strength of ANNs is their ability to learn features and find patterns in data sets. 
+The main strength of NNs is their ability to learn features and find patterns in data sets. 
 This has led to their application in the construction of inter-atomic potentials for molecular dynamics (MD) simulations, 
 which is the topic of this thesis.
 
-HVORFOR ER PES VIKTIG FOR MD?
 In classical MD, we are able to simulate thousands or even millions of atoms over considerable 
 time scales (in a microscopic perspective). This is made possible by modelling the atomic interaction forces 
-as the gradient of a pre-determined potential energy surface (PES), and integrate the atom trajectories according 
-to Newton's equations of motion. The PES thus determines the dynamics of the system, and is the 
+as the gradient of a pre-determined potential energy surface (PES), and predicting new trajectories according 
+to Newtonian dynamics. The PES thus determines the dynamics of the system, and is the 
 key factor for a MD simulation to be physically plausible.
 
-MÅTER Å KONSTRUERE POTENSIALER PÅ
-Atomic interactions are governed by the laws of quantum mechanics (QM). 
-The most accurate approach to MD simulations is to calculate the PES on-the-fly with a QM method like 
+A PES can have very different forms and properties. The ideal potential 
+\footnote{The word ''potential'' is frequently used in place of ''potential energy surface'' in this thesis.}
+should be accurate, i.e. produce thermodynamic properties that agree with experiments, and be computationally 
+efficient to enable large-scale simulations. For many systems, a realistic PES must also be high-dimensional to 
+incorporate all relevant degrees of freedom.
+
+There is usually a trade-off between speed and accuracy when it comes to MD simulations. 
+The most accurate scheme is to recalculate the PES on-the-fly with a quantum mechanical method like 
 Hartree-Fock or Density Functional Theory. 
 This \textit{ab inito} approach to MD is however very computationally expensive, 
 and severely restricts the feasible space and time scales of the simulation.   
 
-In \textit{classical} MD, the PES is approximated by a \textit{pre-defined} mathematical function. 
-The traditional strategy is to start out with a functional form 
+In \textit{classical} MD, the PES is instead approximated by a \textit{pre-defined} mathematical function. 
+The construction of such potentials has been one of the main focus areas in MD research, and there 
+are two main strategies. The ''physical'' approach is to start out with a functional form 
 that incorporates some of the known physics of the system under investigation. 
 The function has a set of parameters that are then fitted to experimental data. 
 These \textit{empirical} potentials usually have a quite simple form containing only 
-a few parameters, making them fast to evaluate, but also biased and possibly inaccurate.  
+a few parameters, making them fast to evaluate, but also biased and possibly inaccurate. Also, the parameter fitting 
+may be difficult and time consuming. 
 Examples are the Lennard-Jones \cite{Jones24} and the Stillinger-Weber 
 \cite{Stillinger85} potentials. 
 
-A third option, which is used in this work, is to employ a QM method to produce a data set of atomic configurations and 
-their corresponding energies. Then, a general functional form containing many parameters are fitted to this data set.
-The resulting PES will be much faster to evaluate compared to computing energies and forces on-the-fly, but considerably slower than 
-most empirical potentials. Further, if the fitting error is small, only the error of the underlying QM method is present. 
-Thus, this scheme can be viewed as a multi-scale physics tool that bridges the gap between the quantum realm and the classical realm, 
-enabling large-scale MD simulations with \textit{ab inito} accuracy. 
+The ''mathematical'' approach is to employ a QM method to produce a data set of atomic configurations and 
+their corresponding energies, called a \textit{reference set}. 
+Then, a general functional form containing many parameters are fitted to this data set with 
+an interpolation algorithm of choice. The use of a very flexible, generic functional form makes this type of potential 
+accurate and bias-free. If a small fitting error is achieved, only the error of the underlying QM method 
+is present. Thus we obtain a PES with effective \textit{ab inito} accuracy that is many of orders of magnitude faster 
+than recomputing the PES on-the-fly. However, since no physics can be extracted from its functional form, great 
+care must be taken during its construction. 
+
 
 \section{Neural Network potentials}
-To construct an adequate PES, we need a suitable fitting method to interpolate
-atomic configurations and energies. The functional form that is to be fitted should be unbiased, contain the 
-right amount of parameters
+Several methods have been proposed to fit data sets of atomic configurations and energies, 
+like interpolating moving least squares \cite{Dawes08} 
+and modified Sheppard interpolation \cite{Ischtwan94}. Recently, also NNs have been employed for this purpose
+\cite{Behler11general}, resulting in so-called \textit{neural network potentials} (NNPs). NNs have very flexible 
+functional forms with an arbitrary number of inputs, outputs and parameters.
+The various attempts at constructing NNPs vary significantly in scope and complexity, especially in the number of networks that is used.
+Examples of NNPs where a single NN was used are Raff et al. \cite{Agrawal06}, who studied the dissociation of 
+the $\mathrm{SiO}_2$ molecule, and \cite{Prudente98}, who studied the vibrational levels of the $\mathrm{H}_3^+$ ion. 
 
-Several methods have been proposed, like interpolating moving least squares \cite{Dawes08} 
-and modified Sheppard interpolation \cite{Ischtwan94}. In the past two decades, also ANNs have been employed for this purpose.
-ANNs are purely mathematical functions that have a very flexible functional form. 
+Using a single NN restricts the dimensionality of the system to a few atoms. Two high-dimensional approaches have 
+been developed in parallel by Bholoa et al. \cite{Bholoa07} and Behler and Parinello \cite{Behler11symmetry}. These 
+methods are applicable to systems containing an arbitrary number of atoms. 
+This thesis concerns itself with the Behler-Parinello (BP) method for constructing NNPs, described by Raff et al. \cite{Raff12}
+as the most powerful technique for executing dynamics of large systems using PESs obtained from \textit{ab inito} 
+calculations. 
+
+As mentioned above, a NN is a purely mathematical concept, which can pose problems in a physical context. 
+There are certain physical symmetries any PES must possess, like translational and rotational invariance
+of a molecule's energy. The BP method utilizes a set of symmetry functions that ensures the relevant symmetries are satisfied. 
+
+In principle, the method can be used to construct potentials for any chemical system, since no intial biased functional form 
+is required. Only the symmetry function set and the reference data differ from system to system, the interpolation procedure itself 
+is automated. Further, the NNP can be fitted to arbitrary accuracy if done correctly. 
+Thus, this scheme can be viewed as a multi-scale physics tool that bridges the gap between the 
+quantum realm and the classical realm, enabling large-scale MD simulations with \textit{ab inito} accuracy.
 
 
 \section{Goals}
-The main goal of this thesis is to use artificial neural networks to
-construct many-body potential energy surfaces (PES) and apply them in molecular dynamics (MD) simulations.
-This goal can be split into the following intermediate objecives:
-\begin{itemize}
- \item 
+The main goal of this thesis is to use artificial neural networks and the Behler-Parinello method to
+construct high-dimensional potential energy surfaces and apply them in molecular dynamics (MD) simulations.
+This goal can be split into the following intermediate objectives:
+\begin{enumerate}[label=\textbf{\alph*)}]
+ \item \textbf{Develop Python scripts that can fit any multi-valued real function with neural networks}. \\
+ \indent We use the machine learning software TensorFlow to implement feed-forward neural networks that can 
  \item Train a many-body NN to reproduce the Stillinger-Weber (SW) potential for Si. 
  Training data (configurations of particles and energies) will be sampled from SW LAMMPS simulations. 
  The resulting NNP will then be used to simulate Si with LAMMPS. 
  We therefor need to extend the LAMMPS library with our own neural network potential.
  \item Construct a many-body NNP that will be able to simulate a system consisting of several atom types. 
  The method will be tested on the Vashishta potential for SiO2.
-\end{itemize}
+\end{enumerate}
 
 \section{Structure of the thesis}
 This thesis has four parts: The first part is an introduction to the theories of 
@@ -4471,6 +4498,13 @@ and
  ''Automated Search for new Quantum Experiments''. 
  In: \textit{Physical Review Letters} 116. (2016), 090405. 
  DOI: \href{http://doi.org/10.1103/PhysRevLett.116.090405}{10.1103/PhysRevLett.116.090405}
+ 
+\bibitem{Prudente98}
+ F. V. Prudente, P. H. Acioli, and J. J. S. Neto. 
+ ''The fitting of potential energy surfaces using neural networks: Application to the study of 
+ vibrational levels of $\mathrm{H}_3^+$''. 
+ In: \textit{The Journal of Chemical Physics} 109. (1998), 8801. 
+ DOI: \href{http://dx.doi.org/10.1063/1.477550}{10.1063/1.477550}
  
  
  
