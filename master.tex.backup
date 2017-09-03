@@ -11,6 +11,7 @@
 \usepackage{amssymb}
 \usepackage{mdframed}
 \usepackage{booktabs}
+\usepackage{enumitem}
 
 \sisetup{range-phrase=-}
 
@@ -154,22 +155,55 @@ quantum realm and the classical realm, enabling large-scale MD simulations with 
 \section{Goals}
 The main goal of this thesis is to use artificial neural networks and the Behler-Parinello method to
 construct high-dimensional potential energy surfaces and apply them in molecular dynamics (MD) simulations.
-This goal can be split into the following intermediate objectives:
-\begin{itemize}
- \item \textbf{Develop Python scripts that can fit any multi-valued real function with neural networks}.
- We use the machine learning software TensorFlow to implement feed-forward neural networks that can 
- \item Train a many-body NN to reproduce the Stillinger-Weber (SW) potential for Si. 
- Training data (configurations of particles and energies) will be sampled from SW LAMMPS simulations. 
- The resulting NNP will then be used to simulate Si with LAMMPS. 
- We therefor need to extend the LAMMPS library with our own neural network potential.
- \item Construct a many-body NNP that will be able to simulate a system consisting of several atom types. 
- The method will be tested on the Vashishta potential for SiO2.
-\end{itemize}
+We will not attempt to construct a PES based on data from \textit{ab inito} calculations, but instead 
+perform a demonstration and validation of the complete methodology by reproducing the Stillinger-Weber potential for Si. 
+
+This main goal can be split into the following intermediate objectives:
+\begin{enumerate}[label=\textbf{\alph*)}]
+ \item \textbf{Sample data from MD simulations} \\
+ We want to sample atomic configurations and energies from MD simulations with known, empirical potentials. 
+ The samples will be assembled to a data set, and neural networks applied to fit a functional form to this data set. 
+ \begin{enumerate}
+ \item[\textbf{1)}] \textbf{Develop a method for sampling atom-centered configurations and energies from LAMMPS} \\
+ Specifically, we wish to dump the positions of all neighbours inside the cutoff sphere of a central atom,  
+ along with the total potential energy of the central atom. LAMMPS does not contain this functionality, a goal is therefore
+ to develop such a method an integrate it in the LAMMPS distribution. 
+ \item[\textbf{2)}] \textbf{Implement a sampling algorithm}
+ Certain statistical properties of the data set is of great importance for a NNP to perform well. 
+ Thus, we should add an adequate sampling algorithm to the LAMMPS extension above. 
+ \end{enumerate}
+
+ \item \textbf{Develop a neural network model for regression}. \\
+ We will use the machine learning software TensorFlow to implement feed-forward neural networks as a set of Python scripts. 
+ The code will be organized like a library that can fit a functional form to any data set. 
+ 
+ \item \textbf{Implement the Behler-Parinello method} \\
+ Develop Python scripts employing the BP symmetry functions to transform the cartesian coordinates of atomic configurations 
+ to a set of symmetry values. The code should be embedded in the neural network regression model, and the combination of these 
+ scripts should be able to create NNPs for systems with an arbitrary number of chemical elements. 
+ We also wish to write code that can analyze and visualize data sets and symmetry function sets. 
+ 
+ \item \textbf{Apply neural network potentials in molecular dynamics simulations}. \\
+ We need to extend the LAMMPS library with our own neural network potential. This includes finding a way 
+ to transfer a NN from Python to C++, and evaluate the NN as an analytic potential. 
+ 
+ \item \textbf{Develop, apply and validate a NNP for Si} \\
+ To demonstrate the methods described in this thesis, we will fit a NN to a data set consisting 
+ of samples from Stillinger-Weber simulations of Si. The performance of the NNP will be tested 
+ by measuring the diffusion constant and compare with experiments. 
+\end{enumerate}
+
+\section{My contributions}
+In this thesis, we have decided to employ LAMMPS to perform MD simulations and TensorFlow to train neural networks. 
+The focus has been on model development, 
+Writing own code from scratch would have been too time-consuming, and left no time for 
+We quickly decided that writing our own neural network library would be a complete thesis in itself, 
+
 
 \section{Structure of the thesis}
-This thesis has four parts: The first part is an introduction to the theories of 
-molecular dynamics, ANNs, and the application of neural network potentials in molecular dynamics. 
-The second part provides introductions to LAMMPS and TensorFlow including implementational details, 
+This thesis has four parts: The first part consists of an introduction to the theories of 
+molecular dynamics and neural networks, in addition to a description of the Behler-Parinello method.  
+The second part provides introductions to the LAMMPS and TensorFlow libraries with implementational details, 
 advanced theory on the construction of NNPs, and results demonstrating the complete method. 
 The fourth part concludes the text and contains a discussion of possible future work and applications. 
 
