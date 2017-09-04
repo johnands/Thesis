@@ -193,16 +193,34 @@ This main goal can be split into the following intermediate objectives:
  by measuring the diffusion constant and compare with experiments. 
 \end{enumerate}
 
-\section{My contributions}
+\section{Our contributions}
 In this thesis, we have decided to employ LAMMPS to perform MD simulations and TensorFlow to train neural networks.
-The author have previously written a basic molecular dynamics code, which has been employed to do some preliminary testing on 
+The author have previously written a basic molecular dynamics code 
+\footnote{\href{https://github.com/johnands/FYS4460-MD}{github.com/johnands/FYS4460-MD}}, 
+which has been employed to do some preliminary testing on 
 how to evaluate and differentiate a neural network in \texttt{C++} that has been trained in Python. However, LAMMPS has been used in 
-the final implementation of the neural network potential for speed purposes. 
+the final implementation of the neural network potential for speed purposes.
+
+We realized from the beginning that writing our own neural network code would not be worth the effort. 
+We wanted to focus on the whole process of constructing a NNP, not just the fitting stage. 
+Developing code from scratch would have given a deep insight in the underlying concept of neural networks, 
+but this has nonetheless been obtained by careful study of the processes initiated with each TensorFlow command. 
+
+Our contributions in this thesis are the following:
+\begin{itemize}
+ \item Extended the LAMMPS library with a custom \texttt{compute} that samples atom-centered configurations and potential 
+ energies. This also incluces a modified version of a sampling algorithm. 
+ \item Developed a method to transfer a trained NN from Python to C++ by manually saving all relevant parameters to file. 
+ This file is then read in C++ and the NN reconstructed as a set of matrices and vectors. 
+ \item Extended the LAMMPS library with a custom class to enable the use of NNPs in MD simulations. 
+ This has been implemented both manually and with the TensorFlow \texttt{C++} API. \footnote{Application Programming Interface}. 
+ To differentiate the network and obtain forces, we have implemented a modified version of the backpropagation algorithm.
+ \item Written a set of post-processing and analysis scripts. 
+\end{itemize}
+
+All code can be found at GitHub \footnote{\href{https://github.com/johnands}{github.com/johnands} (pinned repositories).}
 
 
-The focus has been on model development, and writing our own code from scratch would have been 
-Writing own code from scratch would have been too time-consuming, and left no time for 
-We quickly decided that writing our own neural network library would be a complete thesis in itself, 
 
 
 \section{Structure of the thesis}
@@ -216,7 +234,6 @@ The fourth part concludes the text and contains a discussion of possible future 
 
 
 \part{Theory}
-***Theory needed to understand the results and implementations***
 
 \chapter{Molecular dynamics}
 Molecular dynamics (MD) is a method to simulate the physical movements of atoms and molecules in gases, liquids and solids. 
@@ -1019,7 +1036,9 @@ For a MLP with more than one output, $Y_i$ and $y_i$ are vectors.
 The constant $1/2$ is included to cancel out the exponent when this function is differentiated in \autoref{sec:backprop}.
 
 A variety of other cost functions are used for other machine learning tasks. In classificiation the output is often binary, 
-hence the mean-square error function is inadequate. We will not go into further detail on other cost functions here. 
+hence the mean-square error function is inadequate. We will not go into further detail on these cost functions here, but 
+\autoref{sec:hyperParamsCostFunction} provides a discussion on an extension of \eqref{quadraticCost} that is relevant for 
+the construction of NNPs. 
 
 
 \section{Optimization} \label{sec:optimization}
@@ -3524,10 +3543,23 @@ the NNP becomes less predictive, and will not perform well in simulations.
 problems and overfitting. A well-known method to prevent the latter is \textit{early stopping}. 
 Here, the reference data is randomly split into 
 a \textit{training set}, which is employed for the optimization of the weights, and a \textit{test set}, whose error is monitored
-during the fit but which is not used to adjust the weights. If the errors of these two sets are similar, we know that the NN
+during the fit but which is not used to adjust the weights. A typical test set size is 10-20 \% of the reference data.
+If the errors of these two sets are similar, we know that the NN
 generalizes to data that has not been used in its training. On the other hand, if the test set error is significantly larger
-than the training set error, overfitting is occuring, and training should be stopped. 
-A typical test set size is 10-20 \% of the reference data. 
+than the training set error, overfitting is occuring, and training should be stopped. The most commmon error measure
+is the root-mean-square-error (RMSE), 
+\begin{equation}
+ RMSE(NN) = \sqrt{\frac{1}{N}\sum_{i=1}^N (Y_i - y_i)^2}
+\end{equation}
+where $Y_i$ is the NN prediction and $y_i$ is the reference value, as before. 
+This expression ss almost equivalent to the cost function \eqref{quadraticCost} used in the optimation of the NN.
+
+\autoref{fig:overfitting} displays a typical case of overfitting. Here we have sampled a training set 
+of 5578 configurations and energies from a Si Stillinger-Weber simulation. Then, we have trained two NNs 
+with the same set of hyperparameters, first on the full training set a), then on only the first 300 training examples b).
+The test set is identical in both cases. We observe that the training set error and the test set 
+error are very similar in a), while in b) there are a significant deviation between the two. The latter is clearly a case 
+of overfitting caused by an incomplete training set.  
 \begin{figure}
 \centering
   \includegraphics[width = 0.8\linewidth]{Figures/Implementation/overfitting.pdf}
@@ -3544,7 +3576,8 @@ However, it does not give us the optimal NN architecture. Overfitting can also b
 and reducing the number of neurons is not necessarily the best solution. Often, more data should be added instead, 
 and the current NN size may fit the extended data set better. 
 
-Early stopping is in other words not a reliable method to decide if a NN is of a suitable size or not. 
+Early stopping is in other words not necessarily a reliable method to decide if a NN is of a suitable size or not, 
+but primary a tool to prevent overfitting. 
 The only way to find the optimal architecture is by training several networks of different sizes and choose the one that yields
 the lowest error while simultaneously not overfitting. The problem with this strategy is that the possibilities are very many. 
 We can however make a few observations to narrow down the search. 
@@ -3602,6 +3635,47 @@ on how to optimize hyperparameters.
 
 Some optimizers, like Adam \eqref{Adam}, contain other hyperparameters in addition to a learning rate.  
 Each of these algorithms has a set of default values that are well justified, and we have decided not to alter these. 
+
+\subsection{Cost function} \label{sec:hyperParamsCostFunction}
+We only use the mean-square error \eqref{quadraticCost} as a cost function in this thesis. 
+An obvious weakness of using this is that we only fit the reference function $Y$ (the potential) itself, 
+not its gradient $Y^\prime$ (the forces). If a small error is achieved for the potential fit, we would expect that 
+the error is low also for the gradient, but this is not assured. Considering that the forces determine the 
+dynamics of a simulation, this is not ideal. 
+
+Pukrittayakamee et al. \cite{Pukrittayakamee09} have suggested an extension to the standard mean-square error, that 
+enables simultaneous fitting of both a function and its gradient (the CFDA algorithm). 
+This is achieved by penalizing both the error 
+in the potential and in the forces, and has also been employed by Behler in a modifed form \cite{Behler15},
+\begin{equation}
+ \Gamma = \frac{1}{N}\sum_{i=1}^N \biggr[(E_i^{\mathrm{ref}} - E_i^{\mathrm{NN}})^2 + 
+ \frac{\beta}{3N_i}\sum_{j=1}^{3N_i} (F_{i,j}^{\mathrm{ref}} - F_{i,j}^{\mathrm{NN}})^2 \biggr]
+ \label{CFDA}
+\end{equation}
+As before, the first sum is over $N$ training examples, where $E_i^{\mathrm{NN}}$
+is the energy prediction of the NN for training example $i$ and $E_i^{\mathrm{ref}}$ is the $i$-th reference energy. 
+For training example $i$, there are $3N_i$ force components corresponding to a configuration of $N_i$ atoms. We have that 
+\begin{align}
+ F_{i,j}^{\mathrm{ref}} &= \frac{\partial E_i^{\mathrm{ref}}}{\partial R_{i,j}} \\
+ F_{i,j}^{\mathrm{NN}} &= \frac{\partial E_i^{\mathrm{NN}}}{\partial R_{i,j}}
+ \label{forcesCFDA}
+\end{align}
+where $R_{i,j}$ is the $j$-th position component of training example $i$. The NN still has only one output neuron
+that represents the total energy of a training example. The forces \eqref{forcesCFDA} are computed as
+described in \autoref{sec:symmAndForces}.
+To minimize \eqref{CFDA} we need its gradient, which means that second derivatives of the NN 
+are required. This seems like a daunting task, but can be performed quite easily in TensorFlow. 
+The command
+\begin{minted}{Python}
+ tf.gradients(y, x)
+\end{minted}
+computes the symbolic partial derivative of TF tensor \texttt{y} with respect to TF tensor \texttt{x}. In general, each tensor 
+in a computational graph can be differentiated with respect to any other tensor in the same graph. 
+
+We will not go into further detail on how the CFDA algorithm can be embedded in the training process. 
+Computing second derivatives of the NN during training are computationally demanding, and since we have obtained 
+good results without directly fitting the forces as well, we will stick to the ordinary mean-square cost function. 
+
 
 
 \subsection{Hyperparameter space exploration} \label{sec:optimizingHyperparameters}

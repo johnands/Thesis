@@ -2,8 +2,9 @@
 \contentsline {section}{\numberline {1.1}Potentials in molecular dynamics}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Neural Network potentials}{2}{section.1.2}
 \contentsline {section}{\numberline {1.3}Goals}{3}{section.1.3}
-\contentsline {section}{\numberline {1.4}Structure of the thesis}{4}{section.1.4}
-\contentsline {part}{I\hspace {1em}Theory}{5}{part.1}
+\contentsline {section}{\numberline {1.4}Our contributions}{4}{section.1.4}
+\contentsline {section}{\numberline {1.5}Structure of the thesis}{5}{section.1.5}
+\contentsline {part}{I\hspace {1em}Theory}{7}{part.1}
 \contentsline {chapter}{\numberline {2}Molecular dynamics}{9}{chapter.2}
 \contentsline {section}{\numberline {2.1}Potential energy surfaces}{9}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}From quantum mechanics to classical potentials}{10}{subsection.2.1.1}
@@ -88,20 +89,21 @@
 \contentsline {subsubsection}{Convergence speed vs evaluation speed}{99}{section*.50}
 \contentsline {subsection}{\numberline {7.3.2}Activation functions and weight initialization}{100}{subsection.7.3.2}
 \contentsline {subsection}{\numberline {7.3.3}Network architecture and overfitting}{101}{subsection.7.3.3}
-\contentsline {subsubsection}{Other regularization teqhniques}{103}{section*.52}
-\contentsline {subsection}{\numberline {7.3.4}Optimizer parameters}{103}{subsection.7.3.4}
-\contentsline {subsection}{\numberline {7.3.5}Hyperparameter space exploration}{104}{subsection.7.3.5}
-\contentsline {subsubsection}{Coordinate descent}{104}{section*.53}
-\contentsline {subsubsection}{Grid search}{105}{section*.54}
-\contentsline {subsubsection}{Random search}{105}{section*.55}
-\contentsline {subsection}{\numberline {7.3.6}Summary}{105}{subsection.7.3.6}
-\contentsline {section}{\numberline {7.4}Applying the neural network potential}{105}{section.7.4}
-\contentsline {chapter}{\numberline {8}Validation}{109}{chapter.8}
-\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{109}{section.8.1}
-\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{111}{subsection.8.1.1}
-\contentsline {chapter}{\numberline {9}NN potential for Si}{117}{chapter.9}
-\contentsline {chapter}{\numberline {10}NN potential for SiO2}{119}{chapter.10}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{121}{part.3}
-\contentsline {chapter}{\numberline {11}The quality of the NNP}{123}{chapter.11}
-\contentsline {chapter}{Appendices}{125}{section*.61}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{127}{Appendix.1.A}
+\contentsline {subsubsection}{Other regularization teqhniques}{104}{section*.52}
+\contentsline {subsection}{\numberline {7.3.4}Optimizer parameters}{104}{subsection.7.3.4}
+\contentsline {subsection}{\numberline {7.3.5}Cost function}{105}{subsection.7.3.5}
+\contentsline {subsection}{\numberline {7.3.6}Hyperparameter space exploration}{106}{subsection.7.3.6}
+\contentsline {subsubsection}{Coordinate descent}{106}{section*.53}
+\contentsline {subsubsection}{Grid search}{106}{section*.54}
+\contentsline {subsubsection}{Random search}{107}{section*.55}
+\contentsline {subsection}{\numberline {7.3.7}Summary}{107}{subsection.7.3.7}
+\contentsline {section}{\numberline {7.4}Applying the neural network potential}{107}{section.7.4}
+\contentsline {chapter}{\numberline {8}Validation}{111}{chapter.8}
+\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{111}{section.8.1}
+\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{113}{subsection.8.1.1}
+\contentsline {chapter}{\numberline {9}NN potential for Si}{119}{chapter.9}
+\contentsline {chapter}{\numberline {10}NN potential for SiO2}{121}{chapter.10}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{123}{part.3}
+\contentsline {chapter}{\numberline {11}The quality of the NNP}{125}{chapter.11}
+\contentsline {chapter}{Appendices}{127}{section*.61}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{129}{Appendix.1.A}
