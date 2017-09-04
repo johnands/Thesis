@@ -143,7 +143,8 @@ calculations.
 
 As mentioned above, a NN is a purely mathematical concept, which can pose problems in a physical context. 
 There are certain physical symmetries any PES must possess, like translational and rotational invariance
-of a molecule's energy. The BP method utilizes a set of symmetry functions that ensures the relevant symmetries are satisfied. 
+of the energy of a system. Cartesian coordinates are not invariant with respect to these operations, and can therefore not 
+be used. The BP method utilizes a set of symmetry functions that ensures the relevant symmetries are satisfied. 
 
 In principle, the method can be used to construct potentials for any chemical system, since no intial biased functional form 
 is required. Only the symmetry function set and the reference data differ from system to system, the interpolation procedure itself 
@@ -1564,11 +1565,14 @@ that defines a chemical environment. Secondly, since we employ atomic NNs with a
 they have to be able to produce a constant 
 number of function values independent of the number of neighbours, which can change during MD simulations. 
 
-In addition to this, the NN has a symmetry problem. It does not take into account that exchanging two or more atoms
+In addition to this, the NN has symmetry problems. It does not take into account that exchanging two or more atoms
 can lead to an energetically equivalent configuration. For example, exchanging the positions of both hydrogen atoms
 in a water molecule will not alter the energy. However, noting that all weights have numerically different values,
 changing the order of the input coordinates to the NN will result in a different energy value. This problem can be solved
-by employing symmetry functions that are invariant with respect to the order of the atoms.  
+by employing symmetry functions that are invariant with respect to the order of the atoms. 
+
+Further, the energy of a system is invariant under a translation or rotation. Cartesian coordinates can therefore not be used 
+directly as input to the NN, as their numerical values change under such operations, resulting in a different NN output. 
 
 We start with defining the chemical environments by introducing a cutoff funciton \cite{Behler11symmetry},
 \begin{equation}
@@ -3729,6 +3733,8 @@ The general workflow for constructing and applying a NNP is as follows:
  \item Train a NN to fit the data
  \item Use the analytical expression for the eventual NNP as a potential in MD simulations
 \end{enumerate}
+
+\subsection{Transfer neural network from Python to C++}
 In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C++, is
 employed to run MD simulations for speed purposes. 
 We therefore need a way to transfer the NNP from Python to C++. 
@@ -3736,13 +3742,15 @@ We therefore need a way to transfer the NNP from Python to C++.
 There are built-in functions in TF that automatically saves computational graphs (architecture of network plus
 nodes for training) and variables (weights and activation functions) as binary files.
 These files can then be read and the NN evaluated using the TF C++ API. This API is however quite under-developed
-and the documentation is very sparse. Another alternative is to manually save the weights and biases
+and the documentation is very sparse. 
+
+Another alternative that we have developed is to manually save the weights and biases
 as a text file, along with the necessary hyperparameter values, such as choice of activation function and 
 symmetry function parameters. This file 
 can then be used to reconstruct the NN in the same way that it is made in Python: By representing
 the connection weights between layers as matrices and the biases as vectors 
-(\autoref{sec:MLPmodel} and \autoref{sec:TensorFlowCreatingNN}. 
-The activation functionsmust be implemented manually. A linear algebra library can
+(\autoref{sec:MLPmodel} and \autoref{sec:TensorFlowCreatingNN}). 
+The activation functions must be implemented manually. A linear algebra library can
 be utilized for speed and simplicity; we have chosen to use Armadillo
 \footnote{\href{http://arma.sourceforge.net/}{Armadillo}}. 
 
@@ -3770,21 +3778,28 @@ The results are shown in \autoref{fig:timeComparisonEvaluateNetworkTotalScatter}
   \label{fig:timeComparisonEvaluateNetwork2}
 \end{figure}\end{comment}
 
-The two top figures displays the ratio $T_{\mathrm{TFC}}/T_{\mathrm{ARMA}}$ for NN sizes up to 200. The left one shows the 
-whole picture, while right right on 
+Figure a) and b) display the ratio $T_{\mathrm{TFC}}/T_{\mathrm{ARMA}}$ for NN sizes up to 200, the former with all data points 
+visible, while the latter is zoomed in to give a more detailed picture. We observe that the time difference is huge 
+for small networks, and that even for NNs of size 200 the ratio is still about 5. From c), we decude that the ratio seems to converge 
+to 1 for large networks, but the convergence rate is surprisingly low. 
+As we see from d), the performance of the built-in TF functions is similar 
+in C++ and Python, thus the time deviation can not be caused by an under-developed C++ API. 
 
-As we can see, NN evaluation with the built-in TF methods are notably slower both in Python and C++ than with Armadillo 
-for small NNs, but the ratio seems to converge to 1 for large networks. 
-The convergence rate is however surpisingly low. One reason for this
-may be that the \texttt{Session} environment in TF has a lot of overhead. Considering that we 
-will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
+One reason for this phenomenon may be that the \texttt{Session} environment in TF has a lot of overhead. 
+Further, a NN size of 3000 is small compared to e.g. state-of the art convolutional networks, which are usually trained with GPUs. 
+Considering that we will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
 is definitively the best choice. 
 
 
-
-\chapter{Validation}
-
 \section{Training Lennard-Jones potential}
+As a first test of our implementation of the NNP construction process, we train a neural network to reproduce 
+the Lennard-Jones potential \eqref{Lennard-Jones}. The fitting is done with a NN that has one input and one output, resulting in 
+a NNP that computes the potential energy of a central atom in the presence of a single neighbour of the same element at 
+a distance $r$. This one-dimensional NNP does not face the same symmetry issues as its many-dimensional counterpart: 
+having only one input removes the problem of altering the energy with the exchange of two identical atoms, and 
+the relative coordinate $r$ is invariant to a translation or rotation of a diatomic system. Thus, no symmetry functions 
+are needed. 
+
 To verify that the implementation of the NN and the backpropagation algorithm with Armadillo in our MD code is correct, 
 we train a NN to reproduce the shifted Lennard Jones potential (REF TIL LIKNING). 
 The error of the trained network on the training data interval is evaluated both in Python and C++. The two error

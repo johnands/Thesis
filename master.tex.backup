@@ -3543,7 +3543,8 @@ the NNP becomes less predictive, and will not perform well in simulations.
 problems and overfitting. A well-known method to prevent the latter is \textit{early stopping}. 
 Here, the reference data is randomly split into 
 a \textit{training set}, which is employed for the optimization of the weights, and a \textit{test set}, whose error is monitored
-during the fit but which is not used to adjust the weights. If the errors of these two sets are similar, we know that the NN
+during the fit but which is not used to adjust the weights. A typical test set size is 10-20 \% of the reference data.
+If the errors of these two sets are similar, we know that the NN
 generalizes to data that has not been used in its training. On the other hand, if the test set error is significantly larger
 than the training set error, overfitting is occuring, and training should be stopped. The most commmon error measure
 is the root-mean-square-error (RMSE), 
@@ -3554,9 +3555,11 @@ where $Y_i$ is the NN prediction and $y_i$ is the reference value, as before.
 This expression ss almost equivalent to the cost function \eqref{quadraticCost} used in the optimation of the NN.
 
 \autoref{fig:overfitting} displays a typical case of overfitting. Here we have sampled a training set 
-of 5578 configurations and energies from a Si Stillinger-Weber simulation. Then, we have trained two identical NNs 
-(same set of hyperparameters), first on the full training set a), then on only the first 300 training examples b). 
-A typical test set size is 10-20 \% of the reference data. 
+of 5578 configurations and energies from a Si Stillinger-Weber simulation. Then, we have trained two NNs 
+with the same set of hyperparameters, first on the full training set a), then on only the first 300 training examples b).
+The test set is identical in both cases. We observe that the training set error and the test set 
+error are very similar in a), while in b) there are a significant deviation between the two. The latter is clearly a case 
+of overfitting caused by an incomplete training set.  
 \begin{figure}
 \centering
   \includegraphics[width = 0.8\linewidth]{Figures/Implementation/overfitting.pdf}
@@ -3726,6 +3729,8 @@ The general workflow for constructing and applying a NNP is as follows:
  \item Train a NN to fit the data
  \item Use the analytical expression for the eventual NNP as a potential in MD simulations
 \end{enumerate}
+
+\subsection{Transfer neural network from Python to C++}
 In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C++, is
 employed to run MD simulations for speed purposes. 
 We therefore need a way to transfer the NNP from Python to C++. 
@@ -3733,13 +3738,15 @@ We therefore need a way to transfer the NNP from Python to C++.
 There are built-in functions in TF that automatically saves computational graphs (architecture of network plus
 nodes for training) and variables (weights and activation functions) as binary files.
 These files can then be read and the NN evaluated using the TF C++ API. This API is however quite under-developed
-and the documentation is very sparse. Another alternative is to manually save the weights and biases
+and the documentation is very sparse. 
+
+Another alternative that we have developed is to manually save the weights and biases
 as a text file, along with the necessary hyperparameter values, such as choice of activation function and 
 symmetry function parameters. This file 
 can then be used to reconstruct the NN in the same way that it is made in Python: By representing
 the connection weights between layers as matrices and the biases as vectors 
-(\autoref{sec:MLPmodel} and \autoref{sec:TensorFlowCreatingNN}. 
-The activation functionsmust be implemented manually. A linear algebra library can
+(\autoref{sec:MLPmodel} and \autoref{sec:TensorFlowCreatingNN}). 
+The activation functions must be implemented manually. A linear algebra library can
 be utilized for speed and simplicity; we have chosen to use Armadillo
 \footnote{\href{http://arma.sourceforge.net/}{Armadillo}}. 
 
@@ -3767,21 +3774,31 @@ The results are shown in \autoref{fig:timeComparisonEvaluateNetworkTotalScatter}
   \label{fig:timeComparisonEvaluateNetwork2}
 \end{figure}\end{comment}
 
-The two top figures displays the ratio $T_{\mathrm{TFC}}/T_{\mathrm{ARMA}}$ for NN sizes up to 200. The left one shows the 
-whole picture, while right right on 
+Figure a) and b) display the ratio $T_{\mathrm{TFC}}/T_{\mathrm{ARMA}}$ for NN sizes up to 200, the former with all data points 
+visible, while the latter is zoomed in to give a more detailed picture. We observe that the time difference is huge 
+for small networks, and that even for NNs of size 200 the ratio is still about 5. From c), we decude that the ratio seems to converge 
+to 1 for large networks, but the convergence rate is surprisingly low. 
+As we see from d), the performance of the built-in TF functions is similar 
+in C++ and Python, thus the time deviation can not be caused by an under-developed C++ API. 
 
-As we can see, NN evaluation with the built-in TF methods are notably slower both in Python and C++ than with Armadillo 
-for small NNs, but the ratio seems to converge to 1 for large networks. 
-The convergence rate is however surpisingly low. One reason for this
-may be that the \texttt{Session} environment in TF has a lot of overhead. Considering that we 
-will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
+One reason for this phenomenon may be that the \texttt{Session} environment in TF has a lot of overhead. 
+Further, a NN size of 3000 is small compared to e.g. state-of the art convolutional networks, which are usually trained with GPUs. 
+Considering that we will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
 is definitively the best choice. 
 
 
-
-\chapter{Validation}
-
 \section{Training Lennard-Jones potential}
+As a first test of our implementation of the NNP construction process, we train a neural network to reproduce 
+the Lennard-Jones potential \eqref{Lennard-Jones}. The fitting is done with a NN that has one input and one output, resulting in 
+a NNP that computes the potential energy of a central atom in the presence of a single neighbour of the same element at 
+a distance $r$. This one-dimensional NNP does not face the symmetry problems of its high-dimensional counterpart, thus 
+no symmetry functions are needed. 
+
+The NNP is in other words one-dimensional with the symmetric input $r$ as input, and no symmetry functions are needed. 
+
+
+
+
 To verify that the implementation of the NN and the backpropagation algorithm with Armadillo in our MD code is correct, 
 we train a NN to reproduce the shifted Lennard Jones potential (REF TIL LIKNING). 
 The error of the trained network on the training data interval is evaluated both in Python and C++. The two error

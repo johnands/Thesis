@@ -98,12 +98,12 @@
 \contentsline {subsubsection}{Random search}{107}{section*.55}
 \contentsline {subsection}{\numberline {7.3.7}Summary}{107}{subsection.7.3.7}
 \contentsline {section}{\numberline {7.4}Applying the neural network potential}{107}{section.7.4}
-\contentsline {chapter}{\numberline {8}Validation}{111}{chapter.8}
-\contentsline {section}{\numberline {8.1}Training Lennard-Jones potential}{111}{section.8.1}
-\contentsline {subsection}{\numberline {8.1.1}Many-neighbour Lennard-Jones}{113}{subsection.8.1.1}
-\contentsline {chapter}{\numberline {9}NN potential for Si}{119}{chapter.9}
-\contentsline {chapter}{\numberline {10}NN potential for SiO2}{121}{chapter.10}
+\contentsline {subsection}{\numberline {7.4.1}Transfer neural network from Python to C++}{107}{subsection.7.4.1}
+\contentsline {section}{\numberline {7.5}Training Lennard-Jones potential}{108}{section.7.5}
+\contentsline {subsection}{\numberline {7.5.1}Many-neighbour Lennard-Jones}{111}{subsection.7.5.1}
+\contentsline {chapter}{\numberline {8}NN potential for Si}{119}{chapter.8}
+\contentsline {chapter}{\numberline {9}NN potential for SiO2}{121}{chapter.9}
 \contentsline {part}{III\hspace {1em}Conclusions and future work}{123}{part.3}
-\contentsline {chapter}{\numberline {11}The quality of the NNP}{125}{chapter.11}
+\contentsline {chapter}{\numberline {10}The quality of the NNP}{125}{chapter.10}
 \contentsline {chapter}{Appendices}{127}{section*.61}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{129}{Appendix.1.A}
