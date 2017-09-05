@@ -3018,7 +3018,7 @@ in the initial step.
 In this thesis we do not construct \textit{ab inito} NNPs, thus we will not go into further details
 of the above methods. 
 
-\subsection{Sampling algorithms}
+\subsection{Sampling algorithms} \label{sec:samplingAlgorithms}
 We have seen that MD simulations supply the data that is needed to construct a NN potential, but we 
 also have to consider how this sampling should be performed to identify new relevant structures.
 NNs have a very flexible functional form which makes them able to accurately fit data sets, 
@@ -3408,7 +3408,7 @@ the whole data set. Pair of functions which are strongly correlated can thus be 
 
 
 
-\section{Setting hyperparameters}
+\section{Setting hyperparameters} \label{sec:settingHyperParams}
 In \autoref{sec:training} and \autoref{sec:optimization} we presented the theory on how a MLP is trained 
 by optimizing the weights and biases using an optimization algorithm of choice. 
 At the end of \autoref{sec:symmetryFunctions}, we briefly mentioned that a number of so-called hyperparameters must be set
@@ -3824,9 +3824,10 @@ To sample this configuration space, we simply draw random numbers from a uniform
  inputTrain = np.random.uniform(a, b, trainSize)
  inputTest  = np.random.uniform(a, b, testSize)
 \end{minted}
-while the reference energies are calculated by using the analytical expression for the target function \eqref{shiftedLJ}. 
-The hyperparameters used are listed in \autoref{tab:hyperParamsLJ}. 
-
+while the reference energies are calculated by employing the analytical expression for the target function \eqref{shiftedLJ}. 
+The hyperparameters used are listed in \autoref{tab:hyperParamsLJ}. These have not been optimized, but suitable values
+have been determined on the basis of the discussion in \autoref{sec:settingHyperParams}. The input data has 
+not been transformed in any way. 
 \begin{table} 
   \begin{center}
     \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
@@ -3858,53 +3859,41 @@ The hyperparameters used are listed in \autoref{tab:hyperParamsLJ}.
   \label{tab:hyperParamsLJ} 
 \end{table}
 
+After 5000 epochs, we obtain a test set RMSE of 0.896 meV. This is a good result, considering that no hyperparameters 
+were optimized. However, fitting a one-dimensional target function is not a great challenge, despite its non-linear behaviour. 
+The test set RMSE and the training set RMSE follow each other very closely, and no overfitting occurs. 
 
+It can be useful to visualize the error distribution in configuration space 
+by evaluating the trained NN on a set of distance values $R_{ij} \in [a,b]$, and compare with the target function,
+\begin{minted}{Python}
+# make vector of N distance values r
+N = 2000
+Rij = np.linspace(self.a, self.b, N)
 
+# evaluate trained network on this interval and find absolute error
+energiesNN = sess.run(prediction, feed_dict={x: Rij.reshape([N,1])})
+energiesLJ = self.LennardJones(Rij)
+energyError = energiesLJ - energiesNN.flatten()
+\end{minted}
+The absolute error $E_\mathrm{LJ} - E_\mathrm{NN}$ is plotted as a function of distance $R_{ij}$ in \autoref{fig:LJError}.
+We notice that the error oscillates around zero, and that the amplitude is larger for smaller distances.
+This is in accordance with the observations made in \autoref{sec:samplingAlgorithms}: the regions of configuration space 
+where the gradient of the target function is large, is more difficult to fit, and should therefore have a higher density. 
+The training set is in this case uniformly distributed, thus the error is larger for small inter-atomic distances where 
+strong repulsive forces are at work. Nevertheless, the NN energy prediction follows the shape of the LJ potential very closely
+for most values of $R_{ij}$. 
 \begin{figure}
 \centering
   \includegraphics[width = 0.8\linewidth]{Figures/Implementation/LJError.pdf}
-  \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
-	   The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm.
-	   The result is compared to the analytical derivative of the LJ potential. Only a part of the training
-	   interval is shown, the graph is essentially flat after this point} 
-  \label{fig:errorBackPropTest}
+  \caption{Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
+           The plot can be viewed as a visualization of the error distribution in configuration space, of which the latter 
+           is defined as $R_{ij} \in [a,b]$. The employed hyperparameters are listed in \autoref{tab:hyperParamsLJ}.} 
+  \label{fig:LJError}
 \end{figure}
-
-
-
-To verify that the implementation of the NN and the backpropagation algorithm with Armadillo in our MD code is correct, 
-we train a NN to reproduce the shifted Lennard Jones potential (REF TIL LIKNING). 
-The error of the trained network on the training data interval is evaluated both in Python and C++. The two error
-plots are shown in \autoref{fig:errorLJTest}. 
-\begin{figure}
-\begin{minipage}[t]{0.48\linewidth}
-  \includegraphics[width=\textwidth]{Figures/Tests/errorLJ.pdf}
-\end{minipage}
-\quad
-\begin{minipage}[t]{0.48\linewidth}
-\includegraphics[width=\textwidth]{Figures/Tests/errorLJC.pdf}
-\end{minipage}
-  \caption{Error of a network trained to reproduce the shifted Lennard-Jones potential. 
-           The NN is trained in Python and the error on the training data interval
-           is calculated, shown on the left. The NN is also written to file for evaluation in C++, 
-           shown on the right.}
-\label{fig:errorLJTest}
-\end{figure}
-We observe that the error has excactly the same shape and value on the whole interval, we can therefore
-confirm that the NN is implemented correctly. 
 
 To test the implementation of the backpropagation algorithm, the
 same NN is differentiated in C++ and compared to the analytical derivative of the L-J potential. 
-The gradient of a NN is defined as the derivative of one of the outputs with respect to the input(s). 
-There are two differences when using backpropagation to find the gradient of a network compared
-to the use of backpropagation in training:
-\begin{enumerate}
- \item The derivative of the output neuron's activation function is backpropagated instead of the output error
- \item We backpropagate all the way down to the input layer, during training we stop at the first hidden layer
-\end{enumerate}
-As mentioned before, the backpropagation algorithm is simply an application of the chain rule: 
-To obtain the derivative of the output node with respect to the input nodes we need to differentiate through
-all the nodes in-between because we have fully connected layers. The gradient error is plotted in 
+
 \autoref{fig:errorBackPropTest}.
 \begin{figure}
 \centering
@@ -3922,7 +3911,7 @@ fed a sufficient amount of data in this region to excactly reproduce the rapid c
 This tells us that it is important to train the NN on a larger data interval than needed in simulations or possibly
 feed the NN more data in critical regions during training. 
 
-\subsection{Many-neighbour Lennard-Jones}
+\section{Many-neighbour Lennard-Jones}
 A NN can also be trained to obtain the energy of several neighbouring atoms at once. 
 The training procedure is excactly the same, but now we train the network so that the output
 is the sum of $N$ LJ-potentials for $N$ different distances $r$. The NN will have $N$ inputs and 1 output. 
@@ -3965,6 +3954,7 @@ This is (PROBABLY) due to the fact that our training set and test set are random
 specifics patterns or configurations present in the test set that is not covered by the training set. 
 When we start doing training on data produced by MD trajectories or QM calculations, the situation will different.
 
+\subsection{Alternative way to obtain forces}
 The NN above outputs the total energy on an atom that is surrounded by $N$ neighbouring atoms, but it does not provide the forces. 
 These must be obtained by calculating the analytical derivative of the NN with backpropagation as described above for each time step.
 An alternative approach that may speed up the MD simulation is to have the NN also output the total force on the central atom. 

@@ -100,10 +100,11 @@
 \contentsline {section}{\numberline {7.4}Applying the neural network potential}{107}{section.7.4}
 \contentsline {subsection}{\numberline {7.4.1}Transfer neural network from Python to C++}{107}{subsection.7.4.1}
 \contentsline {chapter}{\numberline {8}Validation}{111}{chapter.8}
-\contentsline {subsection}{\numberline {8.0.1}Many-neighbour Lennard-Jones}{115}{subsection.8.0.1}
+\contentsline {section}{\numberline {8.1}Many-neighbour Lennard-Jones}{113}{section.8.1}
+\contentsline {subsection}{\numberline {8.1.1}Alternative way to obtain forces}{117}{subsection.8.1.1}
 \contentsline {chapter}{\numberline {9}NN potential for Si}{121}{chapter.9}
 \contentsline {chapter}{\numberline {10}NN potential for SiO2}{123}{chapter.10}
 \contentsline {part}{III\hspace {1em}Conclusions and future work}{125}{part.3}
 \contentsline {chapter}{\numberline {11}The quality of the NNP}{127}{chapter.11}
-\contentsline {chapter}{Appendices}{129}{section*.63}
+\contentsline {chapter}{Appendices}{129}{section*.62}
 \contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{131}{Appendix.1.A}

@@ -3018,7 +3018,7 @@ in the initial step.
 In this thesis we do not construct \textit{ab inito} NNPs, thus we will not go into further details
 of the above methods. 
 
-\subsection{Sampling algorithms}
+\subsection{Sampling algorithms} \label{sec:samplingAlgorithms}
 We have seen that MD simulations supply the data that is needed to construct a NN potential, but we 
 also have to consider how this sampling should be performed to identify new relevant structures.
 NNs have a very flexible functional form which makes them able to accurately fit data sets, 
@@ -3826,7 +3826,8 @@ To sample this configuration space, we simply draw random numbers from a uniform
 \end{minted}
 while the reference energies are calculated by employing the analytical expression for the target function \eqref{shiftedLJ}. 
 The hyperparameters used are listed in \autoref{tab:hyperParamsLJ}. These have not been optimized, but suitable values
-have been determined on the basis of the discussion in \autoref{sec:settingHyperParams}. 
+have been determined on the basis of the discussion in \autoref{sec:settingHyperParams}. The input data has 
+not been transformed in any way. 
 \begin{table} 
   \begin{center}
     \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
@@ -3858,53 +3859,41 @@ have been determined on the basis of the discussion in \autoref{sec:settingHyper
   \label{tab:hyperParamsLJ} 
 \end{table}
 
+After 5000 epochs, we obtain a test set RMSE of 0.896 meV. This is a good result, considering that no hyperparameters 
+were optimized. However, fitting a one-dimensional target function is not a great challenge, despite its non-linear behaviour. 
+The test set RMSE and the training set RMSE follow each other very closely, and no overfitting occurs. 
 
+It can be useful to visualize the error distribution in configuration space 
+by evaluating the trained NN on a set of distance values $R_{ij} \in [a,b]$, and compare with the target function,
+\begin{minted}{Python}
+# make vector of N distance values r
+N = 2000
+Rij = np.linspace(self.a, self.b, N)
 
+# evaluate trained network on this interval and find absolute error
+energiesNN = sess.run(prediction, feed_dict={x: Rij.reshape([N,1])})
+energiesLJ = self.LennardJones(Rij)
+energyError = energiesLJ - energiesNN.flatten()
+\end{minted}
+The absolute error $E_\mathrm{LJ} - E_\mathrm{NN}$ is plotted as a function of distance $R_{ij}$ in \autoref{fig:LJError}.
+We notice that the error oscillates around zero, and that the amplitude is larger for smaller distances.
+This is in accordance with the observations made in \autoref{sec:samplingAlgorithms}: the regions of configuration space 
+where the gradient of the target function is large, is more difficult to fit, and should therefore have a higher density. 
+The training set is in this case uniformly distributed, thus the error is larger for small inter-atomic distances where 
+strong repulsive forces are at work. Nevertheless, the NN energy prediction follows the shape of the LJ potential very closely
+for most values of $R_{ij}$. 
 \begin{figure}
 \centering
   \includegraphics[width = 0.8\linewidth]{Figures/Implementation/LJError.pdf}
-  \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
-	   The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm.
-	   The result is compared to the analytical derivative of the LJ potential. Only a part of the training
-	   interval is shown, the graph is essentially flat after this point} 
-  \label{fig:errorBackPropTest}
+  \caption{Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
+           The plot can be viewed as a visualization of the error distribution in configuration space, of which the latter 
+           is defined as $R_{ij} \in [a,b]$. The employed hyperparameters are listed in \autoref{tab:hyperParamsLJ}.} 
+  \label{fig:LJError}
 \end{figure}
-
-
-
-To verify that the implementation of the NN and the backpropagation algorithm with Armadillo in our MD code is correct, 
-we train a NN to reproduce the shifted Lennard Jones potential (REF TIL LIKNING). 
-The error of the trained network on the training data interval is evaluated both in Python and C++. The two error
-plots are shown in \autoref{fig:errorLJTest}. 
-\begin{figure}
-\begin{minipage}[t]{0.48\linewidth}
-  \includegraphics[width=\textwidth]{Figures/Tests/errorLJ.pdf}
-\end{minipage}
-\quad
-\begin{minipage}[t]{0.48\linewidth}
-\includegraphics[width=\textwidth]{Figures/Tests/errorLJC.pdf}
-\end{minipage}
-  \caption{Error of a network trained to reproduce the shifted Lennard-Jones potential. 
-           The NN is trained in Python and the error on the training data interval
-           is calculated, shown on the left. The NN is also written to file for evaluation in C++, 
-           shown on the right.}
-\label{fig:errorLJTest}
-\end{figure}
-We observe that the error has excactly the same shape and value on the whole interval, we can therefore
-confirm that the NN is implemented correctly. 
 
 To test the implementation of the backpropagation algorithm, the
 same NN is differentiated in C++ and compared to the analytical derivative of the L-J potential. 
-The gradient of a NN is defined as the derivative of one of the outputs with respect to the input(s). 
-There are two differences when using backpropagation to find the gradient of a network compared
-to the use of backpropagation in training:
-\begin{enumerate}
- \item The derivative of the output neuron's activation function is backpropagated instead of the output error
- \item We backpropagate all the way down to the input layer, during training we stop at the first hidden layer
-\end{enumerate}
-As mentioned before, the backpropagation algorithm is simply an application of the chain rule: 
-To obtain the derivative of the output node with respect to the input nodes we need to differentiate through
-all the nodes in-between because we have fully connected layers. The gradient error is plotted in 
+
 \autoref{fig:errorBackPropTest}.
 \begin{figure}
 \centering
@@ -3922,7 +3911,7 @@ fed a sufficient amount of data in this region to excactly reproduce the rapid c
 This tells us that it is important to train the NN on a larger data interval than needed in simulations or possibly
 feed the NN more data in critical regions during training. 
 
-\subsection{Many-neighbour Lennard-Jones}
+\section{Many-neighbour Lennard-Jones}
 A NN can also be trained to obtain the energy of several neighbouring atoms at once. 
 The training procedure is excactly the same, but now we train the network so that the output
 is the sum of $N$ LJ-potentials for $N$ different distances $r$. The NN will have $N$ inputs and 1 output. 
@@ -3965,6 +3954,7 @@ This is (PROBABLY) due to the fact that our training set and test set are random
 specifics patterns or configurations present in the test set that is not covered by the training set. 
 When we start doing training on data produced by MD trajectories or QM calculations, the situation will different.
 
+\subsection{Alternative way to obtain forces}
 The NN above outputs the total energy on an atom that is surrounded by $N$ neighbouring atoms, but it does not provide the forces. 
 These must be obtained by calculating the analytical derivative of the NN with backpropagation as described above for each time step.
 An alternative approach that may speed up the MD simulation is to have the NN also output the total force on the central atom. 
@@ -3986,85 +3976,9 @@ we need to have more nodes to get a sufficiently low error. We run a training se
 slower (SKAL JEG GIDDE Å HA ENDA ET ERROR PLOT HER?).
 
 One way to test if this works is to move only one of the input atoms while freezing the others and see if we reproduce
-the LJ-potential form. We load the above training session and test with the command 
-python approximateFunction2.py --load TrainingData/13.12-12.59.51/Checkpoints/ckpt-999 --test with this code: 
-\begin{lstlisting}
-if testFlag:
-  
-  # pick an input vector
-  coordinates = xTrain[0]
-  coordinates = coordinates.reshape([1,self.inputs])
-  neighbours = self.inputs/4
-  xNN = np.zeros(neighbours)
-  yNN = np.zeros(neighbours)
-  zNN = np.zeros(neighbours)
-  rNN = np.zeros(neighbours)
-  # extract coordinates and distances
-  for i in range(neighbours):
-      xNN[i] = coordinates[0,i*4]
-      yNN[i] = coordinates[0,i*4 + 1]
-      zNN[i] = coordinates[0,i*4 + 2]
-      rNN[i] = coordinates[0,i*4 + 3]
-		  
-  # vary coordinates of only one atom and see 
-  # if the resulting potential is similar to LJ
-  N = 500
-  r = np.linspace(0.8, 2.5, N)
-  energyNN = []
-  energyLJ = []
-  forceNN = []
-  forceLJ = []
-  xyz = np.zeros(3)
-  for i in range(N):
-      r2 = r[i]**2
-      xyz[0] = np.random.uniform(0, r2)
-      xyz[1] = np.random.uniform(0, r2-xyz[0])
-      xyz[2] = r2 - xyz[0] - xyz[1]
-      #np.random.shuffle(xyz)
-      x = np.sqrt(xyz[0])# * np.random.choice([-1,1])
-      y = np.sqrt(xyz[1])# * np.random.choice([-1,1])
-      z = np.sqrt(xyz[2])# * np.random.choice([-1,1])                      
-      coordinates[0][0] = x; coordinates[0][1] = y; coordinates[0][2] = z
-      coordinates[0][3] = r[i]
-      energyAndForce = sess.run(prediction, feed_dict={self.x: coordinates})
-      energyNN.append(energyAndForce[0][3]) 
-      rNN[0] = r[i]
-      energyLJ.append(np.sum(self.function(rNN)))
-      forceNN.append(energyAndForce[0][0])
-      xNN[0] = x
-      forceLJ.append(np.sum(self.functionDerivative(rNN)*xNN/rNN))
-  
-  # convert to arrays
-  energyNN = np.array(energyNN); energyLJ = np.array(energyLJ)
-  forceNN = np.array(forceNN); forceLJ = np.array(forceLJ)
-  
-  # plot error 
-  plt.plot(r, energyNN - energyLJ)
-  plt.show()
-  plt.plot(r, forceNN - forceLJ)
-  plt.show()
-  print 'Cost: ', (np.sum((energyNN - energyLJ)**2 + (forceNN - forceLJ)**2))/N
-  
-  # see if the energy is zero when all neighbours is at cutoff distance
-  inputz = np.array([1.87, 1.32, 1.006, 2.5]*neighbours).reshape([1,self.inputs])
-  r = np.array([2.5]*neighbours)
-  energyLJ = sum(self.function(r))               
-  ef = sess.run(prediction, feed_dict={self.x: inputz})
-  
-  print 'Approximate energy: ', ef[0,3]
-  print 'LJ energy: ', energyLJ
-  
-  numberOfEpochs = 0
-\end{lstlisting}
-which produces the following output: 
-\begin{lstlisting}
-Model restored
-Cost:  0.132622806039
-NN energy at cutoff:  0.125104
-LJ energy at cutoff:  0.0
-Time elapsed: 1.2e-05
-\end{lstlisting}
-We see that the NN energy at cutoff is not zero, because of the cost (IS THIS CORRECT? THE COST AT CUTOFF IS PRACTICALLY ZERO).
+the LJ-potential form. 
+
+
 The error of the NN energy and forces over the training data interval is shown in 
 \begin{figure}
 \begin{minipage}[t]{0.48\linewidth}

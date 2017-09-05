@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  5 SEP 2017 15:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  5 SEP 2017 21:35
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -947,9 +947,6 @@ runsystem(rm "master.aex")...executed.
 LaTeX Warning: Label `forwardPropMatrix' multiply defined.
 
 
-LaTeX Warning: Label `fig:errorBackPropTest' multiply defined.
-
-
 LaTeX Warning: Label `cutOffFunctionDerivative1' multiply defined.
 
 
@@ -1830,113 +1827,102 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 (./_minted-master/813DE4EF1B2E2E5BC1630E2F3248B3011BE631E8E4850E2A9AE02C4CEA74B
-D6B.pygtex) <Figures/Implementation/LJError.pdf, id=2487, 578.16pt x 433.62pt>
+D6B.pygtex) [111] [112]
+Package mdframed Info: mdframed works in twoside mode on input line 3868.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 3868.
+\openout3 = `master.pyg'.
+
+
+(./_minted-master/4A812073CA513B96433F3B9D0108879B1BE631E8E4850E2A9AE02C4CEA74B
+D6B.pygtex) <Figures/Implementation/LJError.pdf, id=2500, 578.16pt x 433.62pt>
 File: Figures/Implementation/LJError.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/LJError.pdf>
 Package pdftex.def Info: Figures/Implementation/LJError.pdf used on input line 
-3865.
+3887.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
-<Figures/Tests/errorLJ.pdf, id=2489, 578.16pt x 433.62pt>
-File: Figures/Tests/errorLJ.pdf Graphic file (type pdf)
-
-<use Figures/Tests/errorLJ.pdf>
-Package pdftex.def Info: Figures/Tests/errorLJ.pdf used on input line 3881.
-(pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
-
-<Figures/Tests/errorLJC.pdf, id=2490, 578.16pt x 433.62pt>
-File: Figures/Tests/errorLJC.pdf Graphic file (type pdf)
-
-<use Figures/Tests/errorLJC.pdf>
-Package pdftex.def Info: Figures/Tests/errorLJC.pdf used on input line 3885.
-(pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
- [111] [112] [113 <./Figures/Implementation/LJError.pdf> <./Figures/Tests/error
-LJ.pdf
-
-pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/errorLJ.pdf): PDF inclu
-sion: multiple pdfs with page group included in a single page
-> <./Figures/Tests/errorLJC.pdf
-
-pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/errorLJC.pdf): PDF incl
-usion: multiple pdfs with page group included in a single page
->] <Figures/Tests/errorDerivative.pdf, id=2618, 578.16pt x 433.62pt>
+<Figures/Tests/errorDerivative.pdf, id=2506, 578.16pt x 433.62pt>
 File: Figures/Tests/errorDerivative.pdf Graphic file (type pdf)
 
 <use Figures/Tests/errorDerivative.pdf>
 Package pdftex.def Info: Figures/Tests/errorDerivative.pdf used on input line 3
-911.
+900.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
- [114 <./Figures/Tests/errorDerivative.pdf>]
 
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 3925.
-
-<Figures/Tests/trainingManyNeighbourNN1.pdf, id=2670, 578.16pt x 433.62pt>
+<Figures/Tests/trainingManyNeighbourNN1.pdf, id=2508, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN1.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN1.pdf>
 Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN1.pdf used on inp
-ut line 3951.
+ut line 3940.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
-<Figures/Tests/trainingManyNeighbourNN2.pdf, id=2671, 578.16pt x 433.62pt>
+<Figures/Tests/trainingManyNeighbourNN2.pdf, id=2509, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN2.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN2.pdf>
 Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN2.pdf used on inp
-ut line 3952.
+ut line 3941.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
 
-LaTeX Warning: Reference `quadraticCostFunction' on page 115 undefined on input
- line 3958.
+LaTeX Warning: Reference `quadraticCostFunction' on page 113 undefined on input
+ line 3947.
 
 
-LaTeX Warning: Reference `quadraticCostFunction' on page 115 undefined on input
- line 3958.
+LaTeX Warning: Reference `quadraticCostFunction' on page 113 undefined on input
+ line 3947.
 
 
-LaTeX Warning: Float too large for page by 7.74113pt on input line 3960.
+LaTeX Warning: Float too large for page by 7.74113pt on input line 3949.
 
-Missing character: There is no Ã in font cmr12!
-Missing character: There is no … in font cmr12!
-[115] [116 <./Figures/Tests/trainingManyNeighbourNN1.pdf> <./Figures/Tests/trai
-ningManyNeighbourNN2.pdf
+[113] [114 <./Figures/Implementation/LJError.pdf>] [115 <./Figures/Tests/errorD
+erivative.pdf>] [116 <./Figures/Tests/trainingManyNeighbourNN1.pdf> <./Figures/
+Tests/trainingManyNeighbourNN2.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/trainingManyNeighbourNN
 2.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [117]
-Overfull \hbox (20.86179pt too wide) in paragraph at lines 4035--4037
+>]
+Missing character: There is no Ã in font cmr12!
+Missing character: There is no … in font cmr12!
+ [117]
+Overfull \hbox (20.86179pt too wide) in paragraph at lines 4025--4027
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
  []
 
-<Figures/Tests/manyNeighbourEnergyError.pdf, id=2797, 578.16pt x 433.62pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [118]
+<Figures/Tests/manyNeighbourEnergyError.pdf, id=2769, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourEnergyError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourEnergyError.pdf>
 Package pdftex.def Info: Figures/Tests/manyNeighbourEnergyError.pdf used on inp
-ut line 4071.
+ut line 4061.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Tests/manyNeighbourForceError.pdf, id=2798, 578.16pt x 433.62pt>
+<Figures/Tests/manyNeighbourForceError.pdf, id=2770, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourForceError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourForceError.pdf>
 Package pdftex.def Info: Figures/Tests/manyNeighbourForceError.pdf used on inpu
-t line 4075.
+t line 4065.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
- [118] [119 <./Figures/Tests/manyNeighbourEnergyError.pdf> <./Figures/Tests/man
-yNeighbourForceError.pdf
+ [119 <./Figures/Tests/manyNeighbourEnergyError.pdf> <./Figures/Tests/manyNeigh
+bourForceError.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/manyNeighbourForceError
 .pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [120
-
-]
+>] [120]
 Chapter 9.
-[121] [122
+[121
+
+] [122
 
 ]
 Chapter 10.
@@ -1956,7 +1942,7 @@ Appendix A.
 ] [132] [133] [134] [135] [136
 
 ]
-Underfull \hbox (badness 1194) in paragraph at lines 4389--4393
+Underfull \hbox (badness 1194) in paragraph at lines 4379--4383
 []\OT1/cmr/m/n/12 J. Behler. ''Atom-centered sym-me-try func-tions for con-stru
 ct-ing high-
  []
@@ -1967,25 +1953,25 @@ Missing character: There is no © in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no © in font cmr12!
 
-Underfull \hbox (badness 2012) in paragraph at lines 4481--4485
+Underfull \hbox (badness 2012) in paragraph at lines 4471--4475
 []\OT1/cmr/m/n/12 J. Duchi, E. Hazan, and Y. Singer. ''Adap-tive Sub-gra-di-ent
  Meth-
  []
 
 
-Underfull \hbox (badness 7558) in paragraph at lines 4481--4485
+Underfull \hbox (badness 7558) in paragraph at lines 4471--4475
 \OT1/cmr/m/n/12 ods for On-line Learn-ing and Stochas-tic Op-ti-miza-tion''. In
  \OT1/cmr/m/it/12 The
  []
 
 
-Underfull \hbox (badness 2205) in paragraph at lines 4481--4485
+Underfull \hbox (badness 2205) in paragraph at lines 4471--4475
 \OT1/cmr/m/it/12 Jour-nal of Ma-chine Learn-ing Re-search \OT1/cmr/m/n/12 12. (
 2011) 2121-2159. URL:
  []
 
 [138]
-Underfull \hbox (badness 1221) in paragraph at lines 4529--4532
+Underfull \hbox (badness 1221) in paragraph at lines 4519--4522
 []\OT1/cmr/m/n/12 D. Kriesel. ''A Breif In-tro-duc-tion to Neu-ral Net-works'' 
 Avail-able at
  []
@@ -2005,23 +1991,29 @@ Missing character: There is no â in font cmr12!
 Missing character: There is no € in font cmr12!
 Missing character: There is no “ in font cmr12!
 
-Underfull \hbox (badness 1910) in paragraph at lines 4668--4671
+Underfull \hbox (badness 1910) in paragraph at lines 4658--4661
 []\OT1/cmr/m/n/12 G. Hin-ton, et al. ''Deep neu-ral net-works for acous-tic mod
 -el-ing in
  []
 
 runsystem(rm "master.pyg")...executed.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4712.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4702.
 [141]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 4712.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 4702.
  (./master.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4712.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4712.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4702.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4702.
 
-Package rerunfilecheck Info: File `master.out' has not changed.
-(rerunfilecheck)             Checksum: 0ED7D5E2879D5255777396DDFA0D380B;5640.
 
+
+Package rerunfilecheck Warning: File `master.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `master.out':
+(rerunfilecheck)             Before: 77F83F2FF3B4ABA029AE5FE049372CAD;5640
+(rerunfilecheck)             After:  6DFFB29D42D8E8742EA300DFCA499919;5721.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -2031,46 +2023,50 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4712.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4702.
  )
 (\end occurred when \ifx on line 2880 was incomplete) 
 Here is how much of TeX's memory you used:
- 24756 strings out of 494953
- 459477 string characters out of 6180977
- 645758 words of memory out of 5000000
- 26828 multiletter control sequences out of 15000+600000
+ 24752 strings out of 494953
+ 459595 string characters out of 6180977
+ 662216 words of memory out of 5000000
+ 26824 multiletter control sequences out of 15000+600000
  21828 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 44i,16n,60p,10388b,2243s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
-6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on master.pdf (151 pages, 1823188 bytes).
+ 44i,17n,60p,10388b,2243s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): nam
+e{subsection.8.0.1} has been referenced but does not exist, replaced by a fixed
+ one
+
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra
+/cmmib8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+tt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pf
+b>
+Output written on master.pdf (151 pages, 1810876 bytes).
 PDF statistics:
- 3375 PDF objects out of 3580 (max. 8388607)
- 2463 compressed objects within 25 object streams
- 805 named destinations out of 1000 (max. 500000)
- 823 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3326 PDF objects out of 3580 (max. 8388607)
+ 2456 compressed objects within 25 object streams
+ 804 named destinations out of 1000 (max. 500000)
+ 813 words of extra memory for PDF output out of 10000 (max. 10000000)
 
