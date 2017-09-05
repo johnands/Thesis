@@ -538,21 +538,35 @@ $\sigma=\epsilon=1.0$, the force at a distance $r_{ij} = 3\sigma$ is
 \end{equation}
 This is a general property of systems where only van der Waal-interactions are present: atoms that 
 are far apart do not effectively interact. This can be exploited in MD simulations by introducing 
-a cutoff radius $r_{\mathrm{cut}}$, and only compute forces for atoms displaced by a distance smaller than this cutoff. 
+a cutoff radius $r_\mathrm{c}$, and only compute forces for atoms displaced by a distance smaller than this cutoff. 
 In principle, we have to sum over all pairs of atoms in the system to compute the energy and forces, which 
 scales like $O(N^2)$. With a cutoff, this is reduced to $O(N)$, and the force is now written,
 \begin{equation}
  F_{\mathrm{LJ}}(r_{ij}) = 
  \begin{cases}
   -24\epsilon\left[2\left(\frac{\sigma^{12}}{r_{ij}^{13}}\right) - \left(\frac{\sigma^6}{r_{ij}^7}\right)\right] ,
-  & r_{ij} \leq r_{\mathrm{cut}} \\
-  0, & r_{ij} > r_{\mathrm{cut}} 
+  & r_{ij} \leq r_\mathrm{c} \\
+  0, & r_{ij} > r_\mathrm{c} 
  \end{cases}
  \label{forceCutoff}
 \end{equation}
-and similar for the potential energy \eqref{Lennard-Jones}. 
 This greatly increases the computational performance of MD simulations. In fact, simulations with non-bonded potentials
-not including a cutoff is unfeasible except for small systems. 
+not including a cutoff is unfeasible except for small systems.
+
+The potential \eqref{Lennard-Jones} is also truncated at $r_{ij} = r_\mathrm{c}$, but this creates a discontinuity 
+at the cutoff. To avoid this problem, we simply shift the LJ potential upward a little, so that the energy 
+is excactly zero at this point. The truncated and shifted form of the potential is
+\begin{equation}
+ V_{\mathrm{LJ}}^\mathrm{trunc}(r_{ij}) = 
+ \begin{cases}
+  V_\mathrm{LJ}(r_{ij}) - V_\mathrm{LJ}(r_c), & r_{ij} \leq r_\mathrm{c} \\
+  0, & r_{ij} > r_\mathrm{c} 
+ \end{cases}
+ \label{shiftedLJ}
+\end{equation}
+
+
+
 
 
 
@@ -3394,7 +3408,7 @@ the whole data set. Pair of functions which are strongly correlated can thus be 
 
 
 
-\section{Setting hyperparameters}
+\section{Setting hyperparameters} \label{sec:settingHyperParams}
 In \autoref{sec:training} and \autoref{sec:optimization} we presented the theory on how a MLP is trained 
 by optimizing the weights and biases using an optimization algorithm of choice. 
 At the end of \autoref{sec:symmetryFunctions}, we briefly mentioned that a number of so-called hyperparameters must be set
@@ -3791,20 +3805,78 @@ Considering that we will not need NNs containing more than 100-200 neurons, a ma
 is definitively the best choice. 
 
 
-\section{Training Lennard-Jones potential}
+\chapter{Validation}
 As a first test of our implementation of the NNP construction process, we train a neural network to reproduce 
-the Lennard-Jones potential \eqref{Lennard-Jones}. The fitting is done with a NN that has one input and one output, resulting in 
-a NNP that computes the potential energy of a central atom in the presence of a single neighbour of the same element at 
-a distance $r$. This one-dimensional NNP does not face the same symmetry issues as its many-dimensional counterpart: 
-having only one input removes the problem of altering the energy with the exchange of two identical atoms, and 
-the relative coordinate $r$ is invariant to a translation or rotation of a diatomic system. Thus, no symmetry functions 
+the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
+The fitting is done with a NN that has one input and one output, resulting in 
+a NNP that computes the potential energy of a central atom $i$ in the presence of a single neighbour $j$ of the same element at 
+a distance $R_{ij}$. This one-dimensional NNP does not face the same symmetry issues as its many-dimensional counterpart: 
+having only one input removes the problem that the energy should be invariant to the order of atoms, and 
+the relative coordinate $R_{ij}$ is invariant to a translation or rotation of a diatomic system. Thus, no symmetry functions 
 are needed. 
+
+The configuration space of this NNP is simply $R \in [a,b]$, where $a$ and $b$ are the smallest and largest 
+interatomic distance respectively that the NNP is expected to experience in a simulation. 
+Suitable values of $a$ and $b$ are found by running a MD simulation with the potential that is to be fitted
+at the temperature intended for the NNP's application, and measure the minimum and maximum pair-wise distance. 
+To sample this configuration space, we simply draw random numbers from a uniform distribution with $a$ and $b$ as endpoints,
+\begin{minted}{Python}
+ inputTrain = np.random.uniform(a, b, trainSize)
+ inputTest  = np.random.uniform(a, b, testSize)
+\end{minted}
+while the reference energies are calculated by employing the analytical expression for the target function \eqref{shiftedLJ}. 
+The hyperparameters used are listed in \autoref{tab:hyperParamsLJ}. These have not been optimized, but suitable values
+have been determined on the basis of the discussion in \autoref{sec:settingHyperParams}. 
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
+      \toprule
+      Hyperparameters &  \\ 
+      \hline
+      Network structure & Inputs & 1 \\
+      & Outputs & 1 \\
+      & Hidden layers & 1 \\
+      & Hidden nodes & 10 \\
+      & Activation & Sigmoid \\ 
+      Training & $a$  & \SI{3.2}{\angstrom} \\
+      & $b$  & \SI{8.5125}{\angstrom} \\
+      & Training set size & 10000 \\
+      & Test set size & 1000 \\
+      & Mini-batch size & 200 \\
+      & Number of epochs & 5000 \\
+      & Optimizer & Adam \\
+      & Initial learning rate & 0.001 \\
+      & Weight initialization & $U \in [-0.1, 0.1]$ \\
+      & Bias initialization & $U \in [-0.1, 0.1]$ \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption {Hyperparameters used in the fitting of the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}.
+		The meaning of each parameter is found in the text. 
+                ''Hidden nodes'' signifies the number of nodes in each hidden layer. } 
+  \label{tab:hyperParamsLJ} 
+\end{table}
+
+
+
+\begin{figure}
+\centering
+  \includegraphics[width = 0.8\linewidth]{Figures/Implementation/LJError.pdf}
+  \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
+	   The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm.
+	   The result is compared to the analytical derivative of the LJ potential. Only a part of the training
+	   interval is shown, the graph is essentially flat after this point} 
+  \label{fig:errorBackPropTest}
+\end{figure}
+
+
 
 To verify that the implementation of the NN and the backpropagation algorithm with Armadillo in our MD code is correct, 
 we train a NN to reproduce the shifted Lennard Jones potential (REF TIL LIKNING). 
 The error of the trained network on the training data interval is evaluated both in Python and C++. The two error
 plots are shown in \autoref{fig:errorLJTest}. 
-\begin{figure}[H]
+\begin{figure}
 \begin{minipage}[t]{0.48\linewidth}
   \includegraphics[width=\textwidth]{Figures/Tests/errorLJ.pdf}
 \end{minipage}
@@ -3834,7 +3906,7 @@ As mentioned before, the backpropagation algorithm is simply an application of t
 To obtain the derivative of the output node with respect to the input nodes we need to differentiate through
 all the nodes in-between because we have fully connected layers. The gradient error is plotted in 
 \autoref{fig:errorBackPropTest}.
-\begin{figure}[H]
+\begin{figure}
 \centering
   \includegraphics[width = 0.9\linewidth]{Figures/Tests/errorDerivative.pdf}
   \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
@@ -3873,7 +3945,7 @@ session with $N=20$ inputs is shown in figures \autoref{fig:trainingManyNeighbou
 	   interval is shown, the graph is essentially flat after this point} 
 \end{figure}
 \end{comment}
-\begin{figure}[H]
+\begin{figure}
 \centering
 \subcaptionbox{Zoomed out\label{zoomedOut}}{\includegraphics[width=0.8\textwidth]{Figures/Tests/trainingManyNeighbourNN1.pdf}
   }
@@ -3994,7 +4066,7 @@ Time elapsed: 1.2e-05
 \end{lstlisting}
 We see that the NN energy at cutoff is not zero, because of the cost (IS THIS CORRECT? THE COST AT CUTOFF IS PRACTICALLY ZERO).
 The error of the NN energy and forces over the training data interval is shown in 
-\begin{figure}[H]
+\begin{figure}
 \begin{minipage}[t]{0.48\linewidth}
   \includegraphics[width=\textwidth]{Figures/Tests/manyNeighbourEnergyError.pdf}
 \end{minipage}

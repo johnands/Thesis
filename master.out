@@ -69,11 +69,11 @@
 \BOOKMARK [2][-]{subsection.7.3.7}{Summary}{section.7.3}% 69
 \BOOKMARK [1][-]{section.7.4}{Applying the neural network potential}{chapter.7}% 70
 \BOOKMARK [2][-]{subsection.7.4.1}{Transfer neural network from Python to C++}{section.7.4}% 71
-\BOOKMARK [1][-]{section.7.5}{Training Lennard-Jones potential}{chapter.7}% 72
-\BOOKMARK [2][-]{subsection.7.5.1}{Many-neighbour Lennard-Jones}{section.7.5}% 73
-\BOOKMARK [0][-]{chapter.8}{NN potential for Si}{part.2}% 74
-\BOOKMARK [0][-]{chapter.9}{NN potential for SiO2}{part.2}% 75
+\BOOKMARK [0][-]{chapter.8}{Validation}{part.2}% 72
+\BOOKMARK [1][-]{subsection.8.0.1}{Many-neighbour Lennard-Jones}{chapter.8}% 73
+\BOOKMARK [0][-]{chapter.9}{NN potential for Si}{part.2}% 74
+\BOOKMARK [0][-]{chapter.10}{NN potential for SiO2}{part.2}% 75
 \BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 76
-\BOOKMARK [0][-]{chapter.10}{The quality of the NNP}{part.3}% 77
-\BOOKMARK [0][-]{section*.61}{Appendices}{part.3}% 78
+\BOOKMARK [0][-]{chapter.11}{The quality of the NNP}{part.3}% 77
+\BOOKMARK [0][-]{section*.63}{Appendices}{part.3}% 78
 \BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 79
