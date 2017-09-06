@@ -419,50 +419,51 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.4.1}Transfer neural network from Python to C++}{107}{subsection.7.4.1}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{\mathrm  {TFP}}$), the TF C++ API ($T_{\mathrm  {TFC}}$) and Armadillo ($T_{\mathrm  {ARMA}}$). $L$ is the number of hidden layers, $n$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture.\relax }}{109}{figure.caption.56}}
 \newlabel{fig:timeComparisonEvaluateNetworkTotalScatter}{{7.5}{109}{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions using the TF Python API ($T_{\mathrm {TFP}}$), the TF C++ API ($T_{\mathrm {TFC}}$) and Armadillo ($T_{\mathrm {ARMA}}$). $L$ is the number of hidden layers, $n$ is the number of nodes in each hidden layer. All the NNs have one input and one output. The time has been found by averaging over 50 evaluations for each NN architecture.\relax }{figure.caption.56}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Validation}{111}{chapter.8}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Lennard-Jones validation}{111}{chapter.8}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \zref@newlabel{mdf@pagelabel-22}{\default{8}\page{111}\abspage{121}\mdf@pagevalue{111}}
 \@writefile{lot}{\contentsline {table}{\numberline {8.1}{\ignorespaces Hyperparameters used in the fitting of the truncated and shifted Lennard-Jones potential \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {shiftedLJ}\unskip \@@italiccorr )}}. The meaning of each parameter is found in the text. ''Hidden nodes'' signifies the number of nodes in each hidden layer. \relax }}{112}{table.caption.57}}
 \newlabel{tab:hyperParamsLJ}{{8.1}{112}{Hyperparameters used in the fitting of the truncated and shifted Lennard-Jones potential \eqref {shiftedLJ}. The meaning of each parameter is found in the text. ''Hidden nodes'' signifies the number of nodes in each hidden layer. \relax }{table.caption.57}{}}
-\zref@newlabel{mdf@pagelabel-23}{\default{8}\page{113}\abspage{123}\mdf@pagevalue{113}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.1}Many-neighbour Lennard-Jones}{113}{section.8.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {shiftedLJ}\unskip \@@italiccorr )}}. The plot can be viewed as a visualization of the error distribution in configuration space, of which the latter is defined as $R_{ij} \in [a,b]$. The employed hyperparameters are listed in \autoref  {tab:hyperParamsLJ}.\relax }}{114}{figure.caption.58}}
-\newlabel{fig:LJError}{{8.1}{114}{Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref {shiftedLJ}. The plot can be viewed as a visualization of the error distribution in configuration space, of which the latter is defined as $R_{ij} \in [a,b]$. The employed hyperparameters are listed in \autoref {tab:hyperParamsLJ}.\relax }{figure.caption.58}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }}{115}{figure.caption.59}}
-\newlabel{fig:errorBackPropTest}{{8.2}{115}{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential. The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm. The result is compared to the analytical derivative of the LJ potential. Only a part of the training interval is shown, the graph is essentially flat after this point\relax }{figure.caption.59}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {shiftedLJ}\unskip \@@italiccorr )}}. The plot is as a visualization of the error distribution in the configuration space $R_{ij} \in [a,b]$ defined by the test set. The employed hyperparameters are listed in \autoref  {tab:hyperParamsLJ}.\relax }}{113}{figure.caption.58}}
+\newlabel{fig:LJError}{{8.1}{113}{Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref {shiftedLJ}. The plot is as a visualization of the error distribution in the configuration space $R_{ij} \in [a,b]$ defined by the test set. The employed hyperparameters are listed in \autoref {tab:hyperParamsLJ}.\relax }{figure.caption.58}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Error in configuration space}{113}{section.8.1}}
+\zref@newlabel{mdf@pagelabel-23}{\default{8.1}\page{113}\abspage{123}\mdf@pagevalue{113}}
+\citation{Natarajan16}
+\citation{Artrith12}
+\zref@newlabel{mdf@pagelabel-24}{\default{8.1}\page{114}\abspage{124}\mdf@pagevalue{114}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Many-neighbour Lennard-Jones}{114}{section.8.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Absolute error of the gradient of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {shiftedLJ}\unskip \@@italiccorr )}}. Comparing with \autoref  {fig:LJError}, we see that the graph is of the same shape, but with larger oscillations. The employed hyperparameters are listed in \autoref  {tab:hyperParamsLJ}. \relax }}{115}{figure.caption.59}}
+\newlabel{fig:LJErrorDerivative}{{8.2}{115}{Absolute error of the gradient of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref {shiftedLJ}. Comparing with \autoref {fig:LJError}, we see that the graph is of the same shape, but with larger oscillations. The employed hyperparameters are listed in \autoref {tab:hyperParamsLJ}. \relax }{figure.caption.59}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Alternative way to obtain forces}{115}{subsection.8.2.1}}
 \newlabel{zoomedOut}{{8.3a}{116}{Zoomed out\relax }{figure.caption.60}{}}
 \newlabel{sub@zoomedOut}{{a}{116}{Zoomed out\relax }{figure.caption.60}{}}
 \newlabel{zoomedIn}{{8.3b}{116}{Zoomed in\relax }{figure.caption.60}{}}
 \newlabel{sub@zoomedIn}{{b}{116}{Zoomed in\relax }{figure.caption.60}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Quadratic cost \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {quadraticCostFunction}\unskip \@@italiccorr )}} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \textup  {\hbox {\mathsurround \z@ \normalfont  (\ignorespaces \ref  {sigmoidActivationFunction}\unskip \@@italiccorr )}}. \autoref  {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref  {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }}{116}{figure.caption.60}}
 \newlabel{fig:trainingManyNeighbourNN}{{8.3}{116}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.60}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.1}Alternative way to obtain forces}{117}{subsection.8.1.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{119}{figure.caption.61}}
-\newlabel{fig:errorManyNeighbourNN}{{8.4}{119}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.61}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {9}NN potential for Si}{121}{chapter.9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{117}{figure.caption.61}}
+\newlabel{fig:errorManyNeighbourNN}{{8.4}{117}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.61}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}Neural network potential for Si}{119}{chapter.9}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{sec:SiPotentialResults}{{9}{121}{NN potential for Si}{chapter.9}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {10}NN potential for SiO2}{123}{chapter.10}}
-\@writefile{lof}{\addvspace {10\p@ }}
-\@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Conclusions and future work}{125}{part.3}}
+\newlabel{sec:SiPotentialResults}{{9}{119}{Neural network potential for Si}{chapter.9}{}}
+\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Conclusions and future work}{121}{part.3}}
 \citation{Behler11general}
-\@writefile{toc}{\contentsline {chapter}{\numberline {11}The quality of the NNP}{127}{chapter.11}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}The quality of the NNP}{123}{chapter.10}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{Appendices}{129}{section*.62}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{131}{Appendix.1.A}}
+\@writefile{toc}{\contentsline {chapter}{Appendices}{125}{section*.62}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{127}{Appendix.1.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:appendixA1}{{A}{131}{Symmetry functions derivatives}{Appendix.1.A}{}}
-\newlabel{cutOffFunctionDerivative}{{A.3}{131}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.4}{131}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.5}{131}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.7}{131}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.8}{132}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
-\newlabel{G4Derivative}{{A.16}{132}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
+\newlabel{app:appendixA1}{{A}{127}{Symmetry functions derivatives}{Appendix.1.A}{}}
+\newlabel{cutOffFunctionDerivative}{{A.3}{127}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.4}{127}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.5}{127}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.7}{127}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.8}{128}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
+\newlabel{G4Derivative}{{A.16}{128}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
 \bibcite{Behler11general}{1}
 \bibcite{Behler11symmetry}{2}
 \bibcite{Dragly14}{3}
@@ -516,6 +517,8 @@
 \bibcite{Carleo17}{51}
 \bibcite{Krenn16}{52}
 \bibcite{Prudente98}{53}
+\bibcite{Natarajan16}{54}
+\bibcite{Artrith12}{55}
 \gdef\minted@oldcachelist{,
   default.pygstyle,
   borland.pygstyle,
@@ -539,4 +542,5 @@
   7DBC237B4708E63BA3D155BE0023B31F22779287BE07124B95CB8A8CAE72113E.pygtex,
   FEFB449E0F3A60CFD077D90DF00779F11BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
   813DE4EF1B2E2E5BC1630E2F3248B3011BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
-  4A812073CA513B96433F3B9D0108879B1BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex}
+  0FD6C932108E14A90D25E212153F977C1BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
+  6F9F3DCE5128E522CCF72D23C3AEB80B1BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex}

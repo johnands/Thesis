@@ -2816,7 +2816,7 @@ each containing more nodes. The edges show how the nodes are connected.
 \end{figure}
 Next, we will demonstrate how to train a NN with TensorFlow. 
 
-\subsection{Training a NN with TensorFlow}
+\subsection{Training a NN with TensorFlow} 
 To train the NN described in the previous section, we need two additional components:
 a cost function and an optimizer. The mean-square-error cost function \eqref{quadraticCost} is available as a 
 built-in function in TF, \texttt{tf.nn.l2\_loss}. To compute the error, we need to supply known 
@@ -3805,7 +3805,7 @@ Considering that we will not need NNs containing more than 100-200 neurons, a ma
 is definitively the best choice. 
 
 
-\chapter{Validation}
+\chapter{Lennard-Jones validation}
 As a first test of our implementation of the NNP construction process, we train a neural network to reproduce 
 the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
 The fitting is done with a NN that has one input and one output, resulting in 
@@ -3863,18 +3863,18 @@ After 5000 epochs, we obtain a test set RMSE of 0.896 meV. This is a good result
 were optimized. However, fitting a one-dimensional target function is not a great challenge, despite its non-linear behaviour. 
 The test set RMSE and the training set RMSE follow each other very closely, and no overfitting occurs. 
 
+\section{Error in configuration space}
 It can be useful to visualize the error distribution in configuration space 
-by evaluating the trained NN on a set of distance values $R_{ij} \in [a,b]$, and compare with the target function,
+by evaluating the trained NN on all data points in in the test set, and compare with the target function, 
 \begin{minted}{Python}
-# make vector of N distance values r
-N = 2000
-Rij = np.linspace(self.a, self.b, N)
-
+...
 # evaluate trained network on this interval and find absolute error
-energiesNN = sess.run(prediction, feed_dict={x: Rij.reshape([N,1])})
-energiesLJ = self.LennardJones(Rij)
-energyError = energiesLJ - energiesNN.flatten()
+inputTest = np.sort(inputTest)
+energiesNN = sess.run(NNprediction, feed_dict={x: inputTest})
+energiesLJ = LennardJones(inputTest)
+energyError = energiesLJ - energiesNN
 \end{minted}
+where \texttt{x} is a \texttt{tf.placeholder} as described in \autoref{sec:TensorFlowCreatingNN}. 
 The absolute error $E_\mathrm{LJ} - E_\mathrm{NN}$ is plotted as a function of distance $R_{ij}$ in \autoref{fig:LJError}.
 We notice that the error oscillates around zero, and that the amplitude is larger for smaller distances.
 This is in accordance with the observations made in \autoref{sec:samplingAlgorithms}: the regions of configuration space 
@@ -3884,34 +3884,50 @@ strong repulsive forces are at work. Nevertheless, the NN energy prediction foll
 for most values of $R_{ij}$. 
 \begin{figure}
 \centering
-  \includegraphics[width = 0.8\linewidth]{Figures/Implementation/LJError.pdf}
+  \includegraphics[width = 0.7\linewidth]{Figures/Implementation/LJError.pdf}
   \caption{Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
-           The plot can be viewed as a visualization of the error distribution in configuration space, of which the latter 
-           is defined as $R_{ij} \in [a,b]$. The employed hyperparameters are listed in \autoref{tab:hyperParamsLJ}.} 
+           The plot is as a visualization of the error distribution in the configuration space $R_{ij} \in [a,b]$ 
+           defined by the test set. The employed hyperparameters are listed in \autoref{tab:hyperParamsLJ}.} 
   \label{fig:LJError}
 \end{figure}
 
-To test the implementation of the backpropagation algorithm, the
-same NN is differentiated in C++ and compared to the analytical derivative of the L-J potential. 
+To obtain the forces in a simulation, we must calculate the gradient of the NN. 
+In \autoref{sec:hyperParamsCostFunction} we mentioned that a small energy RMSE does not 
+necessarily imply a small force RMSE. In this one-dimensional example, it is easy to measure the gradient error. 
+This is done in a same manner as for the energy above, except now we are comparing the gradients of the NN and the target function. 
+We also calculate the RMSE of the gradient on the test set,
+\begin{minted}{Python}
+...
+derivativeLJ = LennardJonesDerivative(inputTest)
 
-\autoref{fig:errorBackPropTest}.
+# define a NN gradient operation and differentiate
+gradientOP = tf.gradients(NNprediction, x)
+derivativeNN = sess.run(gradientOP, feed_dict={x: inputTest} )[0]
+
+gradientError = derivativeLJ - derivativeNN
+gradientRMSE = np.sqrt(np.sum(gradientError**2)/testSize)
+\end{minted}
+We obtain a gradient RMSE of 24.3 meV, which is about one order of magnitude larger than for the function itself. 
+This function-gradient RMSE ratio is also reported by others \cite{Natarajan16} \cite{Artrith12}, and thus seems 
+to be a general trend. 
+
+The absolute error plot is shown in \autoref{fig:LJErrorDerivative}. 
+Again we have an oscillating error over the training interval, but with 
+larger amplitudes. The gradient error at $R_{ij} = a$ is about 50 times larger than the energy error at this point, which  
+demonstrates the importance of having a higher density of training points in certain regions. 
 \begin{figure}
 \centering
-  \includegraphics[width = 0.9\linewidth]{Figures/Tests/errorDerivative.pdf}
-  \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
-	   The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm.
-	   The result is compared to the analytical derivative of the LJ potential. Only a part of the training
-	   interval is shown, the graph is essentially flat after this point} 
-  \label{fig:errorBackPropTest}
+  \includegraphics[width = 0.7\linewidth]{Figures/Implementation/LJErrorDerivative.pdf}
+  \caption{Absolute error of the gradient of a NN trained to reproduce the truncated and shifted Lennard-Jones 
+           potential \eqref{shiftedLJ}. Comparing with \autoref{fig:LJError}, we see that the graph is of the same shape, 
+           but with larger oscillations. The employed hyperparameters are listed in \autoref{tab:hyperParamsLJ}. }
+  \label{fig:LJErrorDerivative}
 \end{figure}
-Again we get an oscillating error over the training interval. The oscillations near the left end of the interval is much larger
-than for the energy, but they get damped more quickly. The large error near the left end of the interval is a natural
-consequence of the shape of the LJ potential for these values: the $1/r^{13}$ term dominates with its very steep slope, the NN is not 
-fed a sufficient amount of data in this region to excactly reproduce the rapid changing derivative. 
-This tells us that it is important to train the NN on a larger data interval than needed in simulations or possibly
-feed the NN more data in critical regions during training. 
+
+
 
 \section{Many-neighbour Lennard-Jones}
+SHOULD THIS BE INCLUDED??
 A NN can also be trained to obtain the energy of several neighbouring atoms at once. 
 The training procedure is excactly the same, but now we train the network so that the output
 is the sum of $N$ LJ-potentials for $N$ different distances $r$. The NN will have $N$ inputs and 1 output. 
@@ -3955,6 +3971,7 @@ specifics patterns or configurations present in the test set that is not covered
 When we start doing training on data produced by MD trajectories or QM calculations, the situation will different.
 
 \subsection{Alternative way to obtain forces}
+MOVE THIS TO APPENDIX? SHOULD WRITE SOMETHING ABOUT OUR STRUGGLES TO OBTAIN FORCES SOMEWHERE. 
 The NN above outputs the total energy on an atom that is surrounded by $N$ neighbouring atoms, but it does not provide the forces. 
 These must be obtained by calculating the analytical derivative of the NN with backpropagation as described above for each time step.
 An alternative approach that may speed up the MD simulation is to have the NN also output the total force on the central atom. 
@@ -4001,15 +4018,11 @@ Therefore it is a better idea to have the NN only output the total energy, and f
 differentiating the NN for each time step. $\SI{4}{\angstrom}$
 
 
-\chapter{NN potential for Si} \label{sec:SiPotentialResults}
+\chapter{Neural network potential for Si} \label{sec:SiPotentialResults}
+
 Construct an NN potential for Si that works in a certain temperature range (only solid, or liquid too?)
 Compute thermodynamic properties and things like radial distrubution function and compare both 
 with experiments and with results with Stillinger-Weber. 
-
-\chapter{NN potential for SiO2}
-Construct an NN potential for SiO2 that works in a certain temperature range (only solid, or liquid too?). 
-Can use various potentials as the black box, e.g. Vashishta or ReaxFF. 
-ReaxFF would be great, because then we would maybe get a speed-up. 
 
 
 \part{Conclusions and future work}
@@ -4618,6 +4631,18 @@ and
  vibrational levels of $\mathrm{H}_3^+$''. 
  In: \textit{The Journal of Chemical Physics} 109. (1998), 8801. 
  DOI: \href{http://dx.doi.org/10.1063/1.477550}{10.1063/1.477550}
+ 
+\bibitem{Natarajan16}
+ S. K. Natarajan, and J. Behler. 
+ ''Neural network molecular dynamics simulation of solid-liquid interfaces: water at low-index copper surfaces''. 
+ In: \textit{Phys. Chem. Chem. Phys} 18. (2016), 28704. 
+ DOI: \href{http://doi.org/10.1039/c6cp05711j}{10.1039/c6cp05711j}
+ 
+\bibitem{Artrith12}
+ N. Artrith, and J. Behler. 
+ ''High-dimensional neural network potentials for metal surfaces: A prototype study for copper''. 
+ In: \textit{Physical Review B} 85. (2012), 045439. 
+ DOI: \href{http://doi.org/10.1103/PhysRevB.85.045439}{10.1103/PhysRevB.85.045439}
  
  
  
