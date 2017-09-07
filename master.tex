@@ -4019,11 +4019,132 @@ differentiating the NN for each time step. $\SI{4}{\angstrom}$
 
 
 \chapter{Neural network potential for Si} \label{sec:SiPotentialResults}
+In this chapter we perform a demonstration of the complete NNP construction process, including 
+the Behler-Parinello method. The goal is construct a potential for solid-state Si by sampling atomic configurations 
+and energies from Stillinger-Weber MD simluations. 
+The eventual NNP is validated by computing the radial distribution function for a given temperature, and compared
+with experiments and SW simulations. 
 
-Construct an NN potential for Si that works in a certain temperature range (only solid, or liquid too?)
-Compute thermodynamic properties and things like radial distrubution function and compare both 
-with experiments and with results with Stillinger-Weber. 
+\section{Sampling initial set}
+To assemble the initial data set, we need to decide on the specific application of the NNP that we want to develop. 
+We choose to construct a potential that can be used in Si simulations in a temperature range of $T \in [0, 500]$. 
+The system is prepared in a diamond cubic state with a lattice spacing of \SI{5.431}{\angstrom}, which is 
+the crystalline structure of Si. We perform several simulations of the microcanocical ensemble with initial temperatures
+in the above range and a time step of $\Delta t = 0.001 \mathrm{ps}$.
+The SW potential is parametrized according to \cite{Stillinger85}, with a force cutoff 
+of $r_c = \SI{3.77118}{\angstrom}$. 
+Periodic boundary conditions are imposed and the sampling algorithm 
+\eqref{samplingAlgorithmModified} is applied in each simulation, resulting in 4406 structures and corresponding energies. 
+Note that if an \textit{ab inito} NNP is to be constructed, the reference energies must be calculated with a
+quantum mechanical method, which is outside the scope of this work. Except for this, the procedure is the same. 
 
+\section{Initial symmetry function set}
+To get an idea of how many symmetry functions that are needed, we run a MD simulation as described above and 
+measure the minimum, maximum and average coordination numbers as a function of time, 
+\begin{lstlisting}[style=lammps]
+# coordination number of each atom
+compute neighbours all coord/atom cutoff 3.77118
+
+# global coordination numbers
+compute minNeigh all reduce min c_neighbours
+compute maxNeigh all reduce max c_neighbours
+compute aveNeigh all reduce ave c_neighbours
+
+thermo_style custom step c_minNeigh c_maxNeigh c_aveNeigh 
+\end{lstlisting}
+After 1e5 time steps, the minimum and maximum coordination number of any atom were 4 and 12 respectively, with an average 
+of around 6. Thus, according to the discussion in \autoref{sec:initialSymmSet}, 6-8 radial symmetry functions should be sufficient, 
+while the angular symmetry functions should be at least twice as many. Note that this information must be obtained through 
+emipirical knowledge of the system when constructing \textit{ab inito} potentials. 
+
+We have decided to use $G_i^2$ as the radial function, 
+since this is the better choice (\autoref{sec:symmetryFunctions}), and $G_i^5$ as the angular counterpart
+because of computational efficiency. The initial set thus consists of 8 equidistant $G_i^2$ functions and 16 $G_i^5$ functions, 
+with parameters listed in Appendix \autoref{app:symmFuncParameters}.
+
+The initial radial and angular symmetry functions are shown in \autoref{fig:SiInitialSymmSet}, as a function 
+of inter-atomic distance $R_{ij}$ and triplet angle $\theta_{jik}$ respectively. 
+Only the angular part of $G_i^5$ is displayed. 
+We have also calculated the radial and angular distribution of neighbouring atoms in the data, displayed as dotted lines.
+This is a convenient way to visualize how well the symmetry set represents the atomic environment:
+functions that has no overlap with the area defined by the dotted lines does not contribute to the description. 
+\begin{figure}
+ \begin{minipage}{0.48\linewidth}
+  \subcaption{Radial symmetry functions}
+  \includegraphics[width=\textwidth]{Figures/Results/SiInitialSymmG2.pdf}
+ \end{minipage}
+\quad
+\begin{minipage}{0.48\linewidth}
+ \subcaption{Angular symmetry functions}
+ \includegraphics[width=\textwidth]{Figures/Results/SiInitialSymmG5.pdf}
+\end{minipage} 
+  \caption{Initial set of 8 $G_i^2$ and 16 $G_i^5$ symmetry functions for constructing a Si NNP. Only the angular part 
+           $G_i^5$ is displayed. Further, only 8 of these are visible because pairs of $G_i^5$ functions with identical
+           angular parts overlap. 
+           The dotted lines are the radial and angular distribution of neighbours defined 
+           by the training set. The corresponding symmetry parameters is not included. }
+  \label{fig:SiInitialSymmSet}
+\end{figure}
+
+\section{Fitting the initial data set}
+According to the iterative scheme in \autoref{sec:iterativeMDsampling}, the next step in the construction process
+is to create a preliminary NNP by fitting the initial data set. We do not perform a systematic search for 
+optimal hyperparmameters at this intermediate stage. We have decided to employ the sigmoid activation function 
+\eqref{sigmoidActivationFunction} for the remainder of the construction process
+because it is more computationally efficent compared to the hyperbolic tangent, especially 
+its derivative,
+\begin{equation}
+ f^\prime(x) = f(x) [1 - f(x)]
+\end{equation}
+Also, we have not experienced any significant improvement with the use of the hyperbolic tangent over the sigmoid.
+Further, we have chosen the Adam optimizer for all training sessions, as this has been proven to outperform other 
+schemes \cite{Kingma14}. All the employed hyperparameters are listed in \autoref{tab:hyperParamsSiInitial}. 
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
+      \toprule
+      Hyperparameters &  \\ 
+      \hline
+      Network structure & Inputs & 24 \\
+      & Outputs & 1 \\
+      & Hidden layers & 1 \\
+      & Hidden nodes & 10 \\
+      & Activation & Sigmoid \\ 
+      Training & Training set size & 3900 \\
+      & Test set size & 440 \\
+      & Mini-batch size & 100 \\
+      & Number of epochs & 20125 \\
+      & Test set RMSE tolerance & 1.0 meV \\
+      & Optimizer & Adam \\
+      & Initial learning rate & 0.05 \\
+      & Weight initialization & $U \in [-0.1, 0.1]$ \\
+      & Bias initialization & Zeros \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption{Hyperparameters used in the fitting of the initial data set sampled from Stilling-Weber Si simulations.} 
+  \label{tab:hyperParamsSiInitial} 
+\end{table}
+The symmetry-transformed training data has been shifted so that each symmetry function has zero-mean, and 
+the minimum and maximum value of each symmetry function over the training set is stored for later use
+(\autoref{iterativeSampling}).
+Overfitting is detected by the following test,
+\begin{minted}{Python}
+if testRMSE / trainRMSE > 10:
+    print 'Overfitting is occuring, training ends'
+    break
+\end{minted}
+Several preliminary runs showed the test set RMSE to flatten out at about 1.0 meV, and we therefore decided 
+to stop training if an error below this threshold was obtained, which occured after 20125 epochs. 
+The final test set RMSE was 0.992 meV. 
+
+\section{Iterative sampling} \label{sec:SiIterativeSampling}
+After the initial fit, we apply the preliminary NNP in MD simulations to find new relevant structures not present 
+in the current training set. The Si system is prepared in the same manner as the Stillinger-weber runs above. 
+We use the minimum and maximum symmetry function values stored in the previous step to detect extrapolating
+configurations according to the procedure described in \autoref{sec:iterativeMDsampling}. Each time a structure
+leads to a symmetry value outside the range of the above extreme values, we sample that structure.  
 
 \part{Conclusions and future work}
 
@@ -4294,6 +4415,62 @@ and
  F_2F_3 - 2\eta F_1F_2F_3 + F_1F_2M(r_{ik})f_c(r_{ij})\frac{1}{r_{ik}} \biggr) \, + \\
  &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}}
 \end{align}
+
+
+\chapter{Symmetry function parameters} \label{app:symmFuncParameters}
+Here we list the symmetry parameters employed in the construction of the Si NNP in \autoref{sec:SiPotentialResults}. 
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{6cm}{l @{\extracolsep{\fill}} ll}
+      \toprule
+      $R_c$ & $\eta$ & $R_s$ \\ 
+      \hline
+      6.0 & 0.3 & 0 \\
+      6.0 & 0.1 & 0 \\
+      6.0 & 0.05 & 0 \\
+      6.0 & 0.005 & 0 \\
+      6.0 & 5.0 & 4.2 \\ 
+      6.0 & 5.0 & 3.5 \\
+      6.0 & 5.0 & 2.7 \\ 
+      6.0 & 5.0 & 2.0 \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption{Symmetry function parameters $G_i^2$. } 
+  \label{tab:symmParamsInitialG2} 
+\end{table}
+
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{8cm}{l @{\extracolsep{\fill}} llr}
+      \toprule
+      $\eta$ & $R_c$ & $\zeta$ & $\lambda$\\ 
+      \hline
+      0.01 & 6.0 & 1 & 1 \\
+      0.01 & 3.0 & 1 & 1 \\ 
+      0.01 & 6.0 & 1 & -1 \\ 
+      0.01 & 3.0 & 1 & -1 \\
+      0.01 & 6.0 & 2 & 1 \\
+      0.01 & 3.0 & 2 & 1 \\
+      0.01 & 6.0 & 2 & -1 \\
+      0.01 & 3.0 & 2 & -1 \\
+      0.01 & 6.0 & 4 & 1 \\
+      0.01 & 3.0 & 4 & 1 \\
+      0.01 & 6.0 & 4 & -1 \\
+      0.01 & 3.0 & 4 & -1 \\
+      0.01 & 6.0 & 16 & 1 \\
+      0.01 & 3.0 & 16 & 1 \\
+      0.01 & 6.0 & 16 & -1 \\
+      0.01 & 3.0 & 16 & -1 \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption{Symmetry function parameters $G_i^5$.} 
+  \label{tab:symmParamsInitialG5} 
+\end{table}
+
 
 
 \end{appendices}

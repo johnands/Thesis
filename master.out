@@ -74,7 +74,12 @@
 \BOOKMARK [1][-]{section.8.2}{Many-neighbour Lennard-Jones}{chapter.8}% 74
 \BOOKMARK [2][-]{subsection.8.2.1}{Alternative way to obtain forces}{section.8.2}% 75
 \BOOKMARK [0][-]{chapter.9}{Neural network potential for Si}{part.2}% 76
-\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 77
-\BOOKMARK [0][-]{chapter.10}{The quality of the NNP}{part.3}% 78
-\BOOKMARK [0][-]{section*.62}{Appendices}{part.3}% 79
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 80
+\BOOKMARK [1][-]{section.9.1}{Sampling initial set}{chapter.9}% 77
+\BOOKMARK [1][-]{section.9.2}{Initial symmetry function set}{chapter.9}% 78
+\BOOKMARK [1][-]{section.9.3}{Fitting the initial data set}{chapter.9}% 79
+\BOOKMARK [1][-]{section.9.4}{Iterative sampling}{chapter.9}% 80
+\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 81
+\BOOKMARK [0][-]{chapter.10}{The quality of the NNP}{part.3}% 82
+\BOOKMARK [0][-]{section*.64}{Appendices}{part.3}% 83
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 84
+\BOOKMARK [0][-]{Appendix.1.B}{Symmetry function parameters}{part.3}% 85

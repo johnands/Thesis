@@ -444,26 +444,46 @@
 \newlabel{fig:trainingManyNeighbourNN}{{8.3}{116}{Quadratic cost \eqref {quadraticCostFunction} of training set and test set for NN trained to yield the sum of the shifted LJ-potential of 20 neighbouring atoms. The NN has 20 inputs, one hidden layer with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions \eqref {sigmoidActivationFunction}. \autoref {zoomedOut} shows the cost for the first 50 000 epochs, while \autoref {zoomedIn} displays the cost for all epochs, but on a smaller scale.\relax }{figure.caption.60}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }}{117}{figure.caption.61}}
 \newlabel{fig:errorManyNeighbourNN}{{8.4}{117}{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes in 2 layers. The energy error is shown on the left, force error on the right.\relax }{figure.caption.61}{}}
+\citation{Stillinger85}
 \@writefile{toc}{\contentsline {chapter}{\numberline {9}Neural network potential for Si}{119}{chapter.9}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \newlabel{sec:SiPotentialResults}{{9}{119}{Neural network potential for Si}{chapter.9}{}}
-\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Conclusions and future work}{121}{part.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}Sampling initial set}{119}{section.9.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.2}Initial symmetry function set}{119}{section.9.2}}
+\citation{Kingma14}
+\@writefile{toc}{\contentsline {section}{\numberline {9.3}Fitting the initial data set}{120}{section.9.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9.1}{\ignorespaces Initial set of 8 $G_i^2$ and 16 $G_i^5$ symmetry functions for constructing a Si NNP. Only the angular part $G_i^5$ is displayed. Further, only 8 of these are visible because pairs of $G_i^5$ functions with identical angular parts overlap. The dotted lines are the radial and angular distribution of neighbours defined by the training set. The corresponding symmetry parameters is not included. \relax }}{121}{figure.caption.62}}
+\newlabel{fig:SiInitialSymmSet}{{9.1}{121}{Initial set of 8 $G_i^2$ and 16 $G_i^5$ symmetry functions for constructing a Si NNP. Only the angular part $G_i^5$ is displayed. Further, only 8 of these are visible because pairs of $G_i^5$ functions with identical angular parts overlap. The dotted lines are the radial and angular distribution of neighbours defined by the training set. The corresponding symmetry parameters is not included. \relax }{figure.caption.62}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9.1}{\ignorespaces Hyperparameters used in the fitting of the initial data set sampled from Stilling-Weber Si simulations.\relax }}{121}{table.caption.63}}
+\newlabel{tab:hyperParamsSiInitial}{{9.1}{121}{Hyperparameters used in the fitting of the initial data set sampled from Stilling-Weber Si simulations.\relax }{table.caption.63}{}}
+\zref@newlabel{mdf@pagelabel-25}{\default{9.3}\page{122}\abspage{132}\mdf@pagevalue{122}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.4}Iterative sampling}{122}{section.9.4}}
+\newlabel{sec:SiIterativeSampling}{{9.4}{122}{Iterative sampling}{section.9.4}{}}
+\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Conclusions and future work}{123}{part.3}}
 \citation{Behler11general}
-\@writefile{toc}{\contentsline {chapter}{\numberline {10}The quality of the NNP}{123}{chapter.10}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}The quality of the NNP}{125}{chapter.10}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{Appendices}{125}{section*.62}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{127}{Appendix.1.A}}
+\@writefile{toc}{\contentsline {chapter}{Appendices}{127}{section*.64}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{129}{Appendix.1.A}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:appendixA1}{{A}{127}{Symmetry functions derivatives}{Appendix.1.A}{}}
-\newlabel{cutOffFunctionDerivative}{{A.3}{127}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.4}{127}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.5}{127}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.7}{127}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
-\newlabel{cutOffFunctionDerivative1}{{A.8}{128}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
-\newlabel{G4Derivative}{{A.16}{128}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
+\newlabel{app:appendixA1}{{A}{129}{Symmetry functions derivatives}{Appendix.1.A}{}}
+\newlabel{cutOffFunctionDerivative}{{A.3}{129}{Symmetry functions derivatives}{equation.1.A.0.3}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.4}{129}{Symmetry functions derivatives}{equation.1.A.0.4}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.5}{129}{Symmetry functions derivatives}{equation.1.A.0.5}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.7}{129}{Symmetry functions derivatives}{equation.1.A.0.7}{}}
+\newlabel{cutOffFunctionDerivative1}{{A.8}{130}{Symmetry functions derivatives}{equation.1.A.0.8}{}}
+\newlabel{G4Derivative}{{A.16}{130}{Symmetry functions derivatives}{equation.1.A.0.16}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Symmetry function parameters}{135}{Appendix.1.B}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:symmFuncParameters}{{B}{135}{Symmetry function parameters}{Appendix.1.B}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {B.1}{\ignorespaces Symmetry function parameters $G_i^2$. \relax }}{135}{table.caption.65}}
+\newlabel{tab:symmParamsInitialG2}{{B.1}{135}{Symmetry function parameters $G_i^2$. \relax }{table.caption.65}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {B.2}{\ignorespaces Symmetry function parameters $G_i^5$.\relax }}{136}{table.caption.66}}
+\newlabel{tab:symmParamsInitialG5}{{B.2}{136}{Symmetry function parameters $G_i^5$.\relax }{table.caption.66}{}}
 \bibcite{Behler11general}{1}
 \bibcite{Behler11symmetry}{2}
 \bibcite{Dragly14}{3}
@@ -543,4 +563,5 @@
   FEFB449E0F3A60CFD077D90DF00779F11BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
   813DE4EF1B2E2E5BC1630E2F3248B3011BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
   0FD6C932108E14A90D25E212153F977C1BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
-  6F9F3DCE5128E522CCF72D23C3AEB80B1BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex}
+  6F9F3DCE5128E522CCF72D23C3AEB80B1BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex,
+  CA25EB93F2A174124EE003EF3701A4F41BE631E8E4850E2A9AE02C4CEA74BD6B.pygtex}

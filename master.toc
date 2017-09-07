@@ -104,7 +104,12 @@
 \contentsline {section}{\numberline {8.2}Many-neighbour Lennard-Jones}{114}{section.8.2}
 \contentsline {subsection}{\numberline {8.2.1}Alternative way to obtain forces}{115}{subsection.8.2.1}
 \contentsline {chapter}{\numberline {9}Neural network potential for Si}{119}{chapter.9}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{121}{part.3}
-\contentsline {chapter}{\numberline {10}The quality of the NNP}{123}{chapter.10}
-\contentsline {chapter}{Appendices}{125}{section*.62}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{127}{Appendix.1.A}
+\contentsline {section}{\numberline {9.1}Sampling initial set}{119}{section.9.1}
+\contentsline {section}{\numberline {9.2}Initial symmetry function set}{119}{section.9.2}
+\contentsline {section}{\numberline {9.3}Fitting the initial data set}{120}{section.9.3}
+\contentsline {section}{\numberline {9.4}Iterative sampling}{122}{section.9.4}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{123}{part.3}
+\contentsline {chapter}{\numberline {10}The quality of the NNP}{125}{chapter.10}
+\contentsline {chapter}{Appendices}{127}{section*.64}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{129}{Appendix.1.A}
+\contentsline {chapter}{\numberline {B}Symmetry function parameters}{135}{Appendix.1.B}
