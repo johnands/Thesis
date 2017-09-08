@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  8 SEP 2017 00:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  8 SEP 2017 17:09
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1111,7 +1111,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 
-<figures/apollonseglet/Apollonseglet/UiO_Segl_cmyk.pdf, id=341, 140.94772pt x 1
+<figures/apollonseglet/Apollonseglet/UiO_Segl_cmyk.pdf, id=345, 140.94772pt x 1
 40.95068pt>
 File: figures/apollonseglet/Apollonseglet/UiO_Segl_cmyk.pdf Graphic file (type 
 pdf)
@@ -1178,14 +1178,14 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 Chapter 2.
 [9
 
-] [10] [11] <Figures/Theory/LJ.pdf, id=587, 578.16pt x 433.62pt>
+] [10] [11] <Figures/Theory/LJ.pdf, id=592, 578.16pt x 433.62pt>
 File: Figures/Theory/LJ.pdf Graphic file (type pdf)
 
 <use Figures/Theory/LJ.pdf>
 Package pdftex.def Info: Figures/Theory/LJ.pdf used on input line 375.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
  [12] [13 <./Figures/Theory/LJ.pdf>]
-<Figures/Theory/triplets.pdf, id=651, 544.13849pt x 122.98483pt>
+<Figures/Theory/triplets.pdf, id=657, 544.13849pt x 122.98483pt>
 File: Figures/Theory/triplets.pdf Graphic file (type pdf)
 
 <use Figures/Theory/triplets.pdf>
@@ -1196,7 +1196,7 @@ Package pdftex.def Info: Figures/Theory/triplets.pdf used on input line 412.
 
 ]
 Chapter 3.
-[19] <Figures/Theory/MachineLearningDiagram.png, id=740, 336.7782pt x 240.9pt>
+[19] <Figures/Theory/MachineLearningDiagram.png, id=745, 336.7782pt x 240.9pt>
 File: Figures/Theory/MachineLearningDiagram.png Graphic file (type png)
 
 <use Figures/Theory/MachineLearningDiagram.png>
@@ -1210,14 +1210,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 610--610
  []
 
 [20 <./Figures/Theory/MachineLearningDiagram.png>]
-<Figures/Theory/neuron.pdf, id=752, 500.75726pt x 159.10359pt>
+<Figures/Theory/neuron.pdf, id=757, 500.75726pt x 159.10359pt>
 File: Figures/Theory/neuron.pdf Graphic file (type pdf)
 
 <use Figures/Theory/neuron.pdf>
 Package pdftex.def Info: Figures/Theory/neuron.pdf used on input line 636.
 (pdftex.def)             Requested size: 411.14224pt x 130.63086pt.
 
-<Figures/Theory/neuron_anatomy.jpg, id=756, 542.025pt x 266.9975pt>
+<Figures/Theory/neuron_anatomy.jpg, id=761, 542.025pt x 266.9975pt>
 File: Figures/Theory/neuron_anatomy.jpg Graphic file (type jpg)
 
 <use Figures/Theory/neuron_anatomy.jpg>
@@ -1231,7 +1231,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 663--663
  []
 
 [21 <./Figures/Theory/neuron.pdf>] [22 <./Figures/Theory/neuron_anatomy.jpg>]
-<Figures/Theory/networkGeneral.pdf, id=787, 385.70297pt x 218.06633pt>
+<Figures/Theory/networkGeneral.pdf, id=792, 385.70297pt x 218.06633pt>
 File: Figures/Theory/networkGeneral.pdf Graphic file (type pdf)
 
 <use Figures/Theory/networkGeneral.pdf>
@@ -1242,7 +1242,7 @@ Package pdftex.def Info: Figures/Theory/networkGeneral.pdf used on input line 7
 Underfull \vbox (badness 5592) has occurred while \output is active []
 
  [25]
-<Figures/Theory/networkWithNotation.pdf, id=822, 391.04826pt x 206.54205pt>
+<Figures/Theory/networkWithNotation.pdf, id=827, 391.04826pt x 206.54205pt>
 File: Figures/Theory/networkWithNotation.pdf Graphic file (type pdf)
 
 <use Figures/Theory/networkWithNotation.pdf>
@@ -1254,7 +1254,7 @@ Overfull \hbox (6.44867pt too wide) detected at line 853
 []\OML/cmm/m/it/12 y[] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 f[] []
  []
 
-<Figures/Theory/activationFlex.pdf, id=855, 578.16pt x 433.62pt>
+<Figures/Theory/activationFlex.pdf, id=860, 578.16pt x 433.62pt>
 File: Figures/Theory/activationFlex.pdf Graphic file (type pdf)
 
 <use Figures/Theory/activationFlex.pdf>
@@ -1262,7 +1262,7 @@ Package pdftex.def Info: Figures/Theory/activationFlex.pdf used on input line 8
 71.
 (pdftex.def)             Requested size: 370.0255pt x 277.51585pt.
  [28] [29 <./Figures/Theory/activationFlex.pdf>] [30]
-<Figures/Theory/activationFunctions.pdf, id=912, 578.16pt x 433.62pt>
+<Figures/Theory/activationFunctions.pdf, id=917, 578.16pt x 433.62pt>
 File: Figures/Theory/activationFunctions.pdf Graphic file (type pdf)
 
 <use Figures/Theory/activationFunctions.pdf>
@@ -1270,7 +1270,7 @@ Package pdftex.def Info: Figures/Theory/activationFunctions.pdf used on input l
 ine 967.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
 
-<Figures/Theory/reluActivation.pdf, id=918, 578.16pt x 433.62pt>
+<Figures/Theory/reluActivation.pdf, id=923, 578.16pt x 433.62pt>
 File: Figures/Theory/reluActivation.pdf Graphic file (type pdf)
 
 <use Figures/Theory/reluActivation.pdf>
@@ -1280,7 +1280,7 @@ Package pdftex.def Info: Figures/Theory/reluActivation.pdf used on input line 9
  [31 <./Figures/Theory/activationFunctions.pdf>] [32 <./Figures/Theory/reluActi
 vation.pdf>] [33] [34] [35] [36]
 [37] [38] [39]
-<Figures/Theory/backprop.pdf, id=1094, 478.65672pt x 159.30385pt>
+<Figures/Theory/backprop.pdf, id=1099, 478.65672pt x 159.30385pt>
 File: Figures/Theory/backprop.pdf Graphic file (type pdf)
 
 <use Figures/Theory/backprop.pdf>
@@ -1292,7 +1292,7 @@ Package pdftex.def Info: Figures/Theory/backprop.pdf used on input line 1344.
 ]
 Chapter 4.
 [45] [46] [47]
-<Figures/Theory/cutoffFunction.pdf, id=1202, 578.16pt x 433.62pt>
+<Figures/Theory/cutoffFunction.pdf, id=1207, 578.16pt x 433.62pt>
 File: Figures/Theory/cutoffFunction.pdf Graphic file (type pdf)
 
 <use Figures/Theory/cutoffFunction.pdf>
@@ -1308,28 +1308,28 @@ LaTeX Warning: Citation `cutoffFunction' on page 48 undefined on input line 161
 8.
 
 [48] [49 <./Figures/Theory/cutoffFunction.pdf>]
-<Figures/Theory/G1.pdf, id=1242, 578.16pt x 433.62pt>
+<Figures/Theory/G1.pdf, id=1247, 578.16pt x 433.62pt>
 File: Figures/Theory/G1.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G1.pdf>
 Package pdftex.def Info: Figures/Theory/G1.pdf used on input line 1664.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G2_1.pdf, id=1243, 578.16pt x 433.62pt>
+<Figures/Theory/G2_1.pdf, id=1248, 578.16pt x 433.62pt>
 File: Figures/Theory/G2_1.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G2_1.pdf>
 Package pdftex.def Info: Figures/Theory/G2_1.pdf used on input line 1670.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G2_2.pdf, id=1244, 578.16pt x 433.62pt>
+<Figures/Theory/G2_2.pdf, id=1249, 578.16pt x 433.62pt>
 File: Figures/Theory/G2_2.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G2_2.pdf>
 Package pdftex.def Info: Figures/Theory/G2_2.pdf used on input line 1676.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G3.pdf, id=1245, 578.16pt x 433.62pt>
+<Figures/Theory/G3.pdf, id=1250, 578.16pt x 433.62pt>
 File: Figures/Theory/G3.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G3.pdf>
@@ -1347,7 +1347,7 @@ on: multiple pdfs with page group included in a single page
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Theory/G3.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
->] <Figures/Theory/G4G5angular1.pdf, id=1431, 578.16pt x 433.62pt>
+>] <Figures/Theory/G4G5angular1.pdf, id=1436, 578.16pt x 433.62pt>
 File: Figures/Theory/G4G5angular1.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G4G5angular1.pdf>
@@ -1355,7 +1355,7 @@ Package pdftex.def Info: Figures/Theory/G4G5angular1.pdf used on input line 172
 7.
 (pdftex.def)             Requested size: 205.57112pt x 154.17767pt.
 
-<Figures/Theory/G4G5angular2.pdf, id=1432, 578.16pt x 433.62pt>
+<Figures/Theory/G4G5angular2.pdf, id=1437, 578.16pt x 433.62pt>
 File: Figures/Theory/G4G5angular2.pdf Graphic file (type pdf)
 
 <use Figures/Theory/G4G5angular2.pdf>
@@ -1379,7 +1379,7 @@ pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Theory/G4G5angular2.pdf): PDF
 
 Package hyperref Warning: No autoref name for `Appendix' on input line 1818.
 
-[53] <Figures/Implementation/3atoms.pdf, id=1551, 1069.6075pt x 1374.74738pt>
+[53] <Figures/Implementation/3atoms.pdf, id=1556, 1069.6075pt x 1374.74738pt>
 File: Figures/Implementation/3atoms.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/3atoms.pdf>
@@ -1440,7 +1440,7 @@ LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no … in font cmr12!
 [64] [65]
-<Figures/Implementation/lammpsClasses.pdf, id=1745, 527.6712pt x 565.58702pt>
+<Figures/Implementation/lammpsClasses.pdf, id=1750, 527.6712pt x 565.58702pt>
 File: Figures/Implementation/lammpsClasses.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/lammpsClasses.pdf>
@@ -1508,7 +1508,7 @@ DF9.pygtex) [72] [73] [74
 
 ]
 Chapter 6.
-<Figures/Implementation/DFG.pdf, id=1829, 116.65279pt x 144.05495pt>
+<Figures/Implementation/DFG.pdf, id=1834, 116.65279pt x 144.05495pt>
 File: Figures/Implementation/DFG.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/DFG.pdf>
@@ -1571,7 +1571,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/BF272435D2DD3F8B7BA9FE7C0AC002B122779287BE07124B95CB8A8CAE721
 13E.pygtex) [79]
-<Figures/Implementation/tensorBoardExample.pdf, id=1917, 919.435pt x 1097.09875
+<Figures/Implementation/tensorBoardExample.pdf, id=1922, 919.435pt x 1097.09875
 pt>
 File: Figures/Implementation/tensorBoardExample.pdf Graphic file (type pdf)
  <use Figures/Implementation/tensorBoardExample.pdf>
@@ -1615,7 +1615,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/B33B5AD4BCFFE5428EF8AD9F136D497822779287BE07124B95CB8A8CAE721
 13E.pygtex)
-<Figures/Implementation/tensorBoardTraining.pdf, id=1943, 919.435pt x 1085.0537
+<Figures/Implementation/tensorBoardTraining.pdf, id=1948, 919.435pt x 1085.0537
 6pt>
 File: Figures/Implementation/tensorBoardTraining.pdf Graphic file (type pdf)
  <use Figures/Implementation/tensorBoardTraining.pdf>
@@ -1706,7 +1706,7 @@ Package mdframed Info: mdframed inside a box
 Underfull \vbox (badness 3758) has occurred while \output is active []
 
  [89]
-<Figures/Implementation/forceDistSamplingAlgo.pdf, id=2017, 578.16pt x 433.62pt
+<Figures/Implementation/forceDistSamplingAlgo.pdf, id=2022, 578.16pt x 433.62pt
 >
 File: Figures/Implementation/forceDistSamplingAlgo.pdf Graphic file (type pdf)
  <use Figures/Implementation/forceDistSamplingAlgo.pdf>
@@ -1714,7 +1714,7 @@ Package pdftex.def Info: Figures/Implementation/forceDistSamplingAlgo.pdf used
 on input line 3159.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Implementation/forceDistSamplingAlgoNormed.pdf, id=2018, 578.16pt x 43
+<Figures/Implementation/forceDistSamplingAlgoNormed.pdf, id=2023, 578.16pt x 43
 3.62pt>
 File: Figures/Implementation/forceDistSamplingAlgoNormed.pdf Graphic file (type
  pdf)
@@ -1735,7 +1735,7 @@ pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Implementation/forceDistSampl
 ingAlgoNormed.pdf): PDF inclusion: multiple pdfs with page group included in a 
 single page
 >] [92] [93]
-<Figures/Implementation/radialParams.pdf, id=2162, 578.16pt x 433.62pt>
+<Figures/Implementation/radialParams.pdf, id=2167, 578.16pt x 433.62pt>
 File: Figures/Implementation/radialParams.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/radialParams.pdf>
@@ -1743,7 +1743,7 @@ Package pdftex.def Info: Figures/Implementation/radialParams.pdf used on input
 line 3316.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
  [94]
-<Figures/Implementation/angularParams1.pdf, id=2169, 578.16pt x 433.62pt>
+<Figures/Implementation/angularParams1.pdf, id=2174, 578.16pt x 433.62pt>
 File: Figures/Implementation/angularParams1.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/angularParams1.pdf>
@@ -1772,7 +1772,7 @@ LaTeX Warning: Reference `fig:sigmoidActivationFunctions' on page 100 undefined
  on input line 3506.
 
 [100] [101]
-<Figures/Implementation/overfitting.pdf, id=2333, 578.16pt x 433.62pt>
+<Figures/Implementation/overfitting.pdf, id=2338, 578.16pt x 433.62pt>
 File: Figures/Implementation/overfitting.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/overfitting.pdf>
@@ -1808,7 +1808,7 @@ e-ter op-ti-miza-tion schemes.
  []
 
 [106] [107]
-<Figures/Tests/timeComparisonNetworkNew.pdf, id=2439, 578.16pt x 433.62pt>
+<Figures/Tests/timeComparisonNetworkNew.pdf, id=2444, 578.16pt x 433.62pt>
 File: Figures/Tests/timeComparisonNetworkNew.pdf Graphic file (type pdf)
 
 <use Figures/Tests/timeComparisonNetworkNew.pdf>
@@ -1836,7 +1836,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 (./_minted-master/0FD6C932108E14A90D25E212153F977C1BE631E8E4850E2A9AE02C4CEA74B
-D6B.pygtex) <Figures/Implementation/LJError.pdf, id=2526, 578.16pt x 433.62pt>
+D6B.pygtex) <Figures/Implementation/LJError.pdf, id=2531, 578.16pt x 433.62pt>
 File: Figures/Implementation/LJError.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/LJError.pdf>
@@ -1853,7 +1853,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/6F9F3DCE5128E522CCF72D23C3AEB80B1BE631E8E4850E2A9AE02C4CEA74B
 D6B.pygtex)
-<Figures/Implementation/LJErrorDerivative.pdf, id=2595, 578.16pt x 433.62pt>
+<Figures/Implementation/LJErrorDerivative.pdf, id=2600, 578.16pt x 433.62pt>
 File: Figures/Implementation/LJErrorDerivative.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/LJErrorDerivative.pdf>
@@ -1861,7 +1861,7 @@ Package pdftex.def Info: Figures/Implementation/LJErrorDerivative.pdf used on i
 nput line 3920.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
 
-<Figures/Tests/trainingManyNeighbourNN1.pdf, id=2603, 578.16pt x 433.62pt>
+<Figures/Tests/trainingManyNeighbourNN1.pdf, id=2608, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN1.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN1.pdf>
@@ -1869,7 +1869,7 @@ Package pdftex.def Info: Figures/Tests/trainingManyNeighbourNN1.pdf used on inp
 ut line 3956.
 (pdftex.def)             Requested size: 328.91504pt x 246.68297pt.
 
-<Figures/Tests/trainingManyNeighbourNN2.pdf, id=2604, 578.16pt x 433.62pt>
+<Figures/Tests/trainingManyNeighbourNN2.pdf, id=2609, 578.16pt x 433.62pt>
 File: Figures/Tests/trainingManyNeighbourNN2.pdf Graphic file (type pdf)
 
 <use Figures/Tests/trainingManyNeighbourNN2.pdf>
@@ -1896,7 +1896,7 @@ rainingManyNeighbourNN1.pdf> <./Figures/Tests/trainingManyNeighbourNN2.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Tests/trainingManyNeighbourNN
 2.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] <Figures/Tests/manyNeighbourEnergyError.pdf, id=2748, 578.16pt x 433.62pt>
+>] <Figures/Tests/manyNeighbourEnergyError.pdf, id=2753, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourEnergyError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourEnergyError.pdf>
@@ -1904,7 +1904,7 @@ Package pdftex.def Info: Figures/Tests/manyNeighbourEnergyError.pdf used on inp
 ut line 4002.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Tests/manyNeighbourForceError.pdf, id=2749, 578.16pt x 433.62pt>
+<Figures/Tests/manyNeighbourForceError.pdf, id=2754, 578.16pt x 433.62pt>
 File: Figures/Tests/manyNeighbourForceError.pdf Graphic file (type pdf)
 
 <use Figures/Tests/manyNeighbourForceError.pdf>
@@ -1924,7 +1924,7 @@ Chapter 9.
 
 Package hyperref Warning: No autoref name for `Appendix' on input line 4063.
 
-<Figures/Results/SiInitialSymmG2.pdf, id=2845, 578.16pt x 433.62pt>
+<Figures/Results/SiInitialSymmG2.pdf, id=2850, 578.16pt x 433.62pt>
 File: Figures/Results/SiInitialSymmG2.pdf Graphic file (type pdf)
 
 <use Figures/Results/SiInitialSymmG2.pdf>
@@ -1932,7 +1932,7 @@ Package pdftex.def Info: Figures/Results/SiInitialSymmG2.pdf used on input line
  4074.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Results/SiInitialSymmG5.pdf, id=2846, 578.16pt x 433.62pt>
+<Figures/Results/SiInitialSymmG5.pdf, id=2851, 578.16pt x 433.62pt>
 File: Figures/Results/SiInitialSymmG5.pdf Graphic file (type pdf)
 
 <use Figures/Results/SiInitialSymmG5.pdf>
@@ -1942,7 +1942,7 @@ Package pdftex.def Info: Figures/Results/SiInitialSymmG5.pdf used on input line
 
 
 LaTeX Warning: Reference `iterativeSampling' on page 120 undefined on input lin
-e 4131.
+e 4133.
 
 [120] [121 <./Figures/Results/SiInitialSymmG2.pdf> <./Figures/Results/SiInitial
 SymmG5.pdf
@@ -1950,24 +1950,24 @@ SymmG5.pdf
 pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Results/SiInitialSymmG5.pdf):
  PDF inclusion: multiple pdfs with page group included in a single page
 >]
-Package mdframed Info: mdframed works in twoside mode on input line 4133.
+Package mdframed Info: mdframed works in twoside mode on input line 4135.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 4133.
+(mdframed)              on input line 4135.
 \openout3 = `master.pyg'.
-
-runsystem(pygmentize -l Python -f latex -P commandprefix=PYG -F tokenmerge -o "
-_minted-master/CA25EB93F2A174124EE003EF3701A4F41BE631E8E4850E2A9AE02C4CEA74BD6B
-.pygtex" "master.pyg" )...executed.
 
 
 (./_minted-master/CA25EB93F2A174124EE003EF3701A4F41BE631E8E4850E2A9AE02C4CEA74B
 D6B.pygtex)
+Package mdframed Info: mdframed works in twoside mode on input line 4151.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 4151.
+\openout3 = `master.pyg'.
 
-LaTeX Warning: Reference `mdf@pagelabel-25' on page 122 undefined on input line
- 4137.
 
-[122] [123
+(./_minted-master/1E55E0DEC750FDC3C03F33F69A64107C5ADC847D9CD2AC8271E7988943C71
+362.pygtex) [122] [123
 
 ] [124]
 Chapter 10.
@@ -1985,7 +1985,7 @@ Appendix A.
 ]
 Appendix B.
 [135] [136]
-Underfull \hbox (badness 1194) in paragraph at lines 4493--4497
+Underfull \hbox (badness 1194) in paragraph at lines 4511--4515
 []\OT1/cmr/m/n/12 J. Behler. ''Atom-centered sym-me-try func-tions for con-stru
 ct-ing high-
  []
@@ -1998,25 +1998,25 @@ Missing character: There is no © in font cmr12!
 Missing character: There is no Ã in font cmr12!
 Missing character: There is no © in font cmr12!
 
-Underfull \hbox (badness 2012) in paragraph at lines 4585--4589
+Underfull \hbox (badness 2012) in paragraph at lines 4603--4607
 []\OT1/cmr/m/n/12 J. Duchi, E. Hazan, and Y. Singer. ''Adap-tive Sub-gra-di-ent
  Meth-
  []
 
 
-Underfull \hbox (badness 7558) in paragraph at lines 4585--4589
+Underfull \hbox (badness 7558) in paragraph at lines 4603--4607
 \OT1/cmr/m/n/12 ods for On-line Learn-ing and Stochas-tic Op-ti-miza-tion''. In
  \OT1/cmr/m/it/12 The
  []
 
 
-Underfull \hbox (badness 2205) in paragraph at lines 4585--4589
+Underfull \hbox (badness 2205) in paragraph at lines 4603--4607
 \OT1/cmr/m/it/12 Jour-nal of Ma-chine Learn-ing Re-search \OT1/cmr/m/n/12 12. (
 2011) 2121-2159. URL:
  []
 
 [138]
-Underfull \hbox (badness 1221) in paragraph at lines 4633--4636
+Underfull \hbox (badness 1221) in paragraph at lines 4651--4654
 []\OT1/cmr/m/n/12 D. Kriesel. ''A Breif In-tro-duc-tion to Neu-ral Net-works'' 
 Avail-able at
  []
@@ -2036,7 +2036,7 @@ Missing character: There is no â in font cmr12!
 Missing character: There is no € in font cmr12!
 Missing character: There is no “ in font cmr12!
 
-Underfull \hbox (badness 1910) in paragraph at lines 4772--4775
+Underfull \hbox (badness 1910) in paragraph at lines 4790--4793
 []\OT1/cmr/m/n/12 G. Hin-ton, et al. ''Deep neu-ral net-works for acous-tic mod
 -el-ing in
  []
@@ -2044,22 +2044,16 @@ Underfull \hbox (badness 1910) in paragraph at lines 4772--4775
 [141]
 runsystem(rm "master.pyg")...executed.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4828.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4846.
  [142]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 4828.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 4846.
  (./master.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4828.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4828.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4846.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4846.
 
+Package rerunfilecheck Info: File `master.out' has not changed.
+(rerunfilecheck)             Checksum: D81C27CA66B0A67A86D3DB6E42A6AF1C;6114.
 
-
-Package rerunfilecheck Warning: File `master.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `master.out':
-(rerunfilecheck)             Before: D4FC667C1C2BEA4F8A27876CA293C4A9;6049
-(rerunfilecheck)             After:  D81C27CA66B0A67A86D3DB6E42A6AF1C;6114.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -2069,14 +2063,14 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4828.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4846.
  )
 (\end occurred when \ifx on line 2880 was incomplete) 
 Here is how much of TeX's memory you used:
- 24624 strings out of 494953
- 459026 string characters out of 6180977
- 629088 words of memory out of 5000000
- 26738 multiletter control sequences out of 15000+600000
+ 24634 strings out of 494953
+ 459482 string characters out of 6180977
+ 629451 words of memory out of 5000000
+ 26745 multiletter control sequences out of 15000+600000
  21828 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  44i,17n,60p,10388b,2243s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2105,10 +2099,10 @@ sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on master.pdf (152 pages, 1847550 bytes).
+Output written on master.pdf (152 pages, 1848400 bytes).
 PDF statistics:
- 3397 PDF objects out of 3580 (max. 8388607)
- 2473 compressed objects within 25 object streams
+ 3401 PDF objects out of 3580 (max. 8388607)
+ 2477 compressed objects within 25 object streams
  753 named destinations out of 1000 (max. 500000)
- 863 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 871 words of extra memory for PDF output out of 10000 (max. 10000000)
 

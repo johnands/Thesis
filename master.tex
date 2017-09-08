@@ -4034,7 +4034,7 @@ in the above range and a time step of $\Delta t = 0.001 \mathrm{ps}$.
 The SW potential is parametrized according to \cite{Stillinger85}, with a force cutoff 
 of $r_c = \SI{3.77118}{\angstrom}$. 
 Periodic boundary conditions are imposed and the sampling algorithm 
-\eqref{samplingAlgorithmModified} is applied in each simulation, resulting in 4406 structures and corresponding energies. 
+\eqref{samplingAlgorithmModified} is applied in each simulation, resulting in 4406 structures and corresponding energies.
 Note that if an \textit{ab inito} NNP is to be constructed, the reference energies must be calculated with a
 quantum mechanical method, which is outside the scope of this work. Except for this, the procedure is the same. 
 
@@ -4123,7 +4123,9 @@ schemes \cite{Kingma14}. All the employed hyperparameters are listed in \autoref
       \end{tabular*} 
     \end{center}
     \captionsetup{width=12cm}
-      \caption{Hyperparameters used in the fitting of the initial data set sampled from Stilling-Weber Si simulations.} 
+      \caption{Hyperparameters used in the fitting of the initial data set sampled from Stilling-Weber Si simulations. 
+	       The data set is split into a training set and a test set, where the latter is 10 \% of the total number of 
+	       structures.} 
   \label{tab:hyperParamsSiInitial} 
 \end{table}
 The symmetry-transformed training data has been shifted so that each symmetry function has zero-mean, and 
@@ -4144,11 +4146,51 @@ After the initial fit, we apply the preliminary NNP in MD simulations to find ne
 in the current training set. The Si system is prepared in the same manner as the Stillinger-weber runs above. 
 We use the minimum and maximum symmetry function values stored in the previous step to detect extrapolating
 configurations according to the procedure described in \autoref{sec:iterativeMDsampling}. Each time a structure
-leads to a symmetry value outside the range of the above extreme values, we sample that structure.  
+leads to a symmetry value outside the range of the above extreme values, we sample that structure, and add 
+it to the training set, 
+\begin{minted}{C++}
+bool extrapolation = 0;
+for (int s=0; s < m_numberOfSymmFunc; s++) {
+  if (symmVector[s] < m_minmax[s][0]) {
+    m_minmax[s][0] = inputVector[s];
+    extrapolation = 1;
+  }
+  else if (symmVector[s] > m_minmax[s][1]) {
+    m_minmax[s][1] = inputVector[s];
+    extrapolation = 1;
+  }
+}
+\end{minted}
+where \texttt{m\_minmax} is a vector containing the minimum and maximum values of each symmetry function.
+After a certain number of new structures is added, the NN fit is refined by training on the extended data set. 
+The NNP simulations are also carried out for several temperatures $T \in [0,500] \mathrm{K}$. 
+
+The iterative sampling process is stopped when no new structures are found, which occurs after three iterations 
+of NNP sampling and consecutive fits. We do not employ the multiple-NN method by Behler (\autoref{sec:iterativeMDsampling}
+to find new structures \textit{within} the range of existing symmetry values.
+Instead, we plot the distribution of symmetry function values for the final data set to ensure that all intermediate 
+values are covered. 
+
+
 
 \part{Conclusions and future work}
+In this thesis, we aimed to implement and employ a method to construct high-dimensonal neural network potentials for molecular 
+dynamics. 
 
-\chapter{The quality of the NNP}
+To train neural networkss, we developed a set of Python scripts that employ the machine learning 
+library TensorFlow. These programs were used to fit data sets of atomic configurations and energies to construct potentials 
+
+
+
+
+
+\chapter{Summary and conclusions}
+***Summary of what we have done and how good results we obtained***
+
+***Discussion on how well the method is compared to the ideal potential***
+
+
+
 How well does the NNP described in this thesis perform compared to other potentials? 
 When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
 should possess. These serve as a guide during the construction process, and is also a good 
@@ -4207,6 +4249,10 @@ and molecular dynamics by enabling \textit{ab inito} simulations on a larger sca
 for convential \textit{ab inito} MD. This property, in addition to the unbiased and transferable nature of the approach, 
 signifiy that research in this field will be increasingly important in the future. 
 
+\chapter{Prospects and future work}
+***Using ab inito method***
+***Using on new systems***
+***Fitting forces***
 
 
 
