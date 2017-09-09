@@ -4163,35 +4163,137 @@ for (int s=0; s < m_numberOfSymmFunc; s++) {
 \end{minted}
 where \texttt{m\_minmax} is a vector containing the minimum and maximum values of each symmetry function.
 After a certain number of new structures is added, the NN fit is refined by training on the extended data set. 
-The NNP simulations are also carried out for several temperatures $T \in [0,500] \mathrm{K}$. 
+The NNP simulations are carried out for several temperatures $T \in [0,500] \mathrm{K}$. 
+This iterative sampling process is continued until no new extrapolating structures are found, which occurs 
+after three iterations. A total of 578 structures are added, resulting in an extended data set of 4984 training examples. 
 
-The iterative sampling process is stopped when no new structures are found, which occurs after three iterations 
-of NNP sampling and consecutive fits. We do not employ the multiple-NN method by Behler (\autoref{sec:iterativeMDsampling}
-to find new structures \textit{within} the range of existing symmetry values.
-Instead, we plot the distribution of symmetry function values for the final data set to ensure that all intermediate 
-values are covered. 
+Next, we employ the multiple-NN method (\autoref{sec:iterativeMDsampling}) to identify new structures 
+that are \textit{within} the range of existing symmetry values, but located in regions of configuration space 
+that are poorly represented in the training set. First, we train four NNs with different architectures on 
+the complete training set to similar accuracies. 
+Then, we run several MD simulations with one of these NNPs
+to generate a large number configurations. The atomic coordinates are stored with the command
+\begin{lstlisting}[style=lammps]
+dump configs all custom 1 configs.txt id x y z vx vy vz
+\end{lstlisting}
+The same hyperparameters as in \autoref{tab:hyperParamsSiInitial} are used, 
+except that the RMSE tolerance is changed to 5 meV. Lastly, we run pseudo-simulations with the other three NNPs
+on the configurations above, 
+\begin{lstlisting}[style=lammps]
+rerun configs.txt dump x y z vx vy vz
+compute peAtom all pe/atom
+dump potEnergy chosen custom 1 potEnergy.txt id c_peAtom"
+\end{lstlisting}
+and compare the predicted potential energies of the atoms in group \texttt{chosen}, which are randomly selected. 
+Any structures for which the energy disagreement is significant, is added to the data set. An example of a 
+potential energy comparison for a single atom is shown in \autoref{fig:multipleNNP}. 
+\begin{figure}
+\centering
+  \includegraphics[width = 0.7\linewidth]{Figures/Results/multipleNNP.pdf}
+  \caption{Example plot of the multiple-NN method. Four NNs with different architectures have been fitted to the same 
+           data set to similar accuracies. Then, several configurations are generated with one of these NNPs, and 
+           the potential energy predictions of each NNP for these structures are compared. The plot shows 
+           the energies of a single atom.}
+  \label{fig:multipleNNP}
+\end{figure}
+The simulations have been carried out at an initial temperature of $T = 300$ K, and the first 1000 time steps are displayed. 
+We observe that the four NNPs agree resonably well. To quantatively identify significant differences, we compute the standard deviation
+$\sigma$ of the potential energies at each time step. If $\sigma > 0.01\overline{E}_p$ for any time step, where $\overline{E}_p$
+is the average potential energy, the corresponding structures are added to the training set. We find that no structures 
+satisfy this criterion, and we therefore consider the training set as complete. 
+
+\section{Fitting the final data set}
+Now that the iterative sampling scheme is finished, we are ready to construct the final NNP. 
+To investigate if the symmetry function set needs to be adjusted, we calculate the range of each symmetry function 
+on the training data. We find that the $G_i^5$ functions with a cutoff of $R_c = \SI{3.0}{\angstrom}$ have a very small range 
+of values, thus we change the cutoff to $R_c = 4.0$. Other than that, no adjustments are made. 
+
+To find the optimal NN architecture, we perform a grid search of different 
+number of hidden layers $L$ and nodes in each hidden layer $n_l$. 
+For each architecture $(L,n_l)$ we perform a training session of 40000 epochs, and for every session we store 
+the smallest RMSE obtained, together with the number of epochs and the time elapsed to reach this RMSE. 
+We use the same hyperparamaters as in \autoref{tab:hyperParamsSiInitial} (with various architectures), 
+except that no RMSE tolerance is set, and the mini-batch size is changed to 200 to decrease the error oscillations. 
+The results are listed in \autoref{tab:gridSearch}. 
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{10cm}{l @{\extracolsep{\fill}} llll}
+      \toprule
+      Layers & Nodes & RMSE & Epoch & Time \\ 
+      \hline
+      $L=1$ & 4  & 4.445 & 37035 & 575 \\
+            & 8  & 2.250 & 37305 & 570 \\
+            & 12 & 2.303 & 37980 & 622 \\
+            & 16 & 2.201 & 39780 & 630 \\
+            & 20 & 1.860 & 36180 & 617 \\ 
+            & 24 & 1.928 & 37305 & 621 \\
+            & 28 & 2.407 & 39375 & 697 \\
+            & 32 & 2.214 & 38700 & 672 \\
+      $L=2$ & 4  & 20125 & \\
+            & 8  & 1.0   & \\
+            & 12 & Adam  & \\
+            & 16 & 0.05  & \\
+            & 20 & 1     & \\
+            & 24 & Zeros & \\
+            & 28 & Zeros & \\
+            & 32 & Zeros & \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption{Results of a grid search for finding the optimal NN architecture to fit the final Si training set. 
+               Each NN architecture is trained for 40000 epochs, and the smallest RMSE obtained during each session
+               are listed, together with the number of epochs and time elapsed to reach this RMSE. 
+               The RMSEs are in units of meV, while the time is measured in seconds.} 
+  \label{tab:gridSearch} 
+\end{table}
 
 
 
 \part{Conclusions and future work}
-In this thesis, we aimed to implement and employ a method to construct high-dimensonal neural network potentials for molecular 
-dynamics. 
 
-To train neural networkss, we developed a set of Python scripts that employ the machine learning 
-library TensorFlow. These programs were used to fit data sets of atomic configurations and energies to construct potentials 
+\chapter{Summary}
+In this thesis, we developed a method for constructing high-dimensional neural network potentials. This method was applied
+for the construction of an inter-atomic potential for solid-state Si, and the radial distribution function and 
+the bulk modulus was measured for benchmarking.
+
+To find atomic structures that were relevant for the intended application of the potential, 
+we implemented a custom \texttt{compute} in LAMMPS 
+that sampled atom-centered configuraitons and total potential energies according to a modified sampling algorithm. 
+This \texttt{compute} was used to sample configurations from Stillinger-Weber simulations, which constituted the initial 
+training data for the construction of the Si potential. 
+Further, we included a method for detecting extrapolating structures during NNP simulations, which was employed in 
+an iterative scheme to improve the Si NNP by adding new relevant configurations and energies to the initial data set. 
+
+We implemented the Behler-Parinello method to deal with the fixed-dimensionality and symmetry problems of neural networks. 
+A set of symmetry functions was created for the initial Si training data. This set was compared with 
+the radial and angular distribution of atoms in the training data to evaluate its ability to adequately probe 
+the atomic environments. The symmetry functions were also used in an iterative sampling scheme to find new relevant structures 
+outside the range of existing symmetry values. Further, the multiple-NN method was employed to detect
+new regions of configurations space poorly represented in the training set. 
+
+We developed a set of Python scripts to train neural networks to fit the sampled data sets. 
+The machine learning library TensorFlow was used for this purpose. Various properties of the fitting procedure were 
+investigated by training a one-dimensional neural network to reproduce the truncated and shifted Lennard-Jones potential.
+We found that the NN were able to accurately fit the functional form of the LJ potential, and obtained a RMSE 
+of 0.896 meV. The absolute error was plotted as a function of inter-atomic distance, demonstrating that the error 
+was largest for small distances. Further, TensorFlow was used in combination with the BP method to 
+fit data sets sampled from both Stillinger-Weber and preliminary NNP simulations. The fit was gradually refined 
+during the iterative sampling scheme described above. A final RMSE of <PUT FINAL RMSE HERE> was obtained, 
+which was comparable with other studies REFERENCE. 
+
+Lastly, we applied the eventual Si NNP in a MD simulation to measure the radial distribution function, and 
+and we found that the crystal structure of Si was reproduced. 
+The result agreed resonably well with the corresponding distribution measured from Stillinger-Weber simulations, 
+but some devations were observed. These differences were attributed to the fitting error, resulting 
+in a slight energy drift and a corresponding increase in the kinetic energy of the atoms. 
+
+BULK MODULUS RESULTS
 
 
 
 
-
-\chapter{Summary and conclusions}
-***Summary of what we have done and how good results we obtained***
-
-***Discussion on how well the method is compared to the ideal potential***
-
-
-
-How well does the NNP described in this thesis perform compared to other potentials? 
+\chapter{Conclusions} 
 When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
 should possess. These serve as a guide during the construction process, and is also a good 
 starting point for comparing different types of potentials. Behler \cite{Behler11general} lists 10 requirements
@@ -4250,6 +4352,16 @@ for convential \textit{ab inito} MD. This property, in addition to the unbiased 
 signifiy that research in this field will be increasingly important in the future. 
 
 \chapter{Prospects and future work}
+An important aspect of the construction of NNPs is to employ a suitable \textit{ab inito} method to calculate reference energies.
+In this thesis, we have computed target energies with common empirical potentials, and thus not constructed \textit{ab inito}
+potentials. The most obvious extension to the current work is thus to employ methods like Hartree-Fock or Density Functional theory 
+to obtain energies. However, there also much room for improvement in other areas. 
+
+\section{Sampling methods}
+
+
+
+
 ***Using ab inito method***
 ***Using on new systems***
 ***Fitting forces***
