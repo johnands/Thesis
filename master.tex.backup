@@ -58,9 +58,14 @@
 \maketitle
 
 \begin{abstract}
- We implement a method to construct high-dimensional inter-atomic potentials by fitting 
- artificial neural networks to data sets of atomic configurations and energies. 
- The LAMMPS distribution is extended with custom classes in or
+ We implement a method for constructing analytic inter-atomic potentials by fitting artifical neural networks to 
+ data from molecular dynamics simulations. The LAMMPS distribution is extended with an algorithm  
+ for sampling atomic configurations and energies, and TensorFlow, in combination with the Behler-Parinello method, 
+ is employed to perform the fits. Further, we add a custom potential to LAMMPS that apply trained neural networks in simulations. 
+  
+ We construct a neural network potential for Si, and its performance is evaluated by comparing the radial distribution function
+ and the bulk modulus with Stillinger-Weber simulations and/or experiments. The crystal structure of Si is reproduced with 
+ small differences, and the bulk modulus is measured to be similar to experimental values. 
 \end{abstract}
 
 \begin{acknowledgements}
@@ -4371,8 +4376,34 @@ We observe that the distinct crystal structure of Si is reproduced, but the peak
 is slightly wider and less tall than than that for SW. This difference is attributed to the error of the energy fit, 
 which leads to a slight increase in the kinetic energy of the atoms, resulting in larger vibrations. 
 
+Bulk modulus \cite{Hopcroft10}:
+\begin{equation}
+ B = \frac{c_{11} + 2c_{12}}{3}
+\end{equation}
+Shear modulus 1 and 2, along the $\langle111\rangle$ and $\langle100\rangle$ axes respectively. 
+\begin{equation}
+ S_1 = c_{44}
+ S_2 = (c_{11} - c_{12})/2
+\end{equation}
 
 
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{10cm}{l @{\extracolsep{\fill}} lll}
+      \toprule
+      & NNP & Analytic SW & Relative error  \\ 
+      \hline
+      Bulk modulus    & 103.0  & 101.4  & 97.6 \\
+      Shear modulus 1 & 53.63  & 56.45  & 1 \\
+      Shear modulus 2 & 34.74  & 37.50  & 1 \\
+      Poisson ratio   & 0.3484 & 0.3354 & 10 \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption{} 
+  \label{tab:hyperParamsSiFinal} 
+\end{table}
 
 
 
@@ -4406,18 +4437,23 @@ The machine learning library TensorFlow was used for this purpose. Various prope
 investigated by training a one-dimensional neural network to reproduce the truncated and shifted Lennard-Jones potential.
 We found that the NN were able to accurately fit the functional form of the LJ potential, and obtained a RMSE 
 of 0.896 meV. The absolute error was plotted as a function of inter-atomic distance, demonstrating that the error 
-was largest for small distances. Further, TensorFlow was used in combination with the BP method to 
-fit data sets sampled from both Stillinger-Weber and preliminary NNP simulations. The fit was gradually refined 
-during the iterative sampling scheme described above. A final RMSE of <PUT FINAL RMSE HERE> was obtained, 
+was largest for small distances. 
+
+Further, TensorFlow was used in combination with the BP method to construct a potential for Si by 
+fitting data sets sampled from both Stillinger-Weber and preliminary NNP simulations. The fit was gradually refined 
+with the iterative sampling scheme mentioned above. A final RMSE of <PUT FINAL RMSE HERE> was obtained, 
 which was comparable with other studies REFERENCE. 
 
-Lastly, we applied the eventual Si NNP in a MD simulation to measure the radial distribution function, and 
-and we found that the crystal structure of Si was reproduced. 
-The result agreed resonably well with the corresponding distribution measured from Stillinger-Weber simulations, 
-but some devations were observed. These differences were attributed to the fitting error, resulting 
-in a slight energy drift and a corresponding increase in the kinetic energy of the atoms. 
+Lastly, we applied the eventual Si NNP in MD simuations to evaluate its performance. 
+The radial distribution function was measured, and was found to be in good agreement with Stillinger-Weber. 
+The small deviations were attributed to an increase in the kinetic energy of the atoms due to the fitting error.
+Further, various mechanical properties of the NNP Si system were calculated, specifically the bulk modulus, the shear 
+modulus, and the Poisson ratio. The obtained values were
 
-BULK MODULUS RESULTS
+
+
+
+
 
 
 
@@ -5107,6 +5143,16 @@ Here we list the symmetry parameters employed in the construction of the Si NNP 
  ''High-dimensional neural network potentials for metal surfaces: A prototype study for copper''. 
  In: \textit{Physical Review B} 85. (2012), 045439. 
  DOI: \href{http://doi.org/10.1103/PhysRevB.85.045439}{10.1103/PhysRevB.85.045439}
+ 
+\bibitem{Hopcroft10}
+ M. A. Hopcroft, W. D. Nix, and T. W. Kenny. 
+ ''What is the Young's Modulus of Silicon?''.
+ In: \textit{Journal of microelectromechanical systems} 19. (2010), 229-238. 
+ 
+\bibitem{Cowley88}
+ E. R. Cowley. 
+ ''Lattice Dynamics of Silicon with Empirical Many-Body Potentials''. 
+ In: \textit{Physical review letters} 60. (1988), 2379-2381. 
  
  
  

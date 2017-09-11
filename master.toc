@@ -110,11 +110,11 @@
 \contentsline {section}{\numberline {9.4}Iterative sampling}{122}{section.9.4}
 \contentsline {section}{\numberline {9.5}Fitting the final data set}{124}{section.9.5}
 \contentsline {section}{\numberline {9.6}Applying the NNP}{126}{section.9.6}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{129}{part.3}
-\contentsline {chapter}{\numberline {10}Summary}{131}{chapter.10}
-\contentsline {chapter}{\numberline {11}Conclusions}{133}{chapter.11}
-\contentsline {chapter}{\numberline {12}Prospects and future work}{135}{chapter.12}
-\contentsline {section}{\numberline {12.1}Sampling methods}{135}{section.12.1}
-\contentsline {chapter}{Appendices}{137}{section*.69}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{139}{Appendix.1.A}
-\contentsline {chapter}{\numberline {B}Symmetry function parameters}{145}{Appendix.1.B}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{131}{part.3}
+\contentsline {chapter}{\numberline {10}Summary}{133}{chapter.10}
+\contentsline {chapter}{\numberline {11}Conclusions}{135}{chapter.11}
+\contentsline {chapter}{\numberline {12}Prospects and future work}{137}{chapter.12}
+\contentsline {section}{\numberline {12.1}Sampling methods}{137}{section.12.1}
+\contentsline {chapter}{Appendices}{139}{section*.70}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{141}{Appendix.1.A}
+\contentsline {chapter}{\numberline {B}Symmetry function parameters}{147}{Appendix.1.B}
