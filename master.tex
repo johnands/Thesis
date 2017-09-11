@@ -58,11 +58,19 @@
 \maketitle
 
 \begin{abstract}
-This is an abstract text.
+ We implement a method for constructing analytic potentials by fitting artifical neural networks to 
+ data sampled from molecular dynamics simulations. 
+ The LAMMPS distribution is extended with custom classes for sampling training data and applying 
+ neural network potentials in simulatons. Further, TensorFlow is employed 
+ to train neural networks. The Lennard-Jones potential is reproduced, and various properties of the methodology disussed.  
+ 
+ We construct a neural network potential for Si, and its performance is evaluated by comparing the radial distribution function
+ and the bulk modulus with Stillinger-Weber simulations and/or experiments. The crystal structure of Si is reproduced with 
+ small differences, and the bulk modulus is measured to be similar to experimental values. 
 \end{abstract}
 
 \begin{acknowledgements}
-  I acknowledge my acknowledgements.
+  Acknowledgements...
 \end{acknowledgements}
 
 \tableofcontents
@@ -3805,7 +3813,7 @@ Considering that we will not need NNs containing more than 100-200 neurons, a ma
 is definitively the best choice. 
 
 
-\chapter{Lennard-Jones validation}
+\chapter{Lennard-Jones validation} \label{sec:LJValidation}
 As a first test of our implementation of the NNP construction process, we train a neural network to reproduce 
 the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
 The fitting is done with a NN that has one input and one output, resulting in 
@@ -4196,11 +4204,23 @@ potential energy comparison for a single atom is shown in \autoref{fig:multipleN
            the energies of a single atom.}
   \label{fig:multipleNNP}
 \end{figure}
-The simulations have been carried out at an initial temperature of $T = 300$ K, and the first 1000 time steps are displayed. 
-We observe that the four NNPs agree resonably well. To quantatively identify significant differences, we compute the standard deviation
-$\sigma$ of the potential energies at each time step. If $\sigma > 0.01\overline{E}_p$ for any time step, where $\overline{E}_p$
-is the average potential energy, the corresponding structures are added to the training set. We find that no structures 
-satisfy this criterion, and we therefore consider the training set as complete. 
+The simulations are carried out at an initial temperature of $T = 300$ K, and the first 1000 time steps 
+of one of these simulations are displayed. For each structure, we measure
+\begin{equation}
+ \Delta E = E_{\max} - E_{\min}
+\end{equation}
+where $\Delta E$ is the difference between the maximum $E_{\max}$ and minimum $E_{\min}$ energy prediction
+of the four NNPs on that structure. Any configuration for which, 
+\begin{equation}
+ \Delta E > \epsilon
+\end{equation}
+is added to the training set, where $\epsilon$ is a constant of choice. We have found that setting 
+$\epsilon$ equal to the RMSE tolerance, $\epsilon=5$ meV, is an adequate choice. 
+
+After adding 1595 new structures with the multiple-NN scheme, resulting in a final data set of 6579 training examples,
+we consider the sampling as complete.
+
+
 
 \section{Fitting the final data set}
 Now that the iterative sampling scheme is finished, we are ready to construct the final NNP. 
@@ -4214,7 +4234,8 @@ For each architecture $(L,n_l)$ we perform a training session of 40000 epochs, a
 the smallest RMSE obtained, together with the number of epochs and the time elapsed to reach this RMSE. 
 We use the same hyperparamaters as in \autoref{tab:hyperParamsSiInitial} (with various architectures), 
 except that no RMSE tolerance is set, and the mini-batch size is changed to 200 to decrease the error oscillations. 
-The results are listed in \autoref{tab:gridSearch}. 
+We assume that no more than two layers are needed to fit the Si potential, and the maximum number of nodes has been 
+set to 32.
 \begin{table} 
   \begin{center}
     \begin{tabular*}{10cm}{l @{\extracolsep{\fill}} llll}
@@ -4229,14 +4250,14 @@ The results are listed in \autoref{tab:gridSearch}.
             & 24 & 1.928 & 37305 & 621 \\
             & 28 & 2.407 & 39375 & 697 \\
             & 32 & 2.214 & 38700 & 672 \\
-      $L=2$ & 4  & 20125 & \\
-            & 8  & 1.0   & \\
-            & 12 & Adam  & \\
-            & 16 & 0.05  & \\
-            & 20 & 1     & \\
-            & 24 & Zeros & \\
-            & 28 & Zeros & \\
-            & 32 & Zeros & \\
+      $L=2$ & 4  & 2.947 & 39960 & 750 \\
+            & 8  & 1.933 & 36180 & 671 \\
+            & 12 & 1.450 & 37350 & 766 \\
+            & 16 & 1.791 & 32265 & 633 \\
+            & 20 & 1.492 & 24840 & 546 \\
+            & 24 & 2.118 & 37620 & 819 \\
+            & 28 & 1.455 & 37350 & 895 \\
+            & 32 & 2.008 & 14895 & 344 \\
       \bottomrule
       \end{tabular*} 
     \end{center}
@@ -4247,6 +4268,120 @@ The results are listed in \autoref{tab:gridSearch}.
                The RMSEs are in units of meV, while the time is measured in seconds.} 
   \label{tab:gridSearch} 
 \end{table}
+
+The results are listed in \autoref{tab:gridSearch}. We immidiately observe that all RMSEs lie in a range of about 1.5-2.5 meV, except for the two cases where $n_l = 4$. 
+This tells us that the quality of the fit is not very sensitive to the NN size. Some of the  
+$L=2$-NNs converge at an earlier epoch, but they do not produce significantly better fits, and since each epoch 
+takes a longer time, they do not necessarily converge more \textit{quickly}. Ideally, we should have trained each 
+NN several times and calculated averages, but the above analysis is sufficient to conclude that the choice of NN size 
+is not important to the quality of the fit. For computational efficiency of the eventual NNP,
+we therefore decide to continue using 1 layer and 10 nodes.
+\begin{table} 
+  \begin{center}
+    \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
+      \toprule
+      Hyperparameters &  \\ 
+      \hline
+      Network structure & Inputs & 24 \\
+      & Outputs & 1 \\
+      & Hidden layers & 1 \\
+      & Hidden nodes & 10 \\
+      & Activation & Sigmoid \\ 
+      Training & Training set size & 5922 \\
+      & Test set size & 657 \\
+      & Number of epochs & 11000 \\
+      & Optimizer & Adam \\
+      & Initial learning rate & 0.05 \\
+      & Weight initialization & $U \in [-0.1, 0.1]$ \\
+      & Bias initialization & Zeros \\
+      \bottomrule
+      \end{tabular*} 
+    \end{center}
+    \captionsetup{width=12cm}
+      \caption{Hyperparameters used in the fitting of the final training set for construction of the Si potential.} 
+  \label{tab:hyperParamsSiFinal} 
+\end{table}
+
+The hyperparameters of the final NN fit are listed in \autoref{tab:hyperParamsSiFinal}. As for the initial fit, 
+the training data is shifted so that each symmetry function has zero-mean. This, in combination with zero-centered 
+(small) weights and biases, prevent pre-mature saturation of the sigmoid activation function, which is of great importance 
+for the quality of the fit.
+
+To investigate whether offline or online learning produce the best fit, we run several training sessions employing both. 
+We find that offline learning consequently results in smaller RMSEs, thus we decide to use this method for the final fit. 
+This is slower than online learning, but since we work with quite small data sets, convergence speed is not an issue, 
+as we can see from \autoref{tab:gridSearch}. 
+
+The NN is trained for 40000 epochs, and for every 1000 epochs the current NN parameters 
+and RMSE are stored. When training is finished, the NN with the smallest RMSE is selected as the final NNP. 
+The best fit was obtained after 11000 epochs, with an RMSE of 0.864 meV. This result is similar to other studies
+employing the Behler-Parinello method for NN interpolation \cite{Behler07} \cite{Artrith12} \cite{Natarajan16} .  
+
+We have only fitted energies, and not forces, thus the exact force RMSE is not easily available. This would have required 
+the computation of Stillinger-Weber forces for all configurations sampled from NNP simulations, and vice versa.
+However, a good estimate can be obtained by running a SW simulation to generate a large number of configurations, and 
+store the total force on a single atom at each time step. Then, we run a pseudo-simulation with the NNP on these configurations, 
+and compare the computed forces on the same atom. The resulting force RMSE is 41.2 meV, 
+which is also similar to other studies \cite{Artrith12} \cite{Natarajan16}. 
+As for the Lennard-Jones NNP (\autoref{sec:LJValidation}), the RMSE of the forces is between 1-2 orders of magnitude 
+larger than that for the energy.
+\begin{figure}
+\centering
+  \includegraphics[width = 0.7\linewidth]{Figures/Results/SiForces.pdf}
+  \caption{The RMSE of the Si NNP force predictions on a single atom as a function of the total force on the atom,
+	   demonstrating a clear correlation. 
+	   The force errors were calculated based on 3000 configurations generated by Stillinger-Weber simulations.}
+  \label{fig:SiForces}
+\end{figure}
+
+We also wish to investigate if there is any correlation between the force error and the magnitude of the force. 
+This can be done by binning the set of force errors calculated above, and computing the RMSE of each bin, shown 
+in \autoref{fig:SiForces}. The data points are placed at the bin centers. We clearly see that there 
+is a correlation, and that the error of the strongest forces are significantly larger than for small forces. 
+This tells us that the large potential gradient-regions of configuration space do not have a sufficiently
+high density in the training set, despite the use of the sampling algorithm \eqref{samplingAlgorithmModified}
+for the initial data set. 
+
+
+
+\section{Applying the NNP}
+Calculating fitting errors is not sufficient for assessing the applicability of a NNP. 
+To properly validate the potential we have constructed, we need to evaluate its performance in MD simulations.
+For validation, we have chosen to confirm that the crystal structure of Si is reproduced by the NNP. This is done by measuring 
+the radial distribution function and comparing with the corresponding distribution of a Stillinger-Weber simulaton.
+
+The radial distribution function $g(r)$, (or pair correlation function) of an atomic system is a measure of how 
+particle density varies as a function of distance from a reference atom. If a system is randomly distributed, all distances
+are equally probable, and $g(r)$ is unity for all distances. Any devations from unity signifies an ordered structure.
+The typical shape of $g(r)$ for a crystal lattice is a flat region for small distances due to repulsive forces, 
+followed by a series of peaks corresponding to bond lengths. 
+ 
+To measure $g(r)$, we preare a system consisting of 1000 Si atoms on a diamond cubic lattice with a lattice constant 
+of $b = \SI{5.431}{\angstrom}$. The simulation box is cubic with sides $5L$, where $L$ is the length of one unit cube.
+The initial temperature is $T = 300$ K, and NVE-integration is performed, creating a system trajectory consistent with 
+the microcanonical ensemble. The system is equilibrated for 10 ps, with a time step of $\Delta t = 0.001$ ps. Then, 
+$g(r)$ is calculated every 100 time steps for 1000 time steps, and an average of these 10 measurements are obtained. 
+\begin{figure}
+\centering
+  \includegraphics[width = 0.8\linewidth]{Figures/Results/radialDist.pdf}
+  \caption{Comparison of the radial distribution function of a Stillinger-Weber (SW) simulation and 
+           a NNP simulation of a Si crystal at temperature of $T \approx 150$ K. The crystal structure 
+           of Si is reproduced by the NNP, with a small difference attributed to the increased kinetic 
+           energy of the atoms due to the energy error. }
+  \label{fig:radialDist}
+\end{figure}
+
+The above simulation is executed with both the NNP and the SW potential. The resulting distributions are 
+depicted in \autoref{fig:radialDist} for $r \in [2.0, r_c]$, with a cutoff of $r_c = 3.77118$ as above. 
+We observe that the distinct crystal structure of Si is reproduced, but the peak centered at $r \approx \SI{2.3}{\angstrom}$
+is slightly wider and less tall than than that for SW. This difference is attributed to the error of the energy fit, 
+which leads to a slight increase in the kinetic energy of the atoms, resulting in larger vibrations. 
+
+
+
+
+
+
 
 
 
