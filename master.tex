@@ -61,15 +61,36 @@
  We implement a method for constructing analytic inter-atomic potentials by fitting artifical neural networks to 
  data from molecular dynamics simulations. The LAMMPS distribution is extended with an algorithm  
  for sampling atomic configurations and energies, and TensorFlow, in combination with the Behler-Parinello method, 
- is employed to perform the fits. Further, we add a custom potential to LAMMPS that apply trained neural networks in simulations. 
+ are employed to perform the fits. 
+ Further, we add a custom potential to LAMMPS that apply trained neural networks in simulations. 
   
  We construct a neural network potential for Si, and its performance is evaluated by comparing the radial distribution function
- and the bulk modulus with Stillinger-Weber simulations and/or experiments. The crystal structure of Si is reproduced with 
- small differences, and the bulk modulus is measured to be similar to experimental values. 
+ and various mechanical properties with Stillinger-Weber simulations and/or experiments (SHOULD I COMPARE WITH EXPERIMENTS?). 
+ The crystal structure of Si is reproduced with small devations, 
+ and the bulk modulus, shear modulus and Poisson ratio are measured to be similar to Stillinger-Weber values. 
 \end{abstract}
 
 \begin{acknowledgements}
-  Acknowledgements...
+ I would like to thank my supervisors Anders Malthe-Sørenssen and Morten Hjorth-Jensen for everything they have taught 
+ me during my two years as a computational physics student. You have created a great learning environment that motivates 
+ students to \textit{want} to work hard for learning's own sake, which is quite rare. I appreciate the numerous
+ talks with Anders, which always left me reassured and encouraged. 
+ 
+ Anders Hafreager has been like an additional supervisor for the whole duration of my thesis work. 
+ Thanks for always being available when I asked for guidance. Your extensive knowledge of molecular dynamics 
+ and LAMMPS have been of tremendous help. 
+ 
+ I want to thank Morten Ledum and especially H\aa{}kon Treider for all cooperation and discussions. 
+ We have gone through a lot of ups and downs regarding symmetry functions and forces, and fixing these problems would have been 
+ difficult on my own. I would also like to thank everybody else at the computational physics group for all the enjoyable hours
+ playing Mario Kart, along with good conversations. 
+ 
+ A big thanks to my mom, who have been very supportive through all my years of studies, and to my sister, for 
+ all the nice dinners at Frederikke. \AA{}KG also deserves appreciation for being a wanted distraction during 
+ all my hours in front of the computer. 
+ 
+ Lastly, a huge thanks to my dear Malene for all the patience and support you have granted me. I am very happy to have had you 
+ waiting for me at home after a long day at Blindern. 
 \end{acknowledgements}
 
 \tableofcontents
@@ -4376,6 +4397,31 @@ We observe that the distinct crystal structure of Si is reproduced, but the peak
 is slightly wider and less tall than than that for SW. This difference is attributed to the error of the energy fit, 
 which leads to a slight increase in the kinetic energy of the atoms, resulting in larger vibrations. 
 
+Bulk modulus $K$ is the coefficient that relates stress to strain under uniform compression,
+\begin{equation}
+ \frac{F}{A} = K\frac{\Delta V}{V_0}
+\end{equation}
+where $F/A$ is the uniform pressure (stress), and $\Delta V/V_0$ is the induced relative volume change (strain). 
+A material with a large bulk modulus experiences a small volume change when pressure is applied. Note that the material 
+only changes volume, not shape, under a uniform compression.
+
+A force that is applied tangentially (or transversely) to one face of an object is called a \textit{shear} stress. 
+Shear stress changes the shape of an object, but not volume. 
+Shear modulus $G$ is the coefficient that relates shear stress to shear strain.
+\begin{equation}
+ \frac{F}{A} = G\frac{\Delta_x}{y}
+\end{equation}
+where $\Delta_x/y$ is the shear strain. 
+
+When a material experiences a compressive force, it tends to expand in directions perpendicular to the direction of compression. 
+Conversely, if the material is stretched, it tends to contract in the perpendicular direction. The Poisson 
+ratio is the ratio of relative contraction to relative expansion, or vice versa. More generally, it is the ratio 
+of transverse strain to longitudinal strain,
+\begin{equation}
+ \nu = -\frac{\epsilon_{\mathrm{trans}}}{\epsilon_\mathrm{long}}
+\end{equation}
+
+
 Bulk modulus \cite{Hopcroft10}:
 \begin{equation}
  B = \frac{c_{11} + 2c_{12}}{3}
@@ -4383,25 +4429,29 @@ Bulk modulus \cite{Hopcroft10}:
 Shear modulus 1 and 2, along the $\langle111\rangle$ and $\langle100\rangle$ axes respectively \cite{Zener48}, 
 \begin{equation}
  S_1 = c_{44}
- S_2 = (c_{11} - c_{12})/2
+\end{equation}
+Poisson:
+\begin{equation}
+ \frac{1}{1 + \frac{c_{11}}{c_{22}}}
 \end{equation}
 
 
 \begin{table} 
   \begin{center}
-    \begin{tabular*}{10cm}{l @{\extracolsep{\fill}} lll}
+    \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} lll}
       \toprule
       & NNP & Analytic SW \cite{Cowley88} & Relative error  \\ 
       \hline
-      Bulk modulus    & 103.0  & 101.4  & 97.6 \\
-      Shear modulus 1 & 53.63  & 56.45  & 1 \\
-      Shear modulus 2 & 34.74  & 37.50  & 1 \\
-      Poisson ratio   & 0.3484 & 0.3354 & 10 \\
+      Bulk modulus    & 103.0  & 101.4 &  1.58 \% \\
+      Shear modulus   & 53.6   & 56.4  &  5.22 \% \\
+      Poisson ratio   & 0.348  & 0.335 &  3.88 \% \\
       \bottomrule
       \end{tabular*} 
     \end{center}
     \captionsetup{width=12cm}
-      \caption{} 
+      \caption{Various mechanical properties measured from NNP simulations of Si. The analytical values 
+	       for Stillinger-Weber are included, along with the relative error. The bulk modulus and 
+	       shear modulus have units of GPa, while the Poisson ratio is unitless.} 
   \label{tab:hyperParamsSiFinal} 
 \end{table}
 
