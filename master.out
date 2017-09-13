@@ -1,6 +1,6 @@
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.1.1}{Potentials in molecular dynamics}{chapter.1}% 2
-\BOOKMARK [1][-]{section.1.2}{Neural Network potentials}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.2}{Neural network potentials}{chapter.1}% 3
 \BOOKMARK [1][-]{section.1.3}{Goals}{chapter.1}% 4
 \BOOKMARK [1][-]{section.1.4}{Our contributions}{chapter.1}% 5
 \BOOKMARK [1][-]{section.1.5}{Structure of the thesis}{chapter.1}% 6
@@ -35,7 +35,7 @@
 \BOOKMARK [1][-]{section.4.1}{Neural network potentials}{chapter.4}% 35
 \BOOKMARK [2][-]{subsection.4.1.1}{Potentials using single neural network}{section.4.1}% 36
 \BOOKMARK [2][-]{subsection.4.1.2}{Potentials using multiple neural networks}{section.4.1}% 37
-\BOOKMARK [1][-]{section.4.2}{The Behler-Parinello method}{chapter.4}% 38
+\BOOKMARK [1][-]{section.4.2}{The Behler-Parrinello method}{chapter.4}% 38
 \BOOKMARK [2][-]{subsection.4.2.1}{Symmetry functions}{section.4.2}% 39
 \BOOKMARK [2][-]{subsection.4.2.2}{Symmetry functions and forces}{section.4.2}% 40
 \BOOKMARK [2][-]{subsection.4.2.3}{Summary}{section.4.2}% 41

@@ -15,6 +15,7 @@ import TensorFlow.Tools.matplotlibParameters
 
 points = np.linspace(-3, 3, 5000)
 function = np.tanh
+#function = lambda x: 1.0 / (1 + np.exp(-x))
 
 def activation(function, x, c1, c2, c3, c4):
     
@@ -69,8 +70,8 @@ for c4 in [-0.5, -0.25, 0.0, 0.25, 0.5]:
 #plt.legend(legends, loc=2)
 
 plt.tight_layout()
-plt.savefig('../../Figures/Theory/activationFlex.pdf')
-#plt.show()
+#plt.savefig('../../Figures/Theory/activationFlex.pdf')
+plt.show()
 
 
 

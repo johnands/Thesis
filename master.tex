@@ -12,6 +12,7 @@
 \usepackage{mdframed}
 \usepackage{booktabs}
 \usepackage{enumitem}
+\usepackage{upgreek}
 
 \sisetup{range-phrase=-}
 
@@ -60,7 +61,7 @@
 \begin{abstract}
  We implement a method for constructing analytic inter-atomic potentials by fitting artifical neural networks to 
  data from molecular dynamics simulations. The LAMMPS distribution is extended with an algorithm  
- for sampling atomic configurations and energies, and TensorFlow, in combination with the Behler-Parinello method, 
+ for sampling atomic configurations and energies, and TensorFlow, in combination with the Behler-Parrinello method, 
  are employed to perform the fits. 
  Further, we add a custom potential to LAMMPS that apply trained neural networks in simulations. 
   
@@ -113,23 +114,23 @@ The main strength of NNs is their ability to learn features and find patterns in
 This has led to their application in the construction of inter-atomic potentials for molecular dynamics (MD) simulations, 
 which is the topic of this thesis.
 
-In classical MD, we are able to simulate thousands or even millions of atoms over considerable 
+In MD, we are able to simulate thousands or even millions of atoms over considerable 
 time scales (in a microscopic perspective). This is made possible by modelling the atomic interaction forces 
-as the gradient of a pre-determined potential energy surface (PES), and predicting new trajectories according 
+as the gradient of a potential energy surface (PES), and predicting new trajectories according 
 to Newtonian dynamics. The PES thus determines the dynamics of the system, and is the 
 key factor for a MD simulation to be physically plausible.
 
-A PES can have very different forms and properties. The ideal potential 
+A PES can have very different forms and properties. The ideal potential%
 \footnote{The word ''potential'' is frequently used in place of ''potential energy surface'' in this thesis.}
-should be accurate, i.e. produce thermodynamic properties that agree with experiments, and be computationally 
+should be accurate, i.e.\ produce thermodynamic properties that agree with experiments, and be computationally 
 efficient to enable large-scale simulations. For many systems, a realistic PES must also be high-dimensional to 
 incorporate all relevant degrees of freedom.
 
 There is usually a trade-off between speed and accuracy when it comes to MD simulations. 
-The most accurate scheme is to recalculate the PES on-the-fly with a quantum mechanical method like 
+The most accurate scheme is to recalculate the PES on-the-fly with a quantum mechanical (QM) method like 
 Hartree-Fock or Density Functional Theory. 
 This \textit{ab inito} approach to MD is however very computationally expensive, 
-and severely restricts the feasible space and time scales of the simulation.   
+and severely restricts the feasible space and time scales of the simulation \cite{Sherrill10}.   
 
 In \textit{classical} MD, the PES is instead approximated by a \textit{pre-defined} mathematical function. 
 The construction of such potentials has been one of the main focus areas in MD research, and there 
@@ -138,36 +139,38 @@ that incorporates some of the known physics of the system under investigation.
 The function has a set of parameters that are then fitted to experimental data. 
 These \textit{empirical} potentials usually have a quite simple form containing only 
 a few parameters, making them fast to evaluate, but also biased and possibly inaccurate. Also, the parameter fitting 
-may be difficult and time consuming. 
-Examples are the Lennard-Jones \cite{Jones24} and the Stillinger-Weber 
+may be difficult and time consuming. Examples are the Lennard-Jones \cite{Jones24} and the Stillinger-Weber 
 \cite{Stillinger85} potentials. 
 
 The ''mathematical'' approach is to employ a QM method to produce a data set of atomic configurations and 
-their corresponding energies, called a \textit{reference set}. 
+their corresponding potential energies, called a \textit{reference set}. 
 Then, a general functional form containing many parameters are fitted to this data set with 
 an interpolation algorithm of choice. The use of a very flexible, generic functional form makes this type of potential 
 accurate and bias-free. If a small fitting error is achieved, only the error of the underlying QM method 
-is present. Thus we obtain a PES with effective \textit{ab inito} accuracy that is many of orders of magnitude faster 
-than recomputing the PES on-the-fly. However, since no physics can be extracted from its functional form, great 
+is present. This enables MD simulations with effective \textit{ab inito} accuracy that are several orders of magnitude
+faster than recomputing the PES on-the-fly. However, since no physics can be extracted from its functional form, great 
 care must be taken during its construction. 
 
 
-\section{Neural Network potentials}
+\section{Neural network potentials}
 Several methods have been proposed to fit data sets of atomic configurations and energies, 
-like interpolating moving least squares \cite{Dawes08} 
+like interpolating moving least squares \cite{Dawes08}, 
 and modified Sheppard interpolation \cite{Ischtwan94}. Recently, also NNs have been employed for this purpose
-\cite{Behler11general}, resulting in so-called \textit{neural network potentials} (NNPs). NNs have very flexible 
+\cite{Behler11general}, resulting in so-called \textit{neural network potentials} (NNPs). 
+
+NNs have very flexible 
 functional forms with an arbitrary number of inputs, outputs and parameters.
-The various attempts at constructing NNPs vary significantly in scope and complexity, especially in the number of networks that is used.
-Examples of NNPs where a single NN was used are Raff et al. \cite{Agrawal06}, who studied the dissociation of 
-the $\mathrm{SiO}_2$ molecule, and \cite{Prudente98}, who studied the vibrational levels of the $\mathrm{H}_3^+$ ion. 
+The various attempts at constructing NNPs vary significantly in scope and complexity, especially in the number of networks that are used.
+Examples of NNPs where a single NN was employed are Raff et al.\ \cite{Agrawal06}, who studied the dissociation of 
+the $\mathrm{SiO}_2$ molecule, and Prudente et al.\ \cite{Prudente98}, who calculated the vibrational levels of the $\mathrm{H}_3^+$ ion. 
 
 Using a single NN restricts the dimensionality of the system to a few atoms. Two high-dimensional approaches have 
-been developed in parallel by Bholoa et al. \cite{Bholoa07} and Behler and Parinello \cite{Behler11symmetry}. These 
+been developed in parallel by Bholoa et al.\ \cite{Bholoa07}, and Behler and Parrinello \cite{Behler11symmetry}. These 
 methods are applicable to systems containing an arbitrary number of atoms. 
-This thesis concerns itself with the Behler-Parinello (BP) method for constructing NNPs, described by Raff et al. \cite{Raff12}
+This thesis concerns itself with the Behler-Parrinello (BP) method for constructing NNPs, described by Raff et al.\ \cite{Raff12}
 as the most powerful technique for executing dynamics of large systems using PESs obtained from \textit{ab inito} 
-calculations. 
+calculations. The BP scheme has been applied to systems like copper \cite{Artrith12}, sodium \cite{Eshet12}, and solid-liquid 
+interfaces \cite{Natarajan16}. 
 
 As mentioned above, a NN is a purely mathematical concept, which can pose problems in a physical context. 
 There are certain physical symmetries any PES must possess, like translational and rotational invariance
@@ -176,18 +179,18 @@ be used. The BP method utilizes a set of symmetry functions that ensures the rel
 
 In principle, the method can be used to construct potentials for any chemical system, since no intial biased functional form 
 is required. Only the symmetry function set and the reference data differ from system to system, the interpolation procedure itself 
-is automated. Further, the NNP can be fitted to arbitrary accuracy if done correctly. 
+is automated. Further, the NNP can be fitted to arbitrary accuracy if performed correctly. 
 Thus, this scheme can be viewed as a multi-scale physics tool that bridges the gap between the 
 quantum realm and the classical realm, enabling large-scale MD simulations with \textit{ab inito} accuracy.
 
 
 \section{Goals}
-The main goal of this thesis is to use artificial neural networks and the Behler-Parinello method to
-construct high-dimensional potential energy surfaces and apply them in molecular dynamics (MD) simulations.
+The main goal of this thesis is to use artificial neural networks and the Behler-Parrinello method to
+construct high-dimensional potential energy surfaces and apply them in molecular dynamics simulations.
 We will not attempt to construct a PES based on data from \textit{ab inito} calculations, but instead 
 perform a demonstration and validation of the complete methodology by reproducing the Stillinger-Weber potential for Si. 
 
-This main goal can be split into the following intermediate objectives:
+\noindent The main goal can be split into the following intermediate objectives:
 \begin{enumerate}[label=\textbf{\alph*)}]
  \item \textbf{Sample data from MD simulations} \\
  We want to sample atomic configurations and energies from MD simulations with known, empirical potentials. 
@@ -206,7 +209,7 @@ This main goal can be split into the following intermediate objectives:
  We will use the machine learning software TensorFlow to implement feed-forward neural networks as a set of Python scripts. 
  The code will be organized like a library that can fit a functional form to any data set. 
  
- \item \textbf{Implement the Behler-Parinello method} \\
+ \item \textbf{Implement the Behler-Parrinello method} \\
  Develop Python scripts employing the BP symmetry functions to transform the cartesian coordinates of atomic configurations 
  to a set of symmetry values. The code should be embedded in the neural network regression model, and the combination of these 
  scripts should be able to create NNPs for systems with an arbitrary number of chemical elements. 
@@ -214,47 +217,50 @@ This main goal can be split into the following intermediate objectives:
  
  \item \textbf{Apply neural network potentials in molecular dynamics simulations}. \\
  We need to extend the LAMMPS library with our own neural network potential. This includes finding a way 
- to transfer a NN from Python to C++, and evaluate the NN as an analytic potential. 
+ to transfer a NN from Python to C\texttt{++} and evaluate the NN as an analytic potential. 
  
  \item \textbf{Develop, apply and validate a NNP for Si} \\
  To demonstrate the methods described in this thesis, we will fit a NN to a data set consisting 
  of samples from Stillinger-Weber simulations of Si. The performance of the NNP will be tested 
- by measuring the diffusion constant and compare with experiments. 
+ by measuring the radial distribution function, the bulk modulus, the shear modulus and the Poisson ratio, and 
+ compare with Stillinger-Weber. 
 \end{enumerate}
 
 \section{Our contributions}
 In this thesis, we have decided to employ LAMMPS to perform MD simulations and TensorFlow to train neural networks.
-The author have previously written a basic molecular dynamics code 
+The author has previously written a basic molecular dynamics code% 
 \footnote{\href{https://github.com/johnands/FYS4460-MD}{github.com/johnands/FYS4460-MD}}, 
 which has been employed to do some preliminary testing on 
-how to evaluate and differentiate a neural network in \texttt{C++} that has been trained in Python. However, LAMMPS has been used in 
+how to evaluate and differentiate a neural network in C\texttt{++}, that has been trained in Python. However, LAMMPS has been used in 
 the final implementation of the neural network potential for speed purposes.
 
 We realized from the beginning that writing our own neural network code would not be worth the effort. 
 We wanted to focus on the whole process of constructing a NNP, not just the fitting stage. 
-Developing code from scratch would have given a deep insight in the underlying concept of neural networks, 
+Developing code from scratch would have given deep insights in the underlying concepts of neural networks, 
 but this has nonetheless been obtained by careful study of the processes initiated with each TensorFlow command. 
 
-Our contributions in this thesis are the following:
+\noindent In this thesis we have:
 \begin{itemize}
  \item Extended the LAMMPS library with a custom \texttt{compute} that samples atom-centered configurations and potential 
  energies. This also incluces a modified version of a sampling algorithm. 
- \item Developed a method to transfer a trained NN from Python to C++ by manually saving all relevant parameters to file. 
- This file is then read in C++ and the NN reconstructed as a set of matrices and vectors. 
+ \item Developed a method to transfer a trained NN from Python to C\texttt{++} by manually saving all relevant parameters to file. 
+ This file is then read in C\texttt{++} and the NN reconstructed as a set of matrices and vectors. 
  \item Extended the LAMMPS library with a custom class to enable the use of NNPs in MD simulations. 
- This has been implemented both manually and with the TensorFlow \texttt{C++} API. \footnote{Application Programming Interface}. 
+ This has been implemented both manually and with the TensorFlow C\texttt{++} API% 
+ \footnote{Application Programming Interface.}. 
  To differentiate the network and obtain forces, we have implemented a modified version of the backpropagation algorithm.
- \item Written a set of post-processing and analysis scripts. 
+ \item Written a set of post-processing and analysis scripts.  
 \end{itemize}
 
-All code can be found at GitHub \footnote{\href{https://github.com/johnands}{github.com/johnands} (pinned repositories).}
+\noindent All the source code can be found at GitHub% 
+\footnote{\href{https://github.com/johnands}{github.com/johnands} (pinned repositories).}.
 
 
 
 
 \section{Structure of the thesis}
 This thesis has four parts: The first part consists of an introduction to the theories of 
-molecular dynamics and neural networks, in addition to a description of the Behler-Parinello method.  
+molecular dynamics and neural networks, in addition to a description of the Behler-Parrinello method.  
 The second part provides introductions to the LAMMPS and TensorFlow libraries with implementational details, 
 advanced theory on the construction of NNPs, and results demonstrating the complete method. 
 The fourth part concludes the text and contains a discussion of possible future work and applications. 
@@ -299,10 +305,10 @@ The resulting PES is differentiated to obtain the forces on all atoms, and the n
 by employing Newton's laws. This method is called \textit{ab inito} molecular dynamics. Although this is the most accurate
 approach to MD, it also suffers from bad scalability when the system size grows. 
 
-In \textit{classical} MD, the PES is represented by a predefined, mathematical function, i.e. we do not have to 
+In \textit{classical} MD, the PES is represented by a predefined, mathematical function, i.e.\ we do not have to 
 update the PES during the simulation, resulting in better performance. The cost is a loss of accuracy, but for many 
-systems it is fully possible to construct a predefined PES that yields the correct thermodynamics properties. 
-In this thesis, we present a method to construct potential energy surfaces for classical MD.  
+systems it is fully possible to construct a predefined PES that yields the correct thermodynamic properties. 
+In this thesis, we present a method to construct potential energy surfaces for classical MD.
 
 \subsection{From quantum mechanics to classical potentials} \label{sec:bornOppenheimer}
 It it not obvious how an ensemble of atoms, which is a quantum mechanical system, can be simulated using 
@@ -340,7 +346,7 @@ of configurations and corresponding potential energies. A very flexible function
 are then fitted to this data set. Potentials of this type can in principle be fitted to arbitrary accuracy, and may thus 
 be treated as \textit{ab inito} potentials. QM potentials are purely mathematical,
 in the sense that no physics can be extracted from their functional form. Therefore, the construction of the potential
-has to be done with great care, i.e. the data set must contain all relevant configurations for the intended application
+has to be done with great care, i.e.\ the data set must contain all relevant configurations for the intended application
 of the PES. However, the unbiased nature of QM potentials make them more general than their empirical counterparts,
 and the methodology can be applied to any system. 
 
@@ -349,7 +355,7 @@ are based on methods from computational QM, but many approximations are made and
 
 \subsubsection{Truncation and configuration space}
 Determining how many terms in \eqref{generalPotential} that is sufficient to 
-describe a system adequately is not trivial. Noble gases like argon have weak interactions and 
+describe a system adequately is not trivial. Noble gases like argon (Ar) have weak interactions and 
 may be well described by a two-body potential $V_2$, while molecules with strong angular dependencies on their bond, like
 silicon (Si), will need more terms. We note that the one-body term $V_1$ is only included if the system 
 is experiencing an external force. 
@@ -364,10 +370,10 @@ In this thesis we present a method to construct many-body QM potentials for MD s
 An important step in this process is the fitting of the data set of atomic configurations and energies by 
 a suitable functional form. Several methods have been proposed, like different types of splines, 
 interpolating moving least squares \cite{Dawes08} and modified Sheppard interpolation \cite{Ischtwan94}. 
-We will use \textit{artificial neural networks} (ANNs) for this purpose. 
-The basic theory of ANNs 
-is presented in chapter 2, while chapter 3 deales with physical symmetries that has to be considered. 
-Finally, in the implementation part, the details of constructing and applying an AAN potential in MD simulations are described. 
+We will use \textit{artificial neural networks} (NNs) for this purpose. 
+The basic theory of NNs is presented in chapter 2, while chapter 3 deales with physical symmetries that has to be considered
+when constructing neural network potentials (NNPs). 
+Finally, in the implementation part, the details of constructing and applying a NNP in MD simulations are described. 
 
 
 \section{Common empirical potentials}
@@ -375,13 +381,13 @@ Although the method described in this thesis is for the construction of QM poten
 are useful as test cases and validations of the method. We can define two types of empirical potentials based on how they 
 relate to groups of atoms. \textit{Bonded} potentials compute the energy of each (covalent) bond for a predefined set 
 of atoms or molecules, while \textit{non-bonded} potentials depend on the spatial configuration of \textit{each possible set}
-of particles of a specific kind, e.g. all pairs of Ar atoms or all triplets of Si atoms. The total potential 
-is the sum of the contributions from these potentials,
+of particles of a specific kind, e.g.\ all pairs of Ar atoms or all triplets of Si atoms. The total potential $V_\mathrm{tot}$
+is the sum of the contributions from these two types of potentials,
 \begin{equation}
  V_{\mathrm{tot}} = V_{\mathrm{bonded}} + V_{\mathrm{non-bonded}}
 \end{equation}
-We will only work with non-bonded potentials in this thesis. In the following we will discuss three such potentials
-that are common in the literature, and which we have employed to validate our PES construction method. 
+We will only work with non-bonded potentials in this thesis. In the following we will discuss three non-bonded potentials
+that are common in the literature, two of which we have employed to validate our PES construction method. 
 
 \subsection{Lennard-Jones}
 The Lennard-Jones (LJ) potential \cite{Jones24} is one of the simplest and most widely used potentials. 
@@ -389,23 +395,22 @@ It has a simple functional form which is inexpensive to compute, and is able to 
 like noble gases well. It is a two-body potential that only depends on the distance $r_{ij}$ between pairs of atoms $i$ and $j$. 
 The general form is (\autoref{fig:LJ})
 \begin{equation}
- V_{LJ}(r_{ij}) = 4\epsilon \left[\left(\frac{\sigma}{r_{ij}}\right)^{12} - \left(\frac{\sigma}{r_{ij}}\right)^6\right]
+ V_\mathrm{LJ}(r_{ij}) = 4\epsilon \left[\left(\frac{\sigma}{r_{ij}}\right)^{12} - \left(\frac{\sigma}{r_{ij}}\right)^6\right]
  \label{Lennard-Jones}
 \end{equation}
 where the two parameters $\epsilon$ and $\sigma$ are the depth of the potential well and the zero-point of the potential respectively.
-The Lennard-Jones potential captures a basic, phyiscal property of many atomic systems: atoms repulse each other at short distances
+The Lennard-Jones potential captures a basic, phyiscal property of many atomic systems: Atoms repulse each other at short distances
 and are attracted to each other at long distances. The first term describes the Pauli repulsion due to overlapping electron orbitals, 
 while the second term is the attraction due to the so-called van der Waals force. 
 The functional form of the repulsive term has, in contrast to the attractive one, no theoretical justification other than that
 it approximates the Pauli repulsion well. 
 \begin{figure}
-\begin{center}
- \includegraphics[width = 0.8\linewidth]{Figures/Theory/LJ.pdf}
+\centering
+ \includegraphics[width = 0.7\linewidth]{Figures/Theory/LJ.pdf}
  \caption{The Lennard-Jones potential \eqref{Lennard-Jones} as a function of inter-atomic distance for two different parameter sets. 
  The depth of the potential well (potential
  strength) is given by $\epsilon$, while $\sigma$ is the inter-atomic distance for which the potential is zero.}
  \label{fig:LJ}
-\end{center}
 \end{figure}
 
 
@@ -428,7 +433,7 @@ from $i$ to $k$. Note that there are only two \textit{independent} variables, si
 \end{equation}
 \autoref{fig:triplets} illustrates that three atoms $(i, j, k)$ define three different triplets depending
 on which atom that is the central one. All three triplets have different energies, and must therefore be tallied individually.
-If we assume that the potential form is such that it is symmetric with respect to exchange of the $j$ and $k$
+If we assume that the potential form is symmetric with respect to exchange of the $j$ and $k$
 indicies (which is not always the case for multielemental systems), we have
 \begin{equation}
  \sum_{i<j<k}\left[V_3^{(1)}(r_{ij}, r_{ik}, \theta_{jik}) + V_3^{(2)}(r_{ij}, r_{jk}, \theta_{ijk}) + 
@@ -436,11 +441,11 @@ indicies (which is not always the case for multielemental systems), we have
  \label{threeBodyPotentialEnergy1}
 \end{equation}
 \begin{figure}
-\begin{center}
- \includegraphics[width = 0.9\linewidth]{Figures/Theory/triplets.pdf}
- \caption{}
+ \centering
+ \includegraphics[width = 0.8\linewidth]{Figures/Theory/triplets.pdf}
+ \caption{Three atoms $(i,j,k)$ define three different triplets that generally have different energies. They must therefore 
+          be tallied individually when computing the total energy of a system.}
  \label{fig:triplets}
-\end{center}
 \end{figure}
 where $V_3^{(i)}$ is one of the triplets in \autoref{fig:triplets}. Alternatively, we can calculate the energy of one triplet 
 at a time and instead sum over all $j$,
@@ -448,7 +453,7 @@ at a time and instead sum over all $j$,
  \sum_{i}\sum_{j\neq i}\sum_{k>j} V_3 (r_{ij}, r_{ik}, \theta_{jik}) 
  \label{threeBodyPotentialEnergy2}
 \end{equation}
-This is the strategy we are going to adopt in the following. 
+This is the convention we are going to adopt in the following. 
 The total energy is now written,
 \begin{equation}
  V_{\mathrm{tot}} = \sum_i\sum_{j>i} V_2(r_{ij}) + \sum_{i}\sum_{j\neq i}\sum_{k>j} V_3 (r_{ij}, r_{ik}, \theta_{jik}) 
@@ -460,11 +465,12 @@ The total energy is now written,
 The Stillinger-Weber (SW) potential was proposed in 1985 \cite{Stillinger85} for simulating Si atoms. It has a two-body
 and a three-body term, and is thus written on the form \eqref{totalPotentialEnergy}. 
 The two-body part consists of a Lennard-Jones factor with variable exponents, together with an exponential decay factor
-that ensures zeroing out of the potential at a \textit{cutoff} $a\sigma$,
+that ensures zeroing out of the potential at a \textit{cutoff} distance $r_c = a\sigma$,
 \begin{equation}
  V_2(r_{ij}) = A\epsilon\left[B\left(\frac{\sigma}{r_{ij}}\right)^p - 
  \left(\frac{\sigma}{r_{ij}}\right)^q\right] \exp\left(\frac{\sigma}{r_{ij} - a\sigma}\right)
 \end{equation}
+The significance of the cutoff $r_c$ is explained in \autoref{sec:forceCutoff}. 
 Silicon forms 4-coordinated
 tetrahedral bonded structures, and the purpose of the three-body component is to enforce the tetrahedral bond angle
 $\theta_0 \approx 109^\circ$, 
@@ -476,11 +482,11 @@ We observe that for $\theta_{jik} = \theta_0$, the three-body term is zeroed out
 favourable. The expression also contains two exponential decay factors to ensure that the potential goes 
 to zero once $r_{ij}$ and/or $r_{ik}$ approach the cutoff. 
 
-SW simulations of solid and liquid silicon agree reasonably well with experimental data \cite{Stillinger85}
+SW simulations of solid and liquid silicon agree reasonably well with experimental data \cite{Stillinger85}.
 The potential has also been used on other systems than silicon, for instance in monatomic water models \cite{Molinero08}. 
 
 \subsection{Vashishta}
-In 1990, Vashishta et al. \cite{Vashishta90} suggested a three-body interaction potential for $\mathrm{SiO}_2$. 
+In 1990, Vashishta et al.\ \cite{Vashishta90} suggested a three-body interaction potential for $\mathrm{SiO}_2$. 
 The three-body term is of similar form to that of Stillinger-Weber, 
 \begin{equation}
 \begin{aligned}
@@ -491,7 +497,7 @@ The three-body term is of similar form to that of Stillinger-Weber,
 \end{aligned}
 \end{equation}
 We note that indicies are included for the parameters, as they are generally different for each pair and triplet combination
-of elements; the parameter set must be fitted to e.g. Si-Si-Si and Si-O-O seperately. The angle $\theta_{0jik}$ has 
+of elements; the parameter set must be fitted to e.g.\ (Si,Si,Si) and (Si,O,O) seperately. The angle $\theta_{0jik}$ has 
 the same purpose as for SW, while $r_{0ij}$ is the cutoff distance for each pair of elements. 
 
 \noindent The two-body part is more complex,
@@ -522,8 +528,9 @@ important to prevent unphysical behaviour on large time scales.
 
 A good choice is the Velocity-Verlet algorithm, which is
 a \textit{symplectic} integrator. Put simply, this means that it preserves the form of Hamilton's equations, thereby
-conserving energy. \footnote{Strictly speaking, Velocity-Verlet only conserves a pseudo-Hamiltonian
-approaching the true Hamiltonian in the limit of infinitesimal time steps. \cite{Frenkel01}}
+conserving energy% 
+\footnote{Strictly speaking, Velocity-Verlet only conserves a pseudo-Hamiltonian
+approaching the true Hamiltonian in the limit of infinitesimal time steps \cite{Frenkel01}.}.
 Employing Velocity-Verlet
 allows us to sample the phase space of the microcanonical (NVE) ensemble, and collect 
 thermodynamic properties like temperature and pressure.
@@ -539,11 +546,11 @@ Then we calculate the new accelerations $\vec{F}(t+\Delta t)/m$ based on the new
 to compute the velocities at a whole time step forward $\vec{v}(t + \Delta t)$. 
 
 In addition to being symplectic, Velocity-Verlet is time-reversible \cite{Frenkel01}, which it should be considering that we 
-are solving time-reversible equations \eqref{equationsOfMotion1} \eqref{equationsOfMotion2}. 
+are solving time-reversible equations (\ref{equationsOfMotion1},~\ref{equationsOfMotion2}).  
 It is also computationally inexpensive; the only 
-additional computation compared to the primitive Euler method is the half-velocity. 
+additional calculation compared to the primitive Euler method is the half-velocity. 
 The global error in position and velocity is $O(\Delta t^2)$, which may not seem very impressive. However, 
-this is good enough for collecting statistical properties, 
+this is sufficient for collecting statistical properties, 
 our goal is not to reproduce the exact trajectories of the particles. 
 
 Velocity-Verlet is the integrator of choice in LAMMPS (\autoref{sec:lammps}), and thus the 
@@ -551,9 +558,9 @@ only scheme used in this work.
 
 \section{Force calculations and cutoff radius} \label{sec:forceCutoff}
 We need the force on each atom to compute the acceleration that is integrated in the equations of motion
-\eqref{equationsOfMotion1}\eqref{equationsOfMotion2}. 
+(\ref{equationsOfMotion1},~\ref{equationsOfMotion2}). 
 Using the Lennard-Jones potential as an example, 
-the force on atom $i$ from atom $j$ is \eqref{forcePES} \eqref{Lennard-Jones},
+the force on atom $i$ from atom $j$ is (\ref{forcePES},~\ref{Lennard-Jones}),
 \begin{equation}
  F_{\mathrm{LJ}}(r_{ij}) = -\nabla V_{\mathrm{LJ}}(r_{ij}) = 
  -24\epsilon\left[2\left(\frac{\sigma^{12}}{r_{ij}^{13}}\right) - \left(\frac{\sigma^6}{r_{ij}^7}\right)\right] 
@@ -564,7 +571,7 @@ $\sigma=\epsilon=1.0$, the force at a distance $r_{ij} = 3\sigma$ is
 \begin{equation}
  F_{\mathrm{LJ}}(r_{ij} = 3.0\sigma) \approx 0.01
 \end{equation}
-This is a general property of systems where only van der Waal-interactions are present: atoms that 
+This is a general property of systems where only van der Waal-interactions are present: Atoms that 
 are far apart do not effectively interact. This can be exploited in MD simulations by introducing 
 a cutoff radius $r_\mathrm{c}$, and only compute forces for atoms displaced by a distance smaller than this cutoff. 
 In principle, we have to sum over all pairs of atoms in the system to compute the energy and forces, which 
@@ -578,10 +585,10 @@ scales like $O(N^2)$. With a cutoff, this is reduced to $O(N)$, and the force is
  \end{cases}
  \label{forceCutoff}
 \end{equation}
-This greatly increases the computational performance of MD simulations. In fact, simulations with non-bonded potentials
+which greatly increases the computational performance of MD simulations. In fact, simulations with non-bonded potentials
 not including a cutoff is unfeasible except for small systems.
 
-The potential \eqref{Lennard-Jones} is also truncated at $r_{ij} = r_\mathrm{c}$, but this creates a discontinuity 
+The potential itself \eqref{Lennard-Jones} is also truncated at $r_{ij} = r_\mathrm{c}$, creating a discontinuity 
 at the cutoff. To avoid this problem, we simply shift the LJ potential upward a little, so that the energy 
 is excactly zero at this point. The truncated and shifted form of the potential is
 \begin{equation}
@@ -604,10 +611,11 @@ The idea is that there exist generic algorithms which can be used to find patter
 having to write code specifically for each problem. The algorithm will build its own logic based on the data.  
 
 Machine learning is a subfield of computer science, and is closely related to computational statistics. 
-It evolved from the study of pattern recognition in artificial intelligence research (AI), and has made contributions to
-AI tasks like computer vision, natural language processing and speech recognition. It has also, especially in later years, 
-found applications in a wide variety of other areas, including bioinformatics, economy, physics, finance and marketing. 
-(SHOULD I HAVE REFERENCES HERE??)
+It evolved from the study of pattern recognition in artificial intelligence (AI) research, and has made contributions to
+AI tasks like computer vision \cite{Krizhevsky12}, natural language processing \cite{Collobert11}
+and speech recognition \cite{Hinton12}. It has also, especially in later years, 
+found applications in a wide variety of other areas, including bioinformatics, economy, physics, finance and marketing
+\cite{LeCun15}. 
 
 The approaches to machine learning are many, but are often split into two main categories. 
 In \textit{supervised learning} we know the answer to a problem,
@@ -629,26 +637,26 @@ Some of the most common tasks are:
  It is thus a form of unsupervised learning.  
 \end{itemize} 
 \autoref{fig:machineLearningDiagram} gives an (incomplete) overview of machine learning methods with some selected applications.
-We will not go into further detail on all these approaches to machine learning, as this work only concerns
-one specific area of ML: artificial neural networks. The rest of this chapter concerns the ideas behind this machine learning
+We will not go into further detail on all these approaches to machine learning, as this work is only concerned with
+one specific area: artificial neural networks. The rest of this chapter is devoted to the ideas behind this machine learning
 approach. 
 \begin{figure}
-\begin{center}
- \includegraphics[width = \linewidth]{Figures/Theory/MachineLearningDiagram.png}
- \caption{Machine learning, taken from from http://www.isaziconsulting.co.za/machinelearning.html.}
+ \centering
+ \includegraphics[width=\linewidth]{Figures/Theory/MachineLearningDiagram.png}
+ \caption{Overview of various approaches to machine learning and their applications.
+ Source: \href{http://www.isaziconsulting.co.za/machinelearning.html}{isaziconsulting.co.za}.}
  \label{fig:machineLearningDiagram}
-\end{center}
 \end{figure}
 
 \section{Artificial neurons} \label{sec:ANN}
 The field of artificial neural networks has a long history of development, and is closely connected with 
 the advancement of computer science and computers in general. A model of artificial neurons 
 was first developed by McCulloch and Pitts in 1943 \cite{McCulloch43} to study signal processing in the brain and 
-has later been refined by others. The general idea is to the mimic neural networks in the human brain, which
+has later been refined by others. The general idea is to mimic neural networks in the human brain, which
 is composed of billions of neurons that communicate with each other by sending electrical signals. 
 Each neuron accumulates its incoming signals, 
-which must exceed an activation threshold to yield an output of one. If the threshold is not overcome, the neuron
-remains inactive, i.e. has zero output.  
+which must exceed an activation threshold to yield an output. If the threshold is not overcome, the neuron
+remains inactive, i.e.\ has zero output.  
 
 This behaviour has inspired a simple mathematical model for an artificial neuron \cite{Rojas96},
 \begin{equation}
@@ -660,14 +668,13 @@ a weighted sum of signals $x_i, \dots ,x_n$ received by $n$ other neurons.
 The model is illustrated in \autoref{fig:neuronModel}. We will now take a closer look at if and how 
 this mathematical model is biologically plausible.
 \begin{figure}
- \begin{center}
-  \includegraphics[width=\linewidth]{Figures/Theory/neuron.pdf}
+ \centering
+  \includegraphics[width=0.8\linewidth]{Figures/Theory/neuron.pdf}
   \caption{Mathematical model of an artificial neuron. The neuron receives input signals $x_i,\dots,x_n$ from
 	   $n$ other neurons. Each signal $x_i$ is associated with a weight $w_i$, and the neuron accumulates
 	   all input signals as a weighted sum $u$. This sum is then used as input to its activation function
 	   $f$, which serves as the neuron's output signal.}
   \label{fig:neuronModel}
- \end{center}
 \end{figure}
 
 \subsection*{Biological model}
@@ -679,18 +686,17 @@ of neighbouring neurons. As in the mathematical model, each dendrite is associat
 weakens the input signals. The cell can also transmit signal inhibitors (oppositely charged ions) to 
 accomplish ''negative'' weight values. 
 
-The positive and negative ions arriving from the dendrites are mixed together in the solution inside the \textit{soma}. 
+The positive and negative ions arriving from the dendrites are mixed together in the solution inside the \textit{soma}, 
 which corresponds to the summation in \eqref{artificialNeuron}. Finally, the \textit{axon} serves
 as the activation function by sampling the electrical potential of this solution. If the potential 
 reaches a certain strength, the axon transmits a signal pulse down its own length. The axon is connected 
 to another neuron's dendrites (or other parts of the cell), enabling the neurons to communicate. 
 \begin{figure}
- \begin{center}
-  \includegraphics[width=\linewidth]{Figures/Theory/neuron_anatomy.jpg}
-  \caption{Biological model of a neuron. 
-	   Source: \href{https://askabiologist.asu.edu/neuron-anatomy}{https://askabiologist.asu.edu/neuron-anatomy}}
+ \centering
+  \includegraphics[width=0.9\linewidth]{Figures/Theory/neuron_anatomy.jpg}
+  \caption{Biological model of a nervous cell. The various parts of the cell are briefly explained in the text. 
+	   Source: \href{https://askabiologist.asu.edu/neuron-anatomy}{askabiologist.asu.edu}.}
   \label{fig:neuronBiological}
- \end{center}
 \end{figure}
 
 This discussion of nervous cells helps, to a certain degree, to validate the mathematical form \eqref{artificialNeuron}
@@ -712,26 +718,25 @@ is associated with a weight variable.
 The main factor that seperates the different types are how the neurons are \textit{connected}. 
 This section contains a short presentation of some of the most common types of ANNs, before we move on to 
 a more detailed description of the ANN architecture used in this thesis. In the following we will refer to artificial 
-neural networks simply as neural networks (NNs), i.e. not referring to its biological counterpart.  
+neural networks simply as neural networks (NNs), i.e.\ not referring to its biological counterpart.  
 
 \subsection{Feed-forward neural networks}
 The feed-forward neural network (FFNN) was the first and simplest type of NN devised. In this network, 
-the information moves in only one direction - forward through the layers. An example FFNN is shown
-in \autoref{fig:networkGeneral}, which consists of an input layer, two hidden layers and an output layer. 
+the information moves in only one direction: forward through the layers. An example FFNN is shown
+in \autoref{fig:networkGeneral}, consisting of an input layer, two hidden layers and an output layer. 
 Nodes are represented by circles, while the arrows display the connections between the nodes, including the 
 direction of information flow. Additionaly, each arrow corresponds to a weight variable, not displayed here. 
 We observe that each node in a layer is connected to \textit{all} nodes in the subsequent layer, 
 making this a so-called \textit{fully-connected} FFNN. 
 This is the type of NN that is used in the present work, 
-and will be further investigated in chapter (REF TO CHAPTER).
+and will be further investigated in \autoref{sec:MLP}.
 \begin{figure}
- \begin{center}
-  \includegraphics[width=\linewidth]{Figures/Theory/networkGeneral.pdf}
+ \centering
+  \includegraphics[width=0.8\linewidth]{Figures/Theory/networkGeneral.pdf}
   \caption{Example of a fully-connected feed-forward neural network with an input layer, two hidden layers
 	   and an output layer. Each node in a layer is connected to \textit{all} nodes in the subsequent layer, 
 	   and information only flows forward through the layers, hence the name.}
   \label{fig:networkGeneral}
- \end{center}
 \end{figure}
 
 A different variant of FFNNs are \textit{convolutional neural networks} (CNNs) \cite{LeCun99}, which have a connectivity pattern
@@ -742,11 +747,12 @@ as a convolution operation.
 
 CNNs emulate the behaviour of neurons in the visual cortex by enforcing a \textit{local} connectivity pattern
 between nodes of adjacent layers: Each node
-in a convolutional layer is connected to a subset of the nodes in the previous layer, 
+in a convolutional layer is connected only to a subset of the nodes in the previous layer, 
 in contrast to the fully-connected FFNN in \autoref{fig:networkGeneral}.
 Often, CNNs 
 consist of several convolutional layers that learn local features of the input, with a fully-connected layer at the end, 
-which gathers all the local data and produces the outputs. They have wide applications in image and video recognition. 
+which gathers all the local data and produces the outputs. They have wide applications in image and video recognition
+\cite{LeCun15}. 
 
 \subsection{Recurrent neural networks}
 So far we have only mentioned NNs where information flows in one direction: forward. \textit{Recurrent neural networks} on
@@ -762,23 +768,21 @@ in multidimensional space is the radial basis function (RBF) network. RBFs are t
 an input layer, a hidden layer with non-linear radial symmetric activation functions and a linear output layer (''linear'' here
 means that each node in the output layer has a linear activation function). The layers are normally fully-connected and 
 there are no cycles, thus RBFs can be viewed as a type of fully-connected FFNN. They are however usually treated as
-a seperate type of NN due the unusual activation functions (common activation functions are presented in chapter
-(REF TO CHAPTER)) 
-and a different training algorithm, that we will not expand upon 
-here. 
+a seperate type of NN due the unusual activation functions (common activation functions are presented in
+\autoref{sec:activationFunctions}).
 
-Other types of NNs could also be mentioned, but are outside the scope of this work. Now we will move on to a detailed description
-of how a fully-connected FFNN functions, and how it can be trained to interpolate data. 
+Other types of NNs could also be mentioned, but are outside the scope of this work. We will now move on to a detailed description
+of how a fully-connected FFNN works, and how it can be used to interpolate data sets. 
 
-\section{Multilayer perceptron}
+\section{Multilayer perceptron} \label{sec:MLP}
 In this thesis we use fully-connected feed-forward neural networks with three
 or more layers (an input layer, one or more hidden layers and an output layer), mainly
 consisting of neurons that have non-linear activation functions.
-Such networks are often called \textit{multilayer perceptrons} (MLPs). 
+Such networks are often called \textit{multilayer perceptrons} (MLPs)% 
 \footnote{The terms ''feed-forward neural network'' and ''multilayer perceptron'' are used interchangeably in the 
-literature, although the MLP is just one type of FFNN, namely a fully-connected one with mainly non-linear neurons.}
+literature, although the MLP is just one type of FFNN, namely a fully-connected one with mainly non-linear neurons.}.
 The \textit{perceptron} was first introduced by Rosenblatt in 1958 \cite{Rosenblatt58}, and was a FFNN made up of an input layer
-and an ouput layer only. It served as a \textit{binary classifier}, i.e. a function that maps a real-valued vector $\vec{x}$ 
+and an ouput layer only. It served as a \textit{binary classifier}, i.e.\ a function that maps a real-valued vector $\vec{x}$ 
 to a single binary value $f(\vec{x})$, employing a linear activation function. The addition of hidden layers and 
 non-linear activation functions led to the MLP, which could produce an arbitrary number of continous output values. 
 
@@ -790,20 +794,24 @@ a finite number of neurons can approximate a continous multidimensional function
 assuming the activation function for the hidden layer is a ''non-constant, bounded and monotonically-increasing continous function''.
 Note that the requirements on the activation function only applies to the hidden layer, the output nodes are always
 assumed to be linear, so as to not restrict the range of output values. 
-The only requirement on the NN information flow is that it must be feed-forward, thus recurrent NNs are out of the picture. 
-Also, we might as well use the simplest multilayer FFNN available, the MLP, as 
-adding complicating factors like local connectivity is unnecessary for our purposes. 
 
-We note that this theorem is only applicable to a NN with \textit{one} hidden layer. Therefore, we can easily construct a NN 
-which employs activation functions that do not satisfy the above requirements, as long as we have at least one layer
+The only requirement on the NN information flow is that it must be feed-forward, which is not satisfied by recurrent NNs.
+Anyhow, computing energies and forces in MD simulations at a given time step do not require any knowledge of 
+the earlier states of the system, i.e.\ no memory or recurrency is involved.
+Further, it is not obvious how local connectivity should be helpful in a MD context, thus
+we might as well use the simplest multilayer FFNN available, the MLP. 
+
+We note that this theorem is only applicable to a NN with \textit{one} hidden layer. 
+Therefore, we can easily construct a NN 
+that employs activation functions which do not satisfy the above requirements, as long as we have at least one layer
 with activation functions that \textit{do}. Furthermore, although the universal approximation theorem
 lays the theoretical foundation for regression with neural networks, it does not say anything about how things work in practice: 
-a NN can still be able to approximate a given function reasonably well without having the flexibility to fit \textit{all other}
+A NN can still be able to approximate a given function reasonably well without having the flexibility to fit \textit{all other}
 functions. 
 
 \subsection{Mathematical model} \label{sec:MLPmodel}
 In an MLP, each node (neuron) is modelled according to \eqref{artificialNeuron}. To increase the flexibility of the NN,
-we also add a \textit{bias} to this model, resulting in 
+we also add a \textit{bias} $b$ to this model, resulting in 
 \begin{equation}
  y = f\left(\sum_{i=1}^n w_ix_i + b_i\right) = f(u)
  \label{artificialNeuron2}
@@ -818,21 +826,20 @@ artifical neurons, as they have no activation function. Their only purpose is to
 first hidden layer. A few weights $w$ (blue) and biases $b$ (green) are also included, next to the connections and nodes
 which they belong to respectively. 
 \begin{figure}
- \begin{center}
-  \includegraphics[width=\linewidth]{Figures/Theory/networkWithNotation.pdf}
+ \centering
+  \includegraphics[width=0.8\linewidth]{Figures/Theory/networkWithNotation.pdf}
   \caption{Example of a fully-connected feed-forward neural network with an input layer, two hidden layers
 	   and an output layer. Nodes are depicted as circles, while the arrows shows the connections between neurons, 
 	   including their directions. Each connection has a weight $w$ (blue), where the notation explained in the
 	   text is applied. Every node is marked with its output $y$ and its associated bias $b$ (green), while all input nodes
-	   are labeled with an $x$. Only a few weights and biases are listed.}
+	   are labeled with an $x$. Only a few weights and biases are displayed.}
   \label{fig:networkNotation}
- \end{center}
 \end{figure}
 The following notation is introduced: $y_i^l$ is the output of the $i$-th node in layer $l$, where $l=0$ is the input layer, 
 $l=1$ is the first hidden layer and so on. The same notation applies to the biases. For the weights, we have that
-$w_{ij}^l$ is the weight connecting node $j$ in layer $l-1$ with node $i$ in layer $l$. 
+$w_{ij}^l$ is the weight connecting node $j$ in layer $l-1$ with node $i$ in layer $l$%
 \footnote{This order of indicies $i$ and $j$ may seem illogical, but will become useful when converting
-the equations below to matrix equations.}
+to matrix equations below.}.
 All weights and biases are real-valued numbers.
 
 The MLP in \autoref{fig:networkNotation} maps the inputs $x_i$ to the output $y_1^3$ via two hidden layers
@@ -840,46 +847,48 @@ with an (arbitrary) number of hidden nodes. The hidden neurons have no physical 
 of defining the functional form of the NN. In the following we describe how to calculate the output of this MLP. The description
 is also valid for a NN with several outputs; the result applies to each ouput node individually. 
 
-First, for each node $i$ in the first hidden layer, we calculate a weighted sum $u_i^1$ of the input coordinates $x_m$,
+First, for each node $i$ in the first hidden layer, we calculate a weighted sum $u_i^1$ of the input coordinates $x_j$,
 \begin{equation}
  u_i^1 = \sum_{j=1}^2 w_{ij}^1 x_j  + b_i^1 
 \end{equation}
-This value is the argument to the activation function $f^1$ of each neuron,
+This value is the argument to the activation function $f_1$ of each neuron $i$,
 producing the output $y_i^1$ of all neurons in layer 1,
 \begin{equation}
- y_i^1 = f^1(u_i^1) = f^1\left(\sum_{j=1}^2 w_{ij}^1 x_j  + b_i^1\right)
+ y_i^1 = f_1(u_i^1) = f_1\left(\sum_{j=1}^2 w_{ij}^1 x_j  + b_i^1\right)
  \label{outputLayer1}
 \end{equation}
-where we assume that all nodes in the same layer have identical activation functions, hence the notation $f^l$. 
+where we assume that all nodes in the same layer have identical activation functions, hence the notation $f_l$%
+\footnote{Note that for the activation functions, the layer indicies are subscripts rather than superscripts, 
+as having a single superscript can easily be confused with a square.}.
 For an arbitrary node $i$ in layer $l$ this generalizes to
 \begin{equation}
- y_i^l = f^l(u_i^l) = f^l\left(\sum_{j=1}^{N_{l-1}} w_{ij}^l y_j^{l-1} + b_i^l\right)
+ y_i^l = f_l(u_i^l) = f_l\left(\sum_{j=1}^{N_{l-1}} w_{ij}^l y_j^{l-1} + b_i^l\right)
  \label{generalLayer}
 \end{equation}
 where $N_l$ is the number of nodes in layer $l$. When the output of all the nodes in the first hidden layer are computed,
 the values of the subsequent layer can be calculated and so forth until the output is obtained. 
 The output of neuron $i$ in layer 2 is thus,
 \begin{align}
- y_i^2 &= f^2\left(\sum_{j=1}^3 w_{ij}^2 y_j^1 + b_i^2\right) \\
- &= f^2\left[\sum_{j=1}^3 w_{ij}^2f^1\left(\sum_{k=1}^2 w_{jk}^1 x_k + b_j^1\right) + b_i^2\right]
+ y_i^2 &= f_2\left(\sum_{j=1}^3 w_{ij}^2 y_j^1 + b_i^2\right) \\
+ &= f_2\left[\sum_{j=1}^3 w_{ij}^2f_1\left(\sum_{k=1}^2 w_{jk}^1 x_k + b_j^1\right) + b_i^2\right]
  \label{outputLayer2}
 \end{align}
 where we have substituted $y_m^1$ with \eqref{outputLayer1}. Finally, the NN output yields,
 \begin{align}
- y_1^3 &= f^3\left(\sum_{j=1}^3 w_{1m}^3 y_j^2 + b_1^3\right) \\
- &= f^3\left[\sum_{j=1}^3 w_{1j}^3 f^2\left(\sum_{k=1}^3 w_{jk}^2 f^1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
+ y_1^3 &= f_3\left(\sum_{j=1}^3 w_{1m}^3 y_j^2 + b_1^3\right) \\
+ &= f_3\left[\sum_{j=1}^3 w_{1j}^3 f_2\left(\sum_{k=1}^3 w_{jk}^2 f_1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
   + b_1^3\right]
 \end{align}
 We can generalize this expression to a MLP with $l$ hidden layers. The complete functional form
 is,
-\begin{equation}
- y^{l+1}_1 = f^{l+1}\left[\sum_{j=1}^{N_l} w_{1j}^3 f^l\left(\sum_{k=1}^{N_{l-1}} w_{jk}^2 f^{l-1}\left(
- \cdots f^1\left(\sum_{n=1}^{N_0} w_{mn}^1 x_n + b_m^1\right)
- \cdots \right) + b_k^2\right)
- + b_1^3\right]
+\begin{flalign}
+&y^{l+1}_1\! = \!f_{l+1}\!\left[\!\sum_{j=1}^{N_l}\! w_{1j}^3 f_l\!\left(\!\sum_{k=1}^{N_{l-1}}\! w_{jk}^2 f_{l-1}\!\left(\!
+ \dots \!f_1\!\left(\!\sum_{n=1}^{N_0} \!w_{mn}^1 x_n\! + \!b_m^1\!\right)
+ \!\dots \!\right) \!+ \!b_k^2\!\right)
+ \!+ \!b_1^3\!\right] &&
  \label{completeNN}
-\end{equation}
-which illustrates a basic property of MLPs: the only independent variables are the input values $x_j$. 
+\end{flalign}
+which illustrates a basic property of MLPs: The only independent variables are the input values $x_n$. 
 This confirms that a MLP,
 despite its quite convoluted mathematical form, is nothing more than an analytic function, specifically a 
 mapping of real-valued vectors $\vec{x} \in \mathbb{R}^n \rightarrow \vec{y} \in \mathbb{R}^m$. 
@@ -895,15 +904,14 @@ where the parameters $c_i$ are weights and biases. By adjusting these parameters
 can be shifted up and down or left and right, change slope or be rescaled (\autoref{fig:activationsFlex}), 
 which is the key to the flexibility of a NN. 
 \begin{figure}
-\begin{center}
-  \includegraphics[width = 0.9\linewidth]{Figures/Theory/activationFlex.pdf}
-  \caption{The mathematical expression for a MLP consists of nested terms of the form $h(x) = c_1 f(c_2 x + c_3) + c_4$, 
-	   where $f$ is the activation function
+ \centering
+  \includegraphics[width = 0.8\linewidth]{Figures/Theory/activationFlex.pdf}
+  \caption{The mathematical expression for a MLP consists of nested terms of the form $h(x) = c_1 f(c_2 x + c_3) + c_4$
+           \eqref{completeNN}, where $f$ is the activation function
 	    and $c_i$ are NN parameters. The flexibility of the MLP is shown by adjusting $c_1$, $c_2$, $c_3$ and $c_4$ such that
-	    $h(x)$
-	    a) is scaled, b) has a change of slope, c) is shifted left and right, d) is shifted up and down, respectively.}
+	    $h(x)$ a) is scaled, b) has a change of slope, c) is shifted left and right, d) is shifted up and down, respectively. 
+	    Here $f$ is the hyperbolic tangent \eqref{tanhActivationFunction}. Reproduced from Behler \cite{Behler11general}.}
   \label{fig:activationsFlex}
-  \end{center}
 \end{figure}
 
 \subsubsection{Activation function of output neuron}
@@ -918,19 +926,25 @@ specific linear activation function for the output neuron $o$, namely the identi
 
 
 
-\subsubsection{Matrix representation}
+\subsubsection{Matrix-vector notation}
 We can introduce a more convenient notation for the activations in a NN. 
 If we look at the structure of the NN in \autoref{fig:networkNotation}, we realize that all the weights connecting 
-two adjacent layers can be represented as a matrix $W$, where $w_{ij} = w^l_{ij}$ is the weight connecting connecting node $j$
-in layer $l-1$ with node $i$ in layer $l$. Additionaly, we can represent the biases and activations
-as layer-wise column vectors $\vec{b}$ and $\vec{y}$, so that $b_i = b_i^l$ is the bias of node $i$ in layer $l$. 
-We have that $W_l$ is a $N_{l-1} \times N_l$ matrix, while $\vec{b}_l$ and $\vec{y}_l$ are $N_l \times 1$ column vectors. 
+two adjacent layers can be represented as a matrix $\mathrm{W}_l$, where the $(i,j)$-th element is 
+is the weight $w^l_{ij}$ connecting connecting node $j$
+in layer $l-1$ with node $i$ in layer $l$, as above. 
 
+Additionaly, we can represent the biases and activations
+as layer-wise column vectors $\vec{b}_l$ and $\vec{y}_l$, so that the $i$-th element of each vector 
+is the bias $b_i^l$ and activation $y_i^l$ of node $i$ in layer $l$ respectively. 
+
+We have that $\mathrm{W}_l$ is a $N_{l-1} \times N_l$ matrix, while $\vec{b}_l$ and $\vec{y}_l$ are $N_l \times 1$ column vectors. 
 With this notation, the sum in \eqref{outputLayer2} becomes a matrix-vector multiplication, and we can write
-the equation for the activations of hidden layer 2 in \autoref{fig:networkNotation} as
+the equation for the activations of hidden layer 2 in \autoref{fig:networkNotation} as%
+\footnote{For the same reasons as the activation functions above, the layer indicies are changed from superscripts to subscripts
+          with this matrix-vector notation.}
 \begin{equation}
- \vec{y}_2 = f(W_2 \vec{y}_{1} + \vec{b}_{2}) = 
- f\left(\left[\begin{array}{ccc}
+ \vec{y}_2 = f_2(\mathrm{W}_2 \vec{y}_{1} + \vec{b}_{2}) = 
+ f_2\left(\left[\begin{array}{ccc}
     w^2_{11} &w^2_{12} &w^2_{13} \\
     w^2_{21} &w^2_{22} &w^2_{23} \\
     w^2_{31} &w^2_{32} &w^2_{33} \\
@@ -948,13 +962,14 @@ the equation for the activations of hidden layer 2 in \autoref{fig:networkNotati
 \end{equation}
 and we see that the activation of node $i$ in layer 2 is
 \begin{equation}
- y^2_i = w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3 + b^2_i = 
- \sum_{j=1}^3 w^2_{ij} y_j^1 + b^2_i
+ y^2_i = f_2\Bigr(w^2_{i1}y^1_1 + w^2_{i2}y^1_2 + w^2_{i3}y^1_3 + b^2_i\Bigr) = 
+ f_2\left(\sum_{j=1}^3 w^2_{ij} y_j^1 + b^2_i\right)
 \end{equation} 
-which is in accordance with \eqref{outputLayer2}. This is not just a nice and compact notation, but also 
-a useful and intuitive way to think about MLPs: the output is calculated by a series of matrix-vector multiplications
+which is in accordance with \eqref{outputLayer2}. Note that
+This is not just a convenient and compact notation, but also 
+a useful and intuitive way to think about MLPs: The output is calculated by a series of matrix-vector multiplications
 and vector additions that are used as input to the activation functions. For each operation 
-$W^l \vec{y}^{l-1}$ we move forward one layer. Furthermore, it is the easiest way to implement NNs with 
+$\mathrm{W}_l \vec{y}_{l-1}$ we move forward one layer. Furthermore, it is the easiest way to implement NNs with 
 TensorFlow, which is discussed in \autoref{sec:TensorFlowCreatingNN}. 
 
 
@@ -973,6 +988,14 @@ We realize that the second requirement excludes all linear functions. Furthermor
 layer simply performs a linear transformation of its inputs. Consequentially, regardless of the number of layers, 
 the output of the NN will be nothing but a linear function of the inputs. Thus we need to introduce some kind of 
 non-linearity to the NN to be able to fit non-linear functions. 
+\begin{figure}
+\centering
+  \includegraphics[width = 0.7\linewidth]{Figures/Theory/activationFunctions.pdf}
+  \caption{Two of the most common activation functions for neural networks, the sigmoid \eqref{sigmoidActivationFunction} and 
+           the hyperbolic tangent \eqref{tanhActivationFunction}. Both meet the requirements
+	   of the universal approximation theorem.}
+  \label{fig:SigmoidActivationFunctions}
+\end{figure}
 
 A group of non-linear functions that meet the above requirements are the \textit{sigmoid} functions. 
 The two sigmoid functions that are most commonly used as activation functions \cite{Rojas96} in 
@@ -989,58 +1012,51 @@ and the hyperbolic tangent
 The logistic functon is often referred to as ''the sigmoid'', which is the naming convention we will use 
 in the following. Both functions are depicted in \autoref{fig:SigmoidActivationFunctions}. We observe that they
 are bounded above by 1, while the lower bound is -1 and 0 for the hyperbolic tangent and sigmoid respectively. This property 
-keeps the activations from blowing up. 
-\begin{figure}
-\begin{center}
-  \includegraphics[width = 0.7\linewidth]{Figures/Theory/activationFunctions.pdf}
-  \caption{Two of the most common activation functions for neural networks. Both meet the requirements
-	   of the universal approximation theorem.}
-  \label{fig:SigmoidActivationFunctions}
-  \end{center}
-\end{figure}
+keeps the activations from diverging. 
+
 The sigmoid are more bilogically plausible because 
 the output of inactive neurons are zero. Such activation function are called \textit{one-sided}. However,
 it has been shown \cite{Karlik11} that the hyperbolic tangent 
-performs better than the sigmoid for training MLPs. This will be further discussed in section (REF TO SECTION). 
+performs better than the sigmoid for training MLPs. This will be further discussed in \autoref{sec:hyperParamsActFunctions}. 
 Nevertheless, one should assess the problem 
 at hand when deciding what activation function to use; the performance can vary from problem to problem. 
+\begin{figure}
+\centering
+ \includegraphics[width = 0.7\linewidth]{Figures/Theory/reluActivation.pdf}
+  \caption{The rectifier \eqref{reluActivationFunction} has become the most popular activation function for 
+           deep convolutional NNs.}
+  \label{fig:reluActivationFunction}
+\end{figure}
 
-In later years, the rectifier function (\autoref{fig:reluActivationFunction})
+\noindent In later years, the rectifier function (\autoref{fig:reluActivationFunction})
 \begin{equation}
  f(x) = \max(0,x)
+ \label{reluActivationFunction}
 \end{equation}
-has become the most popular \cite{LeCun15} for \textit{deep neural networks}, i.e. NNs with several hidden layers.
+has become the most popular \cite{LeCun15} for \textit{deep neural networks}, i.e.\ NNs with several hidden layers%
 \footnote{There is no consensus in the literature on how many hidden layers a NN must possess in order to qualify as ''deep'', 
-but there seems to be a tendency towards setting the minimum number of layers to three.}
+but there seems to be a tendency towards setting the minimum number of layers to three.}.
 It has been argued to be even more biologically plausible than the sigmoid and also perform better
 than the hyperbolic tangent, especially for deep, convolutional NNs \cite{Glorot11}. Even though the rectifier is a
 piecewise \textit{linear} function, it effectively behaves as a non-linearity. However, it does not have an upper bound, and
 therefore does not satisfy the universal approximator requirements. Further, the function values can potentially blow up. 
 These problems are solved in practice by employing various teqhniques, illustrating that the universal approximation theorem
 should not be used as an absolute guideline for the construction of activation functions. 
-\begin{figure}
-\begin{center}
- \includegraphics[width = 0.7\linewidth]{Figures/Theory/reluActivation.pdf}
-  \caption{Two of the most common activation functions for neural networks. Both meet the requirements
-	   of the universal approximation theorem.}
-  \label{fig:reluActivationFunction}
-  \end{center}
-\end{figure}
 
 
 \section{Training} \label{sec:training}
 In the beginning of this chapter we defined machine learning as the ''science of giving computers the ability to learn without
 being explicitly programmed.'' In the neural network case, this learning is achieved by iteratively feeding the network with data. 
-With the help of certain learning algorithms, the network will then automatically adjust its parameters, i.e. the weights and biases, 
-to find patterns in this data (in the following, ''weights'' will often be equivalent to all 
-the NN parameters, including the biases).
+With the help of certain learning algorithms, the network will then automatically adjust its parameters, i.e.\ the weights and biases, 
+to find patterns in this data% 
+\footnote{in the following, ''weights'' will often be equivalent to all the NN parameters, including the biases.}.
 The procedure depends on what learning paradigm we work with
 (unsupervised or supervised learning), and the type of NN we use. 
 
-In this thesis we employ NNs for regression: we want to interpolate data sets og atomic coordinates and energies.
+In this thesis we employ NNs for regression: We want to interpolate data sets og atomic coordinates and energies.
 The goal is to adjust the weights of a MLP so that it accurately represents a function that maps
-atomic coordinates to the corresponding energies. Interpolation with NNs is essentialy an optimization problem:
-the weights are typically initialized as random numbers, and then modified iteratively to minimize the error
+atomic coordinates to the corresponding potential energies. Interpolation with NNs is essentialy an optimization problem:
+The weights are typically initialized as random numbers, and then modified iteratively to minimize the error
 to a set of expected output values, in our case energies. 
 This procedure is called \textit{training}. 
 
@@ -1052,7 +1068,7 @@ The input data $X$ and output data $Y$ are represented as matrices, where the $i
 denoted $X_{i*}$ and $Y_{i*}$ respectively, 
 together form a \textit{training example}. The combined data set consists of $N$ such training examples. 
 Note that the number of columns of $X$ and $Y$ are equal to the number of inputs and outputs of our MLP respectively. 
-This is a restatement of the observation made in \autoref{sec:MLPmodel}: the number of inputs and outputs of our MLP must be equal 
+This is a restatement of the observation made in \autoref{sec:MLPmodel}: The number of inputs and outputs of our MLP must be equal 
 to the number of input and output values of the function we are trying to fit. 
 
 
@@ -1076,7 +1092,8 @@ The standard cost function used in regression with NNs is the mean-square error,
 \end{equation}
 where $y_i = y_i(W, B, X_{i*})$ is the value predicted by the NN for traing example $X_{i*}$. 
 For a MLP with more than one output, $Y_i$ and $y_i$ are vectors. 
-The constant $1/2$ is included to cancel out the exponent when this function is differentiated in \autoref{sec:backprop}.
+The constant $1/2$ is included to cancel out the exponent when this function is differentiated at a later stage
+(\autoref{sec:backprop}).
 
 A variety of other cost functions are used for other machine learning tasks. In classificiation the output is often binary, 
 hence the mean-square error function is inadequate. We will not go into further detail on these cost functions here, but 
@@ -1093,11 +1110,11 @@ too computationally expensive for large NNs and data sets. Therefore, only first
 
 The idea behind gradient descent methods is to minimize a function by 
 iteratively taking steps in the direction of steepest descent towards a minima in parameter space. 
-This direction is defined as the negative gradient of the function w.r.t. 
+This direction is defined as the negative gradient of the function with respect to 
 all its parameters. If we define $\vec{\theta} \in \mathbb{R}^d$ as a vector containing all the weights and biases
 of a MLP, we get the following iterative scheme,
 \begin{equation}
- \vec{\theta}_{k+1} = \vec{\theta}_{k} - \gamma \nabla_{\vec{\theta}_k} \Gamma(\vec{\theta})
+ \vec{\uptheta}_{k+1} = \vec{\uptheta}_{k} - \gamma \nabla_{\vec{\uptheta}_k} \Gamma(\vec{\uptheta})
  \label{gradientDescent}
 \end{equation}
 where $\gamma$ is a step size, called the \textit{learning rate} in the context of machine learning. The process is started
@@ -1122,7 +1139,7 @@ of performing redundant computations if many similar examples are present in the
 
 In contrast, \textit{stochastic} gradient descent (SDG) performs a parameter update for \textit{each} training example. 
 SDG avoids redundant gradient calculations and is therefore faster than batch gradient descent. However, the accuracy 
-of each update is lower, which can lead to quite large error oscillations. The concept of having  
+of each update is lower compared to offline learning, which can lead to quite large error oscillations. The concept of having  
 more than one parameter update per epoch is called \textit{online learning}. 
 
 Finally, we have \textit{mini-batch} gradient descent, which is a mix of the two other approaches. The reference set 
@@ -1132,7 +1149,7 @@ between 50 and 256, but should in some degree be tailored to each problem.
 
 We realize that SDG can be seen as 
 a variant of mini-batch gradient descent with a mini-batch size of 1. In the literature, these two methods 
-are often collectively referred to as SDG. We will adopt this naming convention for the rest of this thesis. 
+are often collectively referred to as SDG.
 
 
 \subsection{Optimization algorithms} \label{sec:optimizationAlgorithms}
@@ -1181,7 +1198,7 @@ where $\odot$ stands for element-wise multiplication. In other words, we do not 
 Adagrad does that for us. A weakness of this method is that the learning rates inevitably shrink for each step, 
 resulting in arbitrary small values, at which point the learning stops.
 
-For the rest of \autoref{sec:optimizationAlgorithms}, we assume for brevity that all vector operations are element-wise, i.e.
+For the rest of \autoref{sec:optimizationAlgorithms}, we assume for brevity that all vector operations are element-wise, i.e.\
 $\vec{g}\,\vec{h} = \vec{g} \odot \vec{h}$ and $\vec{g}^2 = \vec{g} \odot \vec{g}$.
 
 \subsubsection{Adadelta}
@@ -1251,7 +1268,7 @@ The default values of the hyperparameters are $\beta_1 = 0.9$, $\beta_2 = 0.999$
 \subsubsection{Which optimizer to use?}
 There is no general answer to the question stated above. The adaptive learning rate methods
 like Adagrad, Adadelta and Adam are generally more robust because they do not rely on manual fine-tuning of the learning rate. 
-Also, an adaptive learning rate generally handles \textit{sparse} data better, i.e. data where some learning features
+Also, an adaptive learning rate generally handles \textit{sparse} data better, i.e.\ data where some learning features
 are poorly represented. 
 
 Adam has been proven to perform favourably over the other optimization methods for certain applications like classification
@@ -1274,7 +1291,7 @@ and the cost function $\Gamma$ is the mean-square-error \eqref{quadraticCost}
 \end{equation}
 here written as a function of only \textit{one} training example. 
 What we have not discussed yet, is
-how we calculate the gradient of the cost function, i.e. how we obtain the partial derivatives $g_{ij}$ and $h_i$ w.r.t.
+how we calculate the gradient of the cost function, i.e.\ how we obtain the partial derivatives $g_{ij}$ and $h_i$ w.r.t.
 all the weights and biases respectively,
 \begin{equation}
 \begin{aligned}
@@ -1429,7 +1446,7 @@ In \autoref{sec:MLPmodel} we rewrote the forward propagation framework as matrix
 This is easily done also for the backpropagation case. From \autoref{sec:MLPmodel} we have the
 set of vectors $\vec{b}^l$ and $\vec{y}^l$ for $l = 1,\dots ,L+1$, 
 where $L$ is the number of hidden layers. We now extend this set with the vectors $\vec{\delta}^l$ 
-and $\vec{u}^l$, i.e. the errors and inputs (or \textit{preactivations}) of layer $l$
+and $\vec{u}^l$, i.e.\ the errors and inputs (or \textit{preactivations}) of layer $l$
 respectively. These are all column vectors of size $N_l \times 1$. 
 
 \noindent Comparing the sums in \eqref{forwardProp} and \eqref{backprop}, we realize that since 
@@ -1440,7 +1457,7 @@ we have
 \begin{equation}
   \sum_i w_{ij} \delta_i \:  \Rightarrow \: W^T \vec{\delta}
 \end{equation}
-i.e. the weight matrices used in backpropagation are the transpose of the matrices used in forward activation.
+i.e.\ the weight matrices used in backpropagation are the transpose of the matrices used in forward activation.
 Thus, for nodes $\{j\}$ in layer $l$ and nodes $\{i\}$ in layer $l+1$, the vectorized equation for the error of each hidden neuron is
 \begin{equation}
  \delta_j = y^\prime_j\sum_{i\in P_j}w_{ij} \delta_i \: \Rightarrow \:
@@ -1516,7 +1533,7 @@ By dimensionality we mean the number of input nodes, as the number of output nod
 \subsection{Potentials using single neural network}
 In the literature, the dominant part of NN potentials employ a single feed-forward NN to calculate the total energy of the system.
 This is the most straightforward approach and is the easiest to implement.
-For instance, Agrawal et al. \cite{Agrawal06} have used a single, three-dimensional NN to study the dissociation of the 
+For instance, Agrawal et al.\ \cite{Agrawal06} have used a single, three-dimensional NN to study the dissociation of the 
 $\mathrm{SiO}_2$ molecule. However, these types of NNPs suffer from a number of limitations. Most importantly, 
 they have a fixed dimensionality. This is a general property of FFNNs where the atomic coordinates are fed directly 
 to the network without any transformations: once fitted, the NNP can only be applied to systems with the same number of atoms
@@ -1533,22 +1550,22 @@ each NN provides the contribution $E_i$ of \textit{one} atom to the total energy
  E_s = \sum_{i=1}^N E_i
  \label{systemEnergy}
 \end{equation}
-Two methods using this approach have been developed in parallel by Bholoa et al. \cite{Bholoa07}, and Behler and Parinello 
+Two methods using this approach have been developed in parallel by Bholoa et al.\ \cite{Bholoa07}, and Behler and Parrinello 
 \cite{Behler07}.
 Both methods compute $E_i$ based on the chemical environment of atom $i$, but they differ in how 
 the environment is represented and also how the atomic NNs are structured. 
 
-Bholoa et al. compute each atomic energy $E_i$ by a NN of variable size, using a set of 
+Bholoa et al.\ compute each atomic energy $E_i$ by a NN of variable size, using a set of 
 vectors as input to the NN. Each vector specifies the geometry of a four atom chain $i-j-k-l$ describing the chemical 
 environment. The input layer and first hidden layer are replicated once for each vector, thus the problem 
 of fixed dimensionality is solved. 
 
-Behler and Parinello have developed a different approach to constructing a NNP. 
-We have chosen to use the Behler-Parinello (BP) method in this thesis, and this will be the topic of the 
+Behler and Parrinello have developed a different approach to constructing a NNP. 
+We have chosen to use the Behler-Parrinello (BP) method in this thesis, and this will be the topic of the 
 rest of the chapter. 
 
-\section{The Behler-Parinello method}
-In the Behler-Parinello (BP) method, the architecture of each NN is fixed, and
+\section{The Behler-Parrinello method}
+In the Behler-Parrinello (BP) method, the architecture of each NN is fixed, and
 the atomic energies $E_i$ depend on the local chemical environments up to a cutoff radius $R_c$. 
 This is analogous to the introduction of a cutoff radius in MD simulations
 (\autoref{sec:forceCutoff}). Thus, the NNP can be applied to MD simlulations in excactly the same way 
@@ -1574,9 +1591,9 @@ A given Si atom $i$ has at a given time $n$ neighbours, including both Si and O 
 We define $\vec{R}_{ij} = (r_{i1}, r_{i2}, \dots, r_{in})$ as the vector containing the distances from
 atom $i$ to all neighbours $j = 1,\dots,n$, where $r_{ij} = |\vec{r}_j - \vec{r}_i|$. 
 Further, $\vec{G}_\mathrm{Si}(\vec{R}_{ij}) = \{G_{\mathrm{Si},s}(\vec{R}_{ij})\}$ is the vector of Si symmetry functions
-$s = 1,\dots,M_\mathrm{Si}$. \footnote{This notation signifies that each symmetry function, i.e. each element of 
+$s = 1,\dots,M_\mathrm{Si}$. \footnote{This notation signifies that each symmetry function, i.e.\ each element of 
 the symmetry vector, depends on the coordinates of all atoms in the cutoff sphere. However, it does not say anything about
-the form of the dependence, e.g. if it involves triplets or just pairs of atoms etc.}
+the form of the dependence, e.g.\ if it involves triplets or just pairs of atoms etc.}
 The process of calculating the potential energy $E_i$ described above can then be written,
 \begin{equation}
  \vec{R}_{ij} \rightarrow \vec{G}_\mathrm{Si}(\vec{R}_{ij}) \rightarrow F_\mathrm{Si}[\vec{G}_\mathrm{Si}(\vec{R}_{ij})] 
@@ -1771,7 +1788,7 @@ a larger number of non-zero terms in the summation. The angular parts of $G^4$ a
 \subsubsection{Setting the symmetry parameters}
 The parameter values $R_c, \eta, R_s, \zeta$ and $\lambda$ are not automatically optimized, like the weights. 
 They need to be pre-determined, and remain fixed during the training. In the context of machine learning, such variables are called
-\textit{hyperparameters}, while the variables that are optimized during training are the \textit{model parameters}, i.e. 
+\textit{hyperparameters}, while the variables that are optimized during training are the \textit{model parameters}, i.e.\ 
 the weights and biases. Other examples of hyperparameters are the learning rate (\autoref{sec:optimization}) and 
 the number of nodes and layers of the NN. Various techniques for deciding on satisfactory hyperparameters are 
 discussed in \autoref{sec:determineHyperparameters}. 
@@ -1824,7 +1841,7 @@ of all the neighbours $i$ of atom $k$ and $k$ itself. This is the reverse proces
 where the differentiation is perfomed in the direction of the arrows. 
 We realize that the first term
 $\partial E_i\partial G_{i,s}$ is the derivative of the output of the atomic NN of atom $i$ with respect to the inputs,
-i.e. the gradient of the NN. This is an analytical gradient
+i.e.\ the gradient of the NN. This is an analytical gradient
 which is given by the architecture of the NN, including the values of the weights and biases.
 We recall from \ref{sec:backprop} that the backpropagation algorithm calculates the derivatives of all neurons in a NN to obtain
 the amount of which each weight and bias should be adjusted during training. We can thus use a slightly modified version
@@ -1923,7 +1940,7 @@ and
  \frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_k} &= \frac{\partial G^n(x_{ij}, x_{ik})}{\partial x_{ik}}
 \end{align}
 \end{subequations}
-i.e. the derivative w.r.t. $i$ is the negative sum of the derivatives w.r.t. $j$ and $k$. This is a symmetry we
+i.e.\ the derivative w.r.t. $i$ is the negative sum of the derivatives w.r.t. $j$ and $k$. This is a symmetry we
 have exploited in our code, see \autoref{sec:extendingLammps}. 
 
 To obtain the derivatives of the energies \eqref{energyAtom1} and \eqref{energyAtom2}, we apply the chain rule
@@ -1959,7 +1976,7 @@ that the interaction strength falls rapidly with distance for most systems where
 
 
 \subsection{Summary}
-In this chapter we have introduced the Behler-Parinello method for constructing NNPs to be used in MD simulations. 
+In this chapter we have introduced the Behler-Parrinello method for constructing NNPs to be used in MD simulations. 
 This scheme employs certain symmetry functions that have the following desirable properties,
 \begin{enumerate}
  \item They are atom-centered and have an inherent cutoff $R_c$ that defines a chemical environment of tractable size. 
@@ -1987,7 +2004,7 @@ REFERENCE TO MANUAL - FOOTNOTE OF REFERNCE?
 LAMMPS (Large-scale Atomic/Molecular Massively Parallel Simulator)
 is a classical molecular dynamics simulation package 
 developed at Sandia National Laboratories \cite{Plimpton95}. It is written
-in highly portable and extendable objected-oriented \texttt{C++}. 
+in highly portable and extendable objected-oriented C\texttt{++}. 
 The package's functionality encompasses a wide variety of 
 potentials, atom types, integrators, thermostats and 
 ensembles and are able to simulate a large number
@@ -2032,7 +2049,7 @@ can be installed. This can be done by running
 \begin{lstlisting}[language=bash]
  make yes-<package name>
 \end{lstlisting}
-e.g. \texttt{manybody} to install many-body potentials
+e.g.\ \texttt{manybody} to install many-body potentials
 like Stillinger-Weber and Vashishta. 
 
 \section{LAMMPS input script}
@@ -2268,7 +2285,7 @@ on a simple input script. Now we move on to
 how class hierarchy of LAMMPS is structured. 
 
 \section{LAMMPS structure}
-LAMMPS is written in \texttt{C++} in an object-oriented
+LAMMPS is written in C\texttt{++} in an object-oriented
 fashion. The class hierarchy is shown schematically
 in \autoref{fig:lammpsClasses}. 
 The top-level classes (blue)
@@ -2333,7 +2350,7 @@ and \texttt{init\_style}. The former controls the number of arguments to
 decides what kind of neighbour lists that LAMMPS should provide to the potential. Our NN potential needs 
 full neighbour lists to be able to compute three-body terms, something which applies to all many-body potentials. 
 
-The parent class \texttt{Pair} has three \textit{pure virtual member functions}, i.e. functions that are required
+The parent class \texttt{Pair} has three \textit{pure virtual member functions}, i.e.\ functions that are required
 to be implemented by a derived class: \texttt{compute}, \texttt{coeff} and the aforementioned \texttt{settings}. 
 The \texttt{compute} method is where the forces and energies are calculated. This function is called
 once each time step by the Verlet algorithm and the resulting forces are used to integrate Newton's equations
@@ -2601,7 +2618,7 @@ the Google Brain Team \footnote{\href
 {https://research.google.com/teams/brain/}{https://research.google.com/teams/brain/}}
 with the purpose of conducting machine learning and 
 deep neural networks research, but is 
-applicable in other domains as well, e.g. for
+applicable in other domains as well, e.g.\ for
 solving partial differential equations. 
 The package incorporates
 a wide variety of machine learning algorithms, including
@@ -2647,16 +2664,16 @@ will test if the installation was succesful.
 
 \section{TensorFlow basic usage} \label{sec:TensorFlowBasic}
 TensorFlow relies on highly-optimized
-\texttt{C++} for its computations, but offers
+C\texttt{++} for its computations, but offers
 APIs \footnote{\href{https://www.tensorflow.org/api_docs/}
 {https://www.tensorflow.org/api\_docs/}}
 in both \texttt{Python},
-\texttt{C++} and a few other languages. 
+C\texttt{++} and a few other languages. 
 The \texttt{Python} API is at present the most
 complete, the easiest to use and the best documented.
 We have therefore chosen to use \texttt{Python}
 to train neural networks. For a discussion
-on ways to import a trained NN to \texttt{C++} see
+on ways to import a trained NN to C\texttt{++} see
 \autoref{sec:extendingLammps}
 and \autoref{sec:timeUsage}. 
 
@@ -2752,7 +2769,7 @@ We note that the shapes of the weight matrices and bias vectors are in accordanc
 \autoref{sec:MLPmodel}.
 
 The activations (outputs) of each layer are calculated according to \eqref{preActivationLayer} and \eqref{activationLayer}. 
-Together with the input \texttt{placeholder}, these are of type \texttt{tf.Tensor}, i.e. nodes in the computational 
+Together with the input \texttt{placeholder}, these are of type \texttt{tf.Tensor}, i.e.\ nodes in the computational 
 graph. 
 
 \subsection{Visualizing the graph}
@@ -3007,12 +3024,12 @@ The method for constructing a NN PES with data sampled from MD simulations is as
 \end{enumerate}
 The idea is to improve the NN potential iteratively and in a self-consistent 
 way by applying it in MD simulations to find 
-''holes'' in the data set, i.e. configurations on which the NNP predicts incorrect energies and forces. The process
+''holes'' in the data set, i.e.\ configurations on which the NNP predicts incorrect energies and forces. The process
 is different depending on whether we are constructing a NNP from \textit{ab inito} electronic structure data
 or reproducing known, empirical MD potentials. 
 
 For the latter, we construct the initial data set by sampling configurations from MD simulations that is relevant
-for the intended applications of the NNP. Furthermore, we are extracting both coordinates and energies from the simulations, i.e.
+for the intended applications of the NNP. Furthermore, we are extracting both coordinates and energies from the simulations, i.e.\
 we get both the input data in step 1 and the target values in step 2 simultaneously. To compute the energies in
 step 4, we simply run a pseudo-simulation on the new structures. This is easily done in LAMMPS by using 
 the \texttt{rerun} command, which tells LAMMPS to compute the energies and forces of atomic configurations 
@@ -3036,7 +3053,7 @@ For instance, if a specific chemical reaction is studied, one can use previous k
 select configurations along the reaction path \cite{Ischtwan94}. The disadvantage of this approach is that
 such information is not always available. 
 
-A more effective method has been presented by Raff et al. \cite{Raff05}, where a semi-empirical
+A more effective method has been presented by Raff et al.\ \cite{Raff05}, where a semi-empirical
 potential has been deployed to initiate the sampling. If a reasonable potential is chosen and an adequate
 sampling method is devised (discussed below), several thousand physically relevant structures can be obtained
 that will constitue the initial data set. It has also been shown \cite{Raff05} that the final PES obtained 
@@ -3077,7 +3094,7 @@ in regions where the forces are small, at least in equilibrium MD.
 
 To sample configuration space with something close to a uniform density, the time interval $\tau$ between 
 sampling needs to be a function of the atomic accelerations (or forces). One such variable 
-interval sampling algorithm, suggested by Pukrittayakamee et al. \cite{Pukrittayakamee09}, is given as
+interval sampling algorithm, suggested by Pukrittayakamee et al.\ \cite{Pukrittayakamee09}, is given as
 \begin{equation}
  \tau = 
 \begin{cases}
@@ -3092,7 +3109,7 @@ where $a_i$ is the absolute value of the acceleration of atom $i$, $\Delta t$ is
 $a_\textrm{max}$ is the maximum acceleration of a chosen molecule and $\textrm{floor}(x)$ yields
 the integer part of $x$. The constant $\alpha$ is system dependent and must be determined empirically. It is the value 
 of $\alpha$ that determines the sampling frequency. We see from the second condition in \eqref{variableIntervalSampling} that
-configurations with an acceleration $a_i > \alpha$ yields $\tau = \Delta t$, i.e. the shortest possible sampling
+configurations with an acceleration $a_i > \alpha$ yields $\tau = \Delta t$, i.e.\ the shortest possible sampling
 interval. On the other hand, if $a_i < \alpha$, the interval increases by a factor $\textrm{floor}(\alpha/a_\textrm{max})$. 
 This approach ensures that we sample all configurations where the gradient of the PES is large, while skipping many
 of the low-gradient regions of configuration space. 
@@ -3118,7 +3135,7 @@ executed, if not the forces will be incorrect. This can be achieved by extending
 force calculations. 
 
 We have made an additional modification to the algorithm \eqref{variableIntervalSampling}.  
-Pukrittayakamee et al. \cite{Pukrittayakamee09} sample \texttt{clusters} of atoms for subsequent DFT calculations
+Pukrittayakamee et al.\ \cite{Pukrittayakamee09} sample \texttt{clusters} of atoms for subsequent DFT calculations
 of the energies of these clusters, and computes $\tau$ based on the maximum acceleration of an atom in a cluster. 
 Our strategy is to select a few atoms, usually 1-10, and compute $\tau$ seperately for each of these atoms. When 
 the sampling criterium is met, the coordinates of all neighbours relative to the central atom is written to file, 
@@ -3241,7 +3258,7 @@ the NN is trained on this extended data set and thus improved. Then, new simulat
 NNP and so on, according to the iterative process \autoref{NNPalgorithm} described in the beginning of this chapter. 
 
 This approach is easily feasible when the target PES is an empirical potential, but too computationally expensive 
-in the case where electronic structure methods are employed. Raff et al. \cite{Raff05} have developed a sampling
+in the case where electronic structure methods are employed. Raff et al.\ \cite{Raff05} have developed a sampling
 algorithm called \textit{modified novelty sampling} that does not require any quantum mechanical calculations of
 the energies of new structures. They describe the database as a set of vectors $\{\vec{q}\}$, where vector
 $\vec{q}_i$ contains the internal coordinates of the $i_\textrm{th}$ cluster of atoms. New configurations
@@ -3351,11 +3368,11 @@ in \autoref{fig:radialParams}.
 
 \subsubsection{Angular symmetry functions}
 A set of initial angular symmetry functions can be made in a similar way. 
-The angular distribution of neighbours is probed by varying $\zeta$ and $\lambda$ at differing radii, i.e. for 
+The angular distribution of neighbours is probed by varying $\zeta$ and $\lambda$ at differing radii, i.e.\ for 
 several values of $\eta$ and/or $R_c$. 
 We have found from empirical investigations that fixing $\eta$, while varying $R_c$ yield the best results. 
 In contrast to the radial parameters, the set of $\zeta$ parameters should not be equidistant. Instead, the values of $\zeta$
-should increase exponentially to ensure that the symmetry functions are sufficiently dissimiliar. i.e. to \textit{avoid
+should increase exponentially to ensure that the symmetry functions are sufficiently dissimiliar. i.e.\ to \textit{avoid
 strong correlations} (discussed further below).  An example is shown in \autoref{fig:angularParams}. 
 \begin{figure}
 \centering
@@ -3375,7 +3392,7 @@ all regions of configuratiton space without having any redundancies.
 
 Further, the number of functions must be large enough for the NNP to be able to distinguish distinct atomic structures that
 should yield different total energies. This distinction is more difficult for configurations of a large number of atoms, because
-e.g. removing one atom from an atomic environment containing 100 atoms only results in a small relative 
+e.g.\ removing one atom from an atomic environment containing 100 atoms only results in a small relative 
 perturbation of the symmetry function values. Thus, we should obtain information on how many input atoms 
 the eventual NNP is expected to experience in simulations. 
 
@@ -3489,7 +3506,7 @@ can also be combined.
 
 For reasons outlined in \autoref{sec:hyperParamsActFunctions},
 another operation that can speed up training is variance scaling \cite{LeCun12}.
-This is combined with shifting of means, such that each symmetry function e.g. has zero-mean and unit-variance,
+This is combined with shifting of means, such that each symmetry function e.g.\ has zero-mean and unit-variance,
 called \textit{standardization},
 \begin{equation}
  G_{i,s}^\prime = \frac{G_{i,s} - \overline{G}_s}{\sigma_s} 
@@ -3502,8 +3519,8 @@ We have seen that a number of operations can be performed on the input data to s
 Note that the these can be applied to the target values as well.  
 \footnote{The observations on scaling and shifting of input variables are valid for most 
 types of input and output data. Scaling of target values are more important 
-for classification, where the output is binary (e.g. \{-1,1\}), than for regression.} However, for the construction of NNPs, 
-the convergence speed is not a main issue. In contrast to e.g. object recognition with deep convolutional networks, where
+for classification, where the output is binary (e.g.\ \{-1,1\}), than for regression.} However, for the construction of NNPs, 
+the convergence speed is not a main issue. In contrast to e.g.\ object recognition with deep convolutional networks, where
 often thousands of NN parameters are needed \cite{LeCun99}, NNPs usually require only up to a few hundred weights. Even though 
 the data set to be fitted can be quite extensive, the duration of the training is rarely more than 30 minutes to 1 hour before 
 an acceptable error is achieved.
@@ -3567,7 +3584,7 @@ conserve the input signal when propagated through the network by preventing it f
 \begin{equation}
  W_l \in U\left[-\frac{\sqrt{6}}{\sqrt{n_{l-1}+n_{l}}}, \frac{\sqrt{6}}{\sqrt{n_{l-1}+n_{l}}}  \right]
 \end{equation}
-This is only valid for an activation function that is symmetric and has a unit derivative at 0 ($f^\prime(0) = 1$), i.e. only 
+This is only valid for an activation function that is symmetric and has a unit derivative at 0 ($f^\prime(0) = 1$), i.e.\ only 
 for the hyperbolic tangent. Further, all input variables are assumed to have the same variance.
 
 
@@ -3627,8 +3644,8 @@ but primary a tool to prevent overfitting.
 The only way to find the optimal architecture is by training several networks of different sizes and choose the one that yields
 the lowest error while simultaneously not overfitting. The problem with this strategy is that the possibilities are very many. 
 We can however make a few observations to narrow down the search. 
-According to Larochelle et al. \cite{Larochelle09}, having the same number of nodes in each hidden layer give the best results. 
-Further, in the literature we have studied concerning NNPs, e.g. \cite{Behler07} \cite{Raff05} \cite{Witkoskie05}, 
+According to Larochelle et al.\ \cite{Larochelle09}, having the same number of nodes in each hidden layer give the best results. 
+Further, in the literature we have studied concerning NNPs, e.g.\ \cite{Behler07} \cite{Raff05} \cite{Witkoskie05}, 
 only one or two hidden layers are used, and we know from the universal approximation theorem (\autoref{sec:whyMLP})
 that one hidden layer is sufficient to represent any function. For typical AI tasks, deeper architectures are required 
 \cite{Bengio07}, but in this thesis we will limit ourselves to maximum three hidden layers. 
@@ -3689,7 +3706,7 @@ not its gradient $Y^\prime$ (the forces). If a small error is achieved for the p
 the error is low also for the gradient, but this is not assured. Considering that the forces determine the 
 dynamics of a simulation, this is not ideal. 
 
-Pukrittayakamee et al. \cite{Pukrittayakamee09} have suggested an extension to the standard mean-square error, that 
+Pukrittayakamee et al.\ \cite{Pukrittayakamee09} have suggested an extension to the standard mean-square error, that 
 enables simultaneous fitting of both a function and its gradient (the CFDA algorithm). 
 This is achieved by penalizing both the error 
 in the potential and in the forces, and has also been employed by Behler in a modifed form \cite{Behler15},
@@ -3730,7 +3747,7 @@ We realize that there are a substantial number of choices to be made, correspond
 that many (if not all) of these choices are vital for a successful outcome. Even though the above discussions narrows down the search 
 for suitable hyperparameters, it is still a difficult task. 
 
-An alternative is to treat hyperparameter selection as an optimization problem, i.e. to train the NN for many different 
+An alternative is to treat hyperparameter selection as an optimization problem, i.e.\ to train the NN for many different 
 parameter sets and choose the set that yields the best fit. To perform this task, it is common to split the data set 
 into three parts: a training set, a test set, and a \textit{validation set}. The first two sets have the same 
 purpose as before (\autoref{sec:overfitting}), while the validation set is used to test the model during hyperparameter 
@@ -3776,14 +3793,14 @@ The general workflow for constructing and applying a NNP is as follows:
  \item Use the analytical expression for the eventual NNP as a potential in MD simulations
 \end{enumerate}
 
-\subsection{Transfer neural network from Python to C++}
-In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C++, is
+\subsection{Transfer neural network from Python to C\texttt{++}}
+In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C\texttt{++}, is
 employed to run MD simulations for speed purposes. 
-We therefore need a way to transfer the NNP from Python to C++. 
+We therefore need a way to transfer the NNP from Python to C\texttt{++}. 
 
 There are built-in functions in TF that automatically saves computational graphs (architecture of network plus
 nodes for training) and variables (weights and activation functions) as binary files.
-These files can then be read and the NN evaluated using the TF C++ API. This API is however quite under-developed
+These files can then be read and the NN evaluated using the TF C\texttt{++} API. This API is however quite under-developed
 and the documentation is very sparse. 
 
 Another alternative that we have developed is to manually save the weights and biases
@@ -3797,8 +3814,8 @@ be utilized for speed and simplicity; we have chosen to use Armadillo
 \footnote{\href{http://arma.sourceforge.net/}{Armadillo}}. 
 
 To find out which alternative is the most computationally efficient, we compare the 
-CPU time usage between evaluating a NN with TensorFlow and Armadillo in C++. We also compare with TF in Python to 
-investigate if any differences between TF and Armadillo in C++ is caused by an under-developed C++ TF API, or 
+CPU time usage between evaluating a NN with TensorFlow and Armadillo in C\texttt{++}. We also compare with TF in Python to 
+investigate if any differences between TF and Armadillo in C\texttt{++} is caused by an under-developed C\texttt{++} TF API, or 
 if the cause is inherent to the TF implementation of neural networks.
 The evaluation time 
 is measured for a range of different NN sizes, and for each size an average of 50 evaluations have been computed.
@@ -3807,7 +3824,7 @@ The results are shown in \autoref{fig:timeComparisonEvaluateNetworkTotalScatter}
 \centering
   \includegraphics[width = 0.9\linewidth]{Figures/Tests/timeComparisonNetworkNew.pdf}
   \caption{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions
-	   using the TF Python API ($T_{\mathrm{TFP}}$), the TF C++ API ($T_{\mathrm{TFC}}$) and Armadillo ($T_{\mathrm{ARMA}}$). 
+	   using the TF Python API ($T_{\mathrm{TFP}}$), the TF C\texttt{++} API ($T_{\mathrm{TFC}}$) and Armadillo ($T_{\mathrm{ARMA}}$). 
 	   $L$ is the number of hidden layers, $n$ is the number of nodes in each hidden layer. All the NNs
 	   have one input and one output. The time has been found by averaging over 50 evaluations
 	   for each NN architecture.}
@@ -3825,10 +3842,10 @@ visible, while the latter is zoomed in to give a more detailed picture. We obser
 for small networks, and that even for NNs of size 200 the ratio is still about 5. From c), we decude that the ratio seems to converge 
 to 1 for large networks, but the convergence rate is surprisingly low. 
 As we see from d), the performance of the built-in TF functions is similar 
-in C++ and Python, thus the time deviation can not be caused by an under-developed C++ API. 
+in C\texttt{++} and Python, thus the time deviation can not be caused by an under-developed C\texttt{++} API. 
 
 One reason for this phenomenon may be that the \texttt{Session} environment in TF has a lot of overhead. 
-Further, a NN size of 3000 is small compared to e.g. state-of the art convolutional networks, which are usually trained with GPUs. 
+Further, a NN size of 3000 is small compared to e.g.\ state-of the art convolutional networks, which are usually trained with GPUs. 
 Considering that we will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
 is definitively the best choice. 
 
@@ -3973,7 +3990,7 @@ session with $N=20$ inputs is shown in figures \autoref{fig:trainingManyNeighbou
   \end{subfigure}
   \label{fig:trainingManyNeighbourNN1}
   \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
-	   The NN is trained in Python and evaluated and differentiated in C++ using the backpropagation algorithm.
+	   The NN is trained in Python and evaluated and differentiated in C\texttt{++} using the backpropagation algorithm.
 	   The result is compared to the analytical derivative of the LJ potential. Only a part of the training
 	   interval is shown, the graph is essentially flat after this point} 
 \end{figure}
@@ -3994,7 +4011,7 @@ session with $N=20$ inputs is shown in figures \autoref{fig:trainingManyNeighbou
 The cost rapidly decreases during the first 10 000 epochs, then it starts to flatten out. This behaviour seems
 to be general when doing regression with ANNs. 
 There is no sign of overfitting: we do not observe an increase in the test cost relative to the training cost. 
-This is (PROBABLY) due to the fact that our training set and test set are random numbers, i.e. there will be no 
+This is (PROBABLY) due to the fact that our training set and test set are random numbers, i.e.\ there will be no 
 specifics patterns or configurations present in the test set that is not covered by the training set. 
 When we start doing training on data produced by MD trajectories or QM calculations, the situation will different.
 
@@ -4048,7 +4065,7 @@ differentiating the NN for each time step. $\SI{4}{\angstrom}$
 
 \chapter{Neural network potential for Si} \label{sec:SiPotentialResults}
 In this chapter we perform a demonstration of the complete NNP construction process, including 
-the Behler-Parinello method. The goal is construct a potential for solid-state Si by sampling atomic configurations 
+the Behler-Parrinello method. The goal is construct a potential for solid-state Si by sampling atomic configurations 
 and energies from Stillinger-Weber MD simluations. 
 The eventual NNP is validated by computing the radial distribution function for a given temperature, and compared
 with experiments and SW simulations. 
@@ -4335,7 +4352,7 @@ as we can see from \autoref{tab:gridSearch}.
 The NN is trained for 40000 epochs, and for every 1000 epochs the current NN parameters 
 and RMSE are stored. When training is finished, the NN with the smallest RMSE is selected as the final NNP. 
 The best fit was obtained after 11000 epochs, with an RMSE of 0.864 meV. This result is similar to other studies
-employing the Behler-Parinello method for NN interpolation \cite{Behler07} \cite{Artrith12} \cite{Natarajan16} .  
+employing the Behler-Parrinello method for NN interpolation \cite{Behler07} \cite{Artrith12} \cite{Natarajan16} .  
 
 We have only fitted energies, and not forces, thus the exact force RMSE is not easily available. This would have required 
 the computation of Stillinger-Weber forces for all configurations sampled from NNP simulations, and vice versa.
@@ -4475,7 +4492,7 @@ training data for the construction of the Si potential.
 Further, we included a method for detecting extrapolating structures during NNP simulations, which was employed in 
 an iterative scheme to improve the Si NNP by adding new relevant configurations and energies to the initial data set. 
 
-We implemented the Behler-Parinello method to deal with the fixed-dimensionality and symmetry problems of neural networks. 
+We implemented the Behler-Parrinello method to deal with the fixed-dimensionality and symmetry problems of neural networks. 
 A set of symmetry functions was created for the initial Si training data. This set was compared with 
 the radial and angular distribution of atoms in the training data to evaluate its ability to adequately probe 
 the atomic environments. The symmetry functions were also used in an iterative sampling scheme to find new relevant structures 
@@ -4514,7 +4531,7 @@ should possess. These serve as a guide during the construction process, and is a
 starting point for comparing different types of potentials. Behler \cite{Behler11general} lists 10 requirements
 that the ideal potential should meet. We will now evaluate our NNP in the light of these requirements. 
 \begin{enumerate}
- \item \textit{The potential should be accurate, i.e. produce results that are in good agreement with experiments. 
+ \item \textit{The potential should be accurate, i.e.\ produce results that are in good agreement with experiments. 
        Ideally, it should be constructed using \textit{ab inito} methods.} 
        
        The NNP can be fitted to \textit{ab inito} data to arbitrary accuracy, and 
@@ -4531,7 +4548,7 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
        
        The NNP is able to model the breaking and making of bonds as long as the reference set contains
        configurations that are relevant for these processes.  
- \item \textit{The potential should be high-dimensional, i.e. depend on all degress of freedom of the system.}
+ \item \textit{The potential should be high-dimensional, i.e.\ depend on all degress of freedom of the system.}
        
        The NNP is high-dimensional because it depends on all the degrees of freedom of the chemical environment of each atom. 
  \item \textit{The construction of the potential should be as automated as possible.} 
@@ -4540,7 +4557,7 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
        symmetry parameters, optimization parameters and the NN architecture must be adjusted manually. 
        Further, training data can be automatically produced by MD simulations, but the physical conditions 
        of each simulation and the sampling of configurations must be carefully considered. 
- \item \textit{The potential should be predictive, i.e. be reliable for atomic configurations that have not been used in the 
+ \item \textit{The potential should be predictive, i.e.\ be reliable for atomic configurations that have not been used in the 
        construction.}
        
        The NNP is generally not able to extrapolate, and is thus reliable only for configurations that are present in 
@@ -4548,7 +4565,7 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
        
  \item \textit{The potential should be fast to evaluate.}
  
-       The NNP is several orders of magnitude faster to evalute than e.g. DFT or Hartree-Fock potentials, 
+       The NNP is several orders of magnitude faster to evalute than e.g.\ DFT or Hartree-Fock potentials, 
        and thus enables MD simulations with \textit{ab inito} accuracy on larger scales of space and time.  
        It is however notably slower compared to empirical potentials like Lennard-Jones or Stillinger-Weber. 
  \item \textit{The construction of the potential should not require much computation time.}
@@ -5082,7 +5099,7 @@ Here we list the symmetry parameters employed in the construction of the Si NNP 
  DOI: \href{https://doi.org/10.1016/j.nimb.2006.11.040}{10.1016/j.nimb.2006.11.040}
  
 \bibitem{Behler07}
- J. Behler and Michele Parinello. 
+ J. Behler and Michele Parrinello. 
  ''Generalized Neural-Network Representation of High-Dimensional Potential-Energy Surfaces''.
  In: \textit{Physical Review Letters} 98. (2007), 146401. 
  DOI: \href{http://dx.doi.org/10.1103/PhysRevLett.98.146401}{10.1103/PhysRevLett.98.146401}
@@ -5142,7 +5159,7 @@ Here we list the symmetry parameters employed in the construction of the Si NNP 
  In: \textit{Proc. Advances in Neural Information Processing Systems} 25. (2012), 1090–1098.
  
 \bibitem{Hinton12}
- G. Hinton, et al. 
+ G. Hinton, et al.\ 
  ''Deep neural networks for acoustic modeling in speechrecognition.'' 
  In: \textit{IEEE Signal Processing Magazine} 29, (2012), 82–97.
  
@@ -5204,10 +5221,17 @@ Here we list the symmetry parameters employed in the construction of the Si NNP 
  ''Lattice Dynamics of Silicon with Empirical Many-Body Potentials''. 
  In: \textit{Physical review letters} 60. (1988), 2379-2381. 
  
-\bibitem{Zener48}
- C. Zener. 
- ''Theory of Strain Interaction of Solute Atoms''.
- In: \textit{Physical review} 74. (1948). 
+\bibitem{Sherrill10}
+ C. D. Sherrill. 
+ ''Frontiers in electronic structure theory''. 
+ In: \textit{The Journal of Chemical Physics} 132. (2010), 110902. 
+ DOI: \href{http://dx.doi.org/10.1063/1.3369628}{10.1063/1.3369628}
+ 
+\bibitem{Eshet12}
+ H. Eshet, R. Z. Khaliullin, T. D. Kühne, J. Behler, and M. Parrinello. 
+ ''\textit{Ab inito} quality neural-network potential for sodium''. 
+ In: \textit{Physical Review B} 81. (2010), 184107. 
+ DOI: \href{http://dx.doi.org/10.1103/PhysRevB.81.184107}{10.1103/PhysRevB.81.184107}
  
  
  
