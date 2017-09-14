@@ -31,60 +31,63 @@
 \BOOKMARK [2][-]{subsection.3.6.1}{Gradient descent variants}{section.3.6}% 31
 \BOOKMARK [2][-]{subsection.3.6.2}{Optimization algorithms}{section.3.6}% 32
 \BOOKMARK [2][-]{subsection.3.6.3}{Backpropagation}{section.3.6}% 33
-\BOOKMARK [0][-]{chapter.4}{Neural networks in molecular dynamics}{part.1}% 34
+\BOOKMARK [0][-]{chapter.4}{Neural network potentials}{part.1}% 34
 \BOOKMARK [1][-]{section.4.1}{Neural network potentials}{chapter.4}% 35
 \BOOKMARK [2][-]{subsection.4.1.1}{Potentials using single neural network}{section.4.1}% 36
 \BOOKMARK [2][-]{subsection.4.1.2}{Potentials using multiple neural networks}{section.4.1}% 37
 \BOOKMARK [1][-]{section.4.2}{The Behler-Parrinello method}{chapter.4}% 38
 \BOOKMARK [2][-]{subsection.4.2.1}{Symmetry functions}{section.4.2}% 39
 \BOOKMARK [2][-]{subsection.4.2.2}{Symmetry functions and forces}{section.4.2}% 40
-\BOOKMARK [2][-]{subsection.4.2.3}{Summary}{section.4.2}% 41
+\BOOKMARK [1][-]{section.4.3}{Summary}{chapter.4}% 41
 \BOOKMARK [-1][-]{part.2}{II Implementation and results}{}% 42
 \BOOKMARK [0][-]{chapter.5}{LAMMPS}{part.2}% 43
 \BOOKMARK [1][-]{section.5.1}{Installing LAMMPS}{chapter.5}% 44
 \BOOKMARK [1][-]{section.5.2}{LAMMPS input script}{chapter.5}% 45
 \BOOKMARK [1][-]{section.5.3}{LAMMPS structure}{chapter.5}% 46
 \BOOKMARK [1][-]{section.5.4}{Extending LAMMPS}{chapter.5}% 47
-\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 48
-\BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 49
-\BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 50
-\BOOKMARK [2][-]{subsection.6.2.1}{Hello world}{section.6.2}% 51
-\BOOKMARK [2][-]{subsection.6.2.2}{Creating a neural network}{section.6.2}% 52
-\BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 53
-\BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 54
-\BOOKMARK [0][-]{chapter.7}{Constructing a neural network potential}{part.2}% 55
-\BOOKMARK [1][-]{section.7.1}{Selecting the reference set}{chapter.7}% 56
-\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 57
-\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 58
-\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 59
-\BOOKMARK [2][-]{subsection.7.2.1}{Initial set}{section.7.2}% 60
-\BOOKMARK [2][-]{subsection.7.2.2}{Adjusting the set}{section.7.2}% 61
-\BOOKMARK [1][-]{section.7.3}{Setting hyperparameters}{chapter.7}% 62
-\BOOKMARK [2][-]{subsection.7.3.1}{Preconditioning the input data}{section.7.3}% 63
-\BOOKMARK [2][-]{subsection.7.3.2}{Activation functions and weight initialization}{section.7.3}% 64
-\BOOKMARK [2][-]{subsection.7.3.3}{Network architecture and overfitting}{section.7.3}% 65
-\BOOKMARK [2][-]{subsection.7.3.4}{Optimizer parameters}{section.7.3}% 66
-\BOOKMARK [2][-]{subsection.7.3.5}{Cost function}{section.7.3}% 67
-\BOOKMARK [2][-]{subsection.7.3.6}{Hyperparameter space exploration}{section.7.3}% 68
-\BOOKMARK [2][-]{subsection.7.3.7}{Summary}{section.7.3}% 69
-\BOOKMARK [1][-]{section.7.4}{Applying the neural network potential}{chapter.7}% 70
-\BOOKMARK [2][-]{subsection.7.4.1}{Transfer neural network from Python to C++}{section.7.4}% 71
-\BOOKMARK [0][-]{chapter.8}{Lennard-Jones validation}{part.2}% 72
-\BOOKMARK [1][-]{section.8.1}{Error in configuration space}{chapter.8}% 73
-\BOOKMARK [1][-]{section.8.2}{Many-neighbour Lennard-Jones}{chapter.8}% 74
-\BOOKMARK [2][-]{subsection.8.2.1}{Alternative way to obtain forces}{section.8.2}% 75
-\BOOKMARK [0][-]{chapter.9}{Neural network potential for Si}{part.2}% 76
-\BOOKMARK [1][-]{section.9.1}{Sampling initial set}{chapter.9}% 77
-\BOOKMARK [1][-]{section.9.2}{Initial symmetry function set}{chapter.9}% 78
-\BOOKMARK [1][-]{section.9.3}{Fitting the initial data set}{chapter.9}% 79
-\BOOKMARK [1][-]{section.9.4}{Iterative sampling}{chapter.9}% 80
-\BOOKMARK [1][-]{section.9.5}{Fitting the final data set}{chapter.9}% 81
-\BOOKMARK [1][-]{section.9.6}{Applying the NNP}{chapter.9}% 82
-\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 83
-\BOOKMARK [0][-]{chapter.10}{Summary}{part.3}% 84
-\BOOKMARK [0][-]{chapter.11}{Conclusions}{part.3}% 85
-\BOOKMARK [0][-]{chapter.12}{Prospects and future work}{part.3}% 86
-\BOOKMARK [1][-]{section.12.1}{Sampling methods}{chapter.12}% 87
-\BOOKMARK [0][-]{section*.70}{Appendices}{part.3}% 88
-\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 89
-\BOOKMARK [0][-]{Appendix.1.B}{Symmetry function parameters}{part.3}% 90
+\BOOKMARK [2][-]{subsection.5.4.1}{Potential initialization}{section.5.4}% 48
+\BOOKMARK [2][-]{subsection.5.4.2}{Computing energies and forces}{section.5.4}% 49
+\BOOKMARK [1][-]{section.5.5}{Summary}{chapter.5}% 50
+\BOOKMARK [0][-]{chapter.6}{TensorFlow}{part.2}% 51
+\BOOKMARK [1][-]{section.6.1}{Installing TensorFlow}{chapter.6}% 52
+\BOOKMARK [1][-]{section.6.2}{TensorFlow basic usage}{chapter.6}% 53
+\BOOKMARK [2][-]{subsection.6.2.1}{Hello world}{section.6.2}% 54
+\BOOKMARK [2][-]{subsection.6.2.2}{Creating a neural network}{section.6.2}% 55
+\BOOKMARK [2][-]{subsection.6.2.3}{Visualizing the graph}{section.6.2}% 56
+\BOOKMARK [2][-]{subsection.6.2.4}{Training a NN with TensorFlow}{section.6.2}% 57
+\BOOKMARK [0][-]{chapter.7}{Constructing a neural network potential}{part.2}% 58
+\BOOKMARK [1][-]{section.7.1}{Selecting the reference set}{chapter.7}% 59
+\BOOKMARK [2][-]{subsection.7.1.1}{Iterative molecular dynamics sampling}{section.7.1}% 60
+\BOOKMARK [2][-]{subsection.7.1.2}{Sampling algorithms}{section.7.1}% 61
+\BOOKMARK [1][-]{section.7.2}{Constructing the symmetry function sets}{chapter.7}% 62
+\BOOKMARK [2][-]{subsection.7.2.1}{Initial set}{section.7.2}% 63
+\BOOKMARK [2][-]{subsection.7.2.2}{Adjusting the set}{section.7.2}% 64
+\BOOKMARK [1][-]{section.7.3}{Setting hyperparameters}{chapter.7}% 65
+\BOOKMARK [2][-]{subsection.7.3.1}{Preconditioning the input data}{section.7.3}% 66
+\BOOKMARK [2][-]{subsection.7.3.2}{Activation functions and weight initialization}{section.7.3}% 67
+\BOOKMARK [2][-]{subsection.7.3.3}{Network architecture and overfitting}{section.7.3}% 68
+\BOOKMARK [2][-]{subsection.7.3.4}{Optimizer parameters}{section.7.3}% 69
+\BOOKMARK [2][-]{subsection.7.3.5}{Cost function}{section.7.3}% 70
+\BOOKMARK [2][-]{subsection.7.3.6}{Hyperparameter space exploration}{section.7.3}% 71
+\BOOKMARK [2][-]{subsection.7.3.7}{Summary}{section.7.3}% 72
+\BOOKMARK [1][-]{section.7.4}{Applying the neural network potential}{chapter.7}% 73
+\BOOKMARK [2][-]{subsection.7.4.1}{Transfer neural network from Python to C++}{section.7.4}% 74
+\BOOKMARK [0][-]{chapter.8}{Lennard-Jones validation}{part.2}% 75
+\BOOKMARK [1][-]{section.8.1}{Error in configuration space}{chapter.8}% 76
+\BOOKMARK [1][-]{section.8.2}{Many-neighbour Lennard-Jones}{chapter.8}% 77
+\BOOKMARK [2][-]{subsection.8.2.1}{Alternative way to obtain forces}{section.8.2}% 78
+\BOOKMARK [0][-]{chapter.9}{Neural network potential for Si}{part.2}% 79
+\BOOKMARK [1][-]{section.9.1}{Sampling initial set}{chapter.9}% 80
+\BOOKMARK [1][-]{section.9.2}{Initial symmetry function set}{chapter.9}% 81
+\BOOKMARK [1][-]{section.9.3}{Fitting the initial data set}{chapter.9}% 82
+\BOOKMARK [1][-]{section.9.4}{Iterative sampling}{chapter.9}% 83
+\BOOKMARK [1][-]{section.9.5}{Fitting the final data set}{chapter.9}% 84
+\BOOKMARK [1][-]{section.9.6}{Applying the NNP}{chapter.9}% 85
+\BOOKMARK [-1][-]{part.3}{III Conclusions and future work}{}% 86
+\BOOKMARK [0][-]{chapter.10}{Summary}{part.3}% 87
+\BOOKMARK [0][-]{chapter.11}{Conclusions}{part.3}% 88
+\BOOKMARK [0][-]{chapter.12}{Prospects and future work}{part.3}% 89
+\BOOKMARK [1][-]{section.12.1}{Sampling methods}{chapter.12}% 90
+\BOOKMARK [0][-]{section*.70}{Appendices}{part.3}% 91
+\BOOKMARK [0][-]{Appendix.1.A}{Symmetry functions derivatives}{part.3}% 92
+\BOOKMARK [0][-]{Appendix.1.B}{Symmetry function parameters}{part.3}% 93

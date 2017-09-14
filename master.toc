@@ -31,7 +31,7 @@
 \contentsline {subsubsection}{Matrix-vector notation}{29}{section*.15}
 \contentsline {section}{\numberline {3.4}Activation functions}{30}{section.3.4}
 \contentsline {section}{\numberline {3.5}Training}{32}{section.3.5}
-\contentsline {subsection}{\numberline {3.5.1}Cost functions}{32}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.1}Cost functions}{33}{subsection.3.5.1}
 \contentsline {section}{\numberline {3.6}Optimization}{33}{section.3.6}
 \contentsline {subsection}{\numberline {3.6.1}Gradient descent variants}{34}{subsection.3.6.1}
 \contentsline {subsection}{\numberline {3.6.2}Optimization algorithms}{34}{subsection.3.6.2}
@@ -42,27 +42,30 @@
 \contentsline {subsubsection}{Which optimizer to use?}{37}{section*.22}
 \contentsline {subsection}{\numberline {3.6.3}Backpropagation}{37}{subsection.3.6.3}
 \contentsline {subsubsection}{1. Forward propagation}{38}{section*.23}
-\contentsline {subsubsection}{2. Backward propagation}{38}{section*.24}
+\contentsline {subsubsection}{2. Backward propagation}{39}{section*.24}
 \contentsline {subsubsection}{Matrix notation}{41}{section*.26}
 \contentsline {subsubsection}{Training algorithm}{42}{section*.27}
-\contentsline {chapter}{\numberline {4}Neural networks in molecular dynamics}{43}{chapter.4}
-\contentsline {section}{\numberline {4.1}Neural network potentials}{43}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Potentials using single neural network}{43}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Potentials using multiple neural networks}{44}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}The Behler-Parrinello method}{44}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Symmetry functions}{45}{subsection.4.2.1}
-\contentsline {subsubsection}{Radial symmetry functions}{46}{section*.29}
-\contentsline {subsubsection}{Angular symmetry functions}{49}{section*.31}
-\contentsline {subsubsection}{Setting the symmetry parameters}{49}{section*.33}
-\contentsline {subsection}{\numberline {4.2.2}Symmetry functions and forces}{50}{subsection.4.2.2}
-\contentsline {subsubsection}{Change of coordinates}{52}{section*.34}
-\contentsline {subsection}{\numberline {4.2.3}Summary}{54}{subsection.4.2.3}
+\contentsline {chapter}{\numberline {4}Neural network potentials}{45}{chapter.4}
+\contentsline {section}{\numberline {4.1}Neural network potentials}{45}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Potentials using single neural network}{45}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Potentials using multiple neural networks}{46}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}The Behler-Parrinello method}{46}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Symmetry functions}{47}{subsection.4.2.1}
+\contentsline {subsubsection}{Radial symmetry functions}{48}{section*.29}
+\contentsline {subsubsection}{Angular symmetry functions}{50}{section*.31}
+\contentsline {subsubsection}{Determining the symmetry parameters}{51}{section*.33}
+\contentsline {subsection}{\numberline {4.2.2}Symmetry functions and forces}{52}{subsection.4.2.2}
+\contentsline {subsubsection}{Change of coordinates}{53}{section*.34}
+\contentsline {section}{\numberline {4.3}Summary}{56}{section.4.3}
 \contentsline {part}{II\hspace {1em}Implementation and results}{57}{part.2}
 \contentsline {chapter}{\numberline {5}LAMMPS}{59}{chapter.5}
 \contentsline {section}{\numberline {5.1}Installing LAMMPS}{59}{section.5.1}
 \contentsline {section}{\numberline {5.2}LAMMPS input script}{60}{section.5.2}
 \contentsline {section}{\numberline {5.3}LAMMPS structure}{64}{section.5.3}
 \contentsline {section}{\numberline {5.4}Extending LAMMPS}{64}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Potential initialization}{66}{subsection.5.4.1}
+\contentsline {subsection}{\numberline {5.4.2}Computing energies and forces}{67}{subsection.5.4.2}
+\contentsline {section}{\numberline {5.5}Summary}{72}{section.5.5}
 \contentsline {chapter}{\numberline {6}TensorFlow}{73}{chapter.6}
 \contentsline {section}{\numberline {6.1}Installing TensorFlow}{74}{section.6.1}
 \contentsline {section}{\numberline {6.2}TensorFlow basic usage}{75}{section.6.2}
