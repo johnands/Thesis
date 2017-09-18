@@ -76,48 +76,48 @@
 \contentsline {chapter}{\numberline {7}Constructing a neural network potential}{83}{chapter.7}
 \contentsline {section}{\numberline {7.1}Selecting the reference set}{83}{section.7.1}
 \contentsline {subsection}{\numberline {7.1.1}Iterative molecular dynamics sampling}{84}{subsection.7.1.1}
-\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{85}{subsection.7.1.2}
+\contentsline {subsection}{\numberline {7.1.2}Sampling algorithms}{86}{subsection.7.1.2}
 \contentsline {subsubsection}{Initial sampling}{86}{section*.40}
-\contentsline {subsubsection}{Iterative sampling}{90}{section*.42}
-\contentsline {subsubsection}{Summary}{91}{section*.43}
+\contentsline {subsubsection}{Iterative sampling}{89}{section*.42}
+\contentsline {subsection}{\numberline {7.1.3}Summary}{91}{subsection.7.1.3}
 \contentsline {section}{\numberline {7.2}Constructing the symmetry function sets}{92}{section.7.2}
 \contentsline {subsection}{\numberline {7.2.1}Initial set}{92}{subsection.7.2.1}
-\contentsline {subsubsection}{Angular symmetry functions}{93}{section*.45}
-\contentsline {subsubsection}{Number of symmetry functions}{93}{section*.47}
-\contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{95}{subsection.7.2.2}
-\contentsline {subsubsection}{For each symmetry function, the range of function values should be as large as possible}{95}{section*.48}
-\contentsline {subsubsection}{The set of values of two different symmetry functions on a given data set should not be strongly correlated}{95}{section*.49}
+\contentsline {subsubsection}{Angular symmetry functions}{93}{section*.44}
+\contentsline {subsubsection}{Number of symmetry functions}{93}{section*.46}
+\contentsline {subsection}{\numberline {7.2.2}Adjusting the set}{94}{subsection.7.2.2}
+\contentsline {subsubsection}{For each symmetry function, the range of function values should be as large as possible}{95}{section*.47}
+\contentsline {subsubsection}{The set of values of two different symmetry functions on a given data set should not be strongly correlated}{95}{section*.48}
 \contentsline {section}{\numberline {7.3}Setting hyperparameters}{96}{section.7.3}
 \contentsline {subsection}{\numberline {7.3.1}Preconditioning the input data}{96}{subsection.7.3.1}
-\contentsline {subsubsection}{Convergence speed vs evaluation speed}{97}{section*.50}
+\contentsline {subsubsection}{Convergence speed vs evaluation speed}{97}{section*.49}
 \contentsline {subsection}{\numberline {7.3.2}Activation functions and weight initialization}{98}{subsection.7.3.2}
 \contentsline {subsection}{\numberline {7.3.3}Network architecture and overfitting}{99}{subsection.7.3.3}
-\contentsline {subsubsection}{Other regularization teqhniques}{102}{section*.52}
-\contentsline {subsection}{\numberline {7.3.4}Optimizer parameters}{102}{subsection.7.3.4}
-\contentsline {subsection}{\numberline {7.3.5}Cost function}{103}{subsection.7.3.5}
-\contentsline {subsection}{\numberline {7.3.6}Hyperparameter space exploration}{104}{subsection.7.3.6}
-\contentsline {subsubsection}{Coordinate descent}{104}{section*.53}
-\contentsline {subsubsection}{Grid search}{104}{section*.54}
-\contentsline {subsubsection}{Random search}{105}{section*.55}
-\contentsline {subsection}{\numberline {7.3.7}Summary}{105}{subsection.7.3.7}
-\contentsline {section}{\numberline {7.4}Applying the neural network potential}{105}{section.7.4}
-\contentsline {subsection}{\numberline {7.4.1}Transfer neural network from Python to C\texttt {++}}{105}{subsection.7.4.1}
-\contentsline {chapter}{\numberline {8}Lennard-Jones validation}{109}{chapter.8}
-\contentsline {section}{\numberline {8.1}Error in configuration space}{111}{section.8.1}
-\contentsline {section}{\numberline {8.2}Many-neighbour Lennard-Jones}{112}{section.8.2}
-\contentsline {subsection}{\numberline {8.2.1}Alternative way to obtain forces}{113}{subsection.8.2.1}
-\contentsline {chapter}{\numberline {9}Neural network potential for Si}{117}{chapter.9}
-\contentsline {section}{\numberline {9.1}Sampling initial set}{117}{section.9.1}
-\contentsline {section}{\numberline {9.2}Initial symmetry function set}{117}{section.9.2}
-\contentsline {section}{\numberline {9.3}Fitting the initial data set}{118}{section.9.3}
-\contentsline {section}{\numberline {9.4}Iterative sampling}{120}{section.9.4}
-\contentsline {section}{\numberline {9.5}Fitting the final data set}{122}{section.9.5}
-\contentsline {section}{\numberline {9.6}Applying the NNP}{124}{section.9.6}
-\contentsline {part}{III\hspace {1em}Conclusions and future work}{129}{part.3}
-\contentsline {chapter}{\numberline {10}Summary}{131}{chapter.10}
-\contentsline {chapter}{\numberline {11}Conclusions}{133}{chapter.11}
-\contentsline {chapter}{\numberline {12}Prospects and future work}{135}{chapter.12}
-\contentsline {section}{\numberline {12.1}Sampling methods}{135}{section.12.1}
-\contentsline {chapter}{Appendices}{137}{section*.70}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{139}{Appendix.1.A}
-\contentsline {chapter}{\numberline {B}Symmetry function parameters}{145}{Appendix.1.B}
+\contentsline {subsubsection}{Other regularization teqhniques}{101}{section*.51}
+\contentsline {subsection}{\numberline {7.3.4}Optimizer parameters}{101}{subsection.7.3.4}
+\contentsline {subsection}{\numberline {7.3.5}Cost function}{102}{subsection.7.3.5}
+\contentsline {subsection}{\numberline {7.3.6}Hyperparameter space exploration}{103}{subsection.7.3.6}
+\contentsline {subsubsection}{Coordinate descent}{104}{section*.52}
+\contentsline {subsubsection}{Grid search}{104}{section*.53}
+\contentsline {subsubsection}{Random search}{104}{section*.54}
+\contentsline {subsection}{\numberline {7.3.7}Summary}{104}{subsection.7.3.7}
+\contentsline {section}{\numberline {7.4}Applying the neural network potential}{104}{section.7.4}
+\contentsline {section}{\numberline {7.5}Summary}{105}{section.7.5}
+\contentsline {chapter}{\numberline {8}Lennard-Jones validation}{107}{chapter.8}
+\contentsline {section}{\numberline {8.1}Error in configuration space}{108}{section.8.1}
+\contentsline {chapter}{\numberline {9}Neural network potential for Si}{111}{chapter.9}
+\contentsline {section}{\numberline {9.1}Sampling initial set}{111}{section.9.1}
+\contentsline {section}{\numberline {9.2}Initial symmetry function set}{111}{section.9.2}
+\contentsline {section}{\numberline {9.3}Fitting the initial data set}{112}{section.9.3}
+\contentsline {section}{\numberline {9.4}Iterative sampling}{114}{section.9.4}
+\contentsline {section}{\numberline {9.5}Fitting the final data set}{116}{section.9.5}
+\contentsline {section}{\numberline {9.6}Applying the NNP}{118}{section.9.6}
+\contentsline {subsection}{\numberline {9.6.1}Radial distribution function}{120}{subsection.9.6.1}
+\contentsline {subsection}{\numberline {9.6.2}Mechanical properties}{120}{subsection.9.6.2}
+\contentsline {part}{III\hspace {1em}Conclusions and future work}{123}{part.3}
+\contentsline {chapter}{\numberline {10}Summary}{125}{chapter.10}
+\contentsline {chapter}{\numberline {11}Conclusions}{127}{chapter.11}
+\contentsline {chapter}{\numberline {12}Prospects and future work}{129}{chapter.12}
+\contentsline {section}{\numberline {12.1}Sampling methods}{129}{section.12.1}
+\contentsline {chapter}{Appendices}{131}{section*.67}
+\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{133}{Appendix.1.A}
+\contentsline {chapter}{\numberline {B}Symmetry function parameters}{139}{Appendix.1.B}

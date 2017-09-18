@@ -1267,6 +1267,7 @@ The parameter update vector for Adam is obtained by replacing the gradient $\vec
 yielding the update rule,
 \begin{equation}
  \vec{\uptheta}_{k+1} = \vec{\uptheta}_k - \frac{\gamma}{\sqrt{\hat{\vec{b}}_k} + \epsilon} \hat{\vec{a}}_k
+ \label{adamUpdateRule}
 \end{equation}
 The default values of the hyperparameters are $\beta_1 = 0.9$, $\beta_2 = 0.999$ and $\epsilon = 10^{-8}$. 
 
@@ -2069,7 +2070,7 @@ can be installed. This can be done by running
 e.g.\ \texttt{manybody} to install many-body potentials
 like Stillinger-Weber and Vashishta. 
 
-\section{LAMMPS input script}
+\section{LAMMPS input script} \label{sec:lammpsInputScript}
 LAMMPS is run by providing an input script as 
 argument to the excecutable. This input script
 is read line by line and has its own syntax. 
@@ -2659,8 +2660,8 @@ We will now continue with an introduction on how to train NNs with the machine l
 
 
 
-\chapter{TensorFlow}
-TensorFlow \cite{Abadi15} \cite{Abadi16} is an open source software library 
+\chapter{TensorFlow} \label{sec:tensorFlow}
+TensorFlow \cite{Abadi15,Abadi16} is an open source software library 
 developed by Google 
 for numerical computation using data flow graphs (DFG). 
 A DFG is a graphical representation of how data is
@@ -2775,14 +2776,14 @@ outputs, and represents the instantation
 of an \textit{operation}. Each operation
 occurs within a so-called \textit{session}. 
 A \texttt{Hello world!} program can be written as
-\begin{lstlisting}[language=python]
+\begin{minted}{Python}
 import tensorflow as tf
 
 hello = tf.constant('Hello world!')
 sess = tf.Session()
 print sess.run(hello)
 # --> Hello world!
-\end{lstlisting}
+\end{minted}
 This simple example outlines the general
 workflow for building a TensorFlow graph,
 \begin{enumerate}
@@ -2805,13 +2806,12 @@ visualize the corresponding DFG.
 In \autoref{sec:MLPmodel} we demonstrated that a NN can be constructed 
 as a set of matrix-vector multiplications and additions which are input to certain activation functions. 
 The equations for evaluting a NN were \eqref{forwardPropMatrix},
-\begin{equation}
- \begin{aligned}
-  \vec{u}_l &= \mathrm{W}_l\vec{y}_{l-1} + \vec{b}_l \\
-  \vec{y}_l &= f_l(\vec{u}_l)
-  \label{forwardPropMatrix}
- \end{aligned}
-\end{equation}
+\begin{subequations}
+ \begin{align}
+  \vec{u}_l &= \mathrm{W}_l\vec{y}_{l-1} + \vec{b}_l \label{preActivation2} \\
+  \vec{y}_l &= f_l(\vec{u}_l) \label{activation2}
+ \end{align}
+\end{subequations}
 We now want to construct a NN with 3 inputs neurons, one hidden layer with 10 neurons and 1 output neuron. 
 We use the sigmoid \eqref{sigmoidActivationFunction} activation function for the hidden layer, while 
 the output layer have the identity activation function \eqref{outputActivation}.
@@ -2847,7 +2847,7 @@ There are several aspects of the TensorFlow Python API to comment on here.
 We observe that the input layer is declared as a TF \texttt{placeholder}. This is a special
 type of TF tensor that is not initialized with any values, but is rather fed with data on its execution.
 Specifying the first component of its shape as \texttt{None} signifies that we can supply an arbitrary 
-number of data points at the same time.
+number of data points simultaneously.
 These properties enables the same NN to be evaluated for different data vectors of varying size on-the-fly during training, 
 explained in more detail below. 
 
@@ -2857,7 +2857,7 @@ the weights are normally distributed numbers while the biases are all set to the
 We note that the shapes of the weight matrices and bias vectors are in accordance with the description in 
 \autoref{sec:MLPmodel}.
 
-The activations (outputs) of each layer are calculated according to \eqref{preActivationLayer} and \eqref{activationLayer}. 
+The activations (outputs) of each layer are calculated according to \eqref{preActivation2} and \eqref{activation2}. 
 Together with the input \texttt{placeholder}, these are of type \texttt{tf.Tensor}, i.e.\ nodes in the computational 
 graph. 
 
@@ -2865,13 +2865,13 @@ graph.
 We can use TensorBoard to visualize the DFG of the above script. The DFG for the present example is quite
 simple, but for more involved models it quickly becomes difficult to keep track of all the different components. 
 A convenient tool to order and group the DFG is \textit{name scoping}. Both \texttt{Tensors} and \texttt{Variables} can 
-be name scoped and TensorBoard uses this information to define a hierarchy of the nodes in the graph. 
+be name scoped and TensorBoard employs this information to define a hierarchy of the nodes in the graph. 
 An example of name scoping is
-\begin{lstlisting}[language=python]
+\begin{minted}{Python}
  with tf.name_scope('layer1'):
     W1 = tf.Variable( tf.random_normal([inputs,nodes]), name='weights')
     b1 = tf.Variable( tf.constant(0.1, shape=[nodes]), name='biases')
-\end{lstlisting}
+\end{minted}
 which results in the following names,
 \begin{itemize}
  \item \texttt{layer1/weights}
@@ -2921,9 +2921,9 @@ with tf.Session() as sess:
  
 \end{minted}
 There are two new TF function calls to comment on in this script. First, we have the line
-\begin{lstlisting}[language=Python]
+\begin{minted}{Python}
  initOperation = tf.global_variables_initializer()
-\end{lstlisting}
+\end{minted}
 Constants are initalized when we call \texttt{tf.constant}, and their value can never change. 
 By contrast, variables need to be initialized using a seperate operation within a session. 
 The function \texttt{tf.global\_variables\_initializer} adds such an operation to the graph, which initializes
@@ -2937,9 +2937,9 @@ The resulting graph is displayed in \autoref{fig:graphExample}.
 By default, only the top of the hierarchy defined by name scoping is shown. In our case, this
 is the three NN layers. In this figure, the output layer is expanded to reveal all the nodes in this scope. 
 The nodes are marked by ellipses, while the rectangles are namespaces defining another level in the hierarchy, 
-each containing more nodes. The edges show how the nodes are connected. 
+each containing more nodes. The edges show how the nodes are connected% 
 \footnote{Each TF variable and constant are actually made up of several nodes, including \textit{assign} and 
-\textit{read} operations. See TF API for more information.}
+\textit{read} operations. See TF API for more information.}.
 \begin{figure}[H]
 \centering
   \includegraphics[width=0.7\linewidth]{Figures/Implementation/tensorBoardExample.pdf}
@@ -2948,7 +2948,7 @@ each containing more nodes. The edges show how the nodes are connected.
 	   containing several nodes.} 
   \label{fig:graphExample}
 \end{figure}
-Next, we will demonstrate how to train a NN with TensorFlow. 
+\noindent Next, we will demonstrate how to train a NN with TensorFlow. 
 
 \subsection{Training a NN with TensorFlow} 
 To train the NN described in the previous section, we need two additional components:
@@ -2960,14 +2960,14 @@ target values that is fed into a new \texttt{placeholder},
 \end{minted}
 The cost function is now defined as
 \begin{minted}{python}
- trainCost = tf.nn.l2_loss( tf.subtract(actOutput, outputData), name='cost')
+ cost = tf.nn.l2_loss( tf.subtract(actOutput, outputData), name='cost')
 \end{minted}
 This adds an operation to the graph that calculates the mean-square-error between the NN prediction \texttt{actOutput}
 on the data set
 and the known target values \texttt{outputData}. In this work, the input data is configurations of atoms, 
-while the target values are the atomic energies of these configurations. 
+while the target values are the potential energies of these configurations. 
 
-A number of gradient descent-based optimizers are implemented in TensorFlow, including
+A number of gradient descent optimizers are implemented in TensorFlow, including
 vanilla gradient descent \eqref{gradientDescent}, Momentum \cite{Qian99}, Adagrad \cite{Duchi11}, 
 Adadelta \cite{Zeiler12} and Adam \cite{Kingma14}.
 To add the Adam optimizer operation to the graph, we simply write
@@ -2982,14 +2982,14 @@ outputData = tf.placeholder(tf.float32, [None,outputs], name='outputData')
 # cost function
 with tf.name_scope('cost'):
     error = tf.subtract(actOutput, outputData, name='deviation')
-    trainCost = tf.nn.l2_loss(error, name='L2norm')
+    cost = tf.nn.l2_loss(error, name='L2norm')
 
 # optimizer
 with tf.name_scope('optimizer'):
     optimizer = tf.train.AdamOptimizer(learning_rate=0.001, name='Adam')
     trainStep = optimizer.minimize(trainCost, name='trainStep')
 \end{minted}
-\begin{figure}[h]
+\begin{figure}[b]
 \centering
   \includegraphics[width=0.8\linewidth]{Figures/Implementation/tensorBoardTraining.pdf}
   \caption{Example of a computational graph in TensorBoard for training a NN consisting of an input layer, one 
@@ -3025,9 +3025,10 @@ for epoch in xrange(numberOfEpochs+1):
 	yBatch = yTrain[indicies]
 	
 	# train
-	sess.run(trainStep, feed_dict={inputLayer: xBatch, outputData: yBatch})
+	sess.run(trainStep, 
+		 feed_dict={inputLayer: xBatch, outputData: yBatch})
 	
-    # online learning / mini-batch gradient descent
+    # online learning
     else:                      
 	# loop through whole set, train each iteration
 	for b in xrange(numberOfBatches):
@@ -3036,9 +3037,11 @@ for epoch in xrange(numberOfEpochs+1):
 	    yBatch = yTrain[batch]
 	    
 	    # train
-	    sess.run(trainStep, feed_dict={inputLayer: xBatch, outputData: yBatch})
+	    sess.run(trainStep, 
+	             feed_dict={inputLayer: xBatch, outputData: yBatch})
 	    
-    trainError = sess.run(trainCost, feed_dict={inputLayer: xBatch, outputData: yBatch})
+    trainError = sess.run(cost, 
+                        feed_dict={inputLayer: xBatch, outputData: yBatch})
 \end{minted}
 We observe that the training step is performed with the single line,
 \begin{minted}{python}
@@ -3055,15 +3058,19 @@ the Adam update rule is applied and the weights and biases adjusted.
 
 
 \chapter{Constructing a neural network potential} \label{sec:constructingNNP}
-In this chapter we present the general workflow for constructing a high-dimensional NNP 
-intended for a specific physical application. We describe different ways of assembling 
+The general workflow for constructing and applying a high-dimensional neural network potential (NNP) is as follows: 
+\begin{enumerate}
+ \item Generate training data relevant for the intended application of the NNP.
+ \item Train a NN to fit the data, employing a suitable set of hyperparameters.
+ \item Use the analytical expression for the eventual NNP as a potential in MD simulations.
+\end{enumerate}
+In this chapter we will go into details regarding these three steps. 
+We describe different ways of assembling 
 an adequate reference set for the NN, which is the most crucial factor for the performance of 
-the final potential. Some of the outlined procedures are primarily used to construct 
-\textit{ab inito} NNPs, but are included for reference. 
+the final potential. Further, we discuss how suitable hyperparameters can be determined, including the 
+symmetry function parameters. Lastly, we compare the performance of two different methods for evaluating a
+trained NN in simulations. 
 
-Next, we discuss how to find a symmetry function set that fits the system under study.
-The form of the symmetry functions are found in \autoref{sec:NNsAndMD}, while
-the mathematical groundwork of neural networks and various training algorithms are presented in \autoref{sec:machineLearning}.
 
 
 
@@ -3079,7 +3086,7 @@ it quickly becomes practically impossible due to the computational cost.
 
 In this work we do not use \textit{ab inito} methods to compute energies and forces, but this problem is still highly relevant
 due to the high-dimensional nature of our approach. The average number of neighbours for the Stillinger-Weber Si simulations
-in this thesis is about $n=6$, which is a small number compared to most other systems.  
+in this thesis is about $n=6$ (\autoref{sec:SiPotentialResults}), which is a small number compared to most other systems.  
 This number is of great importance to the efficiency of the fitting process because it defines the dimensionality 
 of the problem,
 \begin{enumerate}
@@ -3098,8 +3105,8 @@ We realize that the obvious way to achieve this is to sample configurations from
 yields precisely the subset we are looking for. 
 
 \subsection{Iterative molecular dynamics sampling} \label{sec:iterativeMDsampling}
-The method for constructing a NN PES with data sampled from MD simulations is as follows \cite{Behler11general}
-\cite{Raff12},
+In this thesis we employ an iterative scheme to construct a NNP with data sampled from MD simulations. 
+The method have been used by e.g. Raff et al \cite{Raff12} and Behler \cite{Behler11general}, and is as follows
 \begin{enumerate}
  \item Sample an initial data set from MD simulations. \label{sample} 
  \item Calculate the energies and optionally the forces of this initial data set with a chosen method. \label{refEnergies}
@@ -3108,10 +3115,10 @@ The method for constructing a NN PES with data sampled from MD simulations is as
  \item Carry out simulations using the NNP to find new relevant structures. 
  \item Compute the energies (and forces) of the new structures with the method from 2. and add them to the data set
  \item Train a NN on the extended data set to improve the NNP
- \item Repeat 4.-6. until no new relevant configurations are found. 
+ \item Repeat 4-6. until no new relevant configurations are found. 
   \label{NNPalgorithm}
 \end{enumerate}
-The idea is to improve the NN potential iteratively and in a self-consistent 
+The idea is to improve the NNP iteratively and in a self-consistent 
 way by applying it in MD simulations to find 
 ''holes'' in the data set, i.e.\ configurations on which the NNP predicts incorrect energies and forces. The process
 is different depending on whether we are constructing a NNP from \textit{ab inito} electronic structure data
@@ -3130,11 +3137,11 @@ This is often termed as the ''self-starting problem'',
 and several procedures have been suggested for handling it. 
 
 One option is obviously to generate random configurations. This does however take us back to the 
-original problem discussed in the beginning of this chapter: the large configuration space volume of
+original problem discussed in the beginning of this chapter: The large configuration space volume of
 high-dimensional systems enforces the use of importance sampling methods. 
 It is highly unlikely that random sampling will yield the important regions of configuration space, thus 
 vast amounts of data is needed. Nonetheless, random sampling can be applicable to small systems of 1-3 atoms where
-the complete configuration space can be represented without too much effort. 
+the complete configuration space can be represented without too much effort, see \autoref{sec:LJValidation}. 
 
 Another option is to use chemical intuition to select certain configurations of 
 the system under investigation. 
@@ -3166,14 +3173,14 @@ data points in those regions of configuration space that are relevant to the app
 If there are regions with very high point density compared to others, the NN will be trained to accurately fit these, 
 at the cost of regions that are poorly represented. An exception to this rule is regions where the potential gradient, or forces, 
 are large. These regions, typically configurations where two atoms are close to each other and experience strong
-repulsive forces, are the most difficult for the NN to fit (REFERENCE?), 
+repulsive forces, are the most difficult for the NN to fit, 
 and should therefore have a higher density. 
 
 \subsubsection{Initial sampling}
 The initial data set is supposed to function as a starting point for the construction of the NNP. 
 In this work we use empirical MD potentials to do the initial sampling. Before the process is initiated, 
 we must decide on the specific application for the NNP that we want to develop. This entails 
-defining a range of temperatures, pressures etc. that the final NNP will be valid for, and sample
+defining a range of temperatures, pressures etc.\ that the final NNP will be valid for, and sample
 configurations based on these. 
 
 The time interval between selecting configurations during the MD simulations must also be decided. 
@@ -3195,7 +3202,7 @@ interval sampling algorithm, suggested by Pukrittayakamee et al.\ \cite{Pukritta
 \label{variableIntervalSampling}
 \end{equation}
 where $a_i$ is the absolute value of the acceleration of atom $i$, $\Delta t$ is the integration step size, 
-$a_\textrm{max}$ is the maximum acceleration of a chosen molecule and $\textrm{floor}(x)$ yields
+$a_\textrm{max}$ is the maximum acceleration of a chosen molecule, and $\textrm{floor}(x)$ yields
 the integer part of $x$. The constant $\alpha$ is system dependent and must be determined empirically. It is the value 
 of $\alpha$ that determines the sampling frequency. We see from the second condition in \eqref{variableIntervalSampling} that
 configurations with an acceleration $a_i > \alpha$ yields $\tau = \Delta t$, i.e.\ the shortest possible sampling
@@ -3208,27 +3215,27 @@ readily available in LAMMPS. When sampling systems with periodic boundary condit
 the way forces are updated during a simulation. In LAMMPS, any forces attributed to ghost atoms are added back 
 to the originals after \textit{all} forces are computed. This is done in
 \texttt{verlet.cpp},
-\begin{listing}[H]
- \begin{minted}{c++}
+ \begin{minted}{C++}
   if (pair_compute_flag) force->pair->compute(eflag,vflag);
   // ...
   if (force->newton) comm->reverse_comm();
  \end{minted}
-\end{listing}
 The first line computes the forces on all atoms with the chosen \texttt{pair\_style} potential, while
 the second line communicates the forces on ghost atoms back to the original atoms according to Newton's third law. 
 This means that to employ the algorithm
 \eqref{variableIntervalSampling}, we need to sample configurations \textit{after} this reverse communication is
-executed, if not the forces will be incorrect. This can be achieved by extending LAMMPS with a new \texttt{compute} 
-(described in \autoref{sec:extendingLammps}), as all \texttt{computes} and \texttt{fixes} are invoked after the
+executed, if not the forces will be incorrect. This can be achieved by extending LAMMPS with a new \texttt{compute}%
+\footnote{See \autoref{sec:lammpsInputScript} for an explanation of various LAMMPS input script commands, 
+and \autoref{sec:extendingLammps} for a general description on how to add functionality to LAMMPS.},
+as all \texttt{computes} and \texttt{fixes} are invoked after the
 force calculations. 
 
 We have made an additional modification to the algorithm \eqref{variableIntervalSampling}.  
-Pukrittayakamee et al.\ \cite{Pukrittayakamee09} sample \texttt{clusters} of atoms for subsequent DFT calculations
+Pukrittayakamee et al.\ \cite{Pukrittayakamee09} sample clusters of atoms for subsequent DFT calculations
 of the energies of these clusters, and computes $\tau$ based on the maximum acceleration of an atom in a cluster. 
 Our strategy is to select a few atoms, usually 1-10, and compute $\tau$ seperately for each of these atoms. When 
 the sampling criterium is met, the coordinates of all neighbours relative to the central atom is written to file, 
-as well as the atomic energy the central atom experiences in the presence of its neighbours. These coordinates
+as well as the potential energy the central atom experiences in the presence of its neighbours. These coordinates
 and energies make up the input data and target values, respectively, for a NN to interpolate. 
 Our modified sampling algorithm is thus as follows (written in a less convoluted way than above),
 \begin{equation}
@@ -3243,7 +3250,6 @@ Our modified sampling algorithm is thus as follows (written in a less convoluted
 where $\tau$ is measured in units of $\Delta t$ and $\tau_\textrm{max}$ is the maximum value of $\tau$.
 $F_i$ is the total force on atom $i$ including ghost contributions. 
 We have implemented this sampling algorithm as follows,
-\begin{listing}[H]
 \begin{minted}{c++}
 // ...
 // loop through atoms that is to be sampled
@@ -3282,21 +3288,23 @@ for (auto ii : chosenAtoms) {
       j = jlist[jj];
       // ...
 \end{minted}
-\end{listing}
 The vector \texttt{chosenAtoms} contains the indicies of the atoms that are to be sampled. These indicies are decided
 when the parameters of the employed potential is initiliazed with the input script command \texttt{pair\_coeff}. 
-The variable \texttt{maxDelay} decides how often $\tau$ is updated, and functions as a maximum value of $\tau$. 
+The variable \texttt{maxDelay} decides how often $\tau$ is updated, and serves as a maximum value of $\tau$. 
 Its value does not change in the course of the simulation. 
-\begin{figure}[H]
-\begin{minipage}[t]{0.48\linewidth}
+\begin{figure}
+\begin{minipage}{0.48\linewidth}
   \subcaption{}
   \includegraphics[width=\textwidth]{Figures/Implementation/forceDistSamplingAlgo.pdf}
+  \label{fig:forceDistSamplingAlgo:a}
 \end{minipage}
 \quad
-\begin{minipage}[t]{0.48\linewidth}
+\begin{minipage}{0.48\linewidth}
 \subcaption{}
 \includegraphics[width=\textwidth]{Figures/Implementation/forceDistSamplingAlgoNormed.pdf}
+ \label{fig:forceDistSapmlingAlgo:b}
 \end{minipage}
+\vspace{-1ex}
   \caption{Distribution of forces for one Si atom in a quartz $\textrm{SiO}_2$ crystal with 
 	   and withouth the use of the sampling algorithm \eqref{samplingAlgorithmModified}. 
 	   The crystal consists of 576 atoms, with an initial temperature $T= \SI{1000}{\kelvin}$, 
@@ -3308,7 +3316,8 @@ Its value does not change in the course of the simulation.
 \end{figure}
 \autoref{fig:forceDistSamplingAlgo} displays the distribution of forces for one Si atom in a MD simulation
 of quartz $\textrm{SiO}_2$, with and withouth the use of the sampling algorithm \eqref{samplingAlgorithmModified}. 
-We see from the figure a) that the sampling procedure cuts the number of low-gradient configurations significantly, 
+We see from \autoref{fig:forceDistSamplingAlgo:a} that the 
+sampling procedure cuts the number of low-gradient configurations significantly, 
 while keeping all the environments corresponding to large forces. The resulting distribution is however not uniform, simply
 because the ratio of force counts in the range $F_i = \SIrange{0}{2}{\angstrom}$ to the range $F_i = \SIrange{2}{4}{\angstrom}$
 is too high originally.
@@ -3317,22 +3326,18 @@ One way to smooth the distribution further is to manually delete configurations 
 is finished, but then we risk removing relevant structures. The gradient of the PES is not the only way 
 to measure the quality of the sampled set, the time aspect is also important. 
 By selecting samples on-the-fly, we are guaranteed that the they are distributed somewhat uniformly in the time domain. 
-Deleting structures blindly subsequent to the simulation is therefore not a good idea (I AM NOT SURE IF THIS IS TRUE, 
-HAVE TO BE TESTED).
+Deleting structures blindly subsequent to the simulation is therefore not a good idea.
 
 Another option is to sample different types of systems where the forces are more evenly distributed. 
 Examples are non-periodic systems or systems containing only a few atoms. Also, it can be a good idea 
 to do short simulations where the atoms start out in non-equilibrium positions to obtain configurations
 that are not visited by systems with a regular lattice initial state. 
-In general, it is not required that the data used to train the NNs are the results of physically plausible 
-simulations, the only requirement is that it should cover all possible configurations that the NNP have the possibility
-of experiencing in the course of its application. WRITE MORE / DO TESTS ON THIS???
 
 \subsubsection{Iterative sampling}
 The initial data set is usually not sufficient to construct a stable neural network PES. 
 It is difficult to identify all the relevant structures that the NN have to learn to perform well, and 
 since there is always a small fitting error, the 
-NNP will generate different trajectories than the PES that has been used to train it. This is solved
+NNP will generate different trajectories than the PES that has been used to train it. The data set can be extended
 by sampling new relevant structures from simulations using the preliminary NNP trained on the initial data set. 
 In this way, new configurations
 will ''naturally present themselves'', and the NNP will iteratively improve in a self-consistent way.
@@ -3344,7 +3349,7 @@ The simulations should be carried out under the conditions of the intended appli
 that the relevant parts of configuration space are sampled.
 After a certain amount of new data is added, 
 the NN is trained on this extended data set and thus improved. Then, new simulations are carried out with the improved
-NNP and so on, according to the iterative process \autoref{NNPalgorithm} described in the beginning of this chapter. 
+NNP and so on, according to the iterative process described in the beginning of this chapter. 
 
 This approach is easily feasible when the target PES is an empirical potential, but too computationally expensive 
 in the case where electronic structure methods are employed. Raff et al.\ \cite{Raff05} have developed a sampling
@@ -3374,7 +3379,7 @@ This is achieved by comparing the symmetry function vector of each atom during t
 the minimum and maximum values of each symmetry function in the database for the respective element. 
 When such configurations are encountered, a warning can be issued and the structure sampled.  
 
-The other method developed by Behler is called the \textit{multiple-NN method} and are used to identify 
+The other scheme developed by Behler is called the \textit{multiple-NN method} and is used to identify 
 structures that are within the range of existing symmetry values, but located
 in parts of configuration space that are poorly represented in the reference set.
 The idea is to use the high flexibility and reasonably fast training and evaluation of NNs to validate 
@@ -3383,28 +3388,28 @@ the potential. The procedure is as follows,
  \item Fit several NNs with different architectures to the same data set. All the NNs should be trained
  to the same accuracy. 
  \item Generate a large number of trajectories and corresponding energies using one of these NNPs in MD simulations.
- \item Recalculate the energies of the obtained trajectories using the other NNPs
+ \item Recalculate the energies of the obtained trajectories using the other NNPs.
  \item Structures for which the energy disagreement between the different NNPs is significant should be added to 
  the data set.
 \end{enumerate}
-This method takes advantage of the poor extrapolation abilites of NNs: the energy predictions of the different NNPs will
+This method takes advantage of the poor extrapolation abilites of NNs: The energy predictions of the different NNPs will
 be more or less random on structures that are far away from the training points. Thus, missing structures can 
 be identified by comparing the energy predictions of the different NNPs on the genereated trajectories. The procedure 
 also provides a criterion for determining the convergence of the PES without requiring the repeated computation 
 of dynamic properties of the system under study. When, after several iterations of the multiple-NN method,
 no problematic structures are found, the NNP should be reliable and ready for use. 
 
-\subsubsection{Summary}
-In this section we have presented the workflow for constructing a NNP, including several procedures to 
+\subsection{Summary}
+In this section we have presented several procedures to 
 assemble the data set for the NN, which depends on how the target energies are computed. 
-In this work, we know the PES we are trying to fit, which are well-known empirical MD potentials. 
-Therefore, the NNP is validated simply by comparing its predictions to the target PES.  
+In this work, we know the PESs we are trying to fit, which are common empirical MD potentials. 
+Therefore, the NNP can be validated simply by comparing its predictions to the target PES.  
 On the other hand, if an \textit{ab inito} NNP is to be constructed, the underlying target PES is not known, 
 and computing energies and forces of eventual new structures are expensive. Two methods circumventing
-this problem has been described, but they are not used in this thesis. 
+this problem has been described.
 
 Still, there are several factors to consider when constructing the reference set, irrelevant of how the target PES looks like.  
-We have implemented and employed the sampling algorithm \eqref{samplingAlgorithmModified} in this thesis to obtain a more uniform
+We have implemented and employed a sampling algorithm \eqref{samplingAlgorithmModified} in this thesis to obtain a more uniform
 distribution of forces in the data set. The thermodynamical properties of the MD simulations that we sample configurations 
 from have also been carefully considered, described in more detail in \autoref{sec:SiPotentialResults}.  
 
@@ -3428,19 +3433,20 @@ A good strategy is to start out with an initial set that satisfies certain crite
 fit the reference data at hand. We follow and extend upon the discussions in \cite{Behler11symmetry} and \cite{Behler15}. 
 Note that each symmetry function 
 can be treated as a variable that is assigned a unique value for each training example in the data set. 
-Thus we occasionaly refer to a single symmetry function as an \textit{input variable}.  
+Thus we occasionaly refer to a single symmetry function as an \textit{input variable}. The symmetry function definitions 
+are found in \autoref{sec:symmetryFunctions}. 
 
 \subsection{Initial set} \label{sec:initialSymmSet}
 There are some general rules that guide the construction of the initial symmetry function set.
-First, \textit{The symmetry function set should cover the configuration space in an unbiased way}.
+First, \textit{the symmetry function set should cover the configuration space in an unbiased way}.
 This can be realized by simply choosing an equidistant set of initial radial symmetry functions (the angular
 functions are discussed below). Further, the distribution of inter-atomic distances in the data set may be investigated to aquire a 
-lower and upper bound on the range of radial parameter values. For $G^2$, a rule of thumb is that, for each element, 
+lower and upper bound on the range of radial parameter values. For $G_i^2$, a rule of thumb is that, for each element, 
 the width (standard deviation) of the Gaussian
 with the largest $\eta$ value should correspond to the shortest inter-atomic distance present in the data set 
 and vice versa. 
 
-Also, a set of symmetry functions with equidistant $R_s$ parameters should be present in the initial set to improve 
+Also, a set of symmetry functions with equidistant $r_s$ parameters should be present in the initial set to improve 
 the sensitivity at various radii. 
 These should all have the same, large $\eta$ value to prevent too much overlap. 
 An example of an initial radial symmetry function set is displayed
@@ -3448,20 +3454,20 @@ in \autoref{fig:radialParams}.
 \begin{figure}
 \centering
   \includegraphics[width = 0.7\linewidth]{Figures/Implementation/radialParams.pdf}
-  \caption{Example of an initial radial symmetry function set. The parameters $\eta$ and $R_s$ are varied to 
+  \caption{Example of an initial radial symmetry function set. The parameters $\eta$ and $r_s$ are varied to 
   probe the radial arrangement of neighbouring atoms.
-  All symmetry functions have the same cutoff $R_c = 6.0$. 
-  $R_{ij}$, $R_s$ and $R_c$ are in units of $\SI{}{\angstrom}$, while $\eta$ have units $\SI{}{\angstrom}^{-2}$.}
+  All symmetry functions have the same cutoff $r_c = 6.0$. 
+  $r_{ij}$, $r_s$ and $r_c$ are in units of $\SI{}{\angstrom}$, while $\eta$ have units $\SI{}{\angstrom}^{-2}$.}
   \label{fig:radialParams}
 \end{figure}
 
 \subsubsection{Angular symmetry functions}
 A set of initial angular symmetry functions can be made in a similar way. 
 The angular distribution of neighbours is probed by varying $\zeta$ and $\lambda$ at differing radii, i.e.\ for 
-several values of $\eta$ and/or $R_c$. 
-We have found from empirical investigations that fixing $\eta$, while varying $R_c$ yield the best results. 
+several values of $\eta$ and/or $r_c$. 
+We have found from empirical investigations that fixing $\eta$, while varying $r_c$ yield the best results. 
 In contrast to the radial parameters, the set of $\zeta$ parameters should not be equidistant. Instead, the values of $\zeta$
-should increase exponentially to ensure that the symmetry functions are sufficiently dissimiliar. i.e.\ to \textit{avoid
+should increase exponentially to ensure that the symmetry functions are sufficiently dissimiliar, i.e.\ to \textit{avoid
 strong correlations} (discussed further below).  An example is shown in \autoref{fig:angularParams}. 
 \begin{figure}
 \centering
@@ -3485,7 +3491,7 @@ e.g.\ removing one atom from an atomic environment containing 100 atoms only res
 perturbation of the symmetry function values. Thus, we should obtain information on how many input atoms 
 the eventual NNP is expected to experience in simulations. 
 
-In our case this is an easy task: we simply run MD simulations 
+In our case this is an easy task: We simply run MD simulations 
 of the system under investigation with the empirical potential to be fitted, and measure coordination numbers. When the 
 target potential is unknown, the information can be extracted from empirical knowledge of the system. The number of 
 neighbouring atoms will obviously depend on the force cutoffs being used. 
@@ -3523,7 +3529,7 @@ to decrease the correlation. Removing functions in this way contributes to keepi
 small as possible.
 
 To demonstrate how the correlations can be calculated, we remember that in 
-\autoref{sec:training} the data set was represented as a matrix $X$, where
+\autoref{sec:training} the data set was represented as a matrix X, where
 each row is a training example, in this case the values of all the symmetry functions for a single atomic configuration.
 We can calculate the correlations between each pair of symmetry functions with the \texttt{NumPy} method \texttt{corrcoef}, 
 \begin{minted}{python}
@@ -3560,7 +3566,7 @@ activation function(s). The second includes
 the learning rate, the mini-batch size, the number of training iterations, the choice of loss function and any additional 
 parameters associated with the optimization algorithm and weight initialization.
 
-In this section we will discuss common techniques for setting hyperparameters, following \cite{Bengio12}. 
+\noindent In this section we will discuss common techniques for setting hyperparameters. 
 
 \subsection{Preconditioning the input data} \label{sec:transformInputData}
 As stated in \autoref{sec:adjustSymmSet}, the individual symmetry functions may have very different ranges of values. 
@@ -3568,13 +3574,13 @@ For a given configuration, each node in the first hidden layer receives as input
 Symmetry functions with large absolute values will have a signicantly stronger impact on the output of these nodes than 
 functions with small absolute values. Consequentially, the areas of configuration space covered by the latter functions
 may take a longer time for the NN to learn. The importance of the different symmetry functions can be balanced
-by normalizing the values \cite{Behler15} of each symmetry function $G_s$, 
+by normalizing the values of each symmetry function $G_s$  \cite{Behler15}, 
 \begin{equation}
- G_{i,s}^\prime = \frac{2(G_{i,s} - G^{\min}_s)} {G^{\max}_s - G^{\min}_s} - 1
+ G_{i,s}^\mathrm{norm} = \frac{2(G_{i,s} - G^{\min}_s)} {G^{\max}_s - G^{\min}_s} - 1
  \label{scalingInputData}
 \end{equation}
-where $G_{i,s}$ is the value of symmetry function number $s$ in the $i$-th training example 
-\footnote{corresponding to element $X_{ij}$ of the input data matrix.} and
+where $G_{i,s}$ is the value of symmetry function number $s$ in the $i$-th training example% 
+\footnote{Corresponding to element $X_{ij}$ of the input data matrix.}, and
 $G_s^{\min}$ and $G_s^{\max}$ are the smallest and largest values of function $G_s$ in the data set respectively.
 
 Further, convergence is usually faster if the average of each input variable to a NN over the 
@@ -3587,7 +3593,7 @@ As a result, these weights can only increase or decrease \textit{together} for a
 The mean of each symmetry function can be shifted to zero by subtracting the mean $\overline{G}_s$ over the data set from 
 all function values,
 \begin{equation}
- G_{i,s}^\prime = G_{i,s} - \overline{G}_s =  G_{i,s} - \frac{1}{N}\sum_{j=1}^N G_{j,s}
+ G_{i,s}^\mathrm{shift} = G_{i,s} - \overline{G}_s =  G_{i,s} - \frac{1}{N}\sum_{j=1}^N G_{j,s}
  \label{shiftInputData}
 \end{equation}
 where $N$ is the number of training examples. Note that scaling \eqref{scalingInputData} and shifting \eqref{shiftInputData}
@@ -3598,17 +3604,17 @@ another operation that can speed up training is variance scaling \cite{LeCun12}.
 This is combined with shifting of means, such that each symmetry function e.g.\ has zero-mean and unit-variance,
 called \textit{standardization},
 \begin{equation}
- G_{i,s}^\prime = \frac{G_{i,s} - \overline{G}_s}{\sigma_s} 
+ G_{i,s}^\mathrm{stand} = \frac{G_{i,s} - \overline{G}_s}{\sigma_s} 
  \label{scaleVariance}
 \end{equation}
 where $\sigma_s$ is the standard deviation of symmetry function $G_s$. 
 
 \subsubsection{Convergence speed vs evaluation speed}
 We have seen that a number of operations can be performed on the input data to speed up the fitting process.  
-Note that the these can be applied to the target values as well.  
+Note that the these can be applied to the target values as well %  
 \footnote{The observations on scaling and shifting of input variables are valid for most 
 types of input and output data. Scaling of target values are more important 
-for classification, where the output is binary (e.g.\ \{-1,1\}), than for regression.} However, for the construction of NNPs, 
+for classification, where the output is binary (e.g.\ \{-1,1\}), than for regression.}. However, for the construction of NNPs, 
 the convergence speed is not a main issue. In contrast to e.g.\ object recognition with deep convolutional networks, where
 often thousands of NN parameters are needed \cite{LeCun99}, NNPs usually require only up to a few hundred weights. Even though 
 the data set to be fitted can be quite extensive, the duration of the training is rarely more than 30 minutes to 1 hour before 
@@ -3618,11 +3624,7 @@ Further, there is a trade-off between the convergence speed and the evaluation s
 As for the symmetry transformations, the above operations become an integral part of the NNP, and must be performed 
 when the potential is to be applied in simulations. Considering the importance of computational performance in MD simulations,
 an increase in training speed at the cost of evaluation speed is not to be preferred, as long as the \textit{quality} of the fit 
-is not influenced by these operations. This will be investigated in later sections (WHERE?). 
-
-FLYTTE DETTE TIL RESULTATSEKSJON? To investigate this, we have fitted a NN to a data set of 2000 configurations
-from a single simulation of Si with the Stillinger-Weber potential. This fitting has been done five times both with and without 
-scaling and shifting, with the exact same training parameters. The result can be seen in \autoref{fig:testScalingShifting}. 
+is not influenced by these operations. This will be investigated in \autoref{sec:SiPotentialResults}. 
 
 
 
@@ -3637,7 +3639,7 @@ weight updates are proportional to the derivatives of neuron outputs $y$ \eqref{
  y^\prime = f^\prime(u)
 \end{equation}
 where $f$ is the activation function and $u$ is the input. 
-We see from \autoref{fig:sigmoidActivationFunctions} that the sigmoid and hyperbolic
+We see from \autoref{fig:SigmoidActivationFunctions} that the sigmoid and hyperbolic
 tangent have very small gradients for all inputs except those in the small non-linear region around zero, corresponding 
 to about [-4,4] and [-2,2] respectively. 
 Large positive or negative inputs therefore result in vanishing gradients and tiny updates, slowing down learning. 
@@ -3652,14 +3654,14 @@ the neurons in the first hidden layer. The distribution of inputs to the next la
 here the sigmoid and the tangent differ: The former have mean 1/2, while the latter is symmetric around zero. 
 Obviously, zero-mean is preferred, as any positive or negative bias inevitably have a larger risk of pushing the activations 
 towards saturation. Thus, the hyperbolic tangent is generally preferred over the sigmoid, which have also been demonstrated 
-empirically \cite{Karlik11} \cite{Glorot10}. 
+empirically \cite{Karlik11,Glorot10}. 
 
 Secondly, since the weights and biases also contribute to the sum $u$, they should be initialized as small numbers centered around zero. 
 A common scheme is to 
 set all biases to zero, and assign weight values according to some probability distribution with zero-mean and 
 a suitable (small) variance. Assuming standardized input data, 
 a frequently used heuristic is to initialize the weights $W_{ij}$ at each layer by 
-\cite{Bengio12} \cite{LeCun12},
+\cite{Bengio12,LeCun12},
 \begin{equation}
  W_l \in U\left[-\frac{1}{\sqrt{n_{l-1}}}, \frac{1}{\sqrt{n_{l-1}}}\right]
 \end{equation}
@@ -3667,7 +3669,7 @@ where $U[-a, a]$ is the uniform distribution in the interval $[-a,a]$, $n_l$ is 
 $W_l$ is the weight matrix connecting layer $l-1$ and $l$. 
 A disadvantage of this method is that a layer-dependent weight variance might result in saturated upper layers 
 if the layer size changes through the network.  
-Glorot and Bengio \cite{Glorot10} have suggested a modification of this scheme that gives rise to variance that 
+Glorot and Bengio \cite{Glorot10} have suggested a modification of this scheme that gives rise to a variance that 
 is equal through the whole network. The idea is to 
 conserve the input signal when propagated through the network by preventing it from shrinking or growing too much,  
 \begin{equation}
@@ -3701,10 +3703,10 @@ generalizes to data that has not been used in its training. On the other hand, i
 than the training set error, overfitting is occuring, and training should be stopped. The most commmon error measure
 is the root-mean-square-error (RMSE), 
 \begin{equation}
- RMSE(NN) = \sqrt{\frac{1}{N}\sum_{i=1}^N (Y_i - y_i)^2}
+ \mathrm{RMSE}(\mathrm{NN}) = \sqrt{\frac{1}{N}\sum_{i=1}^N (Y_i - y_i)^2}
 \end{equation}
-where $Y_i$ is the NN prediction and $y_i$ is the reference value, as before. 
-This expression ss almost equivalent to the cost function \eqref{quadraticCost} used in the optimation of the NN.
+where $y_i$ is the NN prediction and $Y_i$ is the reference value, as before. 
+This expression is almost equivalent to the cost function \eqref{quadraticCost} used in the optimation of the NN.
 
 \autoref{fig:overfitting} displays a typical case of overfitting. Here we have sampled a training set 
 of 5578 configurations and energies from a Si Stillinger-Weber simulation. Then, we have trained two NNs 
@@ -3723,7 +3725,7 @@ of overfitting caused by an incomplete training set.
   \label{fig:overfitting}
 \end{figure}
 
-Thus, the early stopping method automatically determines another hyperparameter, namely the number of epochs to train. 
+The early stopping method automatically determines another hyperparameter, namely the number of epochs to train. 
 However, it does not give us the optimal NN architecture. Overfitting can also be caused by an incomplete data set, 
 and reducing the number of neurons is not necessarily the best solution. Often, more data should be added instead, 
 and the current NN size may fit the extended data set better. 
@@ -3733,8 +3735,8 @@ but primary a tool to prevent overfitting.
 The only way to find the optimal architecture is by training several networks of different sizes and choose the one that yields
 the lowest error while simultaneously not overfitting. The problem with this strategy is that the possibilities are very many. 
 We can however make a few observations to narrow down the search. 
-According to Larochelle et al.\ \cite{Larochelle09}, having the same number of nodes in each hidden layer give the best results. 
-Further, in the literature we have studied concerning NNPs, e.g.\ \cite{Behler07} \cite{Raff05} \cite{Witkoskie05}, 
+According to Larochelle et al.\ \cite{Larochelle09}, having the same number of nodes in each hidden layer givse the best results. 
+Further, in the literature we have studied concerning NNPs, e.g.\ \cite{Behler07,Raff05,Witkoskie05}, 
 only one or two hidden layers are used, and we know from the universal approximation theorem (\autoref{sec:whyMLP})
 that one hidden layer is sufficient to represent any function. For typical AI tasks, deeper architectures are required 
 \cite{Bengio07}, but in this thesis we will limit ourselves to maximum three hidden layers. 
@@ -3752,7 +3754,7 @@ cost function can be viewed as a compromise between finding small weights and mi
 The parameter $\lambda$ determines the relative importance of these two elements. 
 Keeping the weights small makes the output of the NN more resistant to outliers and noise in the input data, thus
 putting more emphasis on the frequent input patterns. 
-The hope is that this will force the NN to see \textit{the bigger picture}, 
+The hope is that this will force the NN to see ''the bigger picture'', 
 and hence generalize better. 
 
 Another more recent technique to reduce overfitting is \textit{dropout} \cite{Srivastava14}. Here, the key idea 
@@ -3768,14 +3770,15 @@ There are several optimization hyperparameters that need to be decided, namely t
 (if we employ mini-batch gradient descent) and parameters inherent to the update rule of choice. 
 We restrict ourselves to optimization algorithms that use adaptive learning rates, thus only an \textit{initial}
 learning rate needs to be set. According to Bengio \cite{Bengio12}, a default value of 0.01 is appropriate, but 
-a set of different values should be tested (REF TO SECTION ON GRID SEARCH), 
+a set of different values should be tested (\autoref{sec:optimizingHyperparameters}), 
 as the optimal value may depend strongly on the data set and the NN architecture. 
 
 In \autoref{sec:gradientDescentVariants} we discussed different types of gradient descent learning, and 
 declared that mini-batch gradient descent usually is the preferred scheme. The main reason for this is that data sampled from molecular 
 dynamics simulations, even with a good sampling algorithm, often contain redundant information: many configurations 
-are similar because the system tends to stay near equilibrium. \footnote{This is of course not the case if the intended
-application of the NNP is for non-equilibrium molecular dynamics.} Thus, batch learning, where the weights are updated 
+are similar because the system tends to stay near equilibrium%
+\footnote{This is of course not the case if the intended
+application of the NNP is for non-equilibrium molecular dynamics.}. Thus, batch learning, where the weights are updated 
 only after the complete training set have been fed to the network, is wasteful because it recomputes nearly the same outputs
 several times before updating the weights \cite{LeCun99}. 
 
@@ -3785,15 +3788,15 @@ that the mini-batch size should mainly impact the training time and not so much 
 Therefore, we will not discuss this parameter any further, and refer to \autoref{sec:optimizingHyperparameters} for a discussion
 on how to optimize hyperparameters.
 
-Some optimizers, like Adam \eqref{Adam}, contain other hyperparameters in addition to a learning rate.  
+Some optimizers, like Adam \eqref{adamUpdateRule}, contain other hyperparameters in addition to a learning rate.  
 Each of these algorithms has a set of default values that are well justified, and we have decided not to alter these. 
 
 \subsection{Cost function} \label{sec:hyperParamsCostFunction}
 We only use the mean-square error \eqref{quadraticCost} as a cost function in this thesis. 
-An obvious weakness of using this is that we only fit the reference function $Y$ (the potential) itself, 
-not its gradient $Y^\prime$ (the forces). If a small error is achieved for the potential fit, we would expect that 
-the error is low also for the gradient, but this is not assured. Considering that the forces determine the 
-dynamics of a simulation, this is not ideal. 
+An obvious weakness of using this is that we only fit the reference function Y (the potential) itself, 
+not its gradient $\mathrm{Y}^\prime$ (the forces). If a small error is achieved for the potential fit, we would expect that 
+the error is low also for the gradient, but this is not assured. The force error is of vital importance, considering 
+that the forces determine the dynamics of a simulation. 
 
 Pukrittayakamee et al.\ \cite{Pukrittayakamee09} have suggested an extension to the standard mean-square error, that 
 enables simultaneous fitting of both a function and its gradient (the CFDA algorithm). 
@@ -3806,14 +3809,16 @@ in the potential and in the forces, and has also been employed by Behler in a mo
 \end{equation}
 As before, the first sum is over $N$ training examples, where $E_i^{\mathrm{NN}}$
 is the energy prediction of the NN for training example $i$ and $E_i^{\mathrm{ref}}$ is the $i$-th reference energy. 
-For training example $i$, there are $3N_i$ force components corresponding to a configuration of $N_i$ atoms. We have that 
+For training example $i$, there are $3N_i$ force components corresponding to a configuration of $N_i$ atoms. We have that
+\begin{subequations}
 \begin{align}
- F_{i,j}^{\mathrm{ref}} &= \frac{\partial E_i^{\mathrm{ref}}}{\partial R_{i,j}} \\
- F_{i,j}^{\mathrm{NN}} &= \frac{\partial E_i^{\mathrm{NN}}}{\partial R_{i,j}}
- \label{forcesCFDA}
+ F_{i,j}^{\mathrm{ref}} &= \frac{\partial E_i^{\mathrm{ref}}}{\partial r_{i,j}} \label{forcesCFDA1} \\
+ F_{i,j}^{\mathrm{NN}} &= \frac{\partial E_i^{\mathrm{NN}}}{\partial r_{i,j}}
+ \label{forcesCFDA2}
 \end{align}
-where $R_{i,j}$ is the $j$-th position component of training example $i$. The NN still has only one output neuron
-that represents the total energy of a training example. The forces \eqref{forcesCFDA} are computed as
+\end{subequations}
+where $r_{i,j}$ is the $j$-th position component of training example $i$. The NN still has only one output neuron
+that represents the total energy of a training example. The forces (\ref{forcesCFDA1},~\ref{forcesCFDA2}) are computed as
 described in \autoref{sec:symmAndForces}.
 To minimize \eqref{CFDA} we need its gradient, which means that second derivatives of the NN 
 are required. This seems like a daunting task, but can be performed quite easily in TensorFlow. 
@@ -3833,12 +3838,12 @@ good results without directly fitting the forces as well, we will stick to the o
 \subsection{Hyperparameter space exploration} \label{sec:optimizingHyperparameters}
 In this section we have discussed various tricks of the trade regarding hyperparameters for training neural networks. 
 We realize that there are a substantial number of choices to be made, corresponding to a large parameter space, and 
-that many (if not all) of these choices are vital for a successful outcome. Even though the above discussions narrows down the search 
+that many (if not all) of these choices are ipmortant for a successful outcome. Even though the above discussions narrows down the search 
 for suitable hyperparameters, it is still a difficult task. 
 
 An alternative is to treat hyperparameter selection as an optimization problem, i.e.\ to train the NN for many different 
 parameter sets and choose the set that yields the best fit. To perform this task, it is common to split the data set 
-into three parts: a training set, a test set, and a \textit{validation set}. The first two sets have the same 
+into three parts: A training set, a test set, and a \textit{validation set}. The first two sets have the same 
 purpose as before (\autoref{sec:overfitting}), while the validation set is used to test the model during hyperparameter 
 optimization. This is done so that we do not overfit the hyperparameters to the test set, which is only used to assess 
 the performance of the final NN model of choice.
@@ -3850,7 +3855,7 @@ In coordinate descent, we keep all hyperparameters fixed except for one. Then we
 for each value to minimize the validation error  .
 
 \subsubsection{Grid search}
-Grid search is the most simple and brute-force way to optimize hyperparameters: we simply try every hyperparameter setting 
+Grid search is the most simple and brute-force way to optimize hyperparameters: We simply try every hyperparameter setting 
 over a specified range of values and choose the set with the lowest validation error. This is obviously very computationally 
 expensive, and is often infeasible in practice. 
 
@@ -3875,14 +3880,7 @@ for a specific case.
 The quality of a NNP is measured by its test set error, but that does not necessarily mean it performs 
 well in MD simulations. To properly validate the NNP, we have to apply it in simulations, measure thermodynamic quantites, 
 and see if we reproduce known, experimental results. 
-The general workflow for constructing and applying a NNP is as follows: 
-\begin{enumerate}
- \item Generate training data
- \item Train a NN to fit the data
- \item Use the analytical expression for the eventual NNP as a potential in MD simulations
-\end{enumerate}
 
-\subsection{Transfer neural network from Python to C\texttt{++}} \label{sec:transferNN}
 In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C\texttt{++}, is
 employed to run MD simulations for speed purposes. 
 We therefore need a way to transfer the NNP from Python to C\texttt{++}. 
@@ -3895,36 +3893,30 @@ and the documentation is very sparse.
 Another alternative that we have developed is to manually save the weights and biases
 as a text file, along with the necessary hyperparameter values, such as choice of activation function and 
 symmetry function parameters. This file 
-can then be used to reconstruct the NN in the same way that it is made in Python: By representing
+can then be used to reconstruct the NN in the same way that it is made in Python: by representing
 the connection weights between layers as matrices and the biases as vectors 
 (\autoref{sec:MLPmodel} and \autoref{sec:TensorFlowCreatingNN}). 
 The activation functions must be implemented manually. A linear algebra library can
-be utilized for speed and simplicity; we have chosen to use Armadillo
+be utilized for speed and simplicity; we have chosen to use Armadillo%
 \footnote{\href{http://arma.sourceforge.net/}{Armadillo}}. 
 
-To find out which alternative is the most computationally efficient, we compare the 
-CPU time usage between evaluating a NN with TensorFlow and Armadillo in C\texttt{++}. We also compare with TF in Python to 
+To find out which alternative that is the most computationally efficient, we compare the 
+time usage between evaluating a NN with TensorFlow and Armadillo in C\texttt{++}. We also compare with TF in Python to 
 investigate if any differences between TF and Armadillo in C\texttt{++} is caused by an under-developed C\texttt{++} TF API, or 
 if the cause is inherent to the TF implementation of neural networks.
 The evaluation time 
 is measured for a range of different NN sizes, and for each size an average of 50 evaluations have been computed.
 The results are shown in \autoref{fig:timeComparisonEvaluateNetworkTotalScatter}.
-\begin{figure}
+\begin{figure}[t]
 \centering
   \includegraphics[width = 0.9\linewidth]{Figures/Tests/timeComparisonNetworkNew.pdf}
-  \caption{Scatter plot of CPU time when evaluating untrained NNs with random weights and sigmoid activation functions
+  \caption{Scatter plot of time usage when evaluating untrained NNs with random weights and sigmoid activation functions
 	   using the TF Python API ($T_{\mathrm{TFP}}$), the TF C\texttt{++} API ($T_{\mathrm{TFC}}$) and Armadillo ($T_{\mathrm{ARMA}}$). 
 	   $L$ is the number of hidden layers, $n$ is the number of nodes in each hidden layer. All the NNs
-	   have one input and one output. The time has been found by averaging over 50 evaluations
+	   have one input and one output. The time has been calculated by averaging over 50 evaluations
 	   for each NN architecture.}
 \label{fig:timeComparisonEvaluateNetworkTotalScatter}
 \end{figure}
-\begin{comment}\begin{figure}
-\centering
-  \includegraphics[width = 0.9\linewidth]{Figures/Tests/timeComparisonNetwork3.pdf}
-  \caption{Left column: CPU time comparison for $N=100$. Right column: CPU time comparison for $L=30$.} 
-  \label{fig:timeComparisonEvaluateNetwork2}
-\end{figure}\end{comment}
 
 Figure a) and b) display the ratio $T_{\mathrm{TFC}}/T_{\mathrm{ARMA}}$ for NN sizes up to 200, the former with all data points 
 visible, while the latter is zoomed in to give a more detailed picture. We observe that the time difference is huge 
@@ -3938,21 +3930,32 @@ Further, a NN size of 3000 is small compared to e.g.\ state-of the art convoluti
 Considering that we will not need NNs containing more than 100-200 neurons, a manual implementation of NNs with Armadillo 
 is definitively the best choice. 
 
+\section{Summary}
+In this chapter we have discussed the details of the NNP construction steps, specifically how to sample an adequate training set,
+how to determine hyperparameters, and how to apply a NNP in simulations. 
+The construction process will be exemplified 
+in two specific cases. In \autoref{sec:LJValidation}, we will train a NN reproduce the truncated and shifted 
+Lennard-Jones potential \eqref{shiftedLJ}. The quality of the fit will be analyzed, but the NNP will not be applied 
+in simulations. In \autoref{sec:SiPotentialResults}, we will construct a NNP for solid-state Si and apply it in simulations 
+to measure the radial distribution function and various mechanical properties. 
+
+
+
 
 \chapter{Lennard-Jones validation} \label{sec:LJValidation}
 As a first test of our implementation of the NNP construction process, we train a neural network to reproduce 
 the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
-The fitting is done with a NN that has one input and one output, resulting in 
+The fitting is performed with a NN that has one input and one output, resulting in 
 a NNP that computes the potential energy of a central atom $i$ in the presence of a single neighbour $j$ of the same element at 
-a distance $R_{ij}$. This one-dimensional NNP does not face the same symmetry issues as its many-dimensional counterpart: 
+a distance $r_{ij}$. This one-dimensional NNP does not face the same symmetry issues as its many-dimensional counterpart: 
 having only one input removes the problem that the energy should be invariant to the order of atoms, and 
-the relative coordinate $R_{ij}$ is invariant to a translation or rotation of a diatomic system. Thus, no symmetry functions 
+the relative coordinate $r_{ij}$ is invariant to a translation or rotation of a diatomic system. Thus, no symmetry functions 
 are needed. 
 
-The configuration space of this NNP is simply $R \in [a,b]$, where $a$ and $b$ are the smallest and largest 
+The configuration space of this NNP is simply $r_{ij} \in [a,b]$, where $a$ and $b$ are the smallest and largest 
 interatomic distance respectively that the NNP is expected to experience in a simulation. 
 Suitable values of $a$ and $b$ are found by running a MD simulation with the potential that is to be fitted
-at the temperature intended for the NNP's application, and measure the minimum and maximum pair-wise distance. 
+at the temperature intended for the NNP application of the NNP, and measure the minimum and maximum pair-wise distance. 
 To sample this configuration space, we simply draw random numbers from a uniform distribution with $a$ and $b$ as endpoints,
 \begin{minted}{Python}
  inputTrain = np.random.uniform(a, b, trainSize)
@@ -3962,7 +3965,7 @@ while the reference energies are calculated by employing the analytical expressi
 The hyperparameters used are listed in \autoref{tab:hyperParamsLJ}. These have not been optimized, but suitable values
 have been determined on the basis of the discussion in \autoref{sec:settingHyperParams}. The input data has 
 not been transformed in any way. 
-\begin{table} 
+\begin{table}[t]
   \begin{center}
     \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
       \toprule
@@ -4009,18 +4012,18 @@ energiesLJ = LennardJones(inputTest)
 energyError = energiesLJ - energiesNN
 \end{minted}
 where \texttt{x} is a \texttt{tf.placeholder} as described in \autoref{sec:TensorFlowCreatingNN}. 
-The absolute error $E_\mathrm{LJ} - E_\mathrm{NN}$ is plotted as a function of distance $R_{ij}$ in \autoref{fig:LJError}.
+The absolute error $E_\mathrm{LJ} - E_\mathrm{NN}$ is plotted as a function of distance $r_{ij}$ in \autoref{fig:LJError}.
 We notice that the error oscillates around zero, and that the amplitude is larger for smaller distances.
-This is in accordance with the observations made in \autoref{sec:samplingAlgorithms}: the regions of configuration space 
+This is in accordance with the observations made in \autoref{sec:samplingAlgorithms}: The regions of configuration space 
 where the gradient of the target function is large, is more difficult to fit, and should therefore have a higher density. 
 The training set is in this case uniformly distributed, thus the error is larger for small inter-atomic distances where 
 strong repulsive forces are at work. Nevertheless, the NN energy prediction follows the shape of the LJ potential very closely
-for most values of $R_{ij}$. 
+for most values of $r_{ij}$. 
 \begin{figure}
 \centering
   \includegraphics[width = 0.7\linewidth]{Figures/Implementation/LJError.pdf}
   \caption{Absolute error of a NN trained to reproduce the truncated and shifted Lennard-Jones potential \eqref{shiftedLJ}. 
-           The plot is as a visualization of the error distribution in the configuration space $R_{ij} \in [a,b]$ 
+           The plot is as a visualization of the error distribution in the configuration space $r_{ij} \in [a,b]$ 
            defined by the test set. The employed hyperparameters are listed in \autoref{tab:hyperParamsLJ}.} 
   \label{fig:LJError}
 \end{figure}
@@ -4042,12 +4045,11 @@ gradientError = derivativeLJ - derivativeNN
 gradientRMSE = np.sqrt(np.sum(gradientError**2)/testSize)
 \end{minted}
 We obtain a gradient RMSE of 24.3 meV, which is about one order of magnitude larger than for the function itself. 
-This function-gradient RMSE ratio is also reported by others \cite{Natarajan16} \cite{Artrith12}, and thus seems 
-to be a general trend. 
+This function-gradient RMSE ratio is also reported by others \cite{Natarajan16,Artrith12}. 
 
 The absolute error plot is shown in \autoref{fig:LJErrorDerivative}. 
 Again we have an oscillating error over the training interval, but with 
-larger amplitudes. The gradient error at $R_{ij} = a$ is about 50 times larger than the energy error at this point, which  
+larger amplitudes. The gradient error at $r_{ij} = a$ is about 50 times larger than the energy error at this point, which  
 demonstrates the importance of having a higher density of training points in certain regions. 
 \begin{figure}
 \centering
@@ -4060,117 +4062,26 @@ demonstrates the importance of having a higher density of training points in cer
 
 
 
-\section{Many-neighbour Lennard-Jones}
-SHOULD THIS BE INCLUDED??
-A NN can also be trained to obtain the energy of several neighbouring atoms at once. 
-The training procedure is excactly the same, but now we train the network so that the output
-is the sum of $N$ LJ-potentials for $N$ different distances $r$. The NN will have $N$ inputs and 1 output. 
-To get an error of the same order as for 1 neighbour, we need to have a lot more nodes. The result of a training
-session with $N=20$ inputs is shown in figures \autoref{fig:trainingManyNeighbourNN}. 
-(Training session 02.12-19.36.50)
-\begin{comment}
-\begin{figure}[H]
-\centering
-  \begin{subfigure}[b]{0.75\textwidth}
-  \includegraphics[width = 0.9\linewidth]{Figures/Tests/trainingManyNeighbourNN1.pdf}
-\end{subfigure}
-\begin{subfigure}
-  \includegraphics[width = 0.9\linewidth]{Figures/Tests/trainingManyNeighbourNN2.pdf}
-  \end{subfigure}
-  \label{fig:trainingManyNeighbourNN1}
-  \caption{Error of the gradient of a NN trained to reproduce the shifted Lennard-Jones potential.
-	   The NN is trained in Python and evaluated and differentiated in C\texttt{++} using the backpropagation algorithm.
-	   The result is compared to the analytical derivative of the LJ potential. Only a part of the training
-	   interval is shown, the graph is essentially flat after this point} 
-\end{figure}
-\end{comment}
-\begin{figure}
-\centering
-\subcaptionbox{Zoomed out\label{zoomedOut}}{\includegraphics[width=0.8\textwidth]{Figures/Tests/trainingManyNeighbourNN1.pdf}
-  }
-\subcaptionbox{Zoomed in\label{zoomedIn}}{\includegraphics[width=0.8\textwidth]{Figures/Tests/trainingManyNeighbourNN2.pdf}}
-\caption{Quadratic cost \eqref{quadraticCostFunction} of training set and test set for NN trained to yield
-	 the sum of the shifted LJ-potential of 20 neighbouring atoms. 
-	 The NN has 20 inputs, one hidden layer 
-	 with 200 neurons and one output node. All nodes in the hidden layer have sigmoid activation functions 
-	 \eqref{sigmoidActivationFunction}. \autoref{zoomedOut} shows the cost for the first 50 000 epochs, while
-	 \autoref{zoomedIn} displays the cost for all epochs, but on a smaller scale.}	 
-\label{fig:trainingManyNeighbourNN}
-\end{figure}
-The cost rapidly decreases during the first 10 000 epochs, then it starts to flatten out. This behaviour seems
-to be general when doing regression with ANNs. 
-There is no sign of overfitting: we do not observe an increase in the test cost relative to the training cost. 
-This is (PROBABLY) due to the fact that our training set and test set are random numbers, i.e.\ there will be no 
-specifics patterns or configurations present in the test set that is not covered by the training set. 
-When we start doing training on data produced by MD trajectories or QM calculations, the situation will different.
-
-\subsection{Alternative way to obtain forces}
-MOVE THIS TO APPENDIX? SHOULD WRITE SOMETHING ABOUT OUR STRUGGLES TO OBTAIN FORCES SOMEWHERE. 
-The NN above outputs the total energy on an atom that is surrounded by $N$ neighbouring atoms, but it does not provide the forces. 
-These must be obtained by calculating the analytical derivative of the NN with backpropagation as described above for each time step.
-An alternative approach that may speed up the MD simulation is to have the NN also output the total force on the central atom. 
-This can be done giving the cartesian coordinates and distance of N atoms as input to the NN so that each input
-vector looks like
-\begin{equation}
- (x_1, y_1, z_1, r_1, x_2, y_2, z_2, r_2, \dots, x_N, y_N, z_N, r_N)
-\end{equation}
-which yields an output vector
-\begin{equation}
- (F_x^{TOT}, F_y^{TOT}, F_z^{TOT}, E^{TOT})
-\end{equation}
-We have to make sure that the input coordinates are in the range 
-$x, y, z \in [-r_{cut}, r_{cut}]$ to cover the whole configuration space. The distances however, are still in the range
-$r \in [a, r_{cut}]$ where $a$ is the minimum distance that two atoms can have in a given MD simulation (see function
-\textit{energyAndForceCoordinates} in \textit{generateData}). As the NN now have 4 inputs per neighbour and 4 outputs, 
-we need to have more nodes to get a sufficiently low error. We run a training session with 5 neighbours (20 inputs) 
-(session 13.12-12.59.51). The cost has the same shape as before, but the error is much larger to begin with and also converges
-slower (SKAL JEG GIDDE Å HA ENDA ET ERROR PLOT HER?).
-
-One way to test if this works is to move only one of the input atoms while freezing the others and see if we reproduce
-the LJ-potential form. 
-
-
-The error of the NN energy and forces over the training data interval is shown in 
-\begin{figure}
-\begin{minipage}[t]{0.48\linewidth}
-  \includegraphics[width=\textwidth]{Figures/Tests/manyNeighbourEnergyError.pdf}
-\end{minipage}
-\quad
-\begin{minipage}[t]{0.48\linewidth}
-\includegraphics[width=\textwidth]{Figures/Tests/manyNeighbourForceError.pdf}
-\end{minipage}
-  \caption{Error of a network trained to yield the total energy and force on a central atom from 5 neighbouring atoms. 
-           The energy contribution from each neighbour is a shifted LJ potential. Trained for 1e6 epochs, 100 nodes
-           in 2 layers. The energy error is shown on the left, force error on the right.}
-\label{fig:errorManyNeighbourNN}
-\end{figure}
-The error oscillates in exactly the same way as for the 1-input NN above, suggesting that the training is done correctly. 
-However, it is very important that the energies and forces in an MD simulation is consistent, and this is not 
-ensured here, where the two are obtained in a somewhat independent way. Any incosistency between the energies and forces
-will magnify for each time step, resulting in inaccurate statistical properties like temperature and pressure. 
-Therefore it is a better idea to have the NN only output the total energy, and find the forces by analytically
-differentiating the NN for each time step. $\SI{4}{\angstrom}$
-
 
 \chapter{Neural network potential for Si} \label{sec:SiPotentialResults}
 In this chapter we perform a demonstration of the complete NNP construction process, including 
 the Behler-Parrinello method. The goal is construct a potential for solid-state Si by sampling atomic configurations 
 and energies from Stillinger-Weber MD simluations. 
-The eventual NNP is validated by computing the radial distribution function for a given temperature, and compared
-with experiments and SW simulations. 
+The eventual NNP will be validated by computing the radial distribution function and several mechanical properties, and compare
+with SW. 
 
 \section{Sampling initial set}
 To assemble the initial data set, we need to decide on the specific application of the NNP that we want to develop. 
-We choose to construct a potential that can be used in Si simulations in a temperature range of $T \in [0, 500]$. 
+We choose to construct a potential that can be used to simulate solid-state Si in a temperature range of $T \in [0, 500] \, \mathrm{K}$. 
 The system is prepared in a diamond cubic state with a lattice spacing of \SI{5.431}{\angstrom}, which is 
 the crystalline structure of Si. We perform several simulations of the microcanocical ensemble with initial temperatures
-in the above range and a time step of $\Delta t = 0.001 \mathrm{ps}$.
+in the above range and a time step of $\Delta t = 0.001 \, \mathrm{ps}$.
 The SW potential is parametrized according to \cite{Stillinger85}, with a force cutoff 
 of $r_c = \SI{3.77118}{\angstrom}$. 
 Periodic boundary conditions are imposed and the sampling algorithm 
 \eqref{samplingAlgorithmModified} is applied in each simulation, resulting in 4406 structures and corresponding energies.
 Note that if an \textit{ab inito} NNP is to be constructed, the reference energies must be calculated with a
-quantum mechanical method, which is outside the scope of this work. Except for this, the procedure is the same. 
+quantum mechanical method, which is outside the scope of this work.
 
 \section{Initial symmetry function set}
 To get an idea of how many symmetry functions that are needed, we run a MD simulation as described above and 
@@ -4197,9 +4108,9 @@ because of computational efficiency. The initial set thus consists of 8 equidist
 with parameters listed in Appendix \autoref{app:symmFuncParameters}.
 
 The initial radial and angular symmetry functions are shown in \autoref{fig:SiInitialSymmSet}, as a function 
-of inter-atomic distance $R_{ij}$ and triplet angle $\theta_{jik}$ respectively. 
+of inter-atomic distance $r_{ij}$ and triplet angle $\theta_{jik}$ respectively. 
 Only the angular part of $G_i^5$ is displayed. 
-We have also calculated the radial and angular distribution of neighbouring atoms in the data, displayed as dotted lines.
+We have also calculated the radial and angular distribution of neighbouring atoms in the data set, displayed as dotted lines.
 This is a convenient way to visualize how well the symmetry set represents the atomic environment:
 functions that has no overlap with the area defined by the dotted lines does not contribute to the description. 
 \begin{figure}
@@ -4212,11 +4123,11 @@ functions that has no overlap with the area defined by the dotted lines does not
  \subcaption{Angular symmetry functions}
  \includegraphics[width=\textwidth]{Figures/Results/SiInitialSymmG5.pdf}
 \end{minipage} 
-  \caption{Initial set of 8 $G_i^2$ and 16 $G_i^5$ symmetry functions for constructing a Si NNP. Only the angular part 
+  \caption{Initial set of 8 $G_i^2$ and 16 $G_i^5$ symmetry functions for constructing a Si NNP. Only the angular part $G_i^\theta$ of 
            $G_i^5$ is displayed. Further, only 8 of these are visible because pairs of $G_i^5$ functions with identical
            angular parts overlap. 
            The dotted lines are the radial and angular distribution of neighbours defined 
-           by the training set. The corresponding symmetry parameters is not included. }
+           by the training set. The corresponding symmetry parameters are not included. }
   \label{fig:SiInitialSymmSet}
 \end{figure}
 
@@ -4263,8 +4174,8 @@ schemes \cite{Kingma14}. All the employed hyperparameters are listed in \autoref
   \label{tab:hyperParamsSiInitial} 
 \end{table}
 The symmetry-transformed training data has been shifted so that each symmetry function has zero-mean, and 
-the minimum and maximum value of each symmetry function over the training set is stored for later use
-(\autoref{iterativeSampling}).
+the minimum and maximum value of each symmetry function over the training set is stored for detecting 
+extrapolating structures in the next step. 
 Overfitting is detected by the following test,
 \begin{minted}{Python}
 if testRMSE / trainRMSE > 10:
@@ -4297,7 +4208,7 @@ for (int s=0; s < m_numberOfSymmFunc; s++) {
 \end{minted}
 where \texttt{m\_minmax} is a vector containing the minimum and maximum values of each symmetry function.
 After a certain number of new structures is added, the NN fit is refined by training on the extended data set. 
-The NNP simulations are carried out for several temperatures $T \in [0,500] \mathrm{K}$. 
+The NNP simulations are carried out for several temperatures $T \in [0,500] \, \mathrm{K}$. 
 This iterative sampling process is continued until no new extrapolating structures are found, which occurs 
 after three iterations. A total of 578 structures are added, resulting in an extended data set of 4984 training examples. 
 
@@ -4316,7 +4227,7 @@ on the configurations above,
 \begin{lstlisting}[style=lammps]
 rerun configs.txt dump x y z vx vy vz
 compute peAtom all pe/atom
-dump potEnergy chosen custom 1 potEnergy.txt id c_peAtom"
+dump potEnergy chosen custom 1 potEnergy.txt id c_peAtom
 \end{lstlisting}
 and compare the predicted potential energies of the atoms in group \texttt{chosen}, which are randomly selected. 
 Any structures for which the energy disagreement is significant, is added to the data set. An example of a 
@@ -4363,7 +4274,7 @@ except that no RMSE tolerance is set, and the mini-batch size is changed to 200 
 We assume that no more than two layers are needed to fit the Si potential, and the maximum number of nodes has been 
 set to 32.
 \begin{table} 
-  \begin{center}
+\centering
     \begin{tabular*}{10cm}{l @{\extracolsep{\fill}} llll}
       \toprule
       Layers & Nodes & RMSE & Epoch & Time \\ 
@@ -4386,7 +4297,6 @@ set to 32.
             & 32 & 2.008 & 14895 & 344 \\
       \bottomrule
       \end{tabular*} 
-    \end{center}
     \captionsetup{width=12cm}
       \caption{Results of a grid search for finding the optimal NN architecture to fit the final Si training set. 
                Each NN architecture is trained for 40000 epochs, and the smallest RMSE obtained during each session
@@ -4396,14 +4306,14 @@ set to 32.
 \end{table}
 
 The results are listed in \autoref{tab:gridSearch}. We immidiately observe that all RMSEs lie in a range of about 1.5-2.5 meV, except for the two cases where $n_l = 4$. 
-This tells us that the quality of the fit is not very sensitive to the NN size. Some of the  
-$L=2$-NNs converge at an earlier epoch, but they do not produce significantly better fits, and since each epoch 
+This tells us that the quality of the fit is not very sensitive to the NN size. Some of the two-layer NNs
+converge at an earlier epoch, but they do not produce significantly better fits, and since each epoch 
 takes a longer time, they do not necessarily converge more \textit{quickly}. Ideally, we should have trained each 
 NN several times and calculated averages, but the above analysis is sufficient to conclude that the choice of NN size 
 is not important to the quality of the fit. For computational efficiency of the eventual NNP,
 we therefore decide to continue using 1 layer and 10 nodes.
 \begin{table} 
-  \begin{center}
+\centering
     \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} ll}
       \toprule
       Hyperparameters &  \\ 
@@ -4422,7 +4332,6 @@ we therefore decide to continue using 1 layer and 10 nodes.
       & Bias initialization & Zeros \\
       \bottomrule
       \end{tabular*} 
-    \end{center}
     \captionsetup{width=12cm}
       \caption{Hyperparameters used in the fitting of the final training set for construction of the Si potential.} 
   \label{tab:hyperParamsSiFinal} 
@@ -4441,14 +4350,14 @@ as we can see from \autoref{tab:gridSearch}.
 The NN is trained for 40000 epochs, and for every 1000 epochs the current NN parameters 
 and RMSE are stored. When training is finished, the NN with the smallest RMSE is selected as the final NNP. 
 The best fit was obtained after 11000 epochs, with an RMSE of 0.864 meV. This result is similar to other studies
-employing the Behler-Parrinello method for NN interpolation \cite{Behler07} \cite{Artrith12} \cite{Natarajan16} .  
+employing the Behler-Parrinello method for NN interpolation \cite{Behler07,Artrith12,Natarajan16} .  
 
 We have only fitted energies, and not forces, thus the exact force RMSE is not easily available. This would have required 
 the computation of Stillinger-Weber forces for all configurations sampled from NNP simulations, and vice versa.
 However, a good estimate can be obtained by running a SW simulation to generate a large number of configurations, and 
 store the total force on a single atom at each time step. Then, we run a pseudo-simulation with the NNP on these configurations, 
 and compare the computed forces on the same atom. The resulting force RMSE is 41.2 meV, 
-which is also similar to other studies \cite{Artrith12} \cite{Natarajan16}. 
+which is also similar to other studies \cite{Artrith12,Natarajan16}. 
 As for the Lennard-Jones NNP (\autoref{sec:LJValidation}), the RMSE of the forces is between 1-2 orders of magnitude 
 larger than that for the energy.
 \begin{figure}
@@ -4472,21 +4381,9 @@ for the initial data set.
 
 \section{Applying the NNP}
 Calculating fitting errors is not sufficient for assessing the applicability of a NNP. 
-To properly validate the potential we have constructed, we need to evaluate its performance in MD simulations.
-For validation, we have chosen to confirm that the crystal structure of Si is reproduced by the NNP. This is done by measuring 
-the radial distribution function and comparing with the corresponding distribution of a Stillinger-Weber simulaton.
-
-The radial distribution function $g(r)$, (or pair correlation function) of an atomic system is a measure of how 
-particle density varies as a function of distance from a reference atom. If a system is randomly distributed, all distances
-are equally probable, and $g(r)$ is unity for all distances. Any devations from unity signifies an ordered structure.
-The typical shape of $g(r)$ for a crystal lattice is a flat region for small distances due to repulsive forces, 
-followed by a series of peaks corresponding to bond lengths. 
- 
-To measure $g(r)$, we preare a system consisting of 1000 Si atoms on a diamond cubic lattice with a lattice constant 
-of $b = \SI{5.431}{\angstrom}$. The simulation box is cubic with sides $5L$, where $L$ is the length of one unit cube.
-The initial temperature is $T = 300$ K, and NVE-integration is performed, creating a system trajectory consistent with 
-the microcanonical ensemble. The system is equilibrated for 10 ps, with a time step of $\Delta t = 0.001$ ps. Then, 
-$g(r)$ is calculated every 100 time steps for 1000 time steps, and an average of these 10 measurements are obtained. 
+To properly validate the potential we have constructed, we need to evaluate its accuracy in MD simulations.
+For validation, we have chosen to confirm that the crystal structure of Si and various mechanical properties are reproduced by the NNP
+by comparing with Stillinger-Weber results. 
 \begin{figure}
 \centering
   \includegraphics[width = 0.8\linewidth]{Figures/Results/radialDist.pdf}
@@ -4497,13 +4394,28 @@ $g(r)$ is calculated every 100 time steps for 1000 time steps, and an average of
   \label{fig:radialDist}
 \end{figure}
 
+\subsection{Radial distribution function}
+The radial distribution function $g(r)$, (or pair correlation function) of an atomic system is a measure of how 
+particle density varies as a function of distance from a reference atom. If a system is randomly distributed, all distances
+are equally probable, and $g(r)$ is unity for all distances. Any devations from unity signifies an ordered structure.
+The typical shape of $g(r)$ for a crystal lattice is a flat region for small distances due to repulsive forces, 
+followed by a series of peaks corresponding to bond lengths. 
+
+To measure $g(r)$, we preare a system consisting of 1000 Si atoms on a diamond cubic lattice with a lattice constant 
+of $b = \SI{5.431}{\angstrom}$. The simulation box is cubic with sides $5L$, where $L$ is the length of one unit cube.
+The initial temperature is $T = 300$ K, and NVE-integration is performed, creating a system trajectory consistent with 
+the microcanonical ensemble. The system is equilibrated for 10 ps, with a time step of $\Delta t = 0.001$ ps. Then, 
+$g(r)$ is calculated every 100 time steps for 1000 time steps, and an average of these 10 measurements are obtained. 
+
 The above simulation is executed with both the NNP and the SW potential. The resulting distributions are 
 depicted in \autoref{fig:radialDist} for $r \in [2.0, r_c]$, with a cutoff of $r_c = 3.77118$ as above. 
 We observe that the distinct crystal structure of Si is reproduced, but the peak centered at $r \approx \SI{2.3}{\angstrom}$
 is slightly wider and less tall than than that for SW. This difference is attributed to the error of the energy fit, 
 which leads to a slight increase in the kinetic energy of the atoms, resulting in larger vibrations. 
 
-Bulk modulus $K$ is the coefficient that relates stress to strain under uniform compression,
+\subsection{Mechanical properties}
+To further validate the NNP, we measure the bulk modulus, the shear modulus and the Poisson ratio of the Si crystal in 
+NNP simulations. Bulk modulus $K$ is the coefficient that relates stress to strain under uniform compression,
 \begin{equation}
  \frac{F}{A} = K\frac{\Delta V}{V_0}
 \end{equation}
@@ -4515,24 +4427,27 @@ A force that is applied tangentially (or transversely) to one face of an object 
 Shear stress changes the shape of an object, but not volume. 
 Shear modulus $G$ is the coefficient that relates shear stress to shear strain.
 \begin{equation}
- \frac{F}{A} = G\frac{\Delta_x}{y}
+ \frac{F}{A} = G\frac{\Delta x}{y}
 \end{equation}
-where $\Delta_x/y$ is the shear strain. 
+where $\Delta x/y$ is the shear strain. 
 
 When a material experiences a compressive force, it tends to expand in directions perpendicular to the direction of compression. 
-Conversely, if the material is stretched, it tends to contract in the perpendicular direction. The Poisson 
-ratio is the ratio of relative contraction to relative expansion, or vice versa. More generally, it is the ratio 
-of transverse strain to longitudinal strain,
+Conversely, if the material is stretched, it tends to \textit{contract} in the perpendicular direction. The Poisson 
+ratio $\nu$ is the ratio of relative contraction to relative expansion, or vice versa. More generally, it is the ratio 
+of transverse strain $\epsilon_\mathrm{trans}$ to longitudinal strain $\epsilon_\mathrm{long}$,
 \begin{equation}
  \nu = -\frac{\epsilon_{\mathrm{trans}}}{\epsilon_\mathrm{long}}
 \end{equation}
-
-
+To measure these quantites, we employ a set of example scripts contained in the LAMMPS distribution%
+\footnote{\href{https://github.com/johnands/lammps/tree/master/examples/ELASTIC}
+{https://github.com/johnands/lammps/tree/master/examples/ELASTIC}}.
+These are slightly modified so that our NNP is employed to compute energies and forces instead of SW. 
+SAY BRIEFLY SOMETHING ABOUT ELASTICITY TENSOR AND CUBIC SYMMETRY FROM HOPCROFT. 
 Bulk modulus \cite{Hopcroft10}:
 \begin{equation}
  B = \frac{c_{11} + 2c_{12}}{3}
 \end{equation}
-Shear modulus 1 and 2, along the $\langle111\rangle$ and $\langle100\rangle$ axes respectively \cite{Zener48}, 
+Shear modulus, along the $\langle111\rangle$ axis, 
 \begin{equation}
  S_1 = c_{44}
 \end{equation}
@@ -4543,7 +4458,7 @@ Poisson:
 
 
 \begin{table} 
-  \begin{center}
+\centering
     \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} lll}
       \toprule
       & NNP & Analytic SW \cite{Cowley88} & Relative error  \\ 
@@ -4553,7 +4468,6 @@ Poisson:
       Poisson ratio   & 0.348  & 0.335 &  3.88 \% \\
       \bottomrule
       \end{tabular*} 
-    \end{center}
     \captionsetup{width=12cm}
       \caption{Various mechanical properties measured from NNP simulations of Si. The analytical values 
 	       for Stillinger-Weber are included, along with the relative error. The bulk modulus and 
@@ -4897,12 +4811,14 @@ and
 
 
 \chapter{Symmetry function parameters} \label{app:symmFuncParameters}
-Here we list the symmetry parameters employed in the construction of the Si NNP in \autoref{sec:SiPotentialResults}. 
-\begin{table} 
+Here we list the symmetry parameters employed in the construction of the Si NNP in \autoref{sec:SiPotentialResults}.
+For $G_i^2$, the same parameters are used both for the initial and the final fit. For $G_i^5$, the parameters used 
+in the in the initial fit are enclosed in parentheses. 
+\begin{table}[h] 
   \begin{center}
     \begin{tabular*}{6cm}{l @{\extracolsep{\fill}} ll}
       \toprule
-      $R_c$ & $\eta$ & $R_s$ \\ 
+      $r_c$ & $\eta$ & $r_s$ \\ 
       \hline
       6.0 & 0.3 & 0 \\
       6.0 & 0.1 & 0 \\
@@ -4916,15 +4832,17 @@ Here we list the symmetry parameters employed in the construction of the Si NNP 
       \end{tabular*} 
     \end{center}
     \captionsetup{width=12cm}
-      \caption{Symmetry function parameters $G_i^2$. } 
+      \caption{Symmetry function parameters for $G_i^2$ employed in the fitting of the Si NNP in \autoref{sec:SiPotentialResults}. 
+	       The same parameters were used in the initial fit and all subsequent fits. $r_c$ and $r_s$ have units \SI{}{\angstrom}, 
+	       while $\eta$ is in units of $\SI{}{\angstrom}^{-2}$.} 
   \label{tab:symmParamsInitialG2} 
 \end{table}
 
-\begin{table} 
+\begin{table}[h] 
   \begin{center}
     \begin{tabular*}{8cm}{l @{\extracolsep{\fill}} llr}
       \toprule
-      $\eta$ & $R_c$ & $\zeta$ & $\lambda$\\ 
+      $\eta$ & $r_c$ & $\zeta$ & $\lambda$\\ 
       \hline
       0.01 & 6.0 & 1 & 1 \\
       0.01 & 3.0 & 1 & 1 \\ 
@@ -4933,20 +4851,23 @@ Here we list the symmetry parameters employed in the construction of the Si NNP 
       0.01 & 6.0 & 2 & 1 \\
       0.01 & 3.0 & 2 & 1 \\
       0.01 & 6.0 & 2 & -1 \\
-      0.01 & 3.0 & 2 & -1 \\
+      0.01 & 4.0 (3.0) & 2 & -1 \\
       0.01 & 6.0 & 4 & 1 \\
-      0.01 & 3.0 & 4 & 1 \\
+      0.01 & 4.0 (3.0) & 4 & 1 \\
       0.01 & 6.0 & 4 & -1 \\
-      0.01 & 3.0 & 4 & -1 \\
+      0.01 & 4.0 (3.0) & 4 & -1 \\
       0.01 & 6.0 & 16 & 1 \\
-      0.01 & 3.0 & 16 & 1 \\
+      0.01 & 4.0 (3.0) & 16 & 1 \\
       0.01 & 6.0 & 16 & -1 \\
-      0.01 & 3.0 & 16 & -1 \\
+      0.01 & 4.0 (3.0) & 16 & -1 \\
       \bottomrule
       \end{tabular*} 
     \end{center}
     \captionsetup{width=12cm}
-      \caption{Symmetry function parameters $G_i^5$.} 
+      \caption{Symmetry function parameters for $G_i^5$ employed in the fitting of the Si NNP in 
+               \autoref{sec:SiPotentialResults}. For parameters that were adjusted between the initial and final fits, 
+               the values of the initial fit are enclosed in parentheses. $r_c$ have units $\SI{}{\angstrom}$, while
+               $\eta$ is in units of $\SI{}{\angstrom}^{-2}$. $\zeta$ and $\lambda$ are unitless. } 
   \label{tab:symmParamsInitialG5} 
 \end{table}
 
