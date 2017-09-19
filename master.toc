@@ -114,10 +114,15 @@
 \contentsline {subsection}{\numberline {9.6.1}Radial distribution function}{120}{subsection.9.6.1}
 \contentsline {subsection}{\numberline {9.6.2}Mechanical properties}{120}{subsection.9.6.2}
 \contentsline {part}{III\hspace {1em}Conclusions and future work}{123}{part.3}
-\contentsline {chapter}{\numberline {10}Summary}{125}{chapter.10}
-\contentsline {chapter}{\numberline {11}Conclusions}{127}{chapter.11}
-\contentsline {chapter}{\numberline {12}Prospects and future work}{129}{chapter.12}
-\contentsline {section}{\numberline {12.1}Sampling methods}{129}{section.12.1}
-\contentsline {chapter}{Appendices}{131}{section*.67}
-\contentsline {chapter}{\numberline {A}Symmetry functions derivatives}{133}{Appendix.1.A}
+\contentsline {chapter}{\numberline {10}Summary and conclusion}{125}{chapter.10}
+\contentsline {subsubsection}{Properties of a high-dimensional neural network potential}{126}{section*.67}
+\contentsline {chapter}{\numberline {11}Prospects and future work}{129}{chapter.11}
+\contentsline {section}{\numberline {11.1}Force accuracy}{129}{section.11.1}
+\contentsline {section}{\numberline {11.2}Other systems}{129}{section.11.2}
+\contentsline {section}{\numberline {11.3}Optimization}{130}{section.11.3}
+\contentsline {chapter}{Appendices}{131}{section*.68}
+\contentsline {chapter}{\numberline {A}Symmetry function derivatives}{133}{Appendix.1.A}
+\contentsline {subsubsection}{Notation and symmetries}{134}{section*.69}
+\contentsline {subsubsection}{Derivatives of cutoff function and radial symmetry functions}{134}{section*.70}
+\contentsline {subsubsection}{Derivatives of angular symmetry functions}{135}{section*.71}
 \contentsline {chapter}{\numberline {B}Symmetry function parameters}{139}{Appendix.1.B}

@@ -4438,26 +4438,35 @@ of transverse strain $\epsilon_\mathrm{trans}$ to longitudinal strain $\epsilon_
 \begin{equation}
  \nu = -\frac{\epsilon_{\mathrm{trans}}}{\epsilon_\mathrm{long}}
 \end{equation}
-To measure these quantites, we employ a set of example scripts contained in the LAMMPS distribution%
-\footnote{\href{https://github.com/johnands/lammps/tree/master/examples/ELASTIC}
-{https://github.com/johnands/lammps/tree/master/examples/ELASTIC}}.
-These are slightly modified so that our NNP is employed to compute energies and forces instead of SW. 
-SAY BRIEFLY SOMETHING ABOUT ELASTICITY TENSOR AND CUBIC SYMMETRY FROM HOPCROFT. 
-Bulk modulus \cite{Hopcroft10}:
+These quantities can be obtained by employing Hooke's law. For an anisotropic material like Si, this is written as a tensor 
+equation
+\begin{equation}
+ \sigma_{ij} = c_{ijkl}\epsilon_{kl}
+\end{equation}
+where $c_{ijkl}$ is a fourth rank \textit{stiffness} tensor relating stress $\sigma_{ij}$ and strain $\epsilon_{kl}$. 
+However, the cubic symmetry of Si allows us to specify the stiffness tensor as a matrix (tensor of rank two)
+with only three independent components $c_{11}$, $c_{12}$ and $c_{44}$, called \textit{elastic constants}. 
+The bulk modulus, shear modulus and Poisson ratio 
+is then calculated by the below formulas \cite{Hopcroft10}. 
+
+\noindent Bulk modulus:
 \begin{equation}
  B = \frac{c_{11} + 2c_{12}}{3}
 \end{equation}
-Shear modulus, along the $\langle111\rangle$ axis, 
+Shear modulus: 
 \begin{equation}
- S_1 = c_{44}
+ S = c_{44}
 \end{equation}
-Poisson:
+Poisson ratio:
 \begin{equation}
  \frac{1}{1 + \frac{c_{11}}{c_{22}}}
 \end{equation}
-
-
-\begin{table} 
+To measure $c_{11}$, $c_{12}$ and $c_{44}$ in a simulation, we employ a set of example scripts contained in the LAMMPS distribution%
+\footnote{\href{https://github.com/johnands/lammps/tree/master/examples/ELASTIC}
+{https://github.com/johnands/lammps/tree/master/examples/ELASTIC}}.
+These are slightly modified so that our NNP is employed to compute energies and forces instead of SW. 
+The elastic constants are obtained by deforming the simulation box and calculating the induced stress. 
+\begin{table}[h] 
 \centering
     \begin{tabular*}{12cm}{l @{\extracolsep{\fill}} lll}
       \toprule
@@ -4472,8 +4481,14 @@ Poisson:
       \caption{Various mechanical properties measured from NNP simulations of Si. The analytical values 
 	       for Stillinger-Weber are included, along with the relative error. The bulk modulus and 
 	       shear modulus have units of GPa, while the Poisson ratio is unitless.} 
-  \label{tab:hyperParamsSiFinal} 
+  \label{tab:SiMechanical} 
 \end{table}
+
+The results are listed in \autoref{tab:SiMechanical}. We observe that the SW values are reproduced with small relative errors, 
+demonstrating that also the mechanical properties of the Si crystal are modelled correctly with the NNP.
+Since SW has been used to compute reference energies for the NNP fit, we do not compare with experimental values, as 
+this would only assess the accuracy of SW, not the NNP. 
+
 
 
 
@@ -4482,25 +4497,23 @@ Poisson:
 
 \part{Conclusions and future work}
 
-\chapter{Summary}
+\chapter{Summary and conclusion}
 In this thesis, we developed a method for constructing high-dimensional neural network potentials. This method was applied
-for the construction of an inter-atomic potential for solid-state Si, and the radial distribution function and 
-the bulk modulus was measured for benchmarking.
+for the construction of an inter-atomic potential for solid-state Si, and the radial distribution function,
+bulk modulus, shear modulus and Poisson ratio were measured for benchmarking.
 
 To find atomic structures that were relevant for the intended application of the potential, 
 we implemented a custom \texttt{compute} in LAMMPS 
-that sampled atom-centered configuraitons and total potential energies according to a modified sampling algorithm. 
+that sampled atom-centered configurations and total potential energies according to a modified sampling algorithm. 
 This \texttt{compute} was used to sample configurations from Stillinger-Weber simulations, which constituted the initial 
 training data for the construction of the Si potential. 
-Further, we included a method for detecting extrapolating structures during NNP simulations, which was employed in 
-an iterative scheme to improve the Si NNP by adding new relevant configurations and energies to the initial data set. 
 
-We implemented the Behler-Parrinello method to deal with the fixed-dimensionality and symmetry problems of neural networks. 
+We implemented the Behler-Parrinello method to deal with the fixed dimensionality and symmetry problems of neural networks. 
 A set of symmetry functions was created for the initial Si training data. This set was compared with 
 the radial and angular distribution of atoms in the training data to evaluate its ability to adequately probe 
 the atomic environments. The symmetry functions were also used in an iterative sampling scheme to find new relevant structures 
 outside the range of existing symmetry values. Further, the multiple-NN method was employed to detect
-new regions of configurations space poorly represented in the training set. 
+regions of configurations space poorly represented in the training set. 
 
 We developed a set of Python scripts to train neural networks to fit the sampled data sets. 
 The machine learning library TensorFlow was used for this purpose. Various properties of the fitting procedure were 
@@ -4511,34 +4524,28 @@ was largest for small distances.
 
 Further, TensorFlow was used in combination with the BP method to construct a potential for Si by 
 fitting data sets sampled from both Stillinger-Weber and preliminary NNP simulations. The fit was gradually refined 
-with the iterative sampling scheme mentioned above. A final RMSE of <PUT FINAL RMSE HERE> was obtained, 
-which was comparable with other studies REFERENCE. 
+with the iterative sampling scheme mentioned above. A final RMSE of 0.864 meV was obtained, 
+which was comparable with other studies. 
 
-Lastly, we applied the eventual Si NNP in MD simuations to evaluate its performance. 
+Lastly, we applied the eventual Si NNP in MD simuations to evaluate its accuracy. 
 The radial distribution function was measured, and was found to be in good agreement with Stillinger-Weber. 
 The small deviations were attributed to an increase in the kinetic energy of the atoms due to the fitting error.
 Further, various mechanical properties of the NNP Si system were calculated, specifically the bulk modulus, the shear 
-modulus, and the Poisson ratio. The obtained values were
+modulus, and the Poisson ratio. The results had relative errors in the range 1.5-5.2 \% when compared to the analytic 
+Stillinger-Weber values. 
 
 
-
-
-
-
-
-
-
-\chapter{Conclusions} 
-When developing a new PES, it is important to define a set of properties that the ''ideal'' potential 
-should possess. These serve as a guide during the construction process, and is also a good 
+\subsubsection{Properties of a high-dimensional neural network potential} 
+When developing a new PES, it is useful to define a set of properties that the ''ideal'' potential 
+should possess. These may serve as guiding principles during the construction process, and is also a good 
 starting point for comparing different types of potentials. Behler \cite{Behler11general} lists 10 requirements
-that the ideal potential should meet. We will now evaluate our NNP in the light of these requirements. 
+that the ideal potential should meet. We will now evaluate our NNP in light of these requirements. 
 \begin{enumerate}
  \item \textit{The potential should be accurate, i.e.\ produce results that are in good agreement with experiments. 
        Ideally, it should be constructed using \textit{ab inito} methods.} 
        
        The NNP can be fitted to \textit{ab inito} data to arbitrary accuracy, and 
-       can therefore be considered to have \textit{ab inito} accuracy.  
+       can therefore be considered an \textit{ab inito} potential.  
  \item \textit{There should be ways to systematically detect situations where the potential is not suffientently accurate, 
        and improve it without too much effort.} 
        
@@ -4546,7 +4553,9 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
  \item \textit{The potential should be unbiased and applicable to all types of systems and chemical bonding.} 
        
        The NNP has no pre-defined functional form, and its applications are unlimited as 
-       long as the production of \textit{ab inito} reference energies is feasible. 
+       long as the production of \textit{ab inito} reference energies is feasible. However, for systems containing 
+       several different chemical elements, the symmetry function vectors grow very large, and the symmetry function sets 
+       get increasingly difficult to set up.
  \item \textit{The potential should enable the breaking and making of bonds.}
        
        The NNP is able to model the breaking and making of bonds as long as the reference set contains
@@ -4557,14 +4566,14 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
  \item \textit{The construction of the potential should be as automated as possible.} 
        
        The NN parameters, and hence the functional form of the NNP, is automatically optimized. However, 
-       symmetry parameters, optimization parameters and the NN architecture must be adjusted manually. 
+       the determination of symmetry parameters and other hyperparmameters is to a certain degree empirical. 
        Further, training data can be automatically produced by MD simulations, but the physical conditions 
        of each simulation and the sampling of configurations must be carefully considered. 
  \item \textit{The potential should be predictive, i.e.\ be reliable for atomic configurations that have not been used in the 
        construction.}
        
-       The NNP is generally not able to extrapolate, and is thus reliable only for configurations that are present in 
-       the training set. 
+       The NNP is generally not able to extrapolate, and is thus reliable only for configurations that are within 
+       the configuration space spanned by the training set.
        
  \item \textit{The potential should be fast to evaluate.}
  
@@ -4579,27 +4588,60 @@ that the ideal potential should meet. We will now evaluate our NNP in the light 
        Analytic derivatives of both the NN and the symmetry functions are readily available. 
 \end{enumerate}
 We observe that our NNP fulfills the majority of the 10 requirements stated above.  
-However, none of the potentials currently available, including NNPs, are ideal potentials.
-The most crucial flaw is probably the NNPs unreliability for configurations that has not been included in its training. 
-On the other hand, NNPs are an excellent tool for multi-scale physics. They connect the realms of quantum mechanics 
+None of the potentials currently available, including NNPs, are ideal. 
+However, NNPs are an excellent tool for multi-scale physics. They connect the realms of quantum mechanics 
 and molecular dynamics by enabling \textit{ab inito} simulations on a larger scale of space and time than what is feasible 
-for convential \textit{ab inito} MD. This property, in addition to the unbiased and transferable nature of the approach, 
+for convential \textit{ab inito} MD. This property, in addition to the unbiased and transferable nature of the 
+Behler-Parrinello approach, 
 signifiy that research in this field will be increasingly important in the future. 
 
 \chapter{Prospects and future work}
 An important aspect of the construction of NNPs is to employ a suitable \textit{ab inito} method to calculate reference energies.
 In this thesis, we have computed target energies with common empirical potentials, and thus not constructed \textit{ab inito}
-potentials. The most obvious extension to the current work is thus to employ methods like Hartree-Fock or Density Functional theory 
-to obtain energies. However, there also much room for improvement in other areas. 
+potentials. The most obvious extension to the current work is therefore to employ methods like Hartree-Fock or Density Functional theory 
+to obtain energies. However, there is also much room for improvement in other areas. 
 
-\section{Sampling methods}
+\section{Force accuracy}
+We saw in chapters \autoref{sec:LJValidation} and \autoref{sec:SiPotentialResults} that the force RMSE is generally 
+1-2 orders of magnitude larger than that for the energy. The forces determine the dynamics of a simulation, and their accuracy 
+is therefore of vital importance. One way to improve the force RMSE is to employ the modified cost function
+\eqref{CFDA} to fit both energies and forces. To do this, we must compute reference forces in addition to energies, 
+which is obviously more computationally demanding. However, according to Behler \cite{Behler15}, adding forces to the training 
+data reduces the required number of reference energies, leading to a smaller data set. 
+
+Further, we have repeatedly observed that the fitting error increases for large forces and energies, which can be avoided 
+by including more high-gradient configurations in the training data. We employed a sampling algorithm
+\eqref{samplingAlgorithmModified} for this purpose, and although this reduced the problem, it did not remove it entirely. 
+Improved sampling algorithms could therefore be an improvement to this work. 
+
+\section{Other systems}
+We have constructed a NNP for a system consisting of only one chemical element, but the Behler-Parrinello (BP) method 
+is applicable to systems containing several elements. The BP scheme is high-dimensional, which 
+makes it suitable for studying complex systems where many degrees of freedom must be included to provide an accurate description 
+of the dynamics. The BP method can also be extended to include electrostatic contributions \cite{Behler15}, 
+and water $\mathrm{H_2O}$ is therefore an interesting candidate. 
+
+NNPs are also able to model the breaking and making of bonds; studying chemical reaction dynamics is 
+therefore a possibility. 
+
+\section{Optimization}
+For NNPs to serve as a multi-scale physics tool, they must be much more computationally efficient than 
+\textit{ab inito} methods. Ideally, their computational efficiency should be comparable to that of empirical potentials. 
+We have not performed any proper performance analysis in this thesis, but 
+based on several simulations with the Si NNP, we have found that Stillinger-Weber is between 1-2 orders of magnitude faster.
+Consequentially, the NNP is several orders of magnitude faster than \textit{ab inito} methods%
+\footnote{\href{http://lammps.sandia.gov/bench.html}{lammps.sandia.gov/bench.html}}. 
+
+However, optimizing the evaluations of the symmetry functions and the network may contribute to a significant speed-up. 
+We have employed Armadillo to evaluate and differentiate NNPs, which may not the most efficient approach. Further, 
+the size of the NN and the symmetry function set may be reduced by performing a more thorough hyperparmeter optimization. 
 
 
 
 
-***Using ab inito method***
-***Using on new systems***
-***Fitting forces***
+
+
+
 
 
 
@@ -4609,75 +4651,144 @@ to obtain energies. However, there also much room for improvement in other areas
 
 \begin{appendices}
 
-\chapter{Symmetry functions derivatives} \label{app:appendixA1}
-We list here the derivatives of the symmetry functions used for training neural networks. These have to be known
-to compute forces for MD simulations. In some cases we only show the deriviative with respect to 
-$R = \sqrt{x^2 + y^2 + z^2}$. 
-Each component $\alpha$ can be calculated by
+\chapter{Symmetry function derivatives} \label{app:appendixA1}
+According to \eqref{forceAtomkChainRule}, we need the derivatives of the symmetry functions defined in 
+\autoref{sec:symmetryFunctions} to obtain forces during simulations. Analytic derivatives have been obtained 
+with SymPy, shown here for $G_i^5$,
+\begin{minted}{Python}
+from sympy.utilities.codegen import codegen
+from sympy import *
+
+# variables
+xj, yj, zj, xk, yk, zk =  symbols('xj yj zj xk yk zk')
+
+# parameters
+eta, Rc, zeta, Lambda = symbols('eta Rc zeta Lambda')
+
+# substitution parameters
+Rj, Rk, Rj2, Rk2, RjDotRk, CosTheta, Fcj, Fck, dFcj, dFck = \
+    symbols('Rj Rk Rj2 Rk2 RjDotRk CosTheta Fcj Fck dFcj dFck')
+
+rj = sqrt(xj**2 + yj**2 + zj**2)
+rk = sqrt(xk**2 + yk**2 + zk**2)
+fcj = 0.5*cos(pi*rj/Rc) + 0.5
+fck = 0.5*cos(pi*rk/Rc) + 0.5
+rjDotrk = (xj*xk + yj*yk + zj*zk)
+cosTheta = rjDotrk / (rj*rk)
+
+F1 = 2**(1-zeta) * (1 + Lambda*cosTheta)**zeta
+F2 = exp(-eta*(rj**2 + rk**2))
+F3 = fcj*fck
+G5 = F1*F2*F3
+
+dG5dxj = diff(G5, xj)
+dG5dxj = dG5dxj.subs(xj**2 + yj**2 + zj**2, Rj2)
+dG5dxj = dG5dxj.subs(xk**2 + yk**2 + zk**2, Rk2)
+dG5dxj = dG5dxj.subs(sqrt(Rj2), Rj)
+dG5dxj = dG5dxj.subs(sqrt(Rk2), Rk)
+dG5dxj = dG5dxj.subs(xj*xk + yj*yk + zj*zk, RjDotRk)
+dG5dxj = dG5dxj.subs(RjDotRk/(Rj*Rk), CosTheta)
+dG5dxj = dG5dxj.subs(0.5*cos(pi*Rj/Rc) + 0.5, Fcj)
+dG5dxj = dG5dxj.subs(0.5*cos(pi*Rk/Rc) + 0.5, Fck)
+dG5dxj = dG5dxj.subs(sin(pi*Rj/Rc)/(Rc), -2*dFcj/pi)
+
+dG5dxk = diff(G5, xk)
+dG5dxk = dG5dxk.subs(xj**2 + yj**2 + zj**2, Rj2)
+dG5dxk = dG5dxk.subs(xk**2 + yk**2 + zk**2, Rk2)
+dG5dxk = dG5dxk.subs(sqrt(Rj2), Rj)
+dG5dxk = dG5dxk.subs(sqrt(Rk2), Rk)
+dG5dxk = dG5dxk.subs(xj*xk + yj*yk + zj*zk, RjDotRk)
+dG5dxk = dG5dxk.subs(RjDotRk/(Rj*Rk), CosTheta)
+dG5dxk = dG5dxk.subs(0.5*cos(pi*Rj/Rc) + 0.5, Fcj)
+dG5dxk = dG5dxk.subs(0.5*cos(pi*Rk/Rc) + 0.5, Fck)
+dG5dxk = dG5dxk.subs(sin(pi*Rk/Rc)/(Rc), -2*dFck/pi)
+
+print codegen(("dG5dxj", simplify(dG5dxj)), "C", "file")[0][1]
+print codegen(("dG5dxk", simplify(dG5dxk)), "C", "file")[0][1]
+\end{minted}
+However, calculating the derivatives by hand allows us to write the expression for the derivatives in a more compact form, 
+speeding up the force computations.
+Thus, we compute the derivatives of all symmetry functions except $G_i^3$ in the following. The SymPy expressions serve 
+as a validation of our calculations. 
+
+\subsubsection{Notation and symmetries}
+In some cases we only show the deriviative with respect to 
+$r_{ij}$. Each component $\alpha$ can be calculated by
 \begin{equation}
- \frac{\partial R}{\partial \alpha} = \frac{\alpha}{R}
+ \frac{\partial r_{ij}}{\partial \alpha} = \frac{\alpha}{r_{ij}}
 \end{equation}
-The following notation applies in the following,
+The following notation applies,
 \begin{equation}
- R_{ij} = \Bigr(x_{ij}^2 + y_{ij}^2 + z_{ij}^2\Bigr)^{1/2} =
+ r_{ij} = \Bigr(x_{ij}^2 + y_{ij}^2 + z_{ij}^2\Bigr)^{1/2} =
  \Bigr((x_j - x_i)^2 + (y_j - y_i)^2 + (z_j - z_i)^2\Bigr)^{1/2}
 \end{equation}
-Cutoff function \eqref{cutoffFunction}:
+From \autoref{sec:symmAndForces} we have the identities,
+\begin{subequations}
+\begin{align}
+ \frac{\partial r_{ij}}{\partial x_{ij}} &= \frac{\partial r_{ij}}{\partial x_j} \label{symmetryDerivativeApp1} \\
+ \frac{\partial r_{ij}}{\partial x_{ij}} &= -\frac{\partial r_{ij}}{\partial x_i} \label{symmetryDerivativeApp2}
+\end{align}
+\end{subequations}
+
+\subsubsection{Derivatives of cutoff function and radial symmetry functions}
+Derivative of the cutoff function \eqref{cutoffFunction}:
 \begin{equation}
- \frac{\partial f_c(R)}{\partial R} = -\frac{1}{2}\frac{\pi}{R_c} \sin\left(\frac{\pi R}{R_c}\right) = M(R)
+ \frac{\partial f_c(r)}{\partial r} = -\frac{1}{2}\frac{\pi}{r_c} \sin\left(\frac{\pi r}{r_c}\right) = M(r)
  \label{cutOffFunctionDerivative}
 \end{equation}
-This expression is valid for all combinations of indicies. The derivatives w.r.t. to individual coordinates are
+This expression is valid for all combinations of indicies $(i,j,k)$. The derivatives w.r.t. to individual coordinates are
 \begin{equation}
- \frac{\partial f_c(R_{ij})}{\partial x_{ij}} = M(R_{ij})
- \frac{x_{ij}}{R_{ij}}
+ \frac{\partial f_c(r_{ij})}{\partial x_{ij}} = M(r_{ij})
+ \frac{x_{ij}}{r_{ij}}
  \label{cutOffFunctionDerivative1}
 \end{equation}
 and 
 \begin{equation}
- \frac{\partial f_c(R_{ik})}{\partial x_{ik}} = M(R_{ik})
- \frac{x_{ik}}{R_{ik}}
+ \frac{\partial f_c(r_{ik})}{\partial x_{ik}} = M(r_{ik})
+ \frac{x_{ik}}{r_{ik}}
  \label{cutOffFunctionDerivative1}
 \end{equation}
 while
 \begin{equation}
- \frac{\partial f_c(R_{ij})}{\partial x_{ik}} = \frac{\partial f_c(R_{ik})}{\partial x_{ij}} = 0
+ \frac{\partial f_c(r_{ij})}{\partial x_{ik}} = \frac{\partial f_c(r_{ik})}{\partial x_{ij}} = 0
 \end{equation}
-because atom $i$ is always in origo, which means we can do the substitutions $x_{ij} \rightarrow x_{j}$ and 
-$x_{ik} \rightarrow x_{k}$. SHOULD I DO THIS CONSEQUENTLY BELOW????. Also, 
+according to \eqref{symmetryDerivativeApp1}. Also, 
 \begin{equation}
- \frac{\partial f_c(R_{jk})}{\partial x_{ij}} = -M(R_{jk})
- \frac{x_{jk}}{R_{jk}}
+ \frac{\partial f_c(r_{jk})}{\partial x_{ij}} = -M(r_{jk})
+ \frac{x_{jk}}{r_{jk}}
  \label{cutOffFunctionDerivative1}
 \end{equation}
 and 
 \begin{equation}
- \frac{\partial f_c(R_{jk})}{\partial x_{ij}} = M(R_{jk})
- \frac{x_{jk}}{R_{jk}}
+ \frac{\partial f_c(r_{jk})}{\partial x_{ik}} = M(r_{jk})
+ \frac{x_{jk}}{r_{jk}}
  \label{cutOffFunctionDerivative1}
 \end{equation}
-The derivative of each term in $G_i^1$ \eqref{G1} is simply \eqref{cutOffFunctionDerivative}. \\
-$G_i^2$ \eqref{G2}:
+The derivative of each term in $G_i^1$ \eqref{G1} is simply equal to \eqref{cutOffFunctionDerivative}.
+
+\noindent Derivative of $G_i^2$ \eqref{G2}:
 \begin{equation}
- \frac{\partial G_i^2}{R_{ij}} = 
- \exp(-\eta(R_{ij}-R_s)^2) \left[2\eta(R_s - R_{ij}) + \frac{\partial f_c}{\partial R_{ij}}\right]
+ \frac{\partial G_i^2}{r_{ij}} = 
+ \exp(-\eta(r_{ij}-r_s)^2) \left[2\eta(r_s - r_{ij}) + \frac{\partial f_c}{\partial r_{ij}}\right]
 \end{equation}
-$G_i^3$ has not been used in this theses. \\
+
+\subsubsection{Derivatives of angular symmetry functions}
 $G_i^4$ \eqref{G4}:
 \begin{equation}
- G_i^4 = F_1(\theta)F_2(R_{ij},R_{ik},R_{jk})F_3(R_{ij},R_{ij},R_{jk})
+ G_i^4 = F_1(\theta)F_2(r_{ij},r_{ik},r_{jk})F_3(r_{ij},r_{ij},r_{jk})
 \end{equation}
 where
 \begin{align}
  F_1(\theta) &= 2^{1-\zeta}(1 + \lambda \cos\theta_{ijk})^\zeta \\
- F_2(R_{ij},R_{ik},R_{jk}) &= \exp[-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)] \\
- F_3(R_{ij},R_{ij},R_{jk}) &= f_c(R_{ij}) f_c(R_{ik}) f_c (R_{jk})
+ F_2(r_{ij},r_{ik},r_{jk}) &= \exp[-\eta (r_{ij}^2 + r_{ik}^2 + r_{jk}^2)] \\
+ F_3(r_{ij},r_{ij},r_{jk}) &= f_c(r_{ij}) f_c(r_{ik}) f_c (r_{jk})
 \end{align}
-where
+and where
 \begin{equation}
- \cos\theta = \frac{x_{ij}x_{ik} + y_{ij}y_{ik} + z_{ij}z_{ik}}{R_{ij}R_{ik}}
+ \cos\theta = \frac{x_{ij}x_{ik} + y_{ij}y_{ik} + z_{ij}z_{ik}}{r_{ij}r_{ik}}
 \end{equation}
 Using the product rule:
+\begin{subequations}
 \begin{align}
  \frac{\partial G_i^4}{\partial x_{ij}} = &\frac{\partial F_1}{x_{ij}} F_2 F_3 + 
  F_1 \left(\frac{\partial F_2}{\partial x_{ij}}F_3 + F_2\frac{\partial F_3}{\partial x_{ij}}\right) \\
@@ -4685,6 +4796,7 @@ Using the product rule:
  F_1 \frac{\partial F_2}{\partial x_{ij}}F_3 + F_1F_2\frac{\partial F_3}{\partial x_{ij}}
  \label{G4Derivative}
 \end{align}
+\end{subequations}
 We have
 \begin{equation}
  \frac{\partial F_1}{\partial x_{ij}} = \frac{\partial F_1}{\partial\cos\theta}
@@ -4699,69 +4811,83 @@ and
  \frac{\partial\cos\theta}{\partial x_{ij}} = \frac{x_{ik}}{r_{ij}r_{ik}} - 
  \frac{x_{ij}\cos\theta}{r_{ij}^2}
 \end{equation}
-To get the corresponding expression for $x_{ik}$, simply substitute $x_{ij} \leftrightarrow x_{ik}$ and 
-$r_{ij} \leftrightarrow r_{ik}$. Further, 
-\begin{align}
+To get the corresponding expression for $x_{ik}$, simply substitute $x_{ij} \rightarrow x_{ik}$ and 
+$r_{ij} \rightarrow r_{ik}$. Further, 
+\begin{equation}
+\begin{aligned}
  \frac{\partial F_2}{\partial x_{ij}} &= \frac{\partial F_2}{\partial r_{ij}}\frac{\partial r_{ij}}{\partial x_{ij}}  = 
- (-2\eta r_{ij}\frac{x_{ij}}{r_{ij}} - 2\eta r_{jk}\frac{x_{jk}}{r_{jk}})\exp[-\eta (R_{ij}^2 + R_{ik}^2 + R_{jk}^2)] \\
+ (-2\eta r_{ij}\frac{x_{ij}}{r_{ij}} - 2\eta r_{jk}\frac{x_{jk}}{r_{jk}})\exp[-\eta (r_{ij}^2 + r_{ik}^2 + r_{jk}^2)] \\
  &= -2\eta F_2 x_{ij} - 2\eta F_2 x_{jk}
-\end{align}
+\end{aligned}
+\end{equation}
 The corresponding expression for $x_{ik}$ is
 \begin{equation}
  \frac{\partial F_2}{\partial x_{ik}} = 
  -2\eta F_2 x_{ik} + 2\eta F_2 x_{jk}
 \end{equation}
 Lastly, 
+\begin{subequations}
 \begin{align}
  \frac{\partial F_3}{\partial x_{ij}} &=  \frac{\partial f_c(r_{ij})}{\partial x_{ij}}
  f_c(r_{ik}) f_c(r_{jk}) + f_c(r_{ij})f_c(r_{ik})\frac{\partial f_c(r_{jk})}{\partial x_{ij}} \\
  &= f_c(r_{ik})\Biggr(M(r_{ij})\frac{x_{ij}}{r_{ij}}f_c(r_{jk}) - 
  f_c(r_{ij}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
 \end{align}
+\end{subequations}
 The corresponding expression for $x_{ik}$ is
+\begin{subequations}
 \begin{align}
  \frac{\partial F_3}{\partial x_{ik}} &= f_c(r_{ij})\Biggr(\frac{\partial f_c(r_{ik})}{\partial x_{ik}}f_c(r_{jk}) + 
  f_c(r_{ik}) \frac{\partial f_c(r_{jk})}{\partial x_{ik}} \Biggr) \\
  &= f_c(r_{ij})\Biggr(M(r_{ik})\frac{x_{ik}}{r_{ik}}f_c(r_{jk}) + 
- f_c(r_{ik}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr) \\
+ f_c(r_{ik}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
 \end{align}
+\end{subequations}
 Then, taking \eqref{G4Derivative} into account:
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^4}{\partial x_{ij}} = &\biggr(\frac{x_{ik}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ij}^2}
  \biggr)KF_2F_3 \, - \\ &2\eta F_1F_2F_3 x_{jk} - 2\eta F_1F_2F_3 x_{ij} \, + \\
  &F_1F_2 f_c(r_{ik})\Biggr(M(r_{ij})\frac{x_{ij}}{r_{ij}}f_c(r_{jk}) +
  f_c(r_{ij}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
-\end{align}
+\end{aligned}
+\end{equation}
 and for $x_{ik}$:
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^4}{\partial x_{ik}} = &\biggr(\frac{x_{ij}}{r_{ij}r_{ik}} - \frac{x_{ik}\cos\theta}{r_{ik}^2}
  \biggr)KF_2F_3 \, + \\ &2\eta F_1F_2F_3 x_{jk} - 2\eta F_1F_2F_3 x_{ik} \, + \\
  &F_1F_2 f_c(r_{ij})\Biggr(M(r_{ik})\frac{x_{ik}}{r_{ik}}f_c(r_{jk}) - 
  f_c(r_{ik}) M(r_{jk})\frac{x_{jk}}{r_{jk}} \Biggr)
-\end{align}
+\end{aligned}
+\end{equation}
 or in terms of $x_{ij}$ and $x_{ik}$ and $x_{jk}$:
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^4}{\partial x_{ij}} = &x_{ij} \biggr(-\frac{\cos\theta}{r_{ij}^2}K
  F_2F_3 - 2\eta F_1F_2F_3 \, + \\ 
  &F_1F_2M(r_{ij})f_c(r_{ik})f_c(r_{jk})\frac{1}{r_{ij}}\biggr) \, + \\
  &x_{ik}\frac{KF_2F_3}{r_{ij}r_{ik}} - x_{jk}\Bigr(F_1F_2M(r_{jk})f_c(r_{ik})f_c(r_{ij}) + 2\eta F_1F_2F_3\Bigr)\frac{1}{r_{jk}}
-\end{align}
+\end{aligned}
+\end{equation}
 and 
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^4}{\partial x_{ik}} = &\frac{x_{ik}}{r_{ik}} \biggr(-\frac{\cos\theta}{r_{ik}^2}K
  F_2F_3 - 2\eta F_1F_2F_3 \, + \, \\
  &F_1F_2M(r_{ik})f_c(r_{ij})f_c(r_{jk})\frac{1}{r_{ik}}\biggr) + \, \\
  &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}} + x_{jk}\Bigr(F_1F_2M(r_{jk})f_c(r_{ij})f_c(r_{ik}) - 2\eta F_1F_2F_3\Bigr)\frac{1}{r_{jk}}
-\end{align}
+\end{aligned}
+\end{equation}
 The derivative of $G_i^5$ \eqref{G5} is found in a similar way,
 \begin{equation}
- G_i^5 = F_1(\theta)F_2(R_{ij},R_{ik})F_3(R_{ij},R_{ij})
+ G_i^5 = F_1(\theta)F_2(r_{ij},r_{ik})F_3(r_{ij},r_{ij})
 \end{equation}
 where 
 \begin{align}
  F_1(\theta) &= 2^{1-\zeta}(1 + \lambda \cos\theta_{ijk})^\zeta \\
- F_2(R_{ij},R_{ik}) &= \exp[-\eta (R_{ij}^2 + R_{ik}^2)] \\
- F_3(R_{ij},R_{ij}) &= f_c(R_{ij}) f_c(R_{ik})
+ F_2(r_{ij},r_{ik}) &= \exp[-\eta (r_{ij}^2 + r_{ik}^2)] \\
+ F_3(r_{ij},r_{ij}) &= f_c(r_{ij}) f_c(r_{ik})
 \end{align}
 The derivative of $F_1$ is the same, while for $F_2$ we obtain
 \begin{equation}
@@ -4783,37 +4909,43 @@ and
  f_c(r_{ij})M(r_{ik})\frac{x_{ik}}{r_{ik}}
 \end{equation}
 so that
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^5}{\partial x_{ij}} = &\biggr(\frac{x_{ik}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ij}^2}
  \biggr)KF_2F_3 -
  2\eta F_1 F_2F_3 x_{ij} \, + \\
  &F_1F_2 M(r_{ij})f_c(r_{ik})\frac{x_{ij}}{r_{ij}}
-\end{align}
+\end{aligned}
+\end{equation}
 and 
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^5}{\partial x_{ik}} = &\biggr(\frac{x_{ij}}{r_{ij}r_{ik}} - \frac{x_{ij}\cos\theta}{r_{ik}^2}
  \biggr)KF_2F_3 -
  2\eta F_1 F_2F_3 x_{ik} \, + \\
  &F_1F_2 M(r_{ik})f_c(r_{ij})\frac{x_{ik}}{r_{ik}}
-\end{align}
+\end{aligned}
+\end{equation}
 In terms of $x_{ij}$ and $x_{ik}$:
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^5}{\partial x_{ij}} = \, &x_{ij} \biggr(-\frac{\cos\theta}{r_{ij}^2}K
- F_2F_3 - 2\eta F_1F_2F_3 + F_1F_2M(r_{ij})f_c(r_{ik})\frac{1}{r_{ij}} \biggr) \, + \\
- &x_{ik}\frac{KF_2F_3}{r_{ij}r_{ik}}
-\end{align}
+ F_2F_3 - 2\eta F_1F_2F_3 + \\ &F_1F_2M(r_{ij})f_c(r_{ik})\frac{1}{r_{ij}} \biggr) \, + 
+ x_{ik}\frac{KF_2F_3}{r_{ij}r_{ik}}
+\end{aligned}
+\end{equation}
 and 
-\begin{align}
+\begin{equation}
+\begin{aligned}
  \frac{\partial G_i^5}{\partial x_{ik}} = \, &x_{ik} \biggr(-\frac{\cos\theta}{r_{ik}^2}K
- F_2F_3 - 2\eta F_1F_2F_3 + F_1F_2M(r_{ik})f_c(r_{ij})\frac{1}{r_{ik}} \biggr) \, + \\
- &x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}}
-\end{align}
+ F_2F_3 - 2\eta F_1F_2F_3 + \\ &F_1F_2M(r_{ik})f_c(r_{ij})\frac{1}{r_{ik}} \biggr) \, + 
+ x_{ij}\frac{KF_2F_3}{r_{ij}r_{ik}}
+\end{aligned}
+\end{equation}
 
 
 \chapter{Symmetry function parameters} \label{app:symmFuncParameters}
 Here we list the symmetry parameters employed in the construction of the Si NNP in \autoref{sec:SiPotentialResults}.
-For $G_i^2$, the same parameters are used both for the initial and the final fit. For $G_i^5$, the parameters used 
-in the in the initial fit are enclosed in parentheses. 
 \begin{table}[h] 
   \begin{center}
     \begin{tabular*}{6cm}{l @{\extracolsep{\fill}} ll}
