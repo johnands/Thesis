@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  19 SEP 2017 18:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  19 SEP 2017 19:25
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -949,17 +949,7 @@ runsystem(which "pygmentize" && touch "master.aex")...executed.
 
 runsystem(rm "master.aex")...executed.
 
- (./master.aux
-
-LaTeX Warning: Label `cutOffFunctionDerivative1' multiply defined.
-
-
-LaTeX Warning: Label `cutOffFunctionDerivative1' multiply defined.
-
-
-LaTeX Warning: Label `cutOffFunctionDerivative1' multiply defined.
-
-)
+ (./master.aux)
 \openout1 = `master.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
@@ -977,7 +967,8 @@ LaTeX Font Info:    ... okay on input line 57.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 57.
 LaTeX Font Info:    ... okay on input line 57.
 \c@lstlisting=\count273
- (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count274
 \scratchdimen=\dimen264
@@ -1525,10 +1516,6 @@ Package pdftex.def Info: Figures/Implementation/DFG.pdf used on input line 2678
  [73
 
 ] [74 <./Figures/Implementation/DFG.pdf>]
-
-LaTeX Warning: Reference `sec:transferNN' on page 75 undefined on input line 27
-68.
-
 Package mdframed Info: mdframed works in twoside mode on input line 2779.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
@@ -1574,7 +1561,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/92F3309B4882274FBF01EAAD1C6F59DA1BE631E8E4850E2A9AE02C4CEA74B
 D6B.pygtex)
-<Figures/Implementation/tensorBoardExample.pdf, id=1985, 919.435pt x 1097.09875
+<Figures/Implementation/tensorBoardExample.pdf, id=1986, 919.435pt x 1097.09875
 pt>
 File: Figures/Implementation/tensorBoardExample.pdf Graphic file (type pdf)
  <use Figures/Implementation/tensorBoardExample.pdf>
@@ -1621,7 +1608,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/86830B8EA456862A2A876193F707B19722779287BE07124B95CB8A8CAE721
 13E.pygtex)
-<Figures/Implementation/tensorBoardTraining.pdf, id=2008, 919.435pt x 1085.0537
+<Figures/Implementation/tensorBoardTraining.pdf, id=2009, 919.435pt x 1085.0537
 6pt>
 File: Figures/Implementation/tensorBoardTraining.pdf Graphic file (type pdf)
  <use Figures/Implementation/tensorBoardTraining.pdf>
@@ -1686,7 +1673,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/44891C627509FD12201166A00012ABEDB1CFE32A756649A7B3EA379BE3962
 DF9.pygtex)
-<Figures/Implementation/forceDistSamplingAlgo.pdf, id=2091, 578.16pt x 433.62pt
+<Figures/Implementation/forceDistSamplingAlgo.pdf, id=2092, 578.16pt x 433.62pt
 >
 File: Figures/Implementation/forceDistSamplingAlgo.pdf Graphic file (type pdf)
  <use Figures/Implementation/forceDistSamplingAlgo.pdf>
@@ -1694,7 +1681,7 @@ Package pdftex.def Info: Figures/Implementation/forceDistSamplingAlgo.pdf used
 on input line 3298.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Implementation/forceDistSamplingAlgoNormed.pdf, id=2092, 578.16pt x 43
+<Figures/Implementation/forceDistSamplingAlgoNormed.pdf, id=2093, 578.16pt x 43
 3.62pt>
 File: Figures/Implementation/forceDistSamplingAlgoNormed.pdf Graphic file (type
  pdf)
@@ -1710,7 +1697,7 @@ pdfTeX warning: /usr/bin/pdflatex (file ./Figures/Implementation/forceDistSampl
 ingAlgoNormed.pdf): PDF inclusion: multiple pdfs with page group included in a 
 single page
 >] [90] [91]
-<Figures/Implementation/radialParams.pdf, id=2236, 578.16pt x 433.62pt>
+<Figures/Implementation/radialParams.pdf, id=2237, 578.16pt x 433.62pt>
 File: Figures/Implementation/radialParams.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/radialParams.pdf>
@@ -1718,7 +1705,7 @@ Package pdftex.def Info: Figures/Implementation/radialParams.pdf used on input
 line 3456.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
 
-<Figures/Implementation/angularParams1.pdf, id=2238, 578.16pt x 433.62pt>
+<Figures/Implementation/angularParams1.pdf, id=2239, 578.16pt x 433.62pt>
 File: Figures/Implementation/angularParams1.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/angularParams1.pdf>
@@ -1740,7 +1727,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/7DBC237B4708E63BA3D155BE0023B31F22779287BE07124B95CB8A8CAE721
 13E.pygtex) [95] [96] [97] [98]
-<Figures/Implementation/overfitting.pdf, id=2410, 578.16pt x 433.62pt>
+<Figures/Implementation/overfitting.pdf, id=2411, 578.16pt x 433.62pt>
 File: Figures/Implementation/overfitting.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/overfitting.pdf>
@@ -1763,7 +1750,7 @@ e-ter op-ti-miza-tion schemes.
  []
 
 [103] [104]
-<Figures/Tests/timeComparisonNetworkNew.pdf, id=2519, 578.16pt x 433.62pt>
+<Figures/Tests/timeComparisonNetworkNew.pdf, id=2520, 578.16pt x 433.62pt>
 File: Figures/Tests/timeComparisonNetworkNew.pdf Graphic file (type pdf)
 
 <use Figures/Tests/timeComparisonNetworkNew.pdf>
@@ -1791,7 +1778,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 
 (./_minted-master/0FD6C932108E14A90D25E212153F977C1BE631E8E4850E2A9AE02C4CEA74B
-D6B.pygtex) <Figures/Implementation/LJError.pdf, id=2608, 578.16pt x 433.62pt>
+D6B.pygtex) <Figures/Implementation/LJError.pdf, id=2609, 578.16pt x 433.62pt>
 File: Figures/Implementation/LJError.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/LJError.pdf>
@@ -1808,7 +1795,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/6F9F3DCE5128E522CCF72D23C3AEB80B1BE631E8E4850E2A9AE02C4CEA74B
 D6B.pygtex)
-<Figures/Implementation/LJErrorDerivative.pdf, id=2622, 578.16pt x 433.62pt>
+<Figures/Implementation/LJErrorDerivative.pdf, id=2623, 578.16pt x 433.62pt>
 File: Figures/Implementation/LJErrorDerivative.pdf Graphic file (type pdf)
 
 <use Figures/Implementation/LJErrorDerivative.pdf>
@@ -1824,7 +1811,7 @@ Chapter 9.
 
 Package hyperref Warning: No autoref name for `Appendix' on input line 4108.
 
-<Figures/Results/SiInitialSymmG2.pdf, id=2764, 578.16pt x 433.62pt>
+<Figures/Results/SiInitialSymmG2.pdf, id=2765, 578.16pt x 433.62pt>
 File: Figures/Results/SiInitialSymmG2.pdf Graphic file (type pdf)
 
 <use Figures/Results/SiInitialSymmG2.pdf>
@@ -1832,7 +1819,7 @@ Package pdftex.def Info: Figures/Results/SiInitialSymmG2.pdf used on input line
  4119.
 (pdftex.def)             Requested size: 197.34651pt x 148.00449pt.
 
-<Figures/Results/SiInitialSymmG5.pdf, id=2765, 578.16pt x 433.62pt>
+<Figures/Results/SiInitialSymmG5.pdf, id=2766, 578.16pt x 433.62pt>
 File: Figures/Results/SiInitialSymmG5.pdf Graphic file (type pdf)
 
 <use Figures/Results/SiInitialSymmG5.pdf>
@@ -1863,7 +1850,7 @@ Package mdframed Info: mdframed detected package amsthm
 
 (./_minted-master/1E55E0DEC750FDC3C03F33F69A64107C5ADC847D9CD2AC8271E7988943C71
 362.pygtex) [114]
-<Figures/Results/multipleNNP.pdf, id=2856, 578.16pt x 433.62pt>
+<Figures/Results/multipleNNP.pdf, id=2857, 578.16pt x 433.62pt>
 File: Figures/Results/multipleNNP.pdf Graphic file (type pdf)
 
 <use Figures/Results/multipleNNP.pdf>
@@ -1871,14 +1858,14 @@ Package pdftex.def Info: Figures/Results/multipleNNP.pdf used on input line 423
 7.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
  [115 <./Figures/Results/multipleNNP.pdf>] [116] [117] <Figures/Results/SiForce
-s.pdf, id=2928, 578.16pt x 433.62pt>
+s.pdf, id=2929, 578.16pt x 433.62pt>
 File: Figures/Results/SiForces.pdf Graphic file (type pdf)
 
 <use Figures/Results/SiForces.pdf>
 Package pdftex.def Info: Figures/Results/SiForces.pdf used on input line 4365.
 (pdftex.def)             Requested size: 287.79831pt x 215.84346pt.
 
-<Figures/Results/radialDist.pdf, id=2931, 578.16pt x 433.62pt>
+<Figures/Results/radialDist.pdf, id=2932, 578.16pt x 433.62pt>
 File: Figures/Results/radialDist.pdf Graphic file (type pdf)
 
 <use Figures/Results/radialDist.pdf>
@@ -2004,20 +1991,14 @@ Package rerunfilecheck Info: File `master.out' has not changed.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 5382.
  )
 (\end occurred when \ifx on line 3014 was incomplete) 
 Here is how much of TeX's memory you used:
- 24683 strings out of 494953
- 461753 string characters out of 6180977
- 631577 words of memory out of 5000000
- 26732 multiletter control sequences out of 15000+600000
+ 24685 strings out of 494953
+ 461818 string characters out of 6180977
+ 631826 words of memory out of 5000000
+ 26734 multiletter control sequences out of 15000+600000
  24643 words of font info for 93 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  44i,17n,60p,10388b,2243s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2046,10 +2027,10 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/euler/eurb10.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on master.pdf (156 pages, 1513253 bytes).
+Output written on master.pdf (156 pages, 1513329 bytes).
 PDF statistics:
- 3535 PDF objects out of 3580 (max. 8388607)
- 2650 compressed objects within 27 object streams
+ 3536 PDF objects out of 3580 (max. 8388607)
+ 2651 compressed objects within 27 object streams
  790 named destinations out of 1000 (max. 500000)
  946 words of extra memory for PDF output out of 10000 (max. 10000000)
 

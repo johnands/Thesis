@@ -52,7 +52,7 @@
 
 \author{John-Anders Stende}
 \title{Constructing high-dimensional neural network potentials for molecular dynamics}
-\date{May 2017}
+\date{September 2017}
 
 \begin{document}
 
@@ -2765,7 +2765,7 @@ complete, the easiest to use and the best documented.
 We have therefore chosen to use Python
 to train neural networks. For a discussion
 on ways to import a trained NN to C\texttt{++} see
-\autoref{sec:extendingLammps} and \autoref{sec:transferNN}. 
+\autoref{sec:extendingLammps} and \autoref{sec:applyingNNP}. 
 
 \subsection{Hello world}
 As already mentioned, a TensorFlow computation
@@ -4740,13 +4740,13 @@ This expression is valid for all combinations of indicies $(i,j,k)$. The derivat
 \begin{equation}
  \frac{\partial f_c(r_{ij})}{\partial x_{ij}} = M(r_{ij})
  \frac{x_{ij}}{r_{ij}}
- \label{cutOffFunctionDerivative1}
+ \label{cutOffFunctionDerivative2}
 \end{equation}
 and 
 \begin{equation}
  \frac{\partial f_c(r_{ik})}{\partial x_{ik}} = M(r_{ik})
  \frac{x_{ik}}{r_{ik}}
- \label{cutOffFunctionDerivative1}
+ \label{cutOffFunctionDerivative3}
 \end{equation}
 while
 \begin{equation}
@@ -4756,13 +4756,13 @@ according to \eqref{symmetryDerivativeApp1}. Also,
 \begin{equation}
  \frac{\partial f_c(r_{jk})}{\partial x_{ij}} = -M(r_{jk})
  \frac{x_{jk}}{r_{jk}}
- \label{cutOffFunctionDerivative1}
+ \label{cutOffFunctionDerivative4}
 \end{equation}
 and 
 \begin{equation}
  \frac{\partial f_c(r_{jk})}{\partial x_{ik}} = M(r_{jk})
  \frac{x_{jk}}{r_{jk}}
- \label{cutOffFunctionDerivative1}
+ \label{cutOffFunctionDerivative5}
 \end{equation}
 The derivative of each term in $G_i^1$ \eqref{G1} is simply equal to \eqref{cutOffFunctionDerivative}.
 
