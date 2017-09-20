@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: master.aux
+The style file: ieeetr.bst
+Database file #1: master.bib
+Warning--empty journal in Hinton12
+Warning--empty journal in Collobert11
+Warning--empty journal in Ruder16
+Warning--empty journal in Zeiler12
+Warning--empty journal in Kingma14
+You've used 58 entries,
+            1876 wiz_defined-function locations,
+            931 strings with 19225 characters,
+and the built_in function-call counts, 18984 in all, are:
+= -- 1961
+> -- 841
+< -- 0
++ -- 300
+- -- 242
+* -- 1408
+:= -- 2684
+add.period$ -- 108
+call.type$ -- 58
+change.case$ -- 56
+chr.to.int$ -- 0
+cite$ -- 63
+duplicate$ -- 932
+empty$ -- 1531
+format.name$ -- 242
+if$ -- 4587
+int.to.chr$ -- 0
+int.to.str$ -- 58
+missing$ -- 59
+newline$ -- 227
+num.names$ -- 71
+pop$ -- 91
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 793
+stack$ -- 0
+substring$ -- 1288
+swap$ -- 482
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 5
+while$ -- 177
+width$ -- 60
+write$ -- 659
+(There were 5 warnings)

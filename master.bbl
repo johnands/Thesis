@@ -1,0 +1,386 @@
+\begin{thebibliography}{10}
+
+\bibitem{Krizhevsky12}
+A.~Krizhevsky, I.~Sutskever, and G.~E. Hinton, ``{ImageNet} {Classification}
+  with {Deep} {Convolutional} {Neural} {Networks},'' in {\em Advances in
+  {Neural} {Information} {Processing} {Systems} 25} (F.~Pereira, C.~J.~C.
+  Burges, L.~Bottou, and K.~Q. Weinberger, eds.), pp.~1097--1105, Curran
+  Associates, Inc., 2012.
+
+\bibitem{Hinton12}
+G.~Hinton, L.~Deng, D.~Yu, G.~Dahl, A.-R. Mohamed, N.~Jaitly, A.~Senior,
+  V.~Vanhoucke, P.~Nguyen, T.~Sainath, and B.~Kingsbury, ``Deep {Neural}
+  {Networks} for {Acoustic} {Modeling} in {Speech} {Recognition},'' 2012.
+\newblock url:
+  \href{https://research.google.com/pubs/pub38131.html}{research.google.com/pubs/pub38131.html}.
+
+\bibitem{Collobert11}
+R.~Collobert, J.~Weston, L.~Bottou, M.~Karlen, K.~Kavukcuoglu, and P.~Kuksa,
+  ``Natural {Language} {Processing} (almost) from {Scratch},'' Mar. 2011.
+\newblock arXiv: \href{http://arxiv.org/abs/1103.0398}{1103.0398}.
+
+\bibitem{Ciodaro12}
+T.~Ciodaro, D.~Deva, J.~M.~d. Seixas, and D.~Damazio, ``Online particle
+  detection with {Neural} {Networks} based on topological calorimetry
+  information,'' {\em Journal of Physics: Conference Series}, vol.~368, no.~1,
+  p.~012030, 2012.
+\newblock doi:
+  \href{http://dx.doi.org/10.1088/1742-6596/368/1/012030}{10.1088/1742-6596/368/1/012030}.
+
+\bibitem{Helmstaedter13}
+M.~Helmstaedter, K.~L. Briggman, S.~C. Turaga, V.~Jain, H.~S. Seung, and
+  W.~Denk, ``Connectomic reconstruction of the inner plexiform layer in the
+  mouse retina,'' {\em Nature}, vol.~500, pp.~168--174, Aug. 2013.
+\newblock doi:
+  \href{http://dx.doi.org/10.1038/nature12346}{10.1038/nature12346}.
+
+\bibitem{Carleo17}
+G.~Carleo and M.~Troyer, ``Solving the quantum many-body problem with
+  artificial neural networks,'' {\em Science}, vol.~355, pp.~602--606, Feb.
+  2017.
+\newblock doi:
+  \href{http://dx.doi.org/10.1126/science.aag2302}{10.1126/science.aag2302}.
+
+\bibitem{Krenn16}
+M.~Krenn, M.~Malik, R.~Fickler, R.~Lapkiewicz, and A.~Zeilinger, ``Automated
+  {Search} for new {Quantum} {Experiments},'' {\em Physical Review Letters},
+  vol.~116, p.~090405, Mar. 2016.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevLett.116.090405}{10.1103/PhysRevLett.116.090405}.
+
+\bibitem{Sherrill10}
+C.~D. Sherrill, ``Frontiers in electronic structure theory,'' {\em The Journal
+  of Chemical Physics}, vol.~132, p.~110902, Mar. 2010.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.3369628}{10.1063/1.3369628}.
+
+\bibitem{Jones24}
+J.~E. Jones, ``On the {Determination} of {Molecular} {Fields}. {II}. {From} the
+  {Equation} of {State} of a {Gas},'' {\em Proceedings of the Royal Society of
+  London A: Mathematical, Physical and Engineering Sciences}, vol.~106,
+  pp.~463--477, Oct. 1924.
+\newblock doi:
+  \href{http://dx.doi.org/10.1098/rspa.1924.0082}{10.1098/rspa.1924.0082}.
+
+\bibitem{Stillinger85}
+F.~H. Stillinger and T.~A. Weber, ``Computer simulation of local order in
+  condensed phases of silicon,'' {\em Physical Review B}, vol.~31,
+  pp.~5262--5271, Apr. 1985.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevB.31.5262}{10.1103/PhysRevB.31.5262}.
+
+\bibitem{Dawes08}
+R.~Dawes, D.~L. Thompson, A.~F. Wagner, and M.~Minkoff, ``Interpolating moving
+  least-squares methods for fitting potential energy surfaces: {A} strategy for
+  efficient automatic data point placement in high dimensions,'' {\em The
+  Journal of Chemical Physics}, vol.~128, p.~084107, Feb. 2008.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.2831790}{10.1063/1.2831790}.
+
+\bibitem{Ischtwan94}
+J.~Ischtwan and M.~A. Collins, ``Molecular potential energy surfaces by
+  interpolation,'' {\em The Journal of Chemical Physics}, vol.~100,
+  pp.~8080--8088, June 1994.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.466801}{10.1063/1.466801}.
+
+\bibitem{Behler11general}
+J.~Behler, ``Neural network potential-energy surfaces in chemistry: a tool for
+  large-scale simulations,'' {\em Physical Chemistry Chemical Physics},
+  vol.~13, pp.~17930--17955, Oct. 2011.
+\newblock doi: \href{http://dx.doi.org/10.1039/C1CP21668F}{10.1039/C1CP21668F}.
+
+\bibitem{Agrawal06}
+P.~M. Agrawal, L.~M. Raff, M.~T. Hagan, and R.~Komanduri, ``Molecular dynamics
+  investigations of the dissociation of {SiO}2 on an ab initio potential energy
+  surface obtained using neural network methods,'' {\em The Journal of Chemical
+  Physics}, vol.~124, p.~134306, Apr. 2006.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.2185638}{10.1063/1.2185638}.
+
+\bibitem{Prudente98}
+F.~V. Prudente, P.~H. Acioli, and J.~J.~S. Neto, ``The fitting of potential
+  energy surfaces using neural networks: {Application} to the study of
+  vibrational levels of {H}3+,'' {\em The Journal of Chemical Physics},
+  vol.~109, pp.~8801--8808, Nov. 1998.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.477550}{10.1063/1.477550}.
+
+\bibitem{Bholoa07}
+A.~Bholoa, S.~D. Kenny, and R.~Smith, ``A new approach to potential fitting
+  using neural networks,'' {\em Nuclear Instruments and Methods in Physics
+  Research Section B: Beam Interactions with Materials and Atoms}, vol.~255,
+  pp.~1--7, Feb. 2007.
+\newblock doi:
+  \href{http://dx.doi.org/10.1016/j.nimb.2006.11.040}{10.1016/j.nimb.2006.11.040}.
+
+\bibitem{Behler11symmetry}
+J.~Behler, ``Atom-centered symmetry functions for constructing high-dimensional
+  neural network potentials,'' {\em The Journal of Chemical Physics}, vol.~134,
+  p.~074106, Feb. 2011.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.3553717}{10.1063/1.3553717}.
+
+\bibitem{Raff12}
+L.~Raff, R.~Komanduri, M.~Hagan, and S.~Bukkapatnam, {\em Neural {Networks} in
+  {Chemical} {Reaction} {Dynamics}}.
+\newblock Oxford University Press, Feb. 2012.
+
+\bibitem{Artrith12}
+N.~Artrith and J.~Behler, ``High-dimensional neural network potentials for
+  metal surfaces: {A} prototype study for copper,'' {\em Physical Review B},
+  vol.~85, p.~045439, Jan. 2012.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevB.85.045439}{10.1103/PhysRevB.85.045439}.
+
+\bibitem{Eshet12}
+H.~Eshet, R.~Z. Khaliullin, T.~D. K\"{u}hne, J.~Behler, and M.~Parrinello,
+  ``\textit{Ab initio} quality neural-network potential for sodium,'' {\em
+  Physical Review B}, vol.~81, p.~184107, May 2010.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevB.81.184107}{10.1103/PhysRevB.81.184107}.
+
+\bibitem{Natarajan16}
+S.~K. Natarajan and J.~Behler, ``Neural network molecular dynamics simulations
+  of solid-liquid interfaces: water at low-index copper surfaces,'' {\em
+  Physical Chemistry Chemical Physics}, vol.~18, pp.~28704--28725, Oct. 2016.
+\newblock doi: \href{http://dx.doi.org/10.1039/C6CP05711J}{10.1039/C6CP05711J}.
+
+\bibitem{Molinero08}
+V.~Molinero and E.~B. Moore, ``Water {Modeled} {As} an {Intermediate} {Element}
+  between {Carbon} and {Silicon},'' {\em The Journal of Physical Chemistry B},
+  vol.~113, pp.~4008--4016, Apr. 2009.
+\newblock doi: \href{http://dx.doi.org/10.1021/jp805227c}{10.1021/jp805227c}.
+
+\bibitem{Vashishta90}
+P.~Vashishta, R.~K. Kalia, J.~P. Rino, and I.~Ebbsjö, ``Interaction potential
+  for $\mathrm{SiO}_2$: {A} molecular-dynamics study of structural
+  correlations,'' {\em Physical Review B}, vol.~41, pp.~12197--12209, June
+  1990.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevB.41.12197}{10.1103/PhysRevB.41.12197}.
+
+\bibitem{Vashishta07}
+P.~Vashishta, R.~K. Kalia, A.~Nakano, and J.~P. Rino, ``Interaction potential
+  for silicon carbide: {A} molecular dynamics study of elastic constants and
+  vibrational density of states for crystalline and amorphous silicon
+  carbide,'' {\em Journal of Applied Physics}, vol.~101, p.~103515, May 2007.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.2724570}{10.1063/1.2724570}.
+
+\bibitem{Frenkel01}
+D.~Frenkel and B.~Smit, eds., {\em Understanding {Molecular} {Simulation}:
+  {From} {Algorithms} to {Applications}}.
+\newblock Academic Press, 1st~ed., 1996.
+
+\bibitem{LeCun15}
+Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em Nature}, vol.~521,
+  pp.~436--444, May 2015.
+\newblock doi:
+  \href{http://dx.doi.org/10.1038/nature14539}{10.1038/nature14539}.
+
+\bibitem{McCulloch43}
+W.~S. McCulloch and W.~Pitts, ``A logical calculus of the ideas immanent in
+  nervous activity,'' {\em The bulletin of mathematical biophysics}, vol.~5,
+  pp.~115--133, Dec. 1943.
+\newblock doi: \href{http://dx.doi.org/10.1007/BF02478259}{10.1007/BF02478259}.
+
+\bibitem{Rojas96}
+R.~Rojas, {\em Neural {Networks}: {A} {Systematic} {Introduction}}.
+\newblock Springer Science \& Business Media, July 1996.
+
+\bibitem{Kriesel07}
+A.~Kriesel, ``A brief introduction to neural networks.'' url:
+  \href{http://www.dkriesel.com/}{www.dkriesel.com/}.
+
+\bibitem{LeCun99}
+Y.~LeCun, P.~Haffner, L.~Bottou, and Y.~Bengio, ``Object {Recognition} with
+  {Gradient}-{Based} {Learning},'' in {\em Shape, {Contour} and {Grouping} in
+  {Computer} {Vision}}, Lecture {Notes} in {Computer} {Science}, pp.~319--345,
+  Springer, Berlin, Heidelberg, 1999.
+\newblock url:
+  \href{https://link.springer.com/chapter/10.1007/3-540-46805-6\_19}{link.springer.com/chapter/10.1007/3-540-46805-6\_19}.
+
+\bibitem{Rosenblatt58}
+F.~Rosenblatt, ``The {Perceptron}: {A} {Probabilistic} {Model} for
+  {Information} {Storage} and {Organization} in {The} {Brain},'' {\em
+  Psychological Review}, pp.~65--386, 1958.
+
+\bibitem{Hornik89}
+K.~Hornik, M.~Stinchcombe, and H.~White, ``Multilayer feedforward networks are
+  universal approximators,'' {\em Neural Networks}, vol.~2, pp.~359--366, Jan.
+  1989.
+\newblock doi:
+  \href{http://dx.doi.org/10.1016/0893-6080(89)90020-8}{10.1016/0893-6080(89)90020-8}.
+
+\bibitem{Karlik11}
+A.~Vehbi~Olgac and B.~Karlik, ``Performance {Analysis} of {Various}
+  {Activation} {Functions} in {Generalized} {MLP} {Architectures} of {Neural}
+  {Networks},'' {\em International Journal of Artificial Intelligence And
+  Expert Systems}, vol.~1, pp.~111--122, Feb. 2011.
+
+\bibitem{Glorot11}
+X.~Glorot, A.~Bordes, and Y.~Bengio, ``Deep sparse rectifier neural networks,''
+  in {\em Proceedings of the Fourteenth International Conference on Artificial
+  Intelligence and Statistics} (G.~Gordon, D.~Dunson, and M.~Dudík, eds.),
+  vol.~15 of {\em Proceedings of Machine Learning Research}, (Fort Lauderdale,
+  FL, USA), pp.~315--323, PMLR, 11--13 Apr 2011.
+
+\bibitem{Ruder16}
+S.~Ruder, ``An overview of gradient descent optimization algorithms,'' Sept.
+  2016.
+\newblock arXiv: \href{http://arxiv.org/abs/1609.04747}{1609.04747}.
+
+\bibitem{Qian99}
+N.~Qian, ``On the momentum term in gradient descent learning algorithms,'' {\em
+  Neural Networks}, vol.~12, pp.~145--151, Jan. 1999.
+\newblock doi:
+  \href{http://dx.doi.org/10.1016/S0893-6080(98)00116-6}{10.1016/S0893-6080(98)00116-6}.
+
+\bibitem{Duchi11}
+J.~Duchi, E.~Hazan, and Y.~Singer, ``Adaptive {Subgradient} {Methods} for
+  {Online} {Learning} and {Stochastic} {Optimization},'' {\em Journal of
+  Machine Learning Research}, vol.~12, no.~Jul, pp.~2121--2159, 2011.
+\newblock url:
+  \href{http://jmlr.org/papers/v12/duchi11a.html}{jmlr.org/papers/v12/duchi11a.html}.
+
+\bibitem{Zeiler12}
+M.~D. Zeiler, ``{ADADELTA}: {An} {Adaptive} {Learning} {Rate} {Method},'' Dec.
+  2012.
+\newblock arXiv: \href{http://arxiv.org/abs/1212.5701}{1212.5701}.
+
+\bibitem{Kingma14}
+D.~P. Kingma and J.~Ba, ``Adam: {A} {Method} for {Stochastic} {Optimization},''
+  Dec. 2014.
+\newblock arXiv: \href{http://arxiv.org/abs/1412.6980}{1412.6980}.
+
+\bibitem{Rumelhart86}
+D.~E. Rumelhart, G.~E. Hinton, and R.~J. Williams, ``Learning representations
+  by back-propagating errors,'' {\em Nature}, vol.~323, pp.~533--536, Oct.
+  1986.
+\newblock doi: \href{http://dx.doi.org/10.1038/323533a0}{10.1038/323533a0}.
+
+\bibitem{Behler07}
+J.~Behler and M.~Parrinello, ``Generalized {Neural}-{Network} {Representation}
+  of {High}-{Dimensional} {Potential}-{Energy} {Surfaces},'' {\em Physical
+  Review Letters}, vol.~98, p.~146401, Apr. 2007.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevLett.98.146401}{10.1103/PhysRevLett.98.146401}.
+
+\bibitem{Plimpton95}
+S.~Plimpton, ``Fast {Parallel} {Algorithms} for {Short}-{Range} {Molecular}
+  {Dynamics},'' {\em Journal of Computational Physics}, vol.~117, pp.~1--19,
+  Mar. 1995.
+\newblock doi:
+  \href{http://dx.doi.org/10.1006/jcph.1995.1039}{10.1006/jcph.1995.1039}.
+
+\bibitem{Tuckerman92}
+M.~Tuckerman, B.~J. Berne, and G.~J. Martyna, ``Reversible multiple time scale
+  molecular dynamics,'' {\em The Journal of Chemical Physics}, vol.~97,
+  pp.~1990--2001, Aug. 1992.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.463137}{10.1063/1.463137}.
+
+\bibitem{Abadi15}
+M.~Abadi, A.~Agarwal, P.~Barham, E.~Brevdo, Z.~Chen, C.~Citro, G.~S. Corrado,
+  A.~Davis, J.~Dean, M.~Devin, S.~Ghemawat, I.~Goodfellow, A.~Harp, G.~Irving,
+  M.~Isard, Y.~Jia, R.~Jozefowicz, L.~Kaiser, M.~Kudlur, J.~Levenberg, D.~Mane,
+  R.~Monga, S.~Moore, D.~Murray, C.~Olah, M.~Schuster, J.~Shlens, B.~Steiner,
+  I.~Sutskever, K.~Talwar, P.~Tucker, V.~Vanhoucke, V.~Vasudevan, F.~Viegas,
+  O.~Vinyals, P.~Warden, M.~Wattenberg, M.~Wicke, Y.~Yu, and X.~Zheng,
+  ``{TensorFlow}: {Large}-{Scale} {Machine} {Learning} on {Heterogeneous}
+  {Distributed} {Systems},'' {\em Google Brain}, Mar. 2016.
+\newblock arXiv: \href{http://arxiv.org/abs/1603.04467}{1603.04467}.
+
+\bibitem{Abadi16}
+M.~Abadi, P.~Barham, J.~Chen, Z.~Chen, A.~Davis, J.~Dean, M.~Devin,
+  S.~Ghemawat, G.~Irving, M.~Isard, M.~Kudlur, J.~Levenberg, R.~Monga,
+  S.~Moore, D.~G. Murray, B.~Steiner, P.~Tucker, V.~Vasudevan, P.~Warden,
+  M.~Wicke, Y.~Yu, and X.~Zheng, ``{TensorFlow}: {A} system for large-scale
+  machine learning,'' {\em Google Brain}, May 2016.
+\newblock arXiv: \href{http://arxiv.org/abs/1605.08695}{1605.08695}.
+
+\bibitem{Raff05}
+L.~M. Raff, M.~Malshe, M.~Hagan, D.~I. Doughan, M.~G. Rockley, and
+  R.~Komanduri, ``Ab initio potential-energy surfaces for complex, multichannel
+  systems using modified novelty sampling and feedforward neural networks,''
+  {\em The Journal of Chemical Physics}, vol.~122, p.~084104, Feb. 2005.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.1850458}{10.1063/1.1850458}.
+
+\bibitem{Pukrittayakamee09}
+A.~Pukrittayakamee, M.~Malshe, M.~Hagan, L.~M. Raff, R.~Narulkar,
+  S.~Bukkapatnum, and R.~Komanduri, ``Simultaneous fitting of a
+  potential-energy surface and its corresponding force fields using feedforward
+  neural networks,'' {\em The Journal of Chemical Physics}, vol.~130,
+  p.~134101, Apr. 2009.
+\newblock doi: \href{http://dx.doi.org/10.1063/1.3095491}{10.1063/1.3095491}.
+
+\bibitem{Behler15}
+J.~Behler, ``Constructing high-dimensional neural network potentials: {A}
+  tutorial review,'' {\em International Journal of Quantum Chemistry},
+  vol.~115, pp.~1032--1050, Aug. 2015.
+\newblock doi: \href{http://dx.doi.org/10.1002/qua.24890}{10.1002/qua.24890}.
+
+\bibitem{LeCun12}
+Y.~A. LeCun, L.~Bottou, G.~B. Orr, and K.-R. M{\"u}ller, ``Efficient
+  backprop,'' in {\em Neural Networks: Tricks of the Trade: Second Edition}
+  (G.~Montavon, G.~B. Orr, and K.-R. M{\"u}ller, eds.), pp.~9--48, Berlin,
+  Heidelberg: Springer Berlin Heidelberg, 2012.
+\newblock url:
+  \href{https://link.springer.com/chapter/10.1007/978-3-642-35289-8\_3}{link.springer.com/chapter/10.1007/978-3-642-35289-8\_3}.
+
+\bibitem{Glorot10}
+X.~Glorot and Y.~Bengio, ``Understanding the difficulty of training deep
+  feedforward neural networks,'' in {\em Proceedings of the Thirteenth
+  International Conference on Artificial Intelligence and Statistics} (Y.~W.
+  Teh and M.~Titterington, eds.), vol.~9 of {\em Proceedings of Machine
+  Learning Research}, (Chia Laguna Resort, Sardinia, Italy), pp.~249--256,
+  PMLR, 13--15 May 2010.
+\newblock url:
+  \href{http://proceedings.mlr.press/v9/glorot10a.html}{proceedings.mlr.press/v9/glorot10a.html}.
+
+\bibitem{Bengio12}
+Y.~Bengio, ``Practical {Recommendations} for {Gradient}-{Based} {Training} of
+  {Deep} {Architectures},'' in {\em Neural {Networks}: {Tricks} of the
+  {Trade}}, Lecture {Notes} in {Computer} {Science}, pp.~437--478, Springer,
+  Berlin, Heidelberg, 2012.
+
+\bibitem{Larochelle09}
+H.~Larochelle, Y.~Bengio, J.~Louradour, and P.~Lamblin, ``Exploring
+  {Strategies} for {Training} {Deep} {Neural} {Networks},'' {\em Journal of
+  Machine Learning Research}, vol.~10, no.~Jan, pp.~1--40, 2009.
+\newblock url:
+  \href{http://www.jmlr.org/papers/v10/larochelle09a.html}{www.jmlr.org/papers/v10/larochelle09a.html}.
+
+\bibitem{Witkoskie05}
+J.~B. Witkoskie and D.~J. Doren, ``Neural {Network} {Models} of {Potential}
+  {Energy} {Surfaces}:  {Prototypical} {Examples},'' {\em Journal of Chemical
+  Theory and Computation}, vol.~1, pp.~14--23, Jan. 2005.
+\newblock doi: \href{http://dx.doi.org/10.1021/ct049976i}{10.1021/ct049976i}.
+
+\bibitem{Bengio07}
+Y.~Bengio and Y.~Lecun, ``Scaling learning algorithms towards {AI},'' in {\em
+  Large-scale kernel machines} (L.~Bottou, O.~Chapelle, D.~DeCoste, and
+  J.~Weston, eds.), MIT Press, 2007.
+
+\bibitem{Krogh1992}
+A.~Krogh and J.~A. Hertz, ``A {Simple} {Weight} {Decay} {Can} {Improve}
+  {Generalization},'' in {\em Advances in {Neural} {Information} {Processing}
+  {Systems} 4} (J.~E. Moody, S.~J. Hanson, and R.~P. Lippmann, eds.),
+  pp.~950--957, Morgan-Kaufmann, 1992.
+
+\bibitem{Srivastava14}
+N.~Srivastava, G.~Hinton, A.~Krizhevsky, I.~Sutskever, and R.~Salakhutdinov,
+  ``Dropout: {A} {Simple} {Way} to {Prevent} {Neural} {Networks} from
+  {Overfitting},'' {\em Journal of Machine Learning Research}, vol.~15,
+  pp.~1929--1958, 2014.
+\newblock url:
+  \href{http://jmlr.org/papers/v15/srivastava14a.html}{jmlr.org/papers/v15/srivastava14a.html}.
+
+\bibitem{Hopcroft10}
+M.~A. Hopcroft, W.~D. Nix, and T.~W. Kenny, ``What is the {Young}'s {Modulus}
+  of {Silicon}?,'' {\em Journal of Microelectromechanical Systems}, vol.~19,
+  pp.~229--238, Apr. 2010.
+\newblock doi:
+  \href{http://dx.doi.org/10.1109/JMEMS.2009.2039697}{10.1109/JMEMS.2009.2039697}.
+
+\bibitem{Cowley88}
+E.~R. Cowley, ``Lattice {Dynamics} of {Silicon} with {Empirical} {Many}-{Body}
+  {Potentials},'' {\em Physical Review Letters}, vol.~60, pp.~2379--2381, June
+  1988.
+\newblock doi:
+  \href{http://dx.doi.org/10.1103/PhysRevLett.60.2379}{10.1103/PhysRevLett.60.2379}.
+
+\end{thebibliography}
