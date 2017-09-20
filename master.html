@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -69,7 +69,7 @@
 <span style='color:#800000;'>\maketitle</span>
 
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>abstract</span>}
- We implement a method for constructing analytic inter-atomic potentials by fitting artifical neural networks to 
+ We implement a method for constructing analytic inter-atomic potentials by fitting artificial neural networks to 
  data from molecular dynamics simulations. The LAMMPS distribution is extended with an algorithm  
  for sampling atomic configurations and energies, and TensorFlow, in combination with the Behler-Parrinello method, 
  are employed to perform the fits. 
@@ -77,7 +77,7 @@
   
  We construct a neural network potential for Si, and its performance is evaluated by comparing the radial distribution function
  and various mechanical properties with Stillinger-Weber simulations and/or experiments (SHOULD I COMPARE WITH EXPERIMENTS?). 
- The crystal structure of Si is reproduced with small devations, 
+ The crystal structure of Si is reproduced with small deviations, 
  and the bulk modulus, shear modulus and Poisson ratio are measured to be similar to Stillinger-Weber values. 
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>abstract</span>}
 
@@ -107,15 +107,15 @@
 <span style='color:#800000;'>\tableofcontents</span>
 
 <span style='color:#f00000;'>\chapter</span>{<b><span style='color:#000000;'>Introduction</span></b>}
-The field of artifical intelligence (AI) research has experienced a surge of interest in 
-the new millenium, mainly due to the recent success of artifical neural networks (NNs). 
+The field of artificial intelligence (AI) research has experienced a surge of interest in 
+the new millennium, mainly due to the recent success of artificial neural networks (NNs). 
 NNs are computer programs that try to mimic biological brains
 by giving computers the ability to learn without being explicitly programmed. 
 They have beaten previous records in typical AI tasks like image recognition <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Krizhevsky12</span>} and speech recognition
 <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Hinton12</span>}, and have also shown great promise in natural language understanding <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Collobert11</span>}. 
  
 In later years, ANNs have also been employed in the natural sciences, where they have outperformed other machine learning
-teqhniques at analyzing particle accelerator data <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Ciodaro12</span>} and reconstructing brain circuits
+techniques at analyzing particle accelerator data <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Ciodaro12</span>} and reconstructing brain circuits
 <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Helmstaedter13</span>}. Further, physicists have developed NNs that can solve the quantum many-body problem
 <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Carleo17</span>} and even automatically search for new quantum physics experiments <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Krenn16</span>}. 
 
@@ -187,7 +187,7 @@ There are certain physical symmetries any PES must possess, like translational a
 of the energy of a system. Cartesian coordinates are not invariant with respect to these operations, and can therefore not 
 be used. The BP method utilizes a set of symmetry functions that ensures the relevant symmetries are satisfied. 
 
-In principle, the method can be used to construct potentials for any chemical system, since no intial biased functional form 
+In principle, the method can be used to construct potentials for any chemical system, since no initial biased functional form 
 is required. Only the symmetry function set and the reference data differ from system to system, the interpolation procedure itself 
 is automated. Further, the NNP can be fitted to arbitrary accuracy if performed correctly. 
 Thus, this scheme can be viewed as a multi-scale physics tool that bridges the gap between the 
@@ -252,7 +252,7 @@ but this has nonetheless been obtained by careful study of the processes initiat
 <span style='color:#800000;'>\noindent</span> In this thesis we have:
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>itemize</span>}
  <span style='color:#800000;'>\item</span> Extended the LAMMPS library with a custom <span style='color:#800000;'>\texttt</span>{compute} that samples atom-centered configurations and potential 
- energies. This also incluces a modified version of a sampling algorithm. 
+ energies. This also includes a modified version of a sampling algorithm. 
  <span style='color:#800000;'>\item</span> Developed a method to transfer a trained NN from Python to C<span style='color:#800000;'>\texttt</span>{++} by manually saving all relevant parameters to file. 
  This file is then read in C<span style='color:#800000;'>\texttt</span>{++} and the NN reconstructed as a set of matrices and vectors. 
  <span style='color:#800000;'>\item</span> Extended the LAMMPS library with a custom class to enable the use of NNPs in MD simulations. 
@@ -345,7 +345,7 @@ The resulting PES is called an empirical, quantum mechanical or semi-empirical p
 
 When constructing empirical potentials, we typically start out with a functional form that captures some of the known, basic properties
 of the system under investigation. The function has a set of parameters that are fitted to experimental data, hence the name.
-Empirical potentials are often quite simple and only have a few parameters, making their computatioal performance superior. 
+Empirical potentials are often quite simple and only have a few parameters, making their computational performance superior. 
 However, their
 accuracy is limited by the choice of functional form; there is always a risk that not all the physics of a system
 is captured. Further, the parameters need to be fitted specifically for a given system and are typically not transferable 
@@ -409,7 +409,7 @@ The general form is (<span style='color:#f00000;'>\autoref</span>{<span style='c
 <span style='color:#00a000;'> </span><span style='color:#606000;'>\label</span><span style='color:#00a000;'>{Lennard-Jones}</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>equation</span>}
 where the two parameters <span style='color:#00a000;'>$</span><span style='color:#606000;'>\epsilon</span><span style='color:#00a000;'>$</span> and <span style='color:#00a000;'>$</span><span style='color:#606000;'>\sigma</span><span style='color:#00a000;'>$</span> are the depth of the potential well and the zero-point of the potential respectively.
-The Lennard-Jones potential captures a basic, phyiscal property of many atomic systems: Atoms repulse each other at short distances
+The Lennard-Jones potential captures a basic, physical property of many atomic systems: Atoms repulse each other at short distances
 and are attracted to each other at long distances. The first term describes the Pauli repulsion due to overlapping electron orbitals, 
 while the second term is the attraction due to the so-called van der Waals force. 
 The functional form of the repulsive term has, in contrast to the attractive one, no theoretical justification other than that
@@ -1026,7 +1026,7 @@ in the following. Both functions are depicted in <span style='color:#f00000;'>\a
 are bounded above by 1, while the lower bound is -1 and 0 for the hyperbolic tangent and sigmoid respectively. This property 
 keeps the activations from diverging. 
 
-The sigmoid are more bilogically plausible because 
+The sigmoid are more biologically plausible because 
 the output of inactive neurons are zero. Such activation function are called <span style='color:#800000;'>\textit</span>{one-sided}. However,
 it has been shown <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Karlik11</span>} that the hyperbolic tangent 
 performs better than the sigmoid for training MLPs. This will be further discussed in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:hyperParamsActFunctions</span>}. 
@@ -1067,7 +1067,7 @@ The procedure depends on what learning paradigm we work with
 
 In this thesis we employ NNs for regression: We want to interpolate data sets og atomic coordinates and energies.
 The goal is to adjust the weights of a MLP so that it accurately represents a function that maps
-atomic coordinates to the corresponding potential energies. Interpolation with NNs is essentialy an optimization problem:
+atomic coordinates to the corresponding potential energies. Interpolation with NNs is essentially an optimization problem:
 The weights are typically initialized as random numbers, and then modified iteratively to minimize the error
 to a set of expected output values, in our case energies. 
 This procedure is called <span style='color:#800000;'>\textit</span>{training}. 
@@ -1109,7 +1109,7 @@ For a MLP with more than one output, <span style='color:#00a000;'>$Y_i$</span> a
 The constant <span style='color:#00a000;'>$1/2$</span> is included to cancel out the exponent when this function is differentiated at a later stage
 (<span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:backprop</span>}).
 
-A variety of other cost functions are used for other machine learning tasks. In classificiation the output is often binary, 
+A variety of other cost functions are used for other machine learning tasks. In classification the output is often binary, 
 hence the mean-square error function is inadequate. We will not go into further detail on these cost functions here, but 
 <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:hyperParamsCostFunction</span>} provides a discussion on an extension of <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>quadraticCost</span>} that is relevant for 
 the construction of NNPs. 
@@ -1123,7 +1123,7 @@ the conjugate gradient algorithm or Newton's method are rarely seen in the liter
 too computationally expensive for large NNs and data sets. Therefore, only first-order methods will be discussed here. 
 
 The idea behind gradient descent methods is to minimize a function by 
-iteratively taking steps in the direction of steepest descent towards a minima in parameter space. 
+iteratively taking steps in the direction of steepest descent towards a minimum in parameter space. 
 This direction is defined as the negative gradient of the function with respect to 
 all its parameters. If we define <span style='color:#00a000;'>$</span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{</span><span style='color:#606000;'>\theta</span><span style='color:#00a000;'>} </span><span style='color:#606000;'>\in</span><span style='color:#00a000;'> </span><span style='color:#606000;'>\mathbb</span><span style='color:#00a000;'>{R}^d$</span> as a vector containing all the weights and biases
 of a MLP, we get the following iterative scheme,
@@ -1135,7 +1135,7 @@ where <span style='color:#00a000;'>$</span><span style='color:#606000;'>\gamma</
 by initializing the parameters as random numbers. The value of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\gamma</span><span style='color:#00a000;'>$</span> is of great importance for the algorithm to converge,
 and is allowed to change at every iteration. Note that convergence to 
 a minimum is not guaranteed withouth certain assumptions on the function <span style='color:#00a000;'>$</span><span style='color:#606000;'>\Gamma</span><span style='color:#00a000;'>$</span> and the particular choices of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\gamma</span><span style='color:#00a000;'>$</span>.
-Also, the obatained minimum is generally local, not global. 
+Also, the obtained minimum is generally local, not global. 
 Different ways to update <span style='color:#00a000;'>$</span><span style='color:#606000;'>\gamma</span><span style='color:#00a000;'>$</span> is discussed below.
 
 
@@ -1540,7 +1540,7 @@ solving these symmetry issues.
 
 <span style='color:#f00000;'>\section</span>{<b><span style='color:#000000;'>Neural network potentials</span></b>}
 NNPs are constructed by fitting an analytic function to a set of reference data
-obtained by quantum mechanical calulations.
+obtained by quantum mechanical calculations.
 The main goal of the NN approach to constructing a PES, is to create a potential that has the accuracy of <span style='color:#800000;'>\textit</span>{ab inito}
 methods and the speed of empirical potentials (or at least of the same order).
 
@@ -1587,7 +1587,7 @@ rest of the chapter.
 In the Behler-Parrinello method, the architecture of each NN is fixed, and
 the atomic energies <span style='color:#00a000;'>$E_i$</span> depend on the local chemical environments up to a cutoff radius <span style='color:#00a000;'>$R_c$</span>. 
 This is analogous to the introduction of a cutoff radius in MD simulations
-(<span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:forceCutoff</span>}). Thus, the NNP can be applied to MD simlulations in excactly the same way 
+(<span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:forceCutoff</span>}). Thus, the NNP can be applied to MD simulations in excactly the same way 
 as ordinary, empirical potentials: It is simply an analytic function that yields the potential energy of a central atom
 in the presence of neighbouring atoms contained in a cutoff sphere of radius <span style='color:#00a000;'>$R_c$</span>. 
 In other words, the BP method employs an <span style='color:#800000;'>\textit</span>{atom-centered} approach. 
@@ -1605,7 +1605,7 @@ all atoms of the same element have identical
 atomic NNs and symmetry functions sets. Thus, for a diatomic system, only two unique NNs need to be trained. 
 
 As an example, let us look at a system containing two different elements: Si and O. 
-All Si atoms have idential atomic NNs and symmetry function sets, the former represented by the function <span style='color:#00a000;'>$F_{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{Si}}$</span>. 
+All Si atoms have identical atomic NNs and symmetry function sets, the former represented by the function <span style='color:#00a000;'>$F_{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{Si}}$</span>. 
 A given Si atom <span style='color:#00a000;'>$i$</span> has at a given time <span style='color:#00a000;'>$n$</span> neighbours, including both Si and O atoms.  
 We define <span style='color:#00a000;'>$</span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{r}_{ij} = (r_{i1}, r_{i2}, </span><span style='color:#606000;'>\dots</span><span style='color:#00a000;'>, r_{in})$</span> as the vector containing the distances from
 atom <span style='color:#00a000;'>$i$</span> to all neighbours <span style='color:#00a000;'>$j = 1,</span><span style='color:#606000;'>\dots</span><span style='color:#00a000;'>,n$</span>, where <span style='color:#00a000;'>$r_{ij} = |</span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{r}_j - </span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{r}_i|$</span>. 
@@ -1746,7 +1746,7 @@ enabling us to adequately represent the radial distribution of neighbours around
   <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>subfigure</span>} 
   <span style='color:#800000;'>\vspace</span>{-1.5ex}
   <span style='color:#800000;'>\caption</span>{Radial symmetry functions <span style='color:#00a000;'>$G^1$</span>, <span style='color:#00a000;'>$G^2$</span> and <span style='color:#00a000;'>$G^3$</span> for an atom with one neighbour only. A set of such 
-	   functions represents the radial distrubution of neighbours around a central atom placed at the origin.
+	   functions represents the radial distribution of neighbours around a central atom placed at the origin.
 	   For <span style='color:#00a000;'>$G^2$</span> and <span style='color:#00a000;'>$G^3$</span> a cutoff <span style='color:#00a000;'>$r_c = </span><span style='color:#606000;'>\SI</span><span style='color:#00a000;'>{11.0}{</span><span style='color:#606000;'>\angstrom</span><span style='color:#00a000;'>}$</span> has been used. <span style='color:#00a000;'>$r_{ij}$</span>, <span style='color:#00a000;'>$r_c$</span> and <span style='color:#00a000;'>$r_s$</span> are in 
 	   units of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\SI</span><span style='color:#00a000;'>{}{</span><span style='color:#606000;'>\angstrom</span><span style='color:#00a000;'>}$</span>, while <span style='color:#00a000;'>$</span><span style='color:#606000;'>\eta</span><span style='color:#00a000;'>$</span> and <span style='color:#00a000;'>$</span><span style='color:#606000;'>\kappa</span><span style='color:#00a000;'>$</span> have units <span style='color:#00a000;'>$</span><span style='color:#606000;'>\SI</span><span style='color:#00a000;'>{}{</span><span style='color:#606000;'>\angstrom</span><span style='color:#00a000;'>}^{-2}$</span> and 
 	   <span style='color:#00a000;'>$</span><span style='color:#606000;'>\SI</span><span style='color:#00a000;'>{}{</span><span style='color:#606000;'>\angstrom</span><span style='color:#00a000;'>}^{-1}$</span> respectively.}
@@ -1803,14 +1803,14 @@ and is shown in <span style='color:#f00000;'>\autoref</span>{<span style='color:
     <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>fig:angularSymmetryFunctions:b</span>} 
   <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>subfigure</span>} 
   <span style='color:#800000;'>\caption</span>{Angular part of symmetry functions <span style='color:#00a000;'>$G_i^4$</span> and <span style='color:#00a000;'>$G_i^5$</span> for an atom with one neighbour only. A set of such 
-	   functions represents the angular distrubution of neighbours around a central atom placed at the origin.
+	   functions represents the angular distribution of neighbours around a central atom placed at the origin.
 	   <span style='color:#00a000;'>$</span><span style='color:#606000;'>\lambda</span><span style='color:#00a000;'> = +1$</span> for <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>fig:angularSymmetryFunctions:a</span>}, <span style='color:#00a000;'>$</span><span style='color:#606000;'>\lambda</span><span style='color:#00a000;'>=-1$</span> for <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>fig:angularSymmetryFunctions:b</span>}.}
  <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>fig:angularSymmetryFunctions</span>} 
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>figure</span>}
 
 <span style='color:#f00000;'>\subsubsection</span>{<b><span style='color:#000000;'>Determining the symmetry parameters</span></b>}
 The parameter values <span style='color:#00a000;'>$r_c, </span><span style='color:#606000;'>\eta</span><span style='color:#00a000;'>, r_s, </span><span style='color:#606000;'>\zeta</span><span style='color:#00a000;'>$</span> and <span style='color:#00a000;'>$</span><span style='color:#606000;'>\lambda</span><span style='color:#00a000;'>$</span> are not automatically optimized, like the weights. 
-They need to be pre-determined, and remain fixed during the training. In the context of machine learning, such variables are called
+They need to be predetermined, and remain fixed during the training. In the context of machine learning, such variables are called
 <span style='color:#800000;'>\textit</span>{hyperparameters}, while the variables that are optimized during training are the <span style='color:#800000;'>\textit</span>{model parameters}, i.e.<span style='color:#800000;'>\ </span>
 the weights and biases. Other examples of hyperparameters are the learning rate (<span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:optimization</span>}) and 
 the number of NN nodes and layers. Various techniques for deciding on satisfactory hyperparameters are
@@ -1858,7 +1858,7 @@ of all the neighbours <span style='color:#00a000;'>$i$</span> of atom <span styl
 <span style='color:#00a000;'> </span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{G}_</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{e}(</span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{r}_{ij}) </span><span style='color:#606000;'>\rightarrow</span><span style='color:#00a000;'>  </span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{r}_{ij}   </span>
 <span style='color:#00a000;'> </span><span style='color:#606000;'>\label</span><span style='color:#00a000;'>{BPatomicForce}</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>equation</span>}
-where the differentiation is perfomed in the direction of the arrows. 
+where the differentiation is performed in the direction of the arrows. 
 We realize that the first term
 <span style='color:#00a000;'>$</span><span style='color:#606000;'>\partial</span><span style='color:#00a000;'> E_i/</span><span style='color:#606000;'>\partial</span><span style='color:#00a000;'> G_{i,s}$</span> is the derivative of the output of the atomic NN of atom <span style='color:#00a000;'>$i$</span> with respect to the inputs,
 i.e.<span style='color:#800000;'>\ </span>the gradient of the NN. This is an analytic gradient
@@ -1994,7 +1994,7 @@ cancels when differentiated with respect to the coordinates of atom 1, and is th
  
 The sum in <span style='color:#00a000;'>$G_5$</span> <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>G5</span>} however, consists of only one term corresponding to the only unique triplet with atom 2
 as the central atom. This term is directly dependent on the coordinates of atom 0, which means that 
-an atom which is outside the cutoff sphere of atom 1 still contributes to the force. This is an artefact of many-body potentials
+an atom which is outside the cutoff sphere of atom 1 still contributes to the force. This is an artecfact of many-body potentials
 like the NNPs employed in this thesis: The force acting on an atom <span style='color:#00a000;'>$i$</span> depends on the positions of the atoms as 
 far as <span style='color:#00a000;'>$2r_c$</span> away because <span style='color:#800000;'>\textit</span>{neighbours of neighbours} are included in the
 energies that are differentiated to obtain the force. 
@@ -2014,7 +2014,7 @@ This scheme employs certain symmetry functions that have the following desirable
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>enumerate</span>}
 1. and 2. solves the technical issues of the limited and fixed dimensionality of MLPs respectively.
 3. and 4. deals with physical symmetries, namely that the energy of an atomic system does not change
-if two identical atoms are exhanged, or if the system undergoes a translation or a rotation. 
+if two identical atoms are exchanged, or if the system undergoes a translation or a rotation. 
 5. is a wanted property because the symmetry functions are differentiated to obtain forces. 
 
 In <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:constructingNNP</span>} we present the complete workflow for constructing a NNP, 
@@ -2035,9 +2035,9 @@ The package contains functionality encompassing a wide variety of
 potentials, atom types, thermostats and 
 ensembles, and is able to simulate a large number
 of different systems, including atoms, molecules, 
-coarse-grained particles, polymers, graunular materials
+coarse-grained particles, polymers, granular materials
 and metals. LAMMPS can be run on a single processor
-or in parallell. 
+or in parallel. 
 
 There exist several other molecular dynamics packages, 
 like GROMACS, OpenMD, Aber and NAMD that could also
@@ -2082,7 +2082,7 @@ like Stillinger-Weber and Vashishta.
 
 <span style='color:#f00000;'>\section</span>{<b><span style='color:#000000;'>LAMMPS input script</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:lammpsInputScript</span>}
 LAMMPS is run by providing an input script as 
-argument to the excecutable. This input script
+argument to the executable. This input script
 is read line by line and has its own syntax. 
 A good way to show the basics an input file
 is to look at a simple example. 
@@ -2126,7 +2126,7 @@ to measure the radial distribution function of a Si crystal with the Stillinger 
 <span style='color:#a08000;'>thermo_style 	custom step temp density press ke pe etotal </span>
 <span style='color:#a08000;'>thermo_modify 	norm yes</span>
 
-<span style='color:#a08000;'># thermalize before sampling rdf</span>
+<span style='color:#a08000;'># thermalise before sampling rdf</span>
 <span style='color:#a08000;'>run				10000</span>
 <span style='color:#a08000;'>fix radial all ave/time 100 10 1000 c_radialDist[*] file &amp;</span>
 <span style='color:#a08000;'>    rdf.txt mode vector</span>
@@ -2242,7 +2242,7 @@ If that is the case, new lists are built.
 <span style='color:#a08000;'>fix 			integration all nve</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>lstlisting</span>}
 LAMMPS integrates Newtons' equations of motion
-with the velocity-Verlet algorithm by defualt. 
+with the velocity-Verlet algorithm by default. 
 This is the integrator of choice for most MD
 applications due to its simplicity and 
 symplectic nature (<span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:timeIntegration</span>}). The 
@@ -2273,7 +2273,7 @@ quantities (the energies) by the number of atoms.
 <span style='color:#a08000;'>    rdf.txt mode vector</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>lstlisting</span>}
 The radial distribution function are measured with a LAMMPS <span style='color:#800000;'>\texttt</span>{compute}, 
-which defines a computation that is perfomed on a group of atoms, in this case <span style='color:#800000;'>\texttt</span>{all} atoms. 
+which defines a computation that is performed on a group of atoms, in this case <span style='color:#800000;'>\texttt</span>{all} atoms. 
 For the <span style='color:#800000;'>\texttt</span>{compute} to actually be executed, it needs
 to be evoked by other LAMMPS commands, in this case the fix <span style='color:#800000;'>\texttt</span>{ave<span style='color:#800000;'>\slash</span> time}. 
 The three numerical arguments specify how the distribution is averaged over time. 
@@ -2281,10 +2281,10 @@ Note that the <span style='color:#800000;'>\texttt</span>{compute} is referenced
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>lstlisting</span>}[<span style='color:#a08000;'>style=lammps]</span>
 <span style='color:#a08000;'>run		5000</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>lstlisting</span>}
-Lastly, we run the simulation for 5000 timesteps. 
-LAMMPS allowes several run commands to be issued
+Lastly, we run the simulation for 5000 time steps. 
+LAMMPS allowss several run commands to be issued
 after one another. This comes in handy if we want
-to thermalize the system before measuring thermodynamic quantities,
+to thermalise the system before measuring thermodynamic quantities,
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>lstlisting</span>}[<span style='color:#a08000;'>style=lammps]</span>
 <span style='color:#a08000;'> run 	5000</span>
 <span style='color:#a08000;'> fix radial all ave/time 100 10 1000 c_radialDist[*] file &amp;</span>
@@ -2297,7 +2297,7 @@ new fixes, computes, dumps etc.<span style='color:#800000;'>\ </span>defined sin
 the last run command. 
 
 This section has illuminated some of the basic
-funcionality of LAMMPS through several comments
+functionality of LAMMPS through several comments
 on a simple input script. Now we move on to
 how class hierarchy of LAMMPS is structured. 
 
@@ -2479,7 +2479,7 @@ We also store certain information on all neighbours.
       <span style='color:#898887;'>// apply three-body symmetry and </span>
       <span style='color:#898887;'>// store configurations of all triplets...</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>minted</span>}
-We are now ready to evalute the NN with the input vector of symmetry values. 
+We are now ready to evaluate the NN with the input vector of symmetry values. 
 The NN is implemented as a function, shown here in the monatomic case for brevity,
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>minted</span>}{c++}
 <span style='color:#0057ae;'>double</span> PairNNManyBody::network(arma::mat inputVector) {
@@ -2520,7 +2520,7 @@ of backpropagation.},
 <span style='color:#00a000;'>  </span><span style='color:#606000;'>\label</span><span style='color:#00a000;'>{forwardPropMatrixLammpsChapter}</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>align</span><span style='color:#00a000;'>ed}</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>equation</span>}
-The NN is differentiated by employing backpropagation according to the procedure oulined in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:symmAndForces</span>},
+The NN is differentiated by employing backpropagation according to the procedure outlined in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:symmAndForces</span>},
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>minted</span>}{c++}
 arma::mat PairNNManyBody::backPropagation() {
 
@@ -2569,7 +2569,7 @@ First, for <span style='color:#00a000;'>$G_i^2$</span> <span style='color:#f0000
   <b>if</b> ( m_parameters[s].size() == <span style='color:#b08000;'>3</span> ) {
     arma::mat dG2(<span style='color:#b08000;'>1</span>,neighbours);
 
-    <span style='color:#898887;'>// calculate cerivative of G2 for all pairs</span>
+    <span style='color:#898887;'>// calculate derivative of G2 for all pairs</span>
     dG2dR(Rij, m_parameters[s][<span style='color:#b08000;'>0</span>], 
           m_parameters[s][<span style='color:#b08000;'>1</span>], m_parameters[s][<span style='color:#b08000;'>2</span>], dG2);
 
@@ -2711,7 +2711,7 @@ of a quadratic equation
 We observe that each node (green circles)
 contain the mathematical operations needed to compute
 (<span style='color:#f00000;'>\ref</span>{<span style='color:#0000d0;'>quadraticEquationSolution1</span>},~<span style='color:#f00000;'>\ref</span>{<span style='color:#0000d0;'>quadraticEquationSolution2</span>}), while the arrows
-(edges) show what data each node recieve and where
+(edges) show what data each node receive and where
 the output is sent. The inputs and outputs
 of the graph is marked with rectangular
 boxes. 
@@ -2782,7 +2782,7 @@ As already mentioned, a TensorFlow computation
 is described by a graph which consists of nodes
 that communicate with multi-dimensional arrays along
 interconnected edges. Each node has zero or more
-outputs, and represents the instantation
+outputs, and represents the instantiation
 of an <span style='color:#800000;'>\textit</span>{operation}. Each operation
 occurs within a so-called <span style='color:#800000;'>\textit</span>{session}. 
 A <span style='color:#800000;'>\texttt</span>{Hello world!} program can be written as
@@ -2815,7 +2815,7 @@ visualize the corresponding DFG.
 <span style='color:#f00000;'>\subsection</span>{<b><span style='color:#000000;'>Creating a neural network</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:TensorFlowCreatingNN</span>}
 In <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:MLPmodel</span>} we demonstrated that a NN can be constructed 
 as a set of matrix-vector multiplications and additions which are input to certain activation functions. 
-The equations for evaluting a NN were <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>forwardPropMatrix</span>},
+The equations for evaluating a NN were <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>forwardPropMatrix</span>},
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>subequations</span>}
  <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>align</span>}
 <span style='color:#00a000;'>  </span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{u}_l &amp;= </span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{W}_l</span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{y}_{l-1} + </span><span style='color:#606000;'>\vec</span><span style='color:#00a000;'>{b}_l </span><span style='color:#606000;'>\label</span><span style='color:#00a000;'>{preActivation2} </span><span style='color:#606000;'>\\</span>
@@ -2934,7 +2934,7 @@ There are two new TF function calls to comment on in this script. First, we have
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>minted</span>}{Python}
  initOperation <b>=</b> tf.global_variables_initializer()
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>minted</span>}
-Constants are initalized when we call <span style='color:#800000;'>\texttt</span>{tf.constant}, and their value can never change. 
+Constants are initialized when we call <span style='color:#800000;'>\texttt</span>{tf.constant}, and their value can never change. 
 By contrast, variables need to be initialized using a seperate operation within a session. 
 The function <span style='color:#800000;'>\texttt</span>{tf.global<span style='color:#800000;'>\_</span>variables<span style='color:#800000;'>\_</span>initializer} adds such an operation to the graph, which initializes
 all global variables when run with <span style='color:#800000;'>\texttt</span>{sess.run(initOperation)}. 
@@ -3088,7 +3088,7 @@ trained NN in simulations.
 The number of possible configurations of atomic or molecular systems quickly grows very large. 
 Consider for instance water <span style='color:#00a000;'>$</span><span style='color:#606000;'>\textrm</span><span style='color:#00a000;'>{H}_2</span><span style='color:#606000;'>\textrm</span><span style='color:#00a000;'>{O}$</span>, which is a three-body molecule. The configuration of the
 three atoms can be described by three internal coordinates, each with a certain range of values. 
-If each range is divided into <span style='color:#00a000;'>$N$</span> equal segments, the total number of distint configurations is <span style='color:#00a000;'>$N^3$</span>. 
+If each range is divided into <span style='color:#00a000;'>$N$</span> equal segments, the total number of distinct configurations is <span style='color:#00a000;'>$N^3$</span>. 
 If we were to construct an <span style='color:#800000;'>\textit</span>{ab inito} potential that characterizes this system, we would have to compute the energies 
 and forces of all these configurations. 
 Such a brute-force approach may be feasible for a three-atom molecule, but for more complicated systems
@@ -3162,7 +3162,7 @@ such information is not always available.
 A more effective method has been presented by Raff et al.<span style='color:#800000;'>\ </span><span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Raff05</span>}, where a semi-empirical
 potential has been deployed to initiate the sampling. If a reasonable potential is chosen and an adequate
 sampling method is devised (discussed below), several thousand physically relevant structures can be obtained
-that will constitue the initial data set. It has also been shown <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Raff05</span>} that the final PES obtained 
+that will constitute the initial data set. It has also been shown <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Raff05</span>} that the final PES obtained 
 by the iterative sampling of MD trajectories is not sensitive to the choice of the empirical surface employed 
 in the initial step. 
 
@@ -3244,7 +3244,7 @@ We have made an additional modification to the algorithm <span style='color:#f00
 Pukrittayakamee et al.<span style='color:#800000;'>\ </span><span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Pukrittayakamee09</span>} sample clusters of atoms for subsequent DFT calculations
 of the energies of these clusters, and computes <span style='color:#00a000;'>$</span><span style='color:#606000;'>\tau</span><span style='color:#00a000;'>$</span> based on the maximum acceleration of an atom in a cluster. 
 Our strategy is to select a few atoms, usually 1-10, and compute <span style='color:#00a000;'>$</span><span style='color:#606000;'>\tau</span><span style='color:#00a000;'>$</span> seperately for each of these atoms. When 
-the sampling criterium is met, the coordinates of all neighbours relative to the central atom is written to file, 
+the sampling criterion is met, the coordinates of all neighbours relative to the central atom is written to file, 
 as well as the potential energy the central atom experiences in the presence of its neighbours. These coordinates
 and energies make up the input data and target values, respectively, for a NN to interpolate. 
 Our modified sampling algorithm is thus as follows (written in a less convoluted way than above),
@@ -3299,7 +3299,7 @@ We have implemented this sampling algorithm as follows,
       <span style='color:#898887;'>// ...</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>minted</span>}
 The vector <span style='color:#800000;'>\texttt</span>{chosenAtoms} contains the indicies of the atoms that are to be sampled. These indicies are decided
-when the parameters of the employed potential is initiliazed with the input script command <span style='color:#800000;'>\texttt</span>{pair<span style='color:#800000;'>\_</span>coeff}. 
+when the parameters of the employed potential is initialized with the input script command <span style='color:#800000;'>\texttt</span>{pair<span style='color:#800000;'>\_</span>coeff}. 
 The variable <span style='color:#800000;'>\texttt</span>{maxDelay} decides how often <span style='color:#00a000;'>$</span><span style='color:#606000;'>\tau</span><span style='color:#00a000;'>$</span> is updated, and serves as a maximum value of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\tau</span><span style='color:#00a000;'>$</span>. 
 Its value does not change in the course of the simulation. 
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>figure</span>}
@@ -3354,7 +3354,7 @@ will ''naturally present themselves'', and the NNP will iteratively improve in a
 
 The obvious way to identify new structures not already in the initial data set is to evalate both the NNP and 
 the PES we are trying to fit for each structure in an NNP MD simulation and compare the energies (and eventually 
-the forces). If the energy deviation is above a certain treshold, the structure is added to the data set.
+the forces). If the energy deviation is above a certain threshold, the structure is added to the data set.
 The simulations should be carried out under the conditions of the intended application of the NNP to ensure
 that the relevant parts of configuration space are sampled.
 After a certain amount of new data is added, 
@@ -3402,9 +3402,9 @@ the potential. The procedure is as follows,
  <span style='color:#800000;'>\item</span> Structures for which the energy disagreement between the different NNPs is significant should be added to 
  the data set.
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>enumerate</span>}
-This method takes advantage of the poor extrapolation abilites of NNs: The energy predictions of the different NNPs will
+This method takes advantage of the poor extrapolation abilities of NNs: The energy predictions of the different NNPs will
 be more or less random on structures that are far away from the training points. Thus, missing structures can 
-be identified by comparing the energy predictions of the different NNPs on the genereated trajectories. The procedure 
+be identified by comparing the energy predictions of the different NNPs on the generated trajectories. The procedure 
 also provides a criterion for determining the convergence of the PES without requiring the repeated computation 
 of dynamic properties of the system under study. When, after several iterations of the multiple-NN method,
 no problematic structures are found, the NNP should be reliable and ready for use. 
@@ -3431,7 +3431,7 @@ They need to be able to sufficiently distinct inequivalent structures to avoid f
 contradictory data. If this distinction is not possible, different reference structures with 
 different energies and forces give rise to the same symmetry function values, which results in poor fits. 
 
-Although a NN potential is general and unbiased because it has no pre-defined functional form, the 
+Although a NN potential is general and unbiased because it has no predefined functional form, the 
 construction of the symmetry function sets is to some extent empirical. The functional form of the NN
 is adjusted ''automatically'' when trained, while the symmetry function set has to be constructed manually.
 This observation does however not change the fact that the high-dimensional neural network approach to
@@ -3443,14 +3443,14 @@ A good strategy is to start out with an initial set that satisfies certain crite
 fit the reference data at hand. We follow and extend upon the discussions in <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Behler11symmetry</span>} and <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Behler15</span>}. 
 Note that each symmetry function 
 can be treated as a variable that is assigned a unique value for each training example in the data set. 
-Thus we occasionaly refer to a single symmetry function as an <span style='color:#800000;'>\textit</span>{input variable}. The symmetry function definitions 
+Thus we occasionally refer to a single symmetry function as an <span style='color:#800000;'>\textit</span>{input variable}. The symmetry function definitions 
 are found in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:symmetryFunctions</span>}. 
 
 <span style='color:#f00000;'>\subsection</span>{<b><span style='color:#000000;'>Initial set</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:initialSymmSet</span>}
 There are some general rules that guide the construction of the initial symmetry function set.
 First, <span style='color:#800000;'>\textit</span>{the symmetry function set should cover the configuration space in an unbiased way}.
 This can be realized by simply choosing an equidistant set of initial radial symmetry functions (the angular
-functions are discussed below). Further, the distribution of inter-atomic distances in the data set may be investigated to aquire a 
+functions are discussed below). Further, the distribution of inter-atomic distances in the data set may be investigated to acquire a 
 lower and upper bound on the range of radial parameter values. For <span style='color:#00a000;'>$G_i^2$</span>, a rule of thumb is that, for each element, 
 the width (standard deviation) of the Gaussian
 with the largest <span style='color:#00a000;'>$</span><span style='color:#606000;'>\eta</span><span style='color:#00a000;'>$</span> value should correspond to the shortest inter-atomic distance present in the data set 
@@ -3477,7 +3477,7 @@ The angular distribution of neighbours is probed by varying <span style='color:#
 several values of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\eta</span><span style='color:#00a000;'>$</span> and/or <span style='color:#00a000;'>$r_c$</span>. 
 We have found from empirical investigations that fixing <span style='color:#00a000;'>$</span><span style='color:#606000;'>\eta</span><span style='color:#00a000;'>$</span>, while varying <span style='color:#00a000;'>$r_c$</span> yield the best results. 
 In contrast to the radial parameters, the set of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\zeta</span><span style='color:#00a000;'>$</span> parameters should not be equidistant. Instead, the values of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\zeta</span><span style='color:#00a000;'>$</span>
-should increase exponentially to ensure that the symmetry functions are sufficiently dissimiliar, i.e.<span style='color:#800000;'>\ </span>to <span style='color:#800000;'>\textit</span>{avoid
+should increase exponentially to ensure that the symmetry functions are sufficiently dissimilar, i.e.<span style='color:#800000;'>\ </span>to <span style='color:#800000;'>\textit</span>{avoid
 strong correlations} (discussed further below).  An example is shown in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>fig:angularParams</span>}. 
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>figure</span>}
 <span style='color:#800000;'>\centering</span>
@@ -3493,7 +3493,7 @@ strong correlations} (discussed further below).  An example is shown in <span st
 How many symmetry functions should the initial set consist of?
 There is a trade-off between the ability of the symmetry function set to cover the configuration space and 
 the efficiency of the calculation of the NN energy output. The key is to select enough functions to capture 
-all regions of configuratiton space without having any redundancies. 
+all regions of configuration space without having any redundancies. 
 
 Further, the number of functions must be large enough for the NNP to be able to distinguish distinct atomic structures that
 should yield different total energies. This distinction is more difficult for configurations of a large number of atoms, because
@@ -3710,13 +3710,13 @@ a <span style='color:#800000;'>\textit</span>{training set}, which is employed f
 during the fit but which is not used to adjust the weights. A typical test set size is 10-20 <span style='color:#800000;'>\%</span> of the reference data.
 If the errors of these two sets are similar, we know that the NN
 generalizes to data that has not been used in its training. On the other hand, if the test set error is significantly larger
-than the training set error, overfitting is occuring, and training should be stopped. The most commmon error measure
+than the training set error, overfitting is occurring, and training should be stopped. The most common error measure
 is the root-mean-square-error (RMSE), 
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>equation</span>}
 <span style='color:#00a000;'> </span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{RMSE}(</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{NN}) = </span><span style='color:#606000;'>\sqrt</span><span style='color:#00a000;'>{</span><span style='color:#606000;'>\frac</span><span style='color:#00a000;'>{1}{N}</span><span style='color:#606000;'>\sum</span><span style='color:#00a000;'>_{i=1}^N (Y_i - y_i)^2}</span>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>equation</span>}
 where <span style='color:#00a000;'>$y_i$</span> is the NN prediction and <span style='color:#00a000;'>$Y_i$</span> is the reference value, as before. 
-This expression is almost equivalent to the cost function <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>quadraticCost</span>} used in the optimation of the NN.
+This expression is almost equivalent to the cost function <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>quadraticCost</span>} used in the optimization of the NN.
 
 <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>fig:overfitting</span>} displays a typical case of overfitting. Here we have sampled a training set 
 of 5578 configurations and energies from a Si Stillinger-Weber simulation. Then, we have trained two NNs 
@@ -3745,7 +3745,7 @@ but primary a tool to prevent overfitting.
 The only way to find the optimal architecture is by training several networks of different sizes and choose the one that yields
 the lowest error while simultaneously not overfitting. The problem with this strategy is that the possibilities are very many. 
 We can however make a few observations to narrow down the search. 
-According to Larochelle et al.<span style='color:#800000;'>\ </span><span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Larochelle09</span>}, having the same number of nodes in each hidden layer givse the best results. 
+According to Larochelle et al.<span style='color:#800000;'>\ </span><span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Larochelle09</span>}, having the same number of nodes in each hidden layer gives the best results. 
 Further, in the literature we have studied concerning NNPs, e.g.<span style='color:#800000;'>\ </span><span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Behler07,Raff05,Witkoskie05</span>}, 
 only one or two hidden layers are used, and we know from the universal approximation theorem (<span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:whyMLP</span>})
 that one hidden layer is sufficient to represent any function. For typical AI tasks, deeper architectures are required 
@@ -3811,7 +3811,7 @@ that the forces determine the dynamics of a simulation.
 Pukrittayakamee et al.<span style='color:#800000;'>\ </span><span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Pukrittayakamee09</span>} have suggested an extension to the standard mean-square error, that 
 enables simultaneous fitting of both a function and its gradient (the CFDA algorithm). 
 This is achieved by penalizing both the error 
-in the potential and in the forces, and has also been employed by Behler in a modifed form <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Behler15</span>},
+in the potential and in the forces, and has also been employed by Behler in a modified form <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Behler15</span>},
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>equation</span>}
 <span style='color:#00a000;'> </span><span style='color:#606000;'>\Gamma</span><span style='color:#00a000;'> = </span><span style='color:#606000;'>\frac</span><span style='color:#00a000;'>{1}{N}</span><span style='color:#606000;'>\sum</span><span style='color:#00a000;'>_{i=1}^N </span><span style='color:#606000;'>\biggr</span><span style='color:#00a000;'>[(E_i^{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{ref}} - E_i^{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{NN}})^2 + </span>
 <span style='color:#00a000;'> </span><span style='color:#606000;'>\frac</span><span style='color:#00a000;'>{</span><span style='color:#606000;'>\beta</span><span style='color:#00a000;'>}{3N_i}</span><span style='color:#606000;'>\sum</span><span style='color:#00a000;'>_{j=1}^{3N_i} (F_{i,j}^{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{ref}} - F_{i,j}^{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{NN}})^2 </span><span style='color:#606000;'>\biggr</span><span style='color:#00a000;'>]</span>
@@ -3848,7 +3848,7 @@ good results without directly fitting the forces as well, we will stick to the o
 <span style='color:#f00000;'>\subsection</span>{<b><span style='color:#000000;'>Hyperparameter space exploration</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:optimizingHyperparameters</span>}
 In this section we have discussed various tricks of the trade regarding hyperparameters for training neural networks. 
 We realize that there are a substantial number of choices to be made, corresponding to a large parameter space, and 
-that many (if not all) of these choices are ipmortant for a successful outcome. Even though the above discussions narrows down the search 
+that many (if not all) of these choices are important for a successful outcome. Even though the above discussions narrows down the search 
 for suitable hyperparameters, it is still a difficult task. 
 
 An alternative is to treat hyperparameter selection as an optimization problem, i.e.<span style='color:#800000;'>\ </span>to train the NN for many different 
@@ -3888,7 +3888,7 @@ for a specific case.
 
 <span style='color:#f00000;'>\section</span>{<b><span style='color:#000000;'>Applying the neural network potential</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:applyingNNP</span>}
 The quality of a NNP is measured by its test set error, but that does not necessarily mean it performs 
-well in MD simulations. To properly validate the NNP, we have to apply it in simulations, measure thermodynamic quantites, 
+well in MD simulations. To properly validate the NNP, we have to apply it in simulations, measure thermodynamic quantities, 
 and see if we reproduce known, experimental results. 
 
 In this thesis we use the TensorFlow (TF) Python API to train neural networks, while LAMMPS, written in C<span style='color:#800000;'>\texttt</span>{++}, is
@@ -3930,7 +3930,7 @@ The results are shown in <span style='color:#f00000;'>\autoref</span>{<span styl
 
 Figure a) and b) display the ratio <span style='color:#00a000;'>$T_{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{TFC}}/T_{</span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{ARMA}}$</span> for NN sizes up to 200, the former with all data points 
 visible, while the latter is zoomed in to give a more detailed picture. We observe that the time difference is huge 
-for small networks, and that even for NNs of size 200 the ratio is still about 5. From c), we decude that the ratio seems to converge 
+for small networks, and that even for NNs of size 200 the ratio is still about 5. From c), we deduce that the ratio seems to converge 
 to 1 for large networks, but the convergence rate is surprisingly low. 
 As we see from d), the performance of the built-in TF functions is similar 
 in C<span style='color:#800000;'>\texttt</span>{++} and Python, thus the time deviation can not be caused by an under-developed C<span style='color:#800000;'>\texttt</span>{++} API. 
@@ -4076,7 +4076,7 @@ demonstrates the importance of having a higher density of training points in cer
 <span style='color:#f00000;'>\chapter</span>{<b><span style='color:#000000;'>Neural network potential for Si</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:SiPotentialResults</span>}
 In this chapter we perform a demonstration of the complete NNP construction process, including 
 the Behler-Parrinello method. The goal is construct a potential for solid-state Si by sampling atomic configurations 
-and energies from Stillinger-Weber MD simluations. 
+and energies from Stillinger-Weber MD simulations. 
 The eventual NNP will be validated by computing the radial distribution function and several mechanical properties, and compare
 with SW. 
 
@@ -4084,7 +4084,7 @@ with SW.
 To assemble the initial data set, we need to decide on the specific application of the NNP that we want to develop. 
 We choose to construct a potential that can be used to simulate solid-state Si in a temperature range of <span style='color:#00a000;'>$T </span><span style='color:#606000;'>\in</span><span style='color:#00a000;'> [0, 500] </span><span style='color:#606000;'>\,</span><span style='color:#00a000;'> </span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{K}$</span>. 
 The system is prepared in a diamond cubic state with a lattice spacing of <span style='color:#800000;'>\SI</span>{5.431}{<span style='color:#800000;'>\angstrom</span>}, which is 
-the crystalline structure of Si. We perform several simulations of the microcanocical ensemble with initial temperatures
+the crystalline structure of Si. We perform several simulations of the microcanonical ensemble with initial temperatures
 in the above range and a time step of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\Delta</span><span style='color:#00a000;'> t = 0.001 </span><span style='color:#606000;'>\,</span><span style='color:#00a000;'> </span><span style='color:#606000;'>\mathrm</span><span style='color:#00a000;'>{ps}$</span>.
 The SW potential is parametrized according to <span style='color:#f00000;'>\cite</span>{<span style='color:#0000d0;'>Stillinger85</span>}, with a force cutoff 
 of <span style='color:#00a000;'>$r_c = </span><span style='color:#606000;'>\SI</span><span style='color:#00a000;'>{3.77118}{</span><span style='color:#606000;'>\angstrom</span><span style='color:#00a000;'>}$</span>. 
@@ -4144,9 +4144,9 @@ functions that has no overlap with the area defined by the dotted lines does not
 <span style='color:#f00000;'>\section</span>{<b><span style='color:#000000;'>Fitting the initial data set</span></b>}
 According to the iterative scheme in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:iterativeMDsampling</span>}, the next step in the construction process
 is to create a preliminary NNP by fitting the initial data set. We do not perform a systematic search for 
-optimal hyperparmameters at this intermediate stage. We have decided to employ the sigmoid activation function 
+optimal hyperparameters at this intermediate stage. We have decided to employ the sigmoid activation function 
 <span style='color:#f00000;'>\eqref</span>{<span style='color:#0000d0;'>sigmoidActivationFunction</span>} for the remainder of the construction process
-because it is more computationally efficent compared to the hyperbolic tangent, especially 
+because it is more computationally efficient compared to the hyperbolic tangent, especially oc
 its derivative,
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>equation</span>}
 <span style='color:#00a000;'> f^</span><span style='color:#606000;'>\prime</span><span style='color:#00a000;'>(x) = f(x) [1 - f(x)]</span>
@@ -4189,16 +4189,16 @@ extrapolating structures in the next step.
 Overfitting is detected by the following test,
 <span style='color:#f00000;'>\begin</span>{<span style='color:#0000d0;'>minted</span>}{Python}
 <b>if</b> testRMSE <b>/</b> trainRMSE <b>&gt;</b> <span style='color:#b08000;'>10</span>:
-    <span style='color:#0057ae;'>print</span> <span style='color:#bf0303;'>'Overfitting is occuring, training ends'</span>
+    <span style='color:#0057ae;'>print</span> <span style='color:#bf0303;'>'Overfitting is occurring, training ends'</span>
     <b>break</b>
 <span style='color:#f00000;'>\end</span>{<span style='color:#0000d0;'>minted</span>}
 Several preliminary runs showed the test set RMSE to flatten out at about 1.0 meV, and we therefore decided 
-to stop training if an error below this threshold was obtained, which occured after 20125 epochs. 
+to stop training if an error below this threshold was obtained, which occurred after 20125 epochs. 
 The final test set RMSE was 0.992 meV. 
 
 <span style='color:#f00000;'>\section</span>{<b><span style='color:#000000;'>Iterative sampling</span></b>} <span style='color:#f00000;'>\label</span>{<span style='color:#0000d0;'>sec:SiIterativeSampling</span>}
 After the initial fit, we apply the preliminary NNP in MD simulations to find new relevant structures not present 
-in the current training set. The Si system is prepared in the same manner as the Stillinger-weber runs above. 
+in the current training set. The Si system is prepared in the same manner as the Stillinger-Weber runs above. 
 We use the minimum and maximum symmetry function values stored in the previous step to detect extrapolating
 configurations according to the procedure described in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:iterativeMDsampling</span>}. Each time a structure
 leads to a symmetry value outside the range of the above extreme values, we sample that structure, and add 
@@ -4279,7 +4279,7 @@ To find the optimal NN architecture, we perform a grid search of different
 number of hidden layers <span style='color:#00a000;'>$L$</span> and nodes in each hidden layer <span style='color:#00a000;'>$n_l$</span>. 
 For each architecture <span style='color:#00a000;'>$(L,n_l)$</span> we perform a training session of 40000 epochs, and for every session we store 
 the smallest RMSE obtained, together with the number of epochs and the time elapsed to reach this RMSE. 
-We use the same hyperparamaters as in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>tab:hyperParamsSiInitial</span>} (with various architectures), 
+We use the same hyperparameters as in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>tab:hyperParamsSiInitial</span>} (with various architectures), 
 except that no RMSE tolerance is set, and the mini-batch size is changed to 200 to decrease the error oscillations. 
 We assume that no more than two layers are needed to fit the Si potential, and the maximum number of nodes has been 
 set to 32.
@@ -4349,7 +4349,7 @@ we therefore decide to continue using 1 layer and 10 nodes.
 
 The hyperparameters of the final NN fit are listed in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>tab:hyperParamsSiFinal</span>}. As for the initial fit, 
 the training data is shifted so that each symmetry function has zero-mean. This, in combination with zero-centered 
-(small) weights and biases, prevent pre-mature saturation of the sigmoid activation function, which is of great importance 
+(small) weights and biases, prevent premature saturation of the sigmoid activation function, which is of great importance 
 for the quality of the fit.
 
 To investigate whether offline or online learning produce the best fit, we run several training sessions employing both. 
@@ -4407,11 +4407,11 @@ by comparing with Stillinger-Weber results.
 <span style='color:#f00000;'>\subsection</span>{<b><span style='color:#000000;'>Radial distribution function</span></b>}
 The radial distribution function <span style='color:#00a000;'>$g(r)$</span>, (or pair correlation function) of an atomic system is a measure of how 
 particle density varies as a function of distance from a reference atom. If a system is randomly distributed, all distances
-are equally probable, and <span style='color:#00a000;'>$g(r)$</span> is unity for all distances. Any devations from unity signifies an ordered structure.
+are equally probable, and <span style='color:#00a000;'>$g(r)$</span> is unity for all distances. Any deviations from unity signifies an ordered structure.
 The typical shape of <span style='color:#00a000;'>$g(r)$</span> for a crystal lattice is a flat region for small distances due to repulsive forces, 
 followed by a series of peaks corresponding to bond lengths. 
 
-To measure <span style='color:#00a000;'>$g(r)$</span>, we preare a system consisting of 1000 Si atoms on a diamond cubic lattice with a lattice constant 
+To measure <span style='color:#00a000;'>$g(r)$</span>, we prepare a system consisting of 1000 Si atoms on a diamond cubic lattice with a lattice constant 
 of <span style='color:#00a000;'>$b = </span><span style='color:#606000;'>\SI</span><span style='color:#00a000;'>{5.431}{</span><span style='color:#606000;'>\angstrom</span><span style='color:#00a000;'>}$</span>. The simulation box is cubic with sides <span style='color:#00a000;'>$5L$</span>, where <span style='color:#00a000;'>$L$</span> is the length of one unit cube.
 The initial temperature is <span style='color:#00a000;'>$T = 300$</span> K, and NVE-integration is performed, creating a system trajectory consistent with 
 the microcanonical ensemble. The system is equilibrated for 10 ps, with a time step of <span style='color:#00a000;'>$</span><span style='color:#606000;'>\Delta</span><span style='color:#00a000;'> t = 0.001$</span> ps. Then, 
@@ -4537,7 +4537,7 @@ fitting data sets sampled from both Stillinger-Weber and preliminary NNP simulat
 with the iterative sampling scheme mentioned above. A final RMSE of 0.864 meV was obtained, 
 which was comparable with other studies. 
 
-Lastly, we applied the eventual Si NNP in MD simuations to evaluate its accuracy. 
+Lastly, we applied the eventual Si NNP in MD simulations to evaluate its accuracy. 
 The radial distribution function was measured, and was found to be in good agreement with Stillinger-Weber. 
 The small deviations were attributed to an increase in the kinetic energy of the atoms due to the fitting error.
 Further, various mechanical properties of the NNP Si system were calculated, specifically the bulk modulus, the shear 
@@ -4556,13 +4556,13 @@ that the ideal potential should meet. We will now evaluate our NNP in light of t
        
        The NNP can be fitted to <span style='color:#800000;'>\textit</span>{ab inito} data to arbitrary accuracy, and 
        can therefore be considered an <span style='color:#800000;'>\textit</span>{ab inito} potential.  
- <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{There should be ways to systematically detect situations where the potential is not suffientently accurate, 
+ <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{There should be ways to systematically detect situations where the potential is not sufficiently accurate, 
        and improve it without too much effort.} 
        
        The NNP can be systematically improved by employing the iterative scheme proposed in <span style='color:#f00000;'>\autoref</span>{<span style='color:#0000d0;'>sec:selectingTrainingData</span>}.
  <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The potential should be unbiased and applicable to all types of systems and chemical bonding.} 
        
-       The NNP has no pre-defined functional form, and its applications are unlimited as 
+       The NNP has no predefined functional form, and its applications are unlimited as 
        long as the production of <span style='color:#800000;'>\textit</span>{ab inito} reference energies is feasible. However, for systems containing 
        several different chemical elements, the symmetry function vectors grow very large, and the symmetry function sets 
        get increasingly difficult to set up.
@@ -4570,13 +4570,13 @@ that the ideal potential should meet. We will now evaluate our NNP in light of t
        
        The NNP is able to model the breaking and making of bonds as long as the reference set contains
        configurations that are relevant for these processes.  
- <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The potential should be high-dimensional, i.e.<span style='color:#800000;'>\ </span>depend on all degress of freedom of the system.}
+ <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The potential should be high-dimensional, i.e.<span style='color:#800000;'>\ </span>depend on all degrees of freedom of the system.}
        
        The NNP is high-dimensional because it depends on all the degrees of freedom of the chemical environment of each atom. 
  <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The construction of the potential should be as automated as possible.} 
        
        The NN parameters, and hence the functional form of the NNP, is automatically optimized. However, 
-       the determination of symmetry parameters and other hyperparmameters is to a certain degree empirical. 
+       the determination of symmetry parameters and other hyperparameters is to a certain degree empirical. 
        Further, training data can be automatically produced by MD simulations, but the physical conditions 
        of each simulation and the sampling of configurations must be carefully considered. 
  <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The potential should be predictive, i.e.<span style='color:#800000;'>\ </span>be reliable for atomic configurations that have not been used in the 
@@ -4587,7 +4587,7 @@ that the ideal potential should meet. We will now evaluate our NNP in light of t
        
  <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The potential should be fast to evaluate.}
  
-       The NNP is several orders of magnitude faster to evalute than e.g.<span style='color:#800000;'>\ </span>DFT or Hartree-Fock potentials, 
+       The NNP is several orders of magnitude faster to evaluate than e.g.<span style='color:#800000;'>\ </span>DFT or Hartree-Fock potentials, 
        and thus enables MD simulations with <span style='color:#800000;'>\textit</span>{ab inito} accuracy on larger scales of space and time.  
        It is however notably slower compared to empirical potentials like Lennard-Jones or Stillinger-Weber. 
  <span style='color:#800000;'>\item</span> <span style='color:#800000;'>\textit</span>{The construction of the potential should not require much computation time.}
@@ -4601,9 +4601,9 @@ We observe that our NNP fulfills the majority of the 10 requirements stated abov
 None of the potentials currently available, including NNPs, are ideal. 
 However, NNPs are an excellent tool for multi-scale physics. They connect the realms of quantum mechanics 
 and molecular dynamics by enabling <span style='color:#800000;'>\textit</span>{ab inito} simulations on a larger scale of space and time than what is feasible 
-for convential <span style='color:#800000;'>\textit</span>{ab inito} MD. This property, in addition to the unbiased and transferable nature of the 
+for conventional <span style='color:#800000;'>\textit</span>{ab inito} MD. This property, in addition to the unbiased and transferable nature of the 
 Behler-Parrinello approach, 
-signifiy that research in this field will be increasingly important in the future. 
+signify that research in this field will be increasingly important in the future. 
 
 <span style='color:#f00000;'>\chapter</span>{<b><span style='color:#000000;'>Prospects and future work</span></b>}
 An important aspect of the construction of NNPs is to employ a suitable <span style='color:#800000;'>\textit</span>{ab inito} method to calculate reference energies.
@@ -4644,7 +4644,7 @@ Consequentially, the NNP is several orders of magnitude faster than <span style=
 
 However, optimizing the evaluations of the symmetry functions and the network may contribute to a significant speed-up. 
 We have employed Armadillo to evaluate and differentiate NNPs, which may not the most efficient approach. Further, 
-the size of the NN and the symmetry function set may be reduced by performing a more thorough hyperparmeter optimization. 
+the size of the NN and the symmetry function set may be reduced by performing a more thorough hyperparameter optimization. 
 
 
 
