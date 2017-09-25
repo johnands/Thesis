@@ -1,0 +1,135 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{default}
+\usepackage{amsmath}
+
+\title{Konstruksjon av høydimensjonale nevralt nettverk-potensialer for molekylærdynamikk}
+\author{John-Anders Stende}
+\institute{
+  Fysisk institutt \\
+  Universitetet i Oslo
+}
+\date{Masterpresentasjon, oktober 2017}
+\subject{Computational physics}
+
+\begin{document}
+
+\frame{\titlepage}
+
+
+\begin{frame}
+
+\begin{block}{Hva er molekylærdynamikk?}
+  \begin{itemize}
+  \item Numerisk metode for å simulere atomers og molekylers bevegelser i gasser, væsker og faste stoffer.
+  \item Virtuelt eksperiment.
+  \end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{block}{Dynamikk}
+  \begin{itemize}
+  \item Partiklenes interaksjoner styrer dynamikken.
+  \item Interaksjonene bestemmes av et kraftfelt $\mathbf{F}$:
+    \begin{equation*}
+    \mathbf{F} = -\nabla V(\mathbf{r})
+    \end{equation*}
+  \item Potensiell energiflate / potensial):
+    \begin{equation*}
+      V(\mathbf{r}), \quad \mathbf{r} = (\mathbf{r}_1, \mathbf{r}_2, \cdots, \mathbf{r}_N)
+    \end{equation*}
+  \item $V(\mathbf{r})$ inneholder all fysikken. 
+  \end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{columns}[T] % contents are top vertically aligned
+  \begin{column}[T]{0.5\linewidth} % each column can also be its own environment
+    \begin{block}{Ab inito molekylærdynamikk}
+    Løse Schrödinger-likningen ved hvert tidssteg.
+    \end{block}
+  \end{column}
+  \begin{column}[T]{0.5\linewidth} % alternative top-align that's better for graphics
+    \begin{block}{Klassisk molekylærdynamikk}
+    Bruke en predefinert analytisk funksjon.
+    \end{block}
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{block}{Klassisk potensial}
+  \begin{equation*}
+  V(\mathbf{r}) \approx \sum_i^N V_1(\mathbf{r}_i) + \sum_{i,j}^N V_2(\mathbf{r}_i, \mathbf{r}_j) + 
+  \sum_{i,j,k}^N V_3(\mathbf{r}_i, \mathbf{r}_j, \mathbf{r}_k) + \dots
+  \end{equation*}
+\end{block}
+
+\begin{block}{Hvordan bør leddene se ut?}
+Eksperiementer / kvantemekanikk
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{block}{''Fysisk'' strategi:}
+ \begin{enumerate}
+  \item Starte med en funksjonsform med noen parametre.
+  \item Bestemme parametre fra eksperimentelle data.
+ \end{enumerate}
+\end{block}
+
+\begin{block}{''Matematisk'' strategi:}
+ \begin{enumerate}
+  \item Produsere kvantemekaniske data. 
+  \item Tilpasse en generell funksjonsform til dataene.
+ \end{enumerate}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+ 
+\begin{block}{Interpolere datasett}
+ \begin{itemize}
+  \item Spliner
+  \item Minste kvadraters metode
+  \item Kunstige nevrale nettverk
+ \end{itemize}
+\end{block}
+ 
+\end{frame}
+
+
+\begin{frame}
+ 
+\begin{block}{Kunstige nevrale nettverk}
+ 
+\end{block}
+
+ 
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}
