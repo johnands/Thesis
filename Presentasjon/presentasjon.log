@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  25 SEP 2017 18:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  26 SEP 2017 18:32
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1233,9 +1233,91 @@ thkerncmss.
 
 ] [7
 
-] [8
+]
+<../Figures/Theory/MachineLearningDiagram.png, id=204, 336.7782pt x 240.9pt>
+File: ../Figures/Theory/MachineLearningDiagram.png Graphic file (type png)
+
+<use ../Figures/Theory/MachineLearningDiagram.png>
+Package pdftex.def Info: ../Figures/Theory/MachineLearningDiagram.png used on i
+nput line 123.
+(pdftex.def)             Requested size: 276.559pt x 197.84068pt.
+ [8
+
+ <../Figures/Theory/MachineLearningDiagram.png>] [9
 
 ]
+<../Figures/Theory/neuron_anatomy.jpg, id=258, 542.025pt x 266.9975pt>
+File: ../Figures/Theory/neuron_anatomy.jpg Graphic file (type jpg)
+
+<use ../Figures/Theory/neuron_anatomy.jpg>
+Package pdftex.def Info: ../Figures/Theory/neuron_anatomy.jpg used on input lin
+e 146.
+(pdftex.def)             Requested size: 245.83282pt x 121.097pt.
+
+<../Figures/Theory/neuron.pdf, id=259, 500.75726pt x 159.10359pt>
+File: ../Figures/Theory/neuron.pdf Graphic file (type pdf)
+
+<use ../Figures/Theory/neuron.pdf>
+Package pdftex.def Info: ../Figures/Theory/neuron.pdf used on input line 146.
+(pdftex.def)             Requested size: 245.83282pt x 78.1071pt.
+ [10
+
+ <../Figures/Theory/neuron_anatomy.jpg> <../Figures/Theory/neuron.pdf>]
+File: ../Figures/Theory/neuron.pdf Graphic file (type pdf)
+ <use ../Figures/Theory/neuron.pdf>
+Package pdftex.def Info: ../Figures/Theory/neuron.pdf used on input line 158.
+(pdftex.def)             Requested size: 245.83282pt x 78.1071pt.
+ [11
+
+]
+<../Figures/Theory/networkGeneralAltered.pdf, id=318, 385.70297pt x 218.06633pt
+>
+File: ../Figures/Theory/networkGeneralAltered.pdf Graphic file (type pdf)
+ <use ../Figures/Theory/networkGeneralAltered.pdf>
+Package pdftex.def Info: ../Figures/Theory/networkGeneralAltered.pdf used on in
+put line 166.
+(pdftex.def)             Requested size: 276.559pt x 156.3621pt.
+ [12
+
+ <../Figures/Theory/networkGeneralAltered.pdf>]
+<../Figures/Theory/networkWithNotationAltered.pdf, id=353, 391.04826pt x 206.54
+205pt>
+File: ../Figures/Theory/networkWithNotationAltered.pdf Graphic file (type pdf)
+ <use ../Figures/Theory/networkWithNotationAltered.pdf>
+Package pdftex.def Info: ../Figures/Theory/networkWithNotationAltered.pdf used 
+on input line 178.
+(pdftex.def)             Requested size: 245.83282pt x 129.84169pt.
+ [13
+
+ <../Figures/Theory/networkWithNotationAltered.pdf>]
+<../Figures/Theory/activationFlex.pdf, id=388, 578.16pt x 433.62pt>
+File: ../Figures/Theory/activationFlex.pdf Graphic file (type pdf)
+
+<use ../Figures/Theory/activationFlex.pdf>
+Package pdftex.def Info: ../Figures/Theory/activationFlex.pdf used on input lin
+e 193.
+(pdftex.def)             Requested size: 215.10196pt x 161.3235pt.
+ [14
+
+ <../Figures/Theory/activationFlex.pdf>]
+Overfull \hbox (8.40057pt too wide) detected at line 220
+[] \OT1/cmss/m/n/10.95 = \OT1/mathkerncmss/m/sl/10.95 f[]\OT1/cmss/m/n/10.95 (\
+OT1/cmr/m/n/10.95 W[][] \OT1/cmss/m/n/10.95 + []) = \OT1/mathkerncmss/m/sl/10.9
+5 f[] []
+ []
+
+[15
+
+]
+<../Figures/Theory/activationFunctionsAltered.pdf, id=457, 578.16pt x 433.62pt>
+File: ../Figures/Theory/activationFunctionsAltered.pdf Graphic file (type pdf)
+<use ../Figures/Theory/activationFunctionsAltered.pdf>
+Package pdftex.def Info: ../Figures/Theory/activationFunctionsAltered.pdf used 
+on input line 247.
+(pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
+ [16
+
+ <../Figures/Theory/activationFunctionsAltered.pdf>]
 \tf@nav=\write6
 \openout6 = `presentasjon.nav'.
 
@@ -1245,11 +1327,11 @@ thkerncmss.
 \tf@snm=\write8
 \openout8 = `presentasjon.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 135.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 135.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 259.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 259.
  (./presentasjon.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 135.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 135.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 259.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 259.
 Package rerunfilecheck Info: File `presentasjon.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1257,31 +1339,33 @@ Package rerunfilecheck Info: File `presentasjon.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 135.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 259.
  ) 
 Here is how much of TeX's memory you used:
- 16963 strings out of 494953
- 320758 string characters out of 6180977
- 387315 words of memory out of 5000000
- 19829 multiletter control sequences out of 15000+600000
- 12913 words of font info for 47 fonts, out of 8000000 for 9000
+ 17052 strings out of 494953
+ 322839 string characters out of 6180977
+ 390365 words of memory out of 5000000
+ 19888 multiletter control sequences out of 15000+600000
+ 13513 words of font info for 49 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  56i,14n,55p,392b,577s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/symbols/msam10.pfb>
-Output written on presentasjon.pdf (8 pages, 106023 bytes).
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam
+10.pfb>
+Output written on presentasjon.pdf (16 pages, 332207 bytes).
 PDF statistics:
- 269 PDF objects out of 1000 (max. 8388607)
- 239 compressed objects within 3 object streams
- 17 named destinations out of 1000 (max. 500000)
- 43 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 563 PDF objects out of 1000 (max. 8388607)
+ 474 compressed objects within 5 object streams
+ 35 named destinations out of 1000 (max. 500000)
+ 78 words of extra memory for PDF output out of 10000 (max. 10000000)
 

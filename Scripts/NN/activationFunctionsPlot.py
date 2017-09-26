@@ -24,9 +24,9 @@ plt.grid('on')
 plt.axis([-5, 5, -1, 1])
 plt.xlabel('x')
 plt.ylabel('f(x)')
-plt.legend(['Sigmoid', 'Hyperbolic tangent'], loc=2, prop={'size':15})
+plt.legend(['sigmoid', 'tanh'], loc=2, prop={'size':20})
 plt.tight_layout()
-#plt.savefig('../../Figures/Theory/activationFunctions.pdf')
+#plt.savefig('../../Figures/Theory/activationFunctionsAltered.pdf')
 #plt.show()
 
 def rectifier(x):
@@ -47,7 +47,7 @@ plt.ylabel('f(x)')
 plt.grid('on')
 plt.legend(['Rectifier'], loc=2, prop={'size':15})
 plt.tight_layout()
-plt.savefig('../../Figures/Theory/reluActivation.pdf')
+#plt.savefig('../../Figures/Theory/reluActivation.pdf')
 #plt.show()
 
 
