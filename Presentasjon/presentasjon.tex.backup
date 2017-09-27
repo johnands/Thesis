@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{default}
 \usepackage{amsmath}
+\usepackage{upgreek}
 
 \title{Konstruksjon av høydimensjonale nevralt nettverk-potensialer for molekylærdynamikk}
 \author{John-Anders Stende}
@@ -13,10 +14,19 @@
 \date{Masterpresentasjon, oktober 2017}
 \subject{Computational physics}
 
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
 \begin{document}
 
 \frame{\titlepage}
 
+\section{Molekylærdynamikk}
 
 \begin{frame}
 
@@ -116,6 +126,8 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
+\section{Nevrale nettverk}
+
 \begin{frame}
  
 \includegraphics[width=0.9\linewidth]{../Figures/Theory/MachineLearningDiagram.png}
@@ -199,7 +211,7 @@ Eksperiementer / kvantemekanikk
   y_i^2 = f_2\left(\sum_{j=1}^3 w_{ij}^2 y_j^1 + b_i^2\right)
 \end{equation*}
 \begin{equation*}
- \vec{y}_2 = f_2(\mathrm{W}_2 \vec{y}_{1} + \vec{b}_{2}) = 
+ \mathbf{y}_2 = f_2(\mathrm{W}_2 \mathbf{y}_{1} + \mathbf{b}_{2}) = 
  f_2\left(\left[\begin{array}{ccc}
     w^2_{11} &w^2_{12} &w^2_{13} \\
     w^2_{21} &w^2_{22} &w^2_{23} \\
@@ -239,7 +251,7 @@ Eksperiementer / kvantemekanikk
  
  \begin{column}[T]{0.5\linewidth} % alternative top-align that's better for graphics
   \centering
-  \includegraphics[width=\linewidth]{../Figures/Theory/activationFunctions.pdf}
+  \includegraphics[width=\linewidth]{../Figures/Theory/activationFunctionsAltered.pdf}
  \end{column}
  
 \end{columns}
@@ -247,6 +259,78 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
+\begin{frame}
+ 
+\centering
+\includegraphics[width=0.9\linewidth]{../Figures/Presentation/interpolation.pdf}
+\begin{block}{Regresjon med nevralt nettverk}
+ \begin{itemize}
+  \item Regresjon: Interpolere datasett $\mathrm{X} \rightarrow \mathrm{Y}$
+  \item $X$: inputdata, $Y$: outputdata, $X_{i*}$: treningseksempel. 
+  \item Trening: Iterativt minimere feilen til et sett med kjente energier. 
+ \end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+ 
+\begin{block}{Feilen defineres ved en cost-funksjon:} 
+ \begin{equation*}
+ \Gamma = \Gamma\bigr(\{\mathrm{W}_l\}, \{\mathbf{b}_l\}, \mathrm{X}, \mathrm{Y}\bigr)
+        = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
+ \end{equation*}
+\end{block}
+
+\begin{block}{Optimering med gradient descent:}
+ \begin{equation*}
+  \mathbf{\uptheta}_{k+1} = \mathbf{\uptheta}_{k} - \gamma \nabla_{\mathbf{\uptheta}_k} \Gamma(\mathbf{\uptheta})
+ \end{equation*}
+ Mange forskjellige måter å justere $\gamma$ på. 
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Hvordan finne gradienten av nettet?}
+ 
+\centering
+\includegraphics[width = 0.8\linewidth]{../Figures/Theory/backprop.pdf}
+
+\begin{block}{Backpropagation}
+ \begin{enumerate}
+  \item Sender hvert treningsseksempel gjennom nettet. 
+  \item Output (energi) sammenliknes med kjent energi. 
+  \item Feilen propagares \textit{bakover} ved kjerneregelen og vektene justeres. 
+ \end{enumerate}
+\end{block}
+ 
+\end{frame}
+
+\section{Nevralt nettverk-potensial}
+
+\begin{frame}
+ 
+\begin{block}{Flere muligheter}
+ \begin{itemize}
+  \item Et eller flere nettverk? 
+  \item Hvordan representere energien?
+ \end{itemize}
+\end{block}
+
+\begin{block}{Behler-Parrinello-metoden}
+ \begin{equation*}
+       E = \sum_{i=1}^N E_i
+ \end{equation*}
+ \begin{itemize}
+  \item 
+ \end{itemize}
+ 
+\end{block}
+
+ 
+\end{frame}
 
 
 

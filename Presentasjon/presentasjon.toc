@@ -1,1 +1,4 @@
 \beamer@endinputifotherversion {3.36pt}
+\beamer@sectionintoc {1}{Molekyl\IeC {\ae }rdynamikk}{2}{0}{1}
+\beamer@sectionintoc {2}{Nevrale nettverk}{9}{0}{2}
+\beamer@sectionintoc {3}{Nevralt nettverk-potensial}{22}{0}{3}
