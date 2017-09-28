@@ -324,13 +324,183 @@ Eksperiementer / kvantemekanikk
        E = \sum_{i=1}^N E_i
  \end{equation*}
  \begin{itemize}
-  \item 
+  \item Atomsentrert: Hver atomenergi $E_i$ avhenger av alle naboatomer opp til en cutoff $r_c$.
+  \item Hvert atom har et eget nettverk og et sett av symmetrifunksjoner som beskriver cutoff-kulen. 
+  \item Hver atomtype har identiske nettverk og symmetryfunskjonssett.  
  \end{itemize}
- 
 \end{block}
 
+\end{frame}
+
+
+\begin{frame}
+
+\begin{columns}[c] % contents are top vertically aligned
+  \begin{column}[c]{0.35\linewidth} % each column can also be its own environment
+   \centering
+   \includegraphics[width=\linewidth]{../Figures/Presentation/cutoffSphere.pdf}
+  \end{column}
+  \begin{column}[c]{0.65\linewidth} % alternative top-align that's better for graphics
+   \includegraphics[width=\linewidth]{../Figures/Presentation/BehlerParrinello.pdf}
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{block}{Cutoff-funksjon}
+ 
+ \begin{equation*}
+  f_c(r_{ij}) = 
+  \begin{cases}
+   0.5 \!\left[\cos\left(\frac{\pi r_{ij}}{r_c}\right) + 1 \right], & r_{ij} \leq r_c \\
+   0, & r_{ij} > r_c
+  \end{cases}
+ \end{equation*}
+ \centering
+ \includegraphics[width=0.7\linewidth]{../Figures/Presentation/cutoffFunction.pdf}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Radiell symmetrifunksjon}
+
+\begin{equation*}
+ G_i^2 = \sum_{j=1}^N \exp[-\eta(r_{ij}-r_s)^2] \,f_c(r_{ij})
+\end{equation*}
+
+\begin{columns} % contents are top vertically aligned
+  \begin{column}{0.5\linewidth} % each column can also be its own environment
+   \centering
+   \includegraphics[width=\linewidth]{../Figures/Presentation/G2_1.pdf}
+  \end{column}
+  \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
+   \centering
+   \includegraphics[width=\linewidth]{../Figures/Presentation/G2_2.pdf}
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{Angulær symmetrifunksjon}
+
+\begin{equation*}
+  G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} \Big[(1 + \lambda \cos\theta_{jik})^\zeta \,
+ \exp(-\eta (r_{ij}^2 + r_{ik}^2)) \,
+ &f_c(r_{ij}) f_c(r_{ik})\Big]
+\end{equation*}
+\centering
+\includegraphics[width=0.17\linewidth]{../Figures/Presentation/triplet.pdf}
+
+\begin{columns} % contents are top vertically aligned
+  \begin{column}{0.5\linewidth} % each column can also be its own environment
+   \centering
+   $\lambda = +1$
+   \includegraphics[width=\linewidth]{../Figures/Presentation/G4G5angular1.pdf}
+  \end{column}
+  \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
+   \centering
+   $\lambda = -1$
+   \includegraphics[width=\linewidth]{../Figures/Presentation/G4G5angular2.pdf}
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{Krefter}
+
+\begin{equation*}
+ E_i = \mathrm{NN}_e[\mathbf{G}_e(\mathbf{r}_{ij})]
+\end{equation*}
+
+\begin{equation*}
+  F_{i,x} = -\sum_{i=1}^{N_i+1}\frac{\partial E_j}{\partial x} = 
+ -\sum_{j=1}^{N_i+1}\sum_{s=1}^{M_j}\frac{\partial E_j}{\partial G_{j,s}}\frac{\partial G_{j,s}}{\partial x}
+\end{equation*}
+
+\end{frame}
+
+
+\section{LAMMPS og TensorFlow}
+
+
+\begin{frame}
+
+\begin{block}{LAMMPS}
+ \begin{itemize}
+  \item Simuleringspakke for klassisk molekylærdynamikk utviklet ved Sandia National Laboratories. 
+  \item Kjøres ved inputscripts med egen syntaks. 
+  \item Vi har utvidet med samplingsalgoritme og nevralt nettverk-potensial.
+ \end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{block}{TensorFlow}
+ \begin{itemize}
+  \item Maskinlæringspakke utviklet av Google. 
+  \item Setter opp nevrale nettverk som data flow-grafer (DFG). 
+  \item DFG: En graf bestående av \textit{noder} som er forbundet av \textit{kanter} med retning. 
+  \item Noder er matematiske operasjoner, kanter er tensorer. 
+ \end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+ 
+\centering
+\includegraphics[width=0.4\linewidth]{../Figures/Implementation/DFG.pdf} 
+
+\begin{columns} % contents are top vertically aligned
+  \begin{column}{0.5\linewidth} % each column can also be its own environment
+   \begin{equation*}
+    ax^2 + bx + c = 0
+   \end{equation*}
+  \end{column}
+  \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
+   \begin{align*}
+    x_1 &= \frac{-b + \sqrt{b^2 - 4ac}}{2a}  \label{quadraticEquationSolution1} \\
+    x_2 &= \frac{-b - \sqrt{b^2 - 4ac}}{2a}
+   \end{align*}
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}
+ 
+\centering
+\includegraphics[width=0.7\linewidth]{../Figures/Implementation/tensorBoardTraining.pdf} 
  
 \end{frame}
+
+
+\section{Konstruksjon av nevralt nettverk-potensial (NNP)}
+
+
+\begin{frame}
+
+\begin{enumerate}
+ \item Generere treningsdata som er relevant for applikasjonen av NNP. 
+ \item Trene et nevralt nettverk for å tilpasse en funksjon til dataene. 
+ \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer. 
+\end{enumerate}
+
+\end{frame}
+
+
+
 
 
 

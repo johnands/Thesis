@@ -2,3 +2,6 @@
 \beamer@sectionintoc {1}{Molekyl\IeC {\ae }rdynamikk}{2}{0}{1}
 \beamer@sectionintoc {2}{Nevrale nettverk}{9}{0}{2}
 \beamer@sectionintoc {3}{Nevralt nettverk-potensial}{22}{0}{3}
+\beamer@sectionintoc {4}{LAMMPS og TensorFlow}{29}{0}{4}
+\beamer@sectionintoc {5}{Konstruksjon av nevralt nettverk-potensial (NNP)}{34}{0}{5}
+\beamer@sectionintoc {6}{NNP for Si}{37}{0}{6}

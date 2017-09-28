@@ -56,8 +56,47 @@
 \headcommand {\beamer@framepages {23}{23}}
 \headcommand {\slideentry {3}{0}{3}{24/24}{}{0}}
 \headcommand {\beamer@framepages {24}{24}}
-\headcommand {\beamer@partpages {1}{24}}
-\headcommand {\beamer@subsectionpages {22}{24}}
-\headcommand {\beamer@sectionpages {22}{24}}
-\headcommand {\beamer@documentpages {24}}
-\headcommand {\def \inserttotalframenumber {24}}
+\headcommand {\slideentry {3}{0}{4}{25/25}{}{0}}
+\headcommand {\beamer@framepages {25}{25}}
+\headcommand {\slideentry {3}{0}{5}{26/26}{}{0}}
+\headcommand {\beamer@framepages {26}{26}}
+\headcommand {\slideentry {3}{0}{6}{27/27}{}{0}}
+\headcommand {\beamer@framepages {27}{27}}
+\headcommand {\slideentry {3}{0}{7}{28/28}{}{0}}
+\headcommand {\beamer@framepages {28}{28}}
+\headcommand {\sectionentry {4}{LAMMPS og TensorFlow}{29}{LAMMPS og TensorFlow}{0}}
+\headcommand {\beamer@sectionpages {22}{28}}
+\headcommand {\beamer@subsectionpages {22}{28}}
+\headcommand {\slideentry {4}{0}{1}{29/29}{}{0}}
+\headcommand {\beamer@framepages {29}{29}}
+\headcommand {\slideentry {4}{0}{2}{30/30}{}{0}}
+\headcommand {\beamer@framepages {30}{30}}
+\headcommand {\slideentry {4}{0}{3}{31/31}{}{0}}
+\headcommand {\beamer@framepages {31}{31}}
+\headcommand {\slideentry {4}{0}{4}{32/32}{}{0}}
+\headcommand {\beamer@framepages {32}{32}}
+\headcommand {\slideentry {4}{0}{5}{33/33}{}{0}}
+\headcommand {\beamer@framepages {33}{33}}
+\headcommand {\sectionentry {5}{Konstruksjon av nevralt nettverk-potensial (NNP)}{34}{Konstruksjon av nevralt nettverk-potensial (NNP)}{0}}
+\headcommand {\beamer@sectionpages {29}{33}}
+\headcommand {\beamer@subsectionpages {29}{33}}
+\headcommand {\slideentry {5}{0}{1}{34/34}{}{0}}
+\headcommand {\beamer@framepages {34}{34}}
+\headcommand {\slideentry {5}{0}{2}{35/35}{}{0}}
+\headcommand {\beamer@framepages {35}{35}}
+\headcommand {\slideentry {5}{0}{3}{36/36}{}{0}}
+\headcommand {\beamer@framepages {36}{36}}
+\headcommand {\sectionentry {6}{NNP for Si}{37}{NNP for Si}{0}}
+\headcommand {\beamer@sectionpages {34}{36}}
+\headcommand {\beamer@subsectionpages {34}{36}}
+\headcommand {\slideentry {6}{0}{1}{37/37}{}{0}}
+\headcommand {\beamer@framepages {37}{37}}
+\headcommand {\slideentry {6}{0}{2}{38/38}{}{0}}
+\headcommand {\beamer@framepages {38}{38}}
+\headcommand {\slideentry {6}{0}{3}{39/39}{}{0}}
+\headcommand {\beamer@framepages {39}{39}}
+\headcommand {\beamer@partpages {1}{39}}
+\headcommand {\beamer@subsectionpages {37}{39}}
+\headcommand {\beamer@sectionpages {37}{39}}
+\headcommand {\beamer@documentpages {39}}
+\headcommand {\def \inserttotalframenumber {39}}

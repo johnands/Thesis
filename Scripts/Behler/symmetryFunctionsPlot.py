@@ -62,31 +62,30 @@ def G5(Rij, Rik, cosTheta, width, cutoff, thetaRange, inversion):
 #plt.rc('axes', labelsize=25)
 
 # change parameters
-"""plt.rc('axes', labelsize=20)
+plt.rc('xtick', labelsize=20)
+plt.rc('ytick', labelsize=20)
+plt.rc('axes', labelsize=25)
 
 
 ##### fc plot #####
-Rij = np.linspace(0, 1, 1000)
+"""Rij = np.linspace(0, 1, 1000)
 cutoff = 1.0
 plt.plot(Rij, cutoffFunction(Rij, cutoff))
 plt.xlabel(r'$r_{ij}/r_c$')
 plt.ylabel(r'$f_c(r_{ij}/r_c)$')
 plt.tight_layout()
-plt.savefig('../../Figures/Theory/cutoffFunction.pdf')
+plt.savefig('../../Figures/Presentation/cutoffFunction.pdf')
 #plt.show()"""
 
 
-# change parameters
-"""plt.rc('xtick', labelsize=22)
-plt.rc('ytick', labelsize=22)
-plt.rc('axes', labelsize=27)
+
 
 
 
 ##### G1 plot #####
 Rij = np.linspace(0, 14, 1000)
 
-legends = []
+"""legends = []
 for cutoff in [3.0, 5.0, 7.0, 9.0, 11.0]:
     functionValue = G1(Rij, cutoff)
     functionValue[np.where(Rij > cutoff)[0]] = 0
@@ -98,51 +97,52 @@ plt.legend(legends, prop={'size':24})
 plt.ylabel(r'$G_i^1$')
 plt.tight_layout()
 #plt.show()
-plt.savefig('../../Figures/Theory/G1.pdf')
+plt.savefig('../../Figures/Theory/G1.pdf')"""
 
 ##### G2 plot #####
 
-plt.figure()
+"""plt.figure()
 
 Rs = 0.0
 cutoff = 11.0
 legends = []
-for eta in [5.0, 0.9, 0.3, 0.15, 0.07, 0.03, 0.01]:
+for eta in [5.0, 0.9, 0.3, 0.15, 0.07, 0.03]:
     functionValue = G2(Rij, eta, cutoff,  Rs)
     functionValue[np.where(Rij > cutoff)[0]] = 0
     plt.plot(Rij, functionValue)
     legends.append(r'$\eta = %3.2f$' % eta)
     plt.hold('on')
 
-plt.legend(legends, prop={'size':24})
+plt.legend(legends, prop={'size':27})
+plt.xlabel(r'$r_{ij}$')
 plt.ylabel(r'$G_i^2, \; r_s = 0$')
 plt.tight_layout()
 #plt.show()
-plt.savefig('../../Figures/Theory/G2_1.pdf')
+plt.savefig('../../Figures/Presentation/G2_1.pdf')
 
 plt.figure()
 
 eta = 3.0
 cutoff = 11.0
 legends = []
-for Rs in [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]:
+for Rs in [2.0, 3.0, 4.0, 5.0, 6.0, 7.0]:
     functionValue = G2(Rij, eta, cutoff,  Rs)
     functionValue[np.where(Rij > cutoff)[0]] = 0
     plt.plot(Rij, functionValue)
     legends.append(r'$r_s = %.1f$' % Rs)
     plt.hold('on')
 
-plt.legend(legends, prop={'size':24})
+plt.legend(legends, prop={'size':27})
 plt.xlabel(r'$r_{ij}$')
 plt.ylabel(r'$G_i^2, \; \eta=3.0$')
 plt.tight_layout()
-plt.savefig('../../Figures/Theory/G2_2.pdf')
+plt.savefig('../../Figures/Presentation/G2_2.pdf')
 
-plt.figure()
+plt.figure()"""
 
 ##### G3 plot #####
 
-cutoff = 11.0
+"""cutoff = 11.0
 legends = []
 for kappa in [0.5, 1.0, 1.5, 2.0]:
     functionValue = G3(Rij, cutoff, kappa)
@@ -168,43 +168,43 @@ plt.figure()
 
 plt.rc('xtick', labelsize=22)
 plt.rc('ytick', labelsize=22)
-plt.rc('axes', labelsize=27)
+plt.rc('axes', labelsize=31)
 
 theta = np.linspace(0, 2*np.pi, 1000) 
 
 inversion = 1.0
 legends = []
-for zeta in [1.0, 2.0, 4.0, 16.0, 64.0]:
+for zeta in [2.0, 4.0, 16.0, 64.0]:
     functionValue = G4G5angular(theta, zeta, inversion)
     plt.plot(theta*180/np.pi, functionValue)
     legends.append(r'$\zeta = %d$' % zeta)
     plt.hold('on')
     
-plt.legend(legends, prop={'size':20}, loc=9)
+plt.legend(legends, prop={'size':25}, loc=9)
 plt.xlabel(r'$\theta_{jik}$')
 plt.ylabel(r'$G_i^\theta$')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
 #plt.show()
-#plt.savefig('../../Figures/Theory/G4G5angular1.pdf')
+plt.savefig('../../Figures/Presentation/G4G5angular1.pdf')
     
 plt.figure()    
     
 inversion = -1.0
 legends = []
-for zeta in [1.0, 2.0, 4.0, 16.0, 64.0]:
+for zeta in [2.0, 4.0, 16.0, 64.0]:
     functionValue = G4G5angular(theta, zeta, inversion)
     plt.plot(theta*180/np.pi, functionValue)
     legends.append(r'$\zeta = %d$' % zeta)
     plt.hold('on')
 
-plt.legend(legends, fontsize=25, prop={'size':18}, loc=1)
+plt.legend(legends, prop={'size':23}, loc=1)
 plt.xlabel(r'$\theta_{jik}$')
-#plt.ylabel(r'$G_i^4/G_i^5$ angular part')
+plt.ylabel(r'$G_i^\theta$')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
 #plt.show()
-#plt.savefig('../../Figures/Theory/G4G5angular2.pdf')
+plt.savefig('../../Figures/Presentation/G4G5angular2.pdf')
 
 
 ##### G5 plot #####
