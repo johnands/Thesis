@@ -54,7 +54,7 @@
     \begin{equation*}
       V(\mathbf{r}), \quad \mathbf{r} = (\mathbf{r}_1, \mathbf{r}_2, \cdots, \mathbf{r}_N)
     \end{equation*}
-  \item $V(\mathbf{r})$ inneholder all fysikken. 
+  \item $V(\mathbf{r})$ inneholder fysikken. 
   \end{itemize}
 \end{block}
 
@@ -88,27 +88,35 @@
   \end{equation*}
 \end{block}
 
-\begin{block}{Hvordan bør leddene se ut?}
+\begin{enumerate}
+ \item Hvor mange ledd bør tas med?
+ \item Hvordan bør leddene se ut?
+\end{enumerate}
+
 Eksperiementer / kvantemekanikk
-\end{block}
 
 \end{frame}
 
 
 \begin{frame}
 
-\begin{block}{''Fysisk'' strategi:}
+\begin{block}{Empirisk strategi:}
  \begin{enumerate}
   \item Starte med en funksjonsform med noen parametre.
   \item Bestemme parametre fra eksperimentelle data.
  \end{enumerate}
 \end{block}
 
-\begin{block}{''Matematisk'' strategi:}
+\begin{block}{Kvantemekanisk strategi:}
  \begin{enumerate}
   \item Produsere kvantemekaniske data. 
-  \item Tilpasse en generell funksjonsform til dataene.
+  \item Tilpasse en generell funksjonsform til datasettet.
  \end{enumerate}
+ 
+ \begin{itemize}
+  \item Fordeler: Nøyaktig, ingen bias, overførbart.
+  \item Ulemper: Rent matematisk uttrykk, all relevant data må inkluderes. 
+ \end{itemize}
 \end{block}
 
 \end{frame}
@@ -129,22 +137,16 @@ Eksperiementer / kvantemekanikk
 
 \section{Nevrale nettverk}
 
-\begin{frame}
- 
-\includegraphics[width=0.9\linewidth]{../Figures/Theory/MachineLearningDiagram.png}
-
-\end{frame}
-
 
 \begin{frame}
 
 \begin{block}{Kunstige nevrale nettverk}
  \begin{itemize}
-  \item Etterlikne en biologisk hjerne
-  \item Nettverk av matematiske nevroner
+  \item Maskinlæringsalgoritme.
+  \item Etterlikne en biologisk hjerne.
+  \item Nettverk av matematiske nevroner.
  \end{itemize}
 \end{block}
-
 
 \end{frame}
 
@@ -153,8 +155,6 @@ Eksperiementer / kvantemekanikk
  
 \centering
 \includegraphics[width=0.8\linewidth]{../Figures/Theory/neuron_anatomy.jpg} 
-
-\includegraphics[width=0.8\linewidth]{../Figures/Theory/neuron.pdf} 
 
 \end{frame}
 
@@ -193,47 +193,32 @@ Eksperiementer / kvantemekanikk
 
 \begin{frame}
 
-\begin{equation*}
-  y_1^3 = f_3\left[\sum_{j=1}^3 w_{1j}^3 f_2\left(\sum_{k=1}^3 w_{jk}^2 f_1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
-  + b_1^3\right]
-\end{equation*}
-\begin{equation*}
- h(x) = c_1 f(c_2 x + c_3) + c_4
-\end{equation*}
-\centering
-\includegraphics[width = 0.7\linewidth]{../Figures/Theory/activationFlex.pdf}
+\begin{align*}
+  y_1^3 &= f_3\left[\sum_{j=1}^3 w_{1j}^3 f_2\left(\sum_{k=1}^3 w_{jk}^2 f_1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
+  + b_1^3\right] \\
+  &= f_3(x_1, x_2)
+\end{align*}
+\begin{itemize}
+ \item Dimensjonene til nettet må stemme overens med funksjonen som skal tilpasses. 
+ \item Det universelle approksimasjonsteoremet. 
+\end{itemize}
 
-\end{frame}
- 
- 
-\begin{frame}{Matrix notation}
-
-\begin{equation*}
-  y_i^2 = f_2\left(\sum_{j=1}^3 w_{ij}^2 y_j^1 + b_i^2\right)
-\end{equation*}
-\begin{equation*}
- \mathbf{y}_2 = f_2(\mathrm{W}_2 \mathbf{y}_{1} + \mathbf{b}_{2}) = 
- f_2\left(\left[\begin{array}{ccc}
-    w^2_{11} &w^2_{12} &w^2_{13} \\
-    w^2_{21} &w^2_{22} &w^2_{23} \\
-    w^2_{31} &w^2_{32} &w^2_{33} \\
-    \end{array} \right] \cdot
-    \left[\begin{array}{c}
-           y^1_1 \\
-           y^1_2 \\
-           y^1_3 \\
-          \end{array}\right] + 
-    \left[\begin{array}{c}
-           b^2_1 \\
-           b^2_2 \\
-           b^2_3 \\
-          \end{array}\right]\right)
-\end{equation*}
 
 \end{frame}
 
 
-\begin{frame}{Activation functions}
+
+\begin{frame}{Aktiveringsfunksjoner}
+
+\begin{block}{Restriksjoner}
+ \begin{itemize}
+  \item Ikke-konstant
+  \item Begrenset
+  \item Monotont økende
+  \item Kontinuerlig
+ \end{itemize}
+
+\end{block}
 
 \begin{columns}[T] % contents are top vertically aligned
 
@@ -243,7 +228,7 @@ Eksperiementer / kvantemekanikk
   f(x) = \frac{1}{1 + e^{-x}}
   \label{sigmoidActivationFunction}
   \end{equation*}
-  and the hyperbolic tangent
+  og hyperbolsk tangens
   \begin{equation*}
   f(x) = \tanh(x)
   \label{tanhActivationFunction}
@@ -267,7 +252,7 @@ Eksperiementer / kvantemekanikk
 \begin{block}{Regresjon med nevralt nettverk}
  \begin{itemize}
   \item Regresjon: Interpolere datasett $\mathrm{X} \rightarrow \mathrm{Y}$
-  \item $X$: inputdata, $Y$: outputdata, $X_{i*}$: treningseksempel. 
+  \item $X$: inputdata, $Y$: outputdata/målverdier 
   \item Trening: Iterativt minimere feilen til et sett med kjente energier. 
  \end{itemize}
 \end{block}
@@ -279,8 +264,7 @@ Eksperiementer / kvantemekanikk
  
 \begin{block}{Feilen defineres ved en cost-funksjon:} 
  \begin{equation*}
- \Gamma = \Gamma\bigr(\{\mathrm{W}_l\}, \{\mathbf{b}_l\}, \mathrm{X}, \mathrm{Y}\bigr)
-        = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
+ \Gamma = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
  \end{equation*}
 \end{block}
 
@@ -592,11 +576,12 @@ Eksperiementer / kvantemekanikk
 \begin{frame}
  
 \begin{block}{Tilpasse endelig treningssett}
- Velger nettet med lavest RMSE etter 40000 epoker. 
+ Velger nettet med lavest RMSE etter 40000 epoker. RMSE: 0.864 meV.
 \end{block}
 
 \begin{block}{RMSE krefter}
  \centering
+ RMSE: 41.2 meV
  \includegraphics[width = 0.7\linewidth]{../Figures/Results/SiForces.pdf}
 \end{block}
 
@@ -672,9 +657,18 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
+\begin{frame}
 
+\begin{block}{Fremtidig arbeid}
+ \begin{itemize}
+  \item \textit{Ab inito} data. 
+  \item Mer nøyaktige krefter. 
+  \item Andre systemer. 
+  \item Optimering. 
+ \end{itemize}
+\end{block}
 
-
+\end{frame}
 
 
 

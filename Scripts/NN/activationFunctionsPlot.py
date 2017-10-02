@@ -24,9 +24,9 @@ plt.grid('on')
 plt.axis([-5, 5, -1, 1])
 plt.xlabel('x')
 plt.ylabel('f(x)')
-plt.legend(['sigmoid', 'tanh'], loc=2, prop={'size':20})
+plt.legend(['sigmoid', 'tanh'], loc=2, prop={'size':25})
 plt.tight_layout()
-#plt.savefig('../../Figures/Theory/activationFunctionsAltered.pdf')
+plt.savefig('../../Figures/Theory/activationFunctionsAltered.pdf')
 #plt.show()
 
 def rectifier(x):
