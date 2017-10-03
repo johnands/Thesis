@@ -252,7 +252,7 @@ Eksperiementer / kvantemekanikk
 \begin{block}{Regresjon med nevralt nettverk}
  \begin{itemize}
   \item Regresjon: Interpolere datasett $\mathrm{X} \rightarrow \mathrm{Y}$
-  \item $X$: inputdata, $Y$: outputdata/målverdier 
+  \item $X$: inputdata, $Y$: outputdata/målverdier.
   \item Trening: Iterativt minimere feilen til et sett med kjente energier. 
  \end{itemize}
 \end{block}
@@ -270,7 +270,7 @@ Eksperiementer / kvantemekanikk
 
 \begin{block}{Optimering med gradient descent:}
  \begin{equation*}
-  \mathbf{\uptheta}_{k+1} = \mathbf{\uptheta}_{k} - \gamma \nabla_{\mathbf{\uptheta}_k} \Gamma(\mathbf{\uptheta})
+  \boldsymbol{\uptheta}_{k+1} = \boldsymbol{\uptheta}_{k} - \gamma \nabla_{\boldsymbol{\uptheta}_k} \Gamma(\boldsymbol{\uptheta})
  \end{equation*}
  Mange forskjellige måter å justere $\gamma$ på. 
 \end{block}
@@ -297,19 +297,32 @@ Eksperiementer / kvantemekanikk
 
 \begin{frame}
  
-\begin{block}{Flere muligheter}
+\begin{block}{Hvor mange nettverk?}
  \begin{itemize}
-  \item Et eller flere nettverk? 
-  \item Hvordan representere energien?
+  \item Ett nettverk: Uhåndterlig størrelse. 
+  \item Atomære nettverk,
+   \begin{equation*}
+    E = \sum_{i=1}^N E_i
+   \end{equation*}
+  \item Behler-Parrinello: Hver atomenergi $E_i$ avhenger av alle naboatomer opp til en cutoff $r_c$. 
  \end{itemize}
 \end{block}
 
-\begin{block}{Behler-Parrinello-metoden}
- \begin{equation*}
-       E = \sum_{i=1}^N E_i
- \end{equation*}
+\begin{block}{Høydimensjonalt potensial - utfordringer}
+ \begin{enumerate} 
+  \item Varierende antall naboer. 
+  \item Translasjonell og rotasjonell invarians. 
+  \item Rekkefølgen på naboer. 
+ \end{enumerate}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{Behler-Parrinello-metoden: Symmetrifunksjoner}
  \begin{itemize}
-  \item Atomsentrert: Hver atomenergi $E_i$ avhenger av alle naboatomer opp til en cutoff $r_c$.
+  \item Et sett av symmetrifunksjoner løser symmetriproblemene.
   \item Hvert atom har et eget nettverk og et sett av symmetrifunksjoner som beskriver cutoff-kulen. 
   \item Hver atomtype har identiske nettverk og symmetryfunskjonssett.  
  \end{itemize}

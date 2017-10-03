@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  2 OCT 2017 17:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.8.23)  3 OCT 2017 20:29
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1343,55 +1343,57 @@ Package pdftex.def Info: ../Figures/Theory/backprop.pdf used on input line 294.
 
 ] [21
 
+] [22
+
 ]
-<../Figures/Presentation/cutoffSphere.pdf, id=701, 273.73569pt x 256.70148pt>
+<../Figures/Presentation/cutoffSphere.pdf, id=727, 273.73569pt x 256.70148pt>
 File: ../Figures/Presentation/cutoffSphere.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/cutoffSphere.pdf>
 Package pdftex.def Info: ../Figures/Presentation/cutoffSphere.pdf used on input
- line 333.
+ line 354.
 (pdftex.def)             Requested size: 107.55333pt x 100.85739pt.
 
-<../Figures/Presentation/BehlerParrinello.pdf, id=702, 493.42111pt x 280.02217p
+<../Figures/Presentation/BehlerParrinello.pdf, id=728, 493.42111pt x 280.02217p
 t>
 File: ../Figures/Presentation/BehlerParrinello.pdf Graphic file (type pdf)
  <use ../Figures/Presentation/BehlerParrinello.pdf>
 Package pdftex.def Info: ../Figures/Presentation/BehlerParrinello.pdf used on i
-nput line 333.
+nput line 354.
 (pdftex.def)             Requested size: 199.73653pt x 113.3528pt.
- [22
+ [23
 
  <../Figures/Presentation/cutoffSphere.pdf> <../Figures/Presentation/BehlerParr
 inello.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ../Figures/Presentation/BehlerParrinell
 o.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] <../Figures/Presentation/cutoffFunction.pdf, id=744, 578.16pt x 433.62pt>
+>] <../Figures/Presentation/cutoffFunction.pdf, id=769, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/cutoffFunction.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/cutoffFunction.pdf>
 Package pdftex.def Info: ../Figures/Presentation/cutoffFunction.pdf used on inp
-ut line 351.
+ut line 372.
 (pdftex.def)             Requested size: 215.10196pt x 161.3235pt.
- [23
+ [24
 
  <../Figures/Presentation/cutoffFunction.pdf>]
-<../Figures/Presentation/G2_1.pdf, id=799, 578.16pt x 433.62pt>
+<../Figures/Presentation/G2_1.pdf, id=824, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/G2_1.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/G2_1.pdf>
-Package pdftex.def Info: ../Figures/Presentation/G2_1.pdf used on input line 37
-1.
+Package pdftex.def Info: ../Figures/Presentation/G2_1.pdf used on input line 39
+2.
 (pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
 
-<../Figures/Presentation/G2_2.pdf, id=800, 578.16pt x 433.62pt>
+<../Figures/Presentation/G2_2.pdf, id=825, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/G2_2.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/G2_2.pdf>
-Package pdftex.def Info: ../Figures/Presentation/G2_2.pdf used on input line 37
-1.
+Package pdftex.def Info: ../Figures/Presentation/G2_2.pdf used on input line 39
+2.
 (pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
- [24
+ [25
 
  <../Figures/Presentation/G2_1.pdf> <../Figures/Presentation/G2_2.pdf
 
@@ -1401,7 +1403,7 @@ inclusion: multiple pdfs with page group included in a single page
 ! Misplaced alignment tab character &.
 \beamer@doifinframe ...(r_{ij}^2 + r_{ik}^2)) \, &
                                                   f_c(r_{ij}) f_c(r_{ik})\Bi...
-l.397 \end{frame}
+l.419 \end{frame}
                  
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1410,30 +1412,30 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-<../Figures/Presentation/triplet.pdf, id=900, 137.95709pt x 122.98483pt>
+<../Figures/Presentation/triplet.pdf, id=926, 137.95709pt x 122.98483pt>
 File: ../Figures/Presentation/triplet.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/triplet.pdf>
 Package pdftex.def Info: ../Figures/Presentation/triplet.pdf used on input line
- 397.
+ 419.
 (pdftex.def)             Requested size: 52.23871pt x 46.56956pt.
 
-<../Figures/Presentation/G4G5angular1.pdf, id=901, 578.16pt x 433.62pt>
+<../Figures/Presentation/G4G5angular1.pdf, id=927, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/G4G5angular1.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/G4G5angular1.pdf>
 Package pdftex.def Info: ../Figures/Presentation/G4G5angular1.pdf used on input
- line 397.
+ line 419.
 (pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
 
-<../Figures/Presentation/G4G5angular2.pdf, id=902, 578.16pt x 433.62pt>
+<../Figures/Presentation/G4G5angular2.pdf, id=928, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/G4G5angular2.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/G4G5angular2.pdf>
 Package pdftex.def Info: ../Figures/Presentation/G4G5angular2.pdf used on input
- line 397.
+ line 419.
 (pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
- [25
+ [26
 
  <../Figures/Presentation/triplet.pdf> <../Figures/Presentation/G4G5angular1.pd
 f
@@ -1444,115 +1446,115 @@ f): PDF inclusion: multiple pdfs with page group included in a single page
 
 pdfTeX warning: /usr/bin/pdflatex (file ../Figures/Presentation/G4G5angular2.pd
 f): PDF inclusion: multiple pdfs with page group included in a single page
->] [26
+>] [27
 
-] (./presentasjon.toc) [27
-
-] [28
+] (./presentasjon.toc) [28
 
 ] [29
 
+] [30
+
 ]
-<../Figures/Implementation/DFG.pdf, id=1111, 116.65279pt x 144.05495pt>
+<../Figures/Implementation/DFG.pdf, id=1136, 116.65279pt x 144.05495pt>
 File: ../Figures/Implementation/DFG.pdf Graphic file (type pdf)
 
 <use ../Figures/Implementation/DFG.pdf>
 Package pdftex.def Info: ../Figures/Implementation/DFG.pdf used on input line 4
-63.
+91.
 (pdftex.def)             Requested size: 122.91406pt x 151.79189pt.
- [30
+ [31
 
  <../Figures/Implementation/DFG.pdf>]
-<../Figures/Implementation/tensorBoardTraining.pdf, id=1146, 919.435pt x 1085.0
+<../Figures/Implementation/tensorBoardTraining.pdf, id=1172, 919.435pt x 1085.0
 5376pt>
 File: ../Figures/Implementation/tensorBoardTraining.pdf Graphic file (type pdf)
 
  <use ../Figures/Implementation/tensorBoardTraining.pdf>
 Package pdftex.def Info: ../Figures/Implementation/tensorBoardTraining.pdf used
- on input line 471.
+ on input line 499.
 (pdftex.def)             Requested size: 215.10196pt x 253.84526pt.
- [31
+ [32
 
- <../Figures/Implementation/tensorBoardTraining.pdf>] (./presentasjon.toc) [32
+ <../Figures/Implementation/tensorBoardTraining.pdf>] (./presentasjon.toc) [33
 
-] [33
+] [34
 
 ]
-<../Figures/Presentation/iterativeSampling.pdf, id=1235, 312.52235pt x 310.1963
+<../Figures/Presentation/iterativeSampling.pdf, id=1261, 312.52235pt x 310.1963
 7pt>
 File: ../Figures/Presentation/iterativeSampling.pdf Graphic file (type pdf)
  <use ../Figures/Presentation/iterativeSampling.pdf>
 Package pdftex.def Info: ../Figures/Presentation/iterativeSampling.pdf used on 
-input line 493.
+input line 521.
 (pdftex.def)             Requested size: 215.10196pt x 213.50085pt.
- [34
+ [35
 
- <../Figures/Presentation/iterativeSampling.pdf>] (./presentasjon.toc) [35
+ <../Figures/Presentation/iterativeSampling.pdf>] (./presentasjon.toc) [36
 
-] [36
+] [37
 
 ]
-<../Figures/Presentation/SiInitialSymmG2.pdf, id=1327, 578.16pt x 433.62pt>
+<../Figures/Presentation/SiInitialSymmG2.pdf, id=1354, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/SiInitialSymmG2.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/SiInitialSymmG2.pdf>
 Package pdftex.def Info: ../Figures/Presentation/SiInitialSymmG2.pdf used on in
-put line 527.
+put line 555.
 (pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
 
-<../Figures/Presentation/SiInitialSymmG5.pdf, id=1328, 578.16pt x 433.62pt>
+<../Figures/Presentation/SiInitialSymmG5.pdf, id=1355, 578.16pt x 433.62pt>
 File: ../Figures/Presentation/SiInitialSymmG5.pdf Graphic file (type pdf)
 
 <use ../Figures/Presentation/SiInitialSymmG5.pdf>
 Package pdftex.def Info: ../Figures/Presentation/SiInitialSymmG5.pdf used on in
-put line 527.
+put line 555.
 (pdftex.def)             Requested size: 153.64493pt x 115.23296pt.
- [37
+ [38
 
  <../Figures/Presentation/SiInitialSymmG2.pdf> <../Figures/Presentation/SiIniti
 alSymmG5.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ../Figures/Presentation/SiInitialSymmG5
 .pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] <../Figures/Results/multipleNNP.pdf, id=1414, 578.16pt x 433.62pt>
+>] <../Figures/Results/multipleNNP.pdf, id=1439, 578.16pt x 433.62pt>
 File: ../Figures/Results/multipleNNP.pdf Graphic file (type pdf)
 
 <use ../Figures/Results/multipleNNP.pdf>
 Package pdftex.def Info: ../Figures/Results/multipleNNP.pdf used on input line 
-541.
+569.
 (pdftex.def)             Requested size: 215.10196pt x 161.3235pt.
- [38
+ [39
 
- <../Figures/Results/multipleNNP.pdf>] [39
+ <../Figures/Results/multipleNNP.pdf>] [40
 
-] <../Figures/Results/SiForces.pdf, id=1502, 578.16pt x 433.62pt>
+] <../Figures/Results/SiForces.pdf, id=1528, 578.16pt x 433.62pt>
 File: ../Figures/Results/SiForces.pdf Graphic file (type pdf)
 
 <use ../Figures/Results/SiForces.pdf>
-Package pdftex.def Info: ../Figures/Results/SiForces.pdf used on input line 588
+Package pdftex.def Info: ../Figures/Results/SiForces.pdf used on input line 616
 .
-(pdftex.def)             Requested size: 215.10196pt x 161.3235pt.
- [40
-
- <../Figures/Results/SiForces.pdf>]
-<../Figures/Results/radialDist.pdf, id=1569, 578.16pt x 433.62pt>
-File: ../Figures/Results/radialDist.pdf Graphic file (type pdf)
-
-<use ../Figures/Results/radialDist.pdf>
-Package pdftex.def Info: ../Figures/Results/radialDist.pdf used on input line 5
-99.
 (pdftex.def)             Requested size: 215.10196pt x 161.3235pt.
  [41
 
- <../Figures/Results/radialDist.pdf>] [42
+ <../Figures/Results/SiForces.pdf>]
+<../Figures/Results/radialDist.pdf, id=1594, 578.16pt x 433.62pt>
+File: ../Figures/Results/radialDist.pdf Graphic file (type pdf)
 
-] (./presentasjon.toc) [43
+<use ../Figures/Results/radialDist.pdf>
+Package pdftex.def Info: ../Figures/Results/radialDist.pdf used on input line 6
+27.
+(pdftex.def)             Requested size: 215.10196pt x 161.3235pt.
+ [42
 
-] [44
+ <../Figures/Results/radialDist.pdf>] [43
+
+] (./presentasjon.toc) [44
 
 ] [45
 
 ] [46
+
+] [47
 
 ]
 \tf@nav=\write6
@@ -1564,11 +1566,11 @@ Package pdftex.def Info: ../Figures/Results/radialDist.pdf used on input line 5
 \tf@snm=\write8
 \openout8 = `presentasjon.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 678.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 678.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 706.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 706.
  (./presentasjon.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 678.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 678.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 706.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 706.
 Package rerunfilecheck Info: File `presentasjon.out' has not changed.
 (rerunfilecheck)             Checksum: DB5BF7568BB9C36D8EF52C1972A8CD91;417.
 
@@ -1576,14 +1578,14 @@ Package rerunfilecheck Info: File `presentasjon.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 678.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 706.
  ) 
 Here is how much of TeX's memory you used:
- 17462 strings out of 494953
- 329793 string characters out of 6180977
+ 17489 strings out of 494953
+ 330123 string characters out of 6180977
  393287 words of memory out of 5000000
- 20183 multiletter control sequences out of 15000+600000
- 17526 words of font info for 63 fonts, out of 8000000 for 9000
+ 20198 multiletter control sequences out of 15000+600000
+ 22364 words of font info for 75 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  56i,14n,55p,392b,578s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
@@ -1598,12 +1600,12 @@ ic/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmssi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 msy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/euler/eurm10.pfb>
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/euler/eurb10.pfb>
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on presentasjon.pdf (46 pages, 570173 bytes).
+Output written on presentasjon.pdf (47 pages, 571232 bytes).
 PDF statistics:
- 1839 PDF objects out of 2073 (max. 8388607)
- 1487 compressed objects within 15 object streams
- 103 named destinations out of 1000 (max. 500000)
+ 1865 PDF objects out of 2073 (max. 8388607)
+ 1511 compressed objects within 16 object streams
+ 105 named destinations out of 1000 (max. 500000)
  214 words of extra memory for PDF output out of 10000 (max. 10000000)
 

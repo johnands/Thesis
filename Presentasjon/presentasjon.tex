@@ -270,7 +270,7 @@ Eksperiementer / kvantemekanikk
 
 \begin{block}{Optimering med gradient descent:}
  \begin{equation*}
-  \mathbf{\uptheta}_{k+1} = \mathbf{\uptheta}_{k} - \gamma \nabla_{\mathbf{\uptheta}_k} \Gamma(\mathbf{\uptheta})
+  \boldsymbol{\uptheta}_{k+1} = \boldsymbol{\uptheta}_{k} - \gamma \nabla_{\boldsymbol{\uptheta}_k} \Gamma(\boldsymbol{\uptheta})
  \end{equation*}
  Mange forskjellige måter å justere $\gamma$ på. 
 \end{block}
@@ -293,25 +293,20 @@ Eksperiementer / kvantemekanikk
  
 \end{frame}
 
+
 \section{Nevralt nettverk-potensial}
+
 
 \begin{frame}
  
-\begin{block}{Flere muligheter}
+\begin{block}{Hvor mange nettverk?}
  \begin{itemize}
-  \item Et eller flere nettverk? 
-  \item Hvordan representere energien?
- \end{itemize}
-\end{block}
-
-\begin{block}{Behler-Parrinello-metoden}
- \begin{equation*}
-       E = \sum_{i=1}^N E_i
- \end{equation*}
- \begin{itemize}
-  \item Atomsentrert: Hver atomenergi $E_i$ avhenger av alle naboatomer opp til en cutoff $r_c$.
-  \item Hvert atom har et eget nettverk og et sett av symmetrifunksjoner som beskriver cutoff-kulen. 
-  \item Hver atomtype har identiske nettverk og symmetryfunskjonssett.  
+  \item Ett nettverk: Uhåndterlig størrelse. 
+  \item Atomære nettverk,
+   \begin{equation*}
+    E = \sum_{i=1}^N E_i
+   \end{equation*}
+   \item Behler-Parrinello: Hver atomenergi $E_i$ avhenger kun av naboatomer innenfor en cutoff-radius $r_c$. 
  \end{itemize}
 \end{block}
 
@@ -319,6 +314,32 @@ Eksperiementer / kvantemekanikk
 
 
 \begin{frame}
+
+\begin{block}{Høydimensjonalt potensial - utfordringer}
+ \begin{enumerate} 
+  \item Varierende antall naboer. 
+  \item Translasjonell og rotasjonell invarians. 
+  \item Rekkefølgen på naboer. 
+ \end{enumerate}
+\end{block}
+
+\begin{block}{Behler-Parrinello-metoden: Symmetrifunksjoner}
+ \begin{itemize}
+  \item Et sett av såkalte symmetrifunksjoner transformerer de kartesiske koordinatene til alle naboer 
+  til et gitt antall symmetriverdier.
+  \item Funksjonene er definert som summer over naboer. 
+ \end{itemize}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{itemize}
+ \item Hvert atom har et eget nettverk og et sett av symmetrifunksjoner som beskriver cutoff-kulen. 
+ \item Hver atomtype har identiske nettverk og symmetrifunskjonssett. 
+\end{itemize}
 
 \begin{columns}[c] % contents are top vertically aligned
   \begin{column}[c]{0.35\linewidth} % each column can also be its own environment
@@ -336,7 +357,7 @@ Eksperiementer / kvantemekanikk
 \begin{frame}
 
 \begin{block}{Cutoff-funksjon}
- 
+ Monotonisk minkende del av en cosinus-funksjon. 
  \begin{equation*}
   f_c(r_{ij}) = 
   \begin{cases}
@@ -378,6 +399,7 @@ Eksperiementer / kvantemekanikk
  \exp(-\eta (r_{ij}^2 + r_{ik}^2)) \,
  &f_c(r_{ij}) f_c(r_{ik})\Big]
 \end{equation*}
+
 \centering
 \includegraphics[width=0.17\linewidth]{../Figures/Presentation/triplet.pdf}
 
@@ -397,16 +419,22 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}{Krefter}
+\begin{frame}
 
-\begin{equation*}
- E_i = \mathrm{NN}_e[\mathbf{G}_e(\mathbf{r}_{ij})]
-\end{equation*}
+\begin{block}{Krefter for et system av én atomtype}
+ \begin{equation*}
+  \mathbf{F}_i = -\nabla_i E
+ \end{equation*}
 
-\begin{equation*}
-  F_{i,x} = -\sum_{i=1}^{N_i+1}\frac{\partial E_j}{\partial x} = 
- -\sum_{j=1}^{N_i+1}\sum_{s=1}^{M_j}\frac{\partial E_j}{\partial G_{j,s}}\frac{\partial G_{j,s}}{\partial x}
-\end{equation*}
+ \begin{equation*}
+  F_{i,x} = -\frac{\partial E}{\partial x_i} =
+  -\sum_{j=1}^{N_i+1}\frac{\partial E_j}{\partial x_i} = 
+  -\sum_{j=1}^{N_i+1}\sum_{s=1}^M\frac{\partial E_j}{\partial G_s}\frac{\partial G_s}{\partial x_i}
+ \end{equation*}
+ \begin{equation*}
+  E_j = \mathrm{NN}[\mathbf{G}(\mathbf{r}_{jk})]
+ \end{equation*}
+\end{block}
 
 \end{frame}
 
