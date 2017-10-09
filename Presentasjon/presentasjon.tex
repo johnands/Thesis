@@ -281,7 +281,7 @@ Eksperiementer / kvantemekanikk
         $\mathrm{NN}: \mathrm{X} \in \mathbb{R}^n \rightarrow \mathrm{Y} \in \mathbb{R}$.
   \item Referansenergiene $Y$ regnes ut kvantemekanisk. 
   \item Trening: Iterativt justere parameterne slik at nettets output matcher referanseenergiene.
-  \item Én enkelt konfigurasjon kalles et \textit{treningseksempel}. 
+  \item Én enkelt konfigurasjon kalles et \textit{treningseksempel}, og datasettet $(X,Y)$ kalles et \textit{treningssett}. 
  \end{itemize}
 \end{block}
 
@@ -411,7 +411,7 @@ Eksperiementer / kvantemekanikk
 \begin{frame}{Radiell symmetrifunksjon}
 
 \begin{equation*}
- G_i^\mathrm{rad} = \sum_{j=1}^N \exp[-\eta(r_{ij}-r_s)^2] \,f_c(r_{ij})
+ G_i^2 = \sum_{j=1}^N \exp[-\eta(r_{ij}-r_s)^2] \,f_c(r_{ij})
 \end{equation*}
 \newline
 \centering
@@ -435,7 +435,7 @@ For ett enkelt naboatom
 \begin{frame}{Angulær symmetrifunksjon}
 
 \begin{equation*}
-  G_i^\mathrm{ang} = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} \Big[(1 + \lambda \cos\theta_{jik})^\zeta \,
+  G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} \Big[(1 + \lambda \cos\theta_{jik})^\zeta \,
  \exp[-\eta (r_{ij}^2 + r_{ik}^2)] \,
  &f_c(r_{ij}) f_c(r_{ik})\Big]
 \end{equation*}
@@ -506,7 +506,7 @@ For ett enkelt naboatom
 
 \begin{block}{Konstruksjon av et nevralt nettverk-potensial (NNP)}
  \begin{enumerate}
-  \item Generere treningsdata som er relevant for applikasjonen av NNP. 
+  \item Generere treningsdata som er relevant for anvendelsen av potensialet, dvs. identifisere konfigurasjonsrommet. 
   \item Trene et nevralt nettverk for å tilpasse en funksjon til dataene. 
   \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer. 
  \end{enumerate}
@@ -515,7 +515,7 @@ For ett enkelt naboatom
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Sample konfigurasjonsrommet vha. MD-simuleringer}
  
 \centering
 \includegraphics[width=0.7\linewidth]{../Figures/Presentation/iterativeSampling.pdf} 
@@ -523,21 +523,22 @@ For ett enkelt naboatom
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Konstruere et potensial for Si}
 
-\begin{block}{Initiell sampling}
+\begin{block}{1. Initiell sampling}
  \begin{itemize}
-  \item Stillinger-Weber. 
+  \item Reprodusere Stillinger-Weber. 
   \item $T \in [0,500]$ K. 
-  \item Konfigurasjoner og energies samples med samplingsalgoritme.  
+  \item Konfigurasjoner og energies samples med vår samplingsalgoritme.  
  \end{itemize}
 \end{block}
 
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{2. Foreløpig potensial}
 
+\begin{block}{Initielt symmetrifunksjonssett}
 \begin{columns} % contents are top vertically aligned
   \begin{column}{0.5\linewidth} % each column can also be its own environment
    \centering
@@ -550,17 +551,23 @@ For ett enkelt naboatom
    \includegraphics[width=\linewidth]{../Figures/Presentation/SiInitialSymmG5.pdf}
   \end{column}
 \end{columns}
- 
+\begin{itemize}
+ \item Bør dekke konfigurasjonsrommet på en noenlunde uniform måte. 
+ \item Unngå symmetrifunksjoner som er null for alle konfigurasjoner. 
+\end{itemize}
+\end{block}
+\begin{block}{Trener et nevralt nettverk for å konstruere et foreløpig potensial.}
+\end{block}
+
 \end{frame}
 
 
-\begin{frame}
-
-\begin{block}{Ekstrapolasjon}
- Lagre max og min for hver symmetryfunksjon. 
+\begin{frame}{3. Iterativ sampling}
+\begin{block}{Ekstrapolerende konfigurasjoner}
+ Bruke max og min for hver symmetrifunksjon anvendt under trening. 
 \end{block}
 
-\begin{block}{Interpolasjon - multiple-NN-metoden}
+\begin{block}{Interpolerende konfigurasjoner - multiple-NN-metoden}
  \centering
  \includegraphics[width = 0.7\linewidth]{../Figures/Results/multipleNNP.pdf}
 \end{block}
@@ -568,9 +575,27 @@ For ett enkelt naboatom
 \end{frame}
 
 
-\begin{frame}{Gridsøk}
- 
-\renewcommand{\arraystretch}{0.9}
+\begin{frame}{4. Tilpasse endelig treningssett}
+
+\begin{block}{Hyperparametre}
+ \begin{itemize}
+  \item Parametre som ikke optimeres automatisk. 
+  \item Eksempler: 
+  \begin{itemize}
+   \item Antall lag. 
+   \item Antall noder i hvert lag. 
+   \item Antall treningsiterasjoner. 
+   \item Læringsrate. 
+  \end{itemize} 
+  \item Bestemmes fra kvalitative argumenter eller ved en form for gridsøk. 
+ \end{itemize}
+
+\end{block}
+
+\end{frame}
+
+
+\begin{comment}\renewcommand{\arraystretch}{0.9}
 \begin{table} 
 \centering
   \begin{tabular*}{10cm}{l @{\extracolsep{\fill}} llll}
@@ -595,15 +620,13 @@ For ett enkelt naboatom
 	  & 32 & 2.008 & 14895 & 344 \\
     \bottomrule
     \end{tabular*} 
-\end{table}
-
-\end{frame}
+\end{table}\end{comment}
 
 
 \begin{frame}
  
 \begin{block}{Tilpasse endelig treningssett}
- Velger nettet med lavest RMSE etter 40000 epoker. RMSE: 0.864 meV.
+ RMSE: 0.864 meV.
 \end{block}
 
 \begin{block}{RMSE krefter}

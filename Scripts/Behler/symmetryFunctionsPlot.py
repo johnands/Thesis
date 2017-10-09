@@ -62,9 +62,9 @@ def G5(Rij, Rik, cosTheta, width, cutoff, thetaRange, inversion):
 #plt.rc('axes', labelsize=25)
 
 # change parameters
-plt.rc('xtick', labelsize=20)
-plt.rc('ytick', labelsize=20)
-plt.rc('axes', labelsize=25)
+#plt.rc('xtick', labelsize=20)
+#plt.rc('ytick', labelsize=20)
+#plt.rc('axes', labelsize=25)
 
 
 ##### fc plot #####
@@ -101,7 +101,7 @@ plt.savefig('../../Figures/Theory/G1.pdf')"""
 
 ##### G2 plot #####
 
-"""plt.figure()
+plt.figure()
 
 Rs = 0.0
 cutoff = 11.0
@@ -115,7 +115,7 @@ for eta in [5.0, 0.9, 0.3, 0.15, 0.07, 0.03]:
 
 plt.legend(legends, prop={'size':27})
 plt.xlabel(r'$r_{ij}$')
-plt.ylabel(r'$G_i^2, \; r_s = 0$')
+plt.ylabel(r'$G_i^2$')
 plt.tight_layout()
 #plt.show()
 plt.savefig('../../Figures/Presentation/G2_1.pdf')
@@ -134,11 +134,11 @@ for Rs in [2.0, 3.0, 4.0, 5.0, 6.0, 7.0]:
 
 plt.legend(legends, prop={'size':27})
 plt.xlabel(r'$r_{ij}$')
-plt.ylabel(r'$G_i^2, \; \eta=3.0$')
+plt.ylabel(r'$G_i^2$')
 plt.tight_layout()
 plt.savefig('../../Figures/Presentation/G2_2.pdf')
 
-plt.figure()"""
+plt.figure()
 
 ##### G3 plot #####
 
@@ -162,9 +162,9 @@ plt.savefig('../../Figures/Theory/G3.pdf')
 #plt.savefig('../Figures/Theory/radialSymmFuncs.pdf', dpi=1000)"""
 
 
-##### G4 plot #####
+##### G4/G5 angular plot #####
 
-plt.figure()
+"""plt.figure()
 
 plt.rc('xtick', labelsize=22)
 plt.rc('ytick', labelsize=22)
@@ -204,12 +204,7 @@ plt.ylabel(r'$G_i^\theta$')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
 #plt.show()
-plt.savefig('../../Figures/Presentation/G4G5angular2.pdf')
-
-
-##### G5 plot #####
-
-
+plt.savefig('../../Figures/Presentation/G4G5angular2.pdf')"""
 
 
 
