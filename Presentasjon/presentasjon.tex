@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{upgreek}
 \usepackage{booktabs}
+\usepackage{verbatim}
 
 \title{Konstruksjon av høydimensjonale nevralt nettverk-potensialer for molekylærdynamikk}
 \author{John-Anders Stende}
@@ -27,7 +28,15 @@
 
 \frame{\titlepage}
 
+\begin{frame}
+
+\tableofcontents
+
+\end{frame}
+
+
 \section{Molekylærdynamikk}
+
 
 \begin{frame}
 
@@ -100,21 +109,21 @@ Eksperiementer / kvantemekanikk
 
 \begin{frame}
 
-\begin{block}{Empirisk strategi:}
+\begin{block}{Empirisk potensial:}
  \begin{enumerate}
   \item Starte med en funksjonsform med noen parametre.
   \item Bestemme parametre fra eksperimentelle data.
  \end{enumerate}
 \end{block}
 
-\begin{block}{Kvantemekanisk strategi:}
+\begin{block}{Kvantemekanisk potensial:}
  \begin{enumerate}
   \item Produsere kvantemekaniske data. 
   \item Tilpasse en generell funksjonsform til datasettet.
  \end{enumerate}
  
  \begin{itemize}
-  \item Fordeler: Nøyaktig, ingen bias, overførbart.
+  \item Fordeler: Ab inito nøyaktighet, ingen bias, overførbart.
   \item Ulemper: Rent matematisk uttrykk, all relevant data må inkluderes. 
  \end{itemize}
 \end{block}
@@ -128,7 +137,7 @@ Eksperiementer / kvantemekanikk
  \begin{itemize}
   \item Spliner
   \item Minste kvadraters metode
-  \item Maskinlæring
+  \item Kunstige nevrale nettverk
  \end{itemize}
 \end{block}
  
@@ -142,9 +151,9 @@ Eksperiementer / kvantemekanikk
 
 \begin{block}{Kunstige nevrale nettverk}
  \begin{itemize}
-  \item Maskinlæringsalgoritme.
-  \item Etterlikne en biologisk hjerne.
-  \item Nettverk av matematiske nevroner.
+  \item Maskinlæringsalgortime.  
+  \item Etterlikner biologiske nevrale nettverk.
+  \item Kunstige nevroner sender signaler i form av matematiske funksjoner. 
  \end{itemize}
 \end{block}
 
@@ -167,31 +176,47 @@ Eksperiementer / kvantemekanikk
 \begin{equation*}
  y = f\left(\sum_{i=1}^n w_ix_i + b_i\right) = f(u)
 \end{equation*}
- 
+
+\begin{itemize}
+ \item $x_i$: Inputsignaler.
+ \item $w_i$: Vekter - forsterkning/forminksning.  
+ \item $u$: Sum - signalmiksing i soma.
+ \item $f(u)$: Akteriveringsfunksjon - aksjonspotensial.
+\end{itemize}
+
 \end{frame}
 
 
 \begin{frame}
  
 \centering
-\includegraphics[width=0.9\linewidth]{../Figures/Theory/networkGeneralAltered.pdf}
+\includegraphics[width=0.8\linewidth]{../Figures/Presentation/networkGeneral.pdf}
+
+\begin{block}{Fully-connected feed-forward nettverk.}
+ \begin{itemize}
+  \item Hvert nevron i et lag er koblet til alle nevroner i neste lag. 
+  \item Informasjon propagares kun fremover fra input til output.
+ \end{itemize}
+\end{block}
 
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Detaljert beskrivelse}
  
 \centering
 \includegraphics[width=0.8\linewidth]{../Figures/Theory/networkWithNotationAltered.pdf}
 
-\begin{equation*}
- y_i^1 = f_1(u_i^1) = f_1\left(\sum_{j=1}^2 w_{ij}^1 x_j  + b_i^1\right)
-\end{equation*}
+\begin{itemize}
+ \item Hver forbindelse/pil har en vekt $w$. 
+ \item Hver node har en bias $b$.
+ \item Inneholder 25 parametre $\{w,b\}$
+\end{itemize}
 
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Analytisk uttrykk}
 
 \begin{align*}
   y_1^3 &= f_3\left[\sum_{j=1}^3 w_{1j}^3 f_2\left(\sum_{k=1}^3 w_{jk}^2 f_1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
@@ -199,16 +224,17 @@ Eksperiementer / kvantemekanikk
   &= f_3(x_1, x_2)
 \end{align*}
 \begin{itemize}
- \item Dimensjonene til nettet må stemme overens med funksjonen som skal tilpasses. 
- \item Det universelle approksimasjonsteoremet. 
+ \item Mapping: $(x_1, x_2) \in \mathbb{R}^2  \rightarrow y_1^3 \in \mathbb{R}$. 
+ \item Ved å justere de 25 parameterne får uttrykket stor fleksibilitet. 
+ \item Dimensjonene til nettet (inputs og outputs) må stemme overens med funksjonen som skal tilpasses.
+ \item Et nettverk med ett skjult lag kan approksimere enhver kontinuerlig funksjon. 
 \end{itemize}
 
 
 \end{frame}
 
 
-
-\begin{frame}{Aktiveringsfunksjoner}
+\begin{comment}\begin{frame}{Aktiveringsfunksjoner}
 
 \begin{block}{Restriksjoner}
  \begin{itemize}
@@ -242,18 +268,20 @@ Eksperiementer / kvantemekanikk
  
 \end{columns}
   
-\end{frame}
+\end{frame}\end{comment}
 
 
 \begin{frame}
  
 \centering
-\includegraphics[width=0.9\linewidth]{../Figures/Presentation/interpolation.pdf}
+\includegraphics[width=0.8\linewidth]{../Figures/Presentation/interpolation.pdf}
 \begin{block}{Regresjon med nevralt nettverk}
  \begin{itemize}
-  \item Regresjon: Interpolere datasett $\mathrm{X} \rightarrow \mathrm{Y}$
-  \item $X$: inputdata, $Y$: outputdata/målverdier.
-  \item Trening: Iterativt minimere feilen til et sett med kjente energier. 
+  \item Mål: Interpolere datasett av konfigurasjoner $X$ og energier $Y$ slik at
+        $\mathrm{NN}: \mathrm{X} \in \mathbb{R}^n \rightarrow \mathrm{Y} \in \mathbb{R}$.
+  \item Referansenergiene $Y$ regnes ut kvantemekanisk. 
+  \item Trening: Iterativt justere parameterne slik at nettets output matcher referanseenergiene.
+  \item Én enkelt konfigurasjon kalles et \textit{treningseksempel}. 
  \end{itemize}
 \end{block}
 
@@ -262,33 +290,39 @@ Eksperiementer / kvantemekanikk
 
 \begin{frame}
  
-\begin{block}{Feilen defineres ved en cost-funksjon:} 
+\begin{block}{Feilen til nettet defineres ved en cost-funksjon:} 
+ Gjennomsnittlig kvadratisk feil:
  \begin{equation*}
  \Gamma = \frac{1}{2N}\sum_{i=1}^N (Y_i - y_i)^2
  \end{equation*}
 \end{block}
 
-\begin{block}{Optimering med gradient descent:}
+\begin{block}{Cost-funksjonen minimieres med gradient descent:}
  \begin{equation*}
   \boldsymbol{\uptheta}_{k+1} = \boldsymbol{\uptheta}_{k} - \gamma \nabla_{\boldsymbol{\uptheta}_k} \Gamma(\boldsymbol{\uptheta})
  \end{equation*}
- Mange forskjellige måter å justere $\gamma$ på. 
+ \begin{itemize}
+  \item $\boldsymbol{\uptheta}_{k}$: Vektor av parametre ved iterasjon $k$. 
+  \item $\gamma$: Steglengde/læringsrate. 
+ \end{itemize}
 \end{block}
 
 \end{frame}
 
 
-\begin{frame}{Hvordan finne gradienten av nettet?}
- 
-\centering
-\includegraphics[width = 0.8\linewidth]{../Figures/Theory/backprop.pdf}
+\begin{frame}{Hvordan finne gradienten av et nevralt nettverk?}
+
+\begin{equation*}
+  y_1^3 = f_3\left[\sum_{j=1}^3 w_{1j}^3 f_2\left(\sum_{k=1}^3 w_{jk}^2 f_1\left(\sum_{m=1}^2 w_{km}^1 x_m + b_k^1\right) + b_j^2\right)
+  + b_1^3\right]
+\end{equation*}
 
 \begin{block}{Backpropagation}
- \begin{enumerate}
-  \item Sender hvert treningsseksempel gjennom nettet. 
-  \item Output (energi) sammenliknes med kjent energi. 
-  \item Feilen propagares \textit{bakover} ved kjerneregelen og vektene justeres. 
- \end{enumerate}
+ \begin{itemize} 
+  \item Verdien av cost-funksjonen (feilen) propagares \textit{bakover} fra output til input.
+  \item Alle deriverte innhentes ved å propagere feilen én gang. 
+  \item En anvendelse av kjerneregelen. 
+ \end{itemize}
 \end{block}
  
 \end{frame}
@@ -324,21 +358,23 @@ Eksperiementer / kvantemekanikk
 \end{block}
 
 \begin{block}{Behler-Parrinello-metoden: Symmetrifunksjoner}
- \begin{itemize}
+ \begin{enumerate}
   \item Et sett av såkalte symmetrifunksjoner transformerer de kartesiske koordinatene til alle naboer 
-  til et gitt antall symmetriverdier.
-  \item Funksjonene er definert som summer over naboer. 
- \end{itemize}
+  til en vektor av symmetriverdier.
+  \item Symmetrifunksjonene er atomsentrerte. 
+  \item Symmetrifunksjonene er definert som summer over naboer. 
+ \end{enumerate}
 \end{block}
 
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Behler-Parrinello eksempel}
 
 \begin{itemize}
- \item Hvert atom har et eget nettverk og et sett av symmetrifunksjoner som beskriver cutoff-kulen. 
- \item Hver atomtype har identiske nettverk og symmetrifunskjonssett. 
+ \item Symmetrifunksjone beskriver hvert atoms kjemiske omgivelser. 
+ \item Hvert atom har både et eget nettverk og et eget sett av symmetrifunksjoner.  
+ \item Alle atomer av samme kjemiske element har identiske nettverk og symmetrifunksjonssett. 
 \end{itemize}
 
 \begin{columns}[c] % contents are top vertically aligned
@@ -361,7 +397,7 @@ Eksperiementer / kvantemekanikk
  \begin{equation*}
   f_c(r_{ij}) = 
   \begin{cases}
-   0.5 \!\left[\cos\left(\frac{\pi r_{ij}}{r_c}\right) + 1 \right], & r_{ij} \leq r_c \\
+   0.5 \!\left[\cos\left(\pi r_{ij}/r_c\right) + 1 \right], & r_{ij} \leq r_c \\
    0, & r_{ij} > r_c
   \end{cases}
  \end{equation*}
@@ -375,16 +411,20 @@ Eksperiementer / kvantemekanikk
 \begin{frame}{Radiell symmetrifunksjon}
 
 \begin{equation*}
- G_i^2 = \sum_{j=1}^N \exp[-\eta(r_{ij}-r_s)^2] \,f_c(r_{ij})
+ G_i^\mathrm{rad} = \sum_{j=1}^N \exp[-\eta(r_{ij}-r_s)^2] \,f_c(r_{ij})
 \end{equation*}
-
+\newline
+\centering
+For ett enkelt naboatom
 \begin{columns} % contents are top vertically aligned
   \begin{column}{0.5\linewidth} % each column can also be its own environment
    \centering
+   $r_s = 0$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G2_1.pdf}
   \end{column}
   \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
    \centering
+   $\eta = 3.0$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G2_2.pdf}
   \end{column}
 \end{columns}
@@ -395,8 +435,8 @@ Eksperiementer / kvantemekanikk
 \begin{frame}{Angulær symmetrifunksjon}
 
 \begin{equation*}
-  G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} \Big[(1 + \lambda \cos\theta_{jik})^\zeta \,
- \exp(-\eta (r_{ij}^2 + r_{ik}^2)) \,
+  G_i^\mathrm{ang} = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} \Big[(1 + \lambda \cos\theta_{jik})^\zeta \,
+ \exp[-\eta (r_{ij}^2 + r_{ik}^2)] \,
  &f_c(r_{ij}) f_c(r_{ik})\Big]
 \end{equation*}
 
@@ -439,30 +479,23 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\section{LAMMPS og TensorFlow}
+\section{NNP for Si}
 
 
-\begin{frame}
+\begin{frame}{Simuleringspakker}
 
 \begin{block}{LAMMPS}
  \begin{itemize}
-  \item Simuleringspakke for klassisk molekylærdynamikk utviklet ved Sandia National Laboratories. 
+  \item Pakke for klassisk molekylærdynamikk utviklet ved Sandia National Laboratories. 
   \item Kjøres ved inputscripts med egen syntaks. 
   \item Vi har utvidet med samplingsalgoritme og nevralt nettverk-potensial.
  \end{itemize}
 \end{block}
 
-\end{frame}
-
-
-\begin{frame}
-
 \begin{block}{TensorFlow}
  \begin{itemize}
   \item Maskinlæringspakke utviklet av Google. 
-  \item Setter opp nevrale nettverk som data flow-grafer (DFG). 
-  \item DFG: En graf bestående av \textit{noder} som er forbundet av \textit{kanter} med retning. 
-  \item Noder er matematiske operasjoner, kanter er tensorer. 
+  \item Vi har brukt TensorFlow Python API til å utvikle en modell for regresjon med nevrale nettverk. 
  \end{itemize}
 \end{block}
 
@@ -470,45 +503,14 @@ Eksperiementer / kvantemekanikk
 
 
 \begin{frame}
- 
-\centering
-\includegraphics[width=0.4\linewidth]{../Figures/Implementation/DFG.pdf} 
 
-\begin{columns} % contents are top vertically aligned
-  \begin{column}{0.5\linewidth} % each column can also be its own environment
-   \begin{equation*}
-    ax^2 + bx + c = 0
-   \end{equation*}
-  \end{column}
-  \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
-   \begin{align*}
-    x_1 &= \frac{-b + \sqrt{b^2 - 4ac}}{2a}  \label{quadraticEquationSolution1} \\
-    x_2 &= \frac{-b - \sqrt{b^2 - 4ac}}{2a}
-   \end{align*}
-  \end{column}
-\end{columns}
-
-\end{frame}
-
-
-\begin{frame}
- 
-\centering
-\includegraphics[width=0.7\linewidth]{../Figures/Implementation/tensorBoardTraining.pdf} 
- 
-\end{frame}
-
-
-\section{Konstruksjon av nevralt nettverk-potensial (NNP)}
-
-
-\begin{frame}
-
-\begin{enumerate}
- \item Generere treningsdata som er relevant for applikasjonen av NNP. 
- \item Trene et nevralt nettverk for å tilpasse en funksjon til dataene. 
- \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer. 
-\end{enumerate}
+\begin{block}{Konstruksjon av et nevralt nettverk-potensial (NNP)}
+ \begin{enumerate}
+  \item Generere treningsdata som er relevant for applikasjonen av NNP. 
+  \item Trene et nevralt nettverk for å tilpasse en funksjon til dataene. 
+  \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer. 
+ \end{enumerate}
+\end{block}
 
 \end{frame}
 
@@ -519,9 +521,6 @@ Eksperiementer / kvantemekanikk
 \includegraphics[width=0.7\linewidth]{../Figures/Presentation/iterativeSampling.pdf} 
 
 \end{frame}
-
-
-\section{NNP for Si}
 
 
 \begin{frame}
