@@ -1,6 +1,6 @@
 \beamer@endinputifotherversion {3.36pt}
 \beamer@sectionintoc {1}{Molekyl\IeC {\ae }rdynamikk}{3}{0}{1}
 \beamer@sectionintoc {2}{Nevrale nettverk}{10}{0}{2}
-\beamer@sectionintoc {3}{Nevralt nettverk-potensial}{20}{0}{3}
-\beamer@sectionintoc {4}{NNP for Si}{28}{0}{4}
-\beamer@sectionintoc {5}{Konklusjon og fremtidig arbeid}{39}{0}{5}
+\beamer@sectionintoc {3}{Nevralt nettverk-potensial (NNP)}{20}{0}{3}
+\beamer@sectionintoc {4}{NNP for Si}{26}{0}{4}
+\beamer@sectionintoc {5}{Konklusjon og fremtidig arbeid}{36}{0}{5}

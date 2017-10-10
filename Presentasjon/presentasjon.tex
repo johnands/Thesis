@@ -13,7 +13,7 @@
   Fysisk institutt \\
   Universitetet i Oslo
 }
-\date{Masterpresentasjon, oktober 2017}
+\date{Masterpresentasjon, 11. oktober 2017}
 \subject{Computational physics}
 
 \AtBeginSection[]
@@ -43,6 +43,7 @@
 \begin{block}{Hva er molekylærdynamikk?}
   \begin{itemize}
   \item Numerisk metode for å simulere atomers og molekylers bevegelser i gasser, væsker og faste stoffer.
+  \item Kan simulere tusener og millioner av atomer. 
   \item Virtuelt eksperiment.
   \end{itemize}
 \end{block}
@@ -54,16 +55,16 @@
 
 \begin{block}{Dynamikk}
   \begin{itemize}
-  \item Partiklenes interaksjoner styrer dynamikken.
+  \item Dynamikken styres av partiklenes interaksjoner. 
   \item Interaksjonene bestemmes av et kraftfelt $\mathbf{F}$:
     \begin{equation*}
     \mathbf{F} = -\nabla V(\mathbf{r})
     \end{equation*}
-  \item Potensiell energiflate / potensial):
+  \item Potensiell energiflate / potensial:
     \begin{equation*}
       V(\mathbf{r}), \quad \mathbf{r} = (\mathbf{r}_1, \mathbf{r}_2, \cdots, \mathbf{r}_N)
     \end{equation*}
-  \item $V(\mathbf{r})$ inneholder fysikken. 
+  \item $V(\mathbf{r})$ inneholder fysikken til systemet. 
   \end{itemize}
 \end{block}
 
@@ -90,7 +91,7 @@
 
 \begin{frame}
 
-\begin{block}{Klassisk potensial}
+\begin{block}{Predefinert analytisk potensial}
   \begin{equation*}
   V(\mathbf{r}) \approx \sum_i^N V_1(\mathbf{r}_i) + \sum_{i,j}^N V_2(\mathbf{r}_i, \mathbf{r}_j) + 
   \sum_{i,j,k}^N V_3(\mathbf{r}_i, \mathbf{r}_j, \mathbf{r}_k) + \dots
@@ -118,14 +119,9 @@ Eksperiementer / kvantemekanikk
 
 \begin{block}{Kvantemekanisk potensial:}
  \begin{enumerate}
-  \item Produsere kvantemekaniske data. 
+  \item Produsere et datasett av konfigurasjoner med tilhørede ab inito energier. 
   \item Tilpasse en generell funksjonsform til datasettet.
  \end{enumerate}
- 
- \begin{itemize}
-  \item Fordeler: Ab inito nøyaktighet, ingen bias, overførbart.
-  \item Ulemper: Rent matematisk uttrykk, all relevant data må inkluderes. 
- \end{itemize}
 \end{block}
 
 \end{frame}
@@ -160,7 +156,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Biologisk nevron}
  
 \centering
 \includegraphics[width=0.8\linewidth]{../Figures/Theory/neuron_anatomy.jpg} 
@@ -168,7 +164,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Kunstig nevron}
 
 \centering
 \includegraphics[width=0.8\linewidth]{../Figures/Theory/neuron.pdf} 
@@ -210,7 +206,7 @@ Eksperiementer / kvantemekanikk
 \begin{itemize}
  \item Hver forbindelse/pil har en vekt $w$. 
  \item Hver node har en bias $b$.
- \item Inneholder 25 parametre $\{w,b\}$
+ \item Vektene og biasene $\{w,b\}$ er nettverkets parametre (25 stk). 
 \end{itemize}
 
 \end{frame}
@@ -225,7 +221,7 @@ Eksperiementer / kvantemekanikk
 \end{align*}
 \begin{itemize}
  \item Mapping: $(x_1, x_2) \in \mathbb{R}^2  \rightarrow y_1^3 \in \mathbb{R}$. 
- \item Ved å justere de 25 parameterne får uttrykket stor fleksibilitet. 
+ \item Kan approksimere en rekke funksjoner ved å justere parameterne. 
  \item Dimensjonene til nettet (inputs og outputs) må stemme overens med funksjonen som skal tilpasses.
  \item Et nettverk med ett skjult lag kan approksimere enhver kontinuerlig funksjon. 
 \end{itemize}
@@ -277,10 +273,10 @@ Eksperiementer / kvantemekanikk
 \includegraphics[width=0.8\linewidth]{../Figures/Presentation/interpolation.pdf}
 \begin{block}{Regresjon med nevralt nettverk}
  \begin{itemize}
-  \item Mål: Interpolere datasett av konfigurasjoner $X$ og energier $Y$ slik at
+  \item Mål: Interpolere datasett av konfigurasjoner X og energier Y slik at
         $\mathrm{NN}: \mathrm{X} \in \mathbb{R}^n \rightarrow \mathrm{Y} \in \mathbb{R}$.
-  \item Referansenergiene $Y$ regnes ut kvantemekanisk. 
-  \item Trening: Iterativt justere parameterne slik at nettets output matcher referanseenergiene.
+  \item Referansenergiene Y regnes ut kvantemekanisk. 
+  \item Iterativt justere parameterne slik at nettets output matcher referanseenergiene - \textit{trening}.
   \item Én enkelt konfigurasjon kalles et \textit{treningseksempel}, og datasettet $(X,Y)$ kalles et \textit{treningssett}. 
  \end{itemize}
 \end{block}
@@ -324,11 +320,11 @@ Eksperiementer / kvantemekanikk
   \item En anvendelse av kjerneregelen. 
  \end{itemize}
 \end{block}
- 
+
 \end{frame}
 
 
-\section{Nevralt nettverk-potensial}
+\section{Nevralt nettverk-potensial (NNP)}
 
 
 \begin{frame}
@@ -369,7 +365,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}{Behler-Parrinello eksempel}
+\begin{frame}{Behler-Parrinello}
 
 \begin{itemize}
  \item Symmetrifunksjone beskriver hvert atoms kjemiske omgivelser. 
@@ -390,7 +386,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}
+\begin{comment}\begin{frame}
 
 \begin{block}{Cutoff-funksjon}
  Monotonisk minkende del av en cosinus-funksjon. 
@@ -405,26 +401,26 @@ Eksperiementer / kvantemekanikk
  \includegraphics[width=0.7\linewidth]{../Figures/Presentation/cutoffFunction.pdf}
 \end{block}
 
-\end{frame}
+\end{frame}\end{comment}
 
 
-\begin{frame}{Radiell symmetrifunksjon}
+\begin{frame}{Symmetrifunksjoner}
+To typer: Radielle og angulære symmetrifunksjoner. \newline
+Funksjoner av alle naboatomer. 
 
 \begin{equation*}
- G_i^2 = \sum_{j=1}^N \exp[-\eta(r_{ij}-r_s)^2] \,f_c(r_{ij})
+ G_i^2 = \sum_j G_{ij}^2(r_{ij}; \{p_i\})
 \end{equation*}
+ 
+Trenger et sett av slike funksjoner med forskjellige parametre:
 \newline
-\centering
-For ett enkelt naboatom
 \begin{columns} % contents are top vertically aligned
   \begin{column}{0.5\linewidth} % each column can also be its own environment
    \centering
-   $r_s = 0$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G2_1.pdf}
   \end{column}
   \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
    \centering
-   $\eta = 3.0$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G2_2.pdf}
   \end{column}
 \end{columns}
@@ -432,12 +428,10 @@ For ett enkelt naboatom
 \end{frame}
 
 
-\begin{frame}{Angulær symmetrifunksjon}
+\begin{frame}{Angulære symmetrifunksjoner}
 
 \begin{equation*}
-  G_i^5 = 2^{1-\zeta}\sum_{j\neq i}\sum_{k>j} \Big[(1 + \lambda \cos\theta_{jik})^\zeta \,
- \exp[-\eta (r_{ij}^2 + r_{ik}^2)] \,
- &f_c(r_{ij}) f_c(r_{ik})\Big]
+  G_i^5 = \sum_{j\neq i}\sum_{k>j} G_{ijk}^5(r_{ij}, r_{ik}, \theta_{jik}; \{p_i\})
 \end{equation*}
 
 \centering
@@ -446,12 +440,10 @@ For ett enkelt naboatom
 \begin{columns} % contents are top vertically aligned
   \begin{column}{0.5\linewidth} % each column can also be its own environment
    \centering
-   $\lambda = +1$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G4G5angular1.pdf}
   \end{column}
   \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
    \centering
-   $\lambda = -1$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G4G5angular2.pdf}
   \end{column}
 \end{columns}
@@ -459,7 +451,7 @@ For ett enkelt naboatom
 \end{frame}
 
 
-\begin{frame}
+\begin{comment}\begin{frame}
 
 \begin{block}{Krefter for et grunnstoff}
  \begin{equation*}
@@ -476,7 +468,7 @@ For ett enkelt naboatom
  \end{equation*}
 \end{block}
 
-\end{frame}
+\end{frame}\end{comment}
 
 
 \section{NNP for Si}
@@ -508,7 +500,7 @@ For ett enkelt naboatom
  \begin{enumerate}
   \item Generere treningsdata som er relevant for anvendelsen av potensialet, dvs. identifisere konfigurasjonsrommet. 
   \item Trene et nevralt nettverk for å tilpasse en funksjon til dataene. 
-  \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer. 
+  \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer for å validere.  
  \end{enumerate}
 \end{block}
 
@@ -527,7 +519,7 @@ For ett enkelt naboatom
 
 \begin{block}{1. Initiell sampling}
  \begin{itemize}
-  \item Reprodusere Stillinger-Weber. 
+  \item Stillinger-Weber brukes til å regne ut referanseenergier.  
   \item $T \in [0,500]$ K. 
   \item Konfigurasjoner og energies samples med vår samplingsalgoritme.  
  \end{itemize}
@@ -563,11 +555,13 @@ For ett enkelt naboatom
 
 
 \begin{frame}{3. Iterativ sampling}
-\begin{block}{Ekstrapolerende konfigurasjoner}
- Bruke max og min for hver symmetrifunksjon anvendt under trening. 
-\end{block}
 
-\begin{block}{Interpolerende konfigurasjoner - multiple-NN-metoden}
+\begin{block}{Finne nye relevante konfigurasjoner}
+ \begin{enumerate}
+  \item Trene fire forskjellige nett på samme treningssett. 
+  \item Sammenlikne energier for de samme konfigurasjonene. 
+ \end{enumerate}
+
  \centering
  \includegraphics[width = 0.7\linewidth]{../Figures/Results/multipleNNP.pdf}
 \end{block}
@@ -575,7 +569,7 @@ For ett enkelt naboatom
 \end{frame}
 
 
-\begin{frame}{4. Tilpasse endelig treningssett}
+\begin{comment}\begin{frame}{4. Tilpasse endelig treningssett}
 
 \begin{block}{Hyperparametre}
  \begin{itemize}
@@ -592,7 +586,7 @@ For ett enkelt naboatom
 
 \end{block}
 
-\end{frame}
+\end{frame}\end{comment}
 
 
 \begin{comment}\renewcommand{\arraystretch}{0.9}
@@ -625,26 +619,29 @@ For ett enkelt naboatom
 
 \begin{frame}
  
-\begin{block}{Tilpasse endelig treningssett}
- RMSE: 0.864 meV.
-\end{block}
-
-\begin{block}{RMSE krefter}
- \centering
- RMSE: 41.2 meV
- \includegraphics[width = 0.7\linewidth]{../Figures/Results/SiForces.pdf}
+\begin{block}{4. Tilpasse endelig treningssett}
+ \begin{itemize} 
+  \item RMSE energi per atom: 0.864 meV
+  \item RMSE krefter per atom: 41.2 meV
+ \end{itemize}
 \end{block}
 
 \end{frame}
 
-
-\begin{frame}
-
-\begin{block}{Radiell distribusjonsfunksjon $g(r)$}
- Sammenlikner tidsmidlet SW og NN.
+\begin{comment}\begin{block}{RMSE krefter}
  \centering
- \includegraphics[width = 0.7\linewidth]{../Figures/Results/radialDist.pdf}
-\end{block}
+ RMSE: 41.2 meV
+ \includegraphics[width = 0.7\linewidth]{../Figures/Results/SiForces.pdf}
+\end{block}\end{comment}
+
+
+\begin{frame}{5. Anvende potensialet}
+
+Sammenlikner tidsmidlet radiell distribusjonsfunksjon $g(r)$ for SW og NNP.
+\begin{figure}
+\centering
+\includegraphics[width = 0.75\linewidth]{../Figures/Results/radialDist.pdf}
+\end{figure}
 
 \end{frame}
 
@@ -672,35 +669,29 @@ For ett enkelt naboatom
 \section{Konklusjon og fremtidig arbeid}
 
 
-\begin{frame}
+\begin{frame}{Ab inito NNP med Behler-Parrinello-metoden}
 
-\begin{block}{Det ideelle potensial}
+\begin{block}{Fordeler}
  \begin{itemize}
-  \item Potensialet bør være nøyaktig.
-        
-  \item Burde finnes måter å systematisk forbedre potensialet.
-        
-  \item Potensialet bør være generelt og anvendbart på alle typer systemer.
-	
-  \item Potensialet bør kunne modellere faseoverganger.
-	
-  \item Potensialet bør være høydimensjonalt, dvs. avhenge av alle frihetsgrader.
-
+  \item Multiskalafysikk: Ab inito nøyaktighet, men flere størrelsesordener raskere enn kvantemekaniske metoder.  
+  \item Metoden er anvendbar på alle typer systemer (i teorien). 
+  \item Høydimensjonalt. 
+  \item Deler av konstruksjonen er automatisert. 
+  \item Analytisk derivert tilgjengelig. 
  \end{itemize}
 \end{block}
 
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Ab inito NNP med Behler-Parrinello-metoden}
 
-\begin{block}{Det ideelle potensial fortsetter}
+\begin{block}{Ulemper}
  \begin{itemize}
-  \item Konstruksjonen av potensialet bør være så automatisert som mulig.
-  \item Potensialet bør være prediktivt. 
-  \item Potensialet bør være raskt å evaluere.
-  \item Konstruksjonen bør ikke ta for mye tid. 
-  \item Analytisk derivert bør være tilgjengelig. 
+  \item Konstruksjonen kan ta lang tid dersom konfigurasjonsrommet er stort. 
+  \item Behler-Parrinello tungvint for system med mange atomtyper. 
+  \item Tregere enn empiriske potensialer som Stillinger-Weber. 
+  \item Dårlige ekstrapoleringsegenskaper. 
  \end{itemize}
 \end{block}
 
@@ -719,9 +710,6 @@ For ett enkelt naboatom
 \end{block}
 
 \end{frame}
-
-
-
 
 
 

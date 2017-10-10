@@ -83,7 +83,7 @@ plt.savefig('../../Figures/Presentation/cutoffFunction.pdf')
 
 
 ##### G1 plot #####
-Rij = np.linspace(0, 14, 1000)
+Rij = np.linspace(0, 10, 1000)
 
 """legends = []
 for cutoff in [3.0, 5.0, 7.0, 9.0, 11.0]:
@@ -101,7 +101,7 @@ plt.savefig('../../Figures/Theory/G1.pdf')"""
 
 ##### G2 plot #####
 
-plt.figure()
+"""plt.figure()
 
 Rs = 0.0
 cutoff = 11.0
@@ -113,9 +113,9 @@ for eta in [5.0, 0.9, 0.3, 0.15, 0.07, 0.03]:
     legends.append(r'$\eta = %3.2f$' % eta)
     plt.hold('on')
 
-plt.legend(legends, prop={'size':27})
-plt.xlabel(r'$r_{ij}$')
-plt.ylabel(r'$G_i^2$')
+#plt.legend(legends, prop={'size':27})
+plt.xlabel(r'$r_{ij} \; [\mathrm{\AA{}}]$')
+plt.ylabel(r'$G_{i,j}^2$')
 plt.tight_layout()
 #plt.show()
 plt.savefig('../../Figures/Presentation/G2_1.pdf')
@@ -132,13 +132,13 @@ for Rs in [2.0, 3.0, 4.0, 5.0, 6.0, 7.0]:
     legends.append(r'$r_s = %.1f$' % Rs)
     plt.hold('on')
 
-plt.legend(legends, prop={'size':27})
-plt.xlabel(r'$r_{ij}$')
-plt.ylabel(r'$G_i^2$')
+#plt.legend(legends, prop={'size':27})
+plt.xlabel(r'$r_{ij} \; [\mathrm{\AA{}}]$')
+plt.ylabel(r'$G_{i,j}^2$')
 plt.tight_layout()
 plt.savefig('../../Figures/Presentation/G2_2.pdf')
 
-plt.figure()
+plt.figure()"""
 
 ##### G3 plot #####
 
@@ -164,7 +164,7 @@ plt.savefig('../../Figures/Theory/G3.pdf')
 
 ##### G4/G5 angular plot #####
 
-"""plt.figure()
+plt.figure()
 
 plt.rc('xtick', labelsize=22)
 plt.rc('ytick', labelsize=22)
@@ -180,9 +180,9 @@ for zeta in [2.0, 4.0, 16.0, 64.0]:
     legends.append(r'$\zeta = %d$' % zeta)
     plt.hold('on')
     
-plt.legend(legends, prop={'size':25}, loc=9)
+#plt.legend(legends, prop={'size':25}, loc=9)
 plt.xlabel(r'$\theta_{jik}$')
-plt.ylabel(r'$G_i^\theta$')
+plt.ylabel(r'$G_{ijk}^5$')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
 #plt.show()
@@ -198,13 +198,13 @@ for zeta in [2.0, 4.0, 16.0, 64.0]:
     legends.append(r'$\zeta = %d$' % zeta)
     plt.hold('on')
 
-plt.legend(legends, prop={'size':23}, loc=1)
+#plt.legend(legends, prop={'size':23}, loc=1)
 plt.xlabel(r'$\theta_{jik}$')
-plt.ylabel(r'$G_i^\theta$')
+plt.ylabel(r'$G_{ijk}^5$')
 plt.axis([0, 2*180, 0, 2])
 plt.tight_layout()
 #plt.show()
-plt.savefig('../../Figures/Presentation/G4G5angular2.pdf')"""
+plt.savefig('../../Figures/Presentation/G4G5angular2.pdf')
 
 
 
