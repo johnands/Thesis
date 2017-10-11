@@ -122,11 +122,6 @@ Eksperiementer / kvantemekanikk
   \item Produsere et datasett av konfigurasjoner med tilhørede ab inito energier. 
   \item Tilpasse en generell funksjonsform til datasettet.
  \end{enumerate}
- 
- \begin{itemize}
-  \item Fordeler: Ab inito nøyaktighet, ingen bias, overførbar.
-  \item Ulemper: Rent matematisk uttrykk, alle relevante konfigurasjoner må inkluderes. 
- \end{itemize}
 \end{block}
 
 \end{frame}
@@ -161,7 +156,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Biologisk nevron}
  
 \centering
 \includegraphics[width=0.8\linewidth]{../Figures/Theory/neuron_anatomy.jpg} 
@@ -169,7 +164,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{Kunstig nevron}
 
 \centering
 \includegraphics[width=0.8\linewidth]{../Figures/Theory/neuron.pdf} 
@@ -211,7 +206,7 @@ Eksperiementer / kvantemekanikk
 \begin{itemize}
  \item Hver forbindelse/pil har en vekt $w$. 
  \item Hver node har en bias $b$.
- \item Inneholder 25 parametre $\{w,b\}$
+ \item Vektene og biasene $\{w,b\}$ er nettverkets parametre (25 stk). 
 \end{itemize}
 
 \end{frame}
@@ -226,7 +221,7 @@ Eksperiementer / kvantemekanikk
 \end{align*}
 \begin{itemize}
  \item Mapping: $(x_1, x_2) \in \mathbb{R}^2  \rightarrow y_1^3 \in \mathbb{R}$. 
- \item Ved å justere de 25 parameterne får uttrykket stor fleksibilitet. 
+ \item Kan approksimere en rekke funksjoner ved å justere parameterne. 
  \item Dimensjonene til nettet (inputs og outputs) må stemme overens med funksjonen som skal tilpasses.
  \item Et nettverk med ett skjult lag kan approksimere enhver kontinuerlig funksjon. 
 \end{itemize}
@@ -278,10 +273,10 @@ Eksperiementer / kvantemekanikk
 \includegraphics[width=0.8\linewidth]{../Figures/Presentation/interpolation.pdf}
 \begin{block}{Regresjon med nevralt nettverk}
  \begin{itemize}
-  \item Mål: Interpolere datasett av konfigurasjoner $X$ og energier $Y$ slik at
+  \item Mål: Interpolere datasett av konfigurasjoner X og energier Y slik at
         $\mathrm{NN}: \mathrm{X} \in \mathbb{R}^n \rightarrow \mathrm{Y} \in \mathbb{R}$.
-  \item Referansenergiene $Y$ regnes ut kvantemekanisk. 
-  \item Trening: Iterativt justere parameterne slik at nettets output matcher referanseenergiene.
+  \item Referansenergiene Y regnes ut kvantemekanisk. 
+  \item Iterativt justere parameterne slik at nettets output matcher referanseenergiene - \textit{trening}.
   \item Én enkelt konfigurasjon kalles et \textit{treningseksempel}, og datasettet $(X,Y)$ kalles et \textit{treningssett}. 
  \end{itemize}
 \end{block}
@@ -370,7 +365,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}{Behler-Parrinello eksempel}
+\begin{frame}{Behler-Parrinello}
 
 \begin{itemize}
  \item Symmetrifunksjone beskriver hvert atoms kjemiske omgivelser. 
@@ -409,21 +404,23 @@ Eksperiementer / kvantemekanikk
 \end{frame}\end{comment}
 
 
-\begin{frame}{Radiell symmetrifunksjon}
+\begin{frame}{Symmetrifunksjoner}
+To typer: Radielle og angulære symmetrifunksjoner. \newline
+Funksjoner av alle naboatomer. 
 
 \begin{equation*}
- G_i^2 = \sum_j G_{ij}^2(r_{ij}; r_c, \eta, r_s)
+ G_i^2 = \sum_j G_{ij}^2(r_{ij}; \{p_i\})
 \end{equation*}
-
+ 
+Trenger et sett av slike funksjoner med forskjellige parametre:
+\newline
 \begin{columns} % contents are top vertically aligned
   \begin{column}{0.5\linewidth} % each column can also be its own environment
    \centering
-   Varierer $\eta$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G2_1.pdf}
   \end{column}
   \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
    \centering
-   Varierer $r_s$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G2_2.pdf}
   \end{column}
 \end{columns}
@@ -431,10 +428,10 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}{Angulær symmetrifunksjon}
+\begin{frame}{Angulære symmetrifunksjoner}
 
 \begin{equation*}
-  G_i^5 = \sum_{j\neq i}\sum_{k>j} G_{ijk}^5(r_{ij}, r_{ik}, \theta_{jik}; r_c, \eta, \zeta, \lambda)
+  G_i^5 = \sum_{j\neq i}\sum_{k>j} G_{ijk}^5(r_{ij}, r_{ik}, \theta_{jik}; \{p_i\})
 \end{equation*}
 
 \centering
@@ -443,12 +440,10 @@ Eksperiementer / kvantemekanikk
 \begin{columns} % contents are top vertically aligned
   \begin{column}{0.5\linewidth} % each column can also be its own environment
    \centering
-   $\lambda = +1$, varierer $\zeta$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G4G5angular1.pdf}
   \end{column}
   \begin{column}{0.5\linewidth} % alternative top-align that's better for graphics
    \centering
-   $\lambda = -1$, varierer $\zeta$
    \includegraphics[width=\linewidth]{../Figures/Presentation/G4G5angular2.pdf}
   \end{column}
 \end{columns}
@@ -505,7 +500,7 @@ Eksperiementer / kvantemekanikk
  \begin{enumerate}
   \item Generere treningsdata som er relevant for anvendelsen av potensialet, dvs. identifisere konfigurasjonsrommet. 
   \item Trene et nevralt nettverk for å tilpasse en funksjon til dataene. 
-  \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer. 
+  \item Bruke det trente nettverket som et analytisk potensial i molekylærdynamikksimuleringer for å validere.  
  \end{enumerate}
 \end{block}
 
@@ -524,7 +519,7 @@ Eksperiementer / kvantemekanikk
 
 \begin{block}{1. Initiell sampling}
  \begin{itemize}
-  \item Reprodusere Stillinger-Weber. 
+  \item Stillinger-Weber brukes til å regne ut referanseenergier.  
   \item $T \in [0,500]$ K. 
   \item Konfigurasjoner og energies samples med vår samplingsalgoritme.  
  \end{itemize}
@@ -560,11 +555,13 @@ Eksperiementer / kvantemekanikk
 
 
 \begin{frame}{3. Iterativ sampling}
-\begin{block}{Ekstrapolerende konfigurasjoner}
- Bruke max og min for hver symmetrifunksjon anvendt under trening. 
-\end{block}
 
-\begin{block}{Interpolerende konfigurasjoner - multiple-NN-metoden}
+\begin{block}{Finne nye relevante konfigurasjoner}
+ \begin{enumerate}
+  \item Trene fire forskjellige nett på samme treningssett. 
+  \item Sammenlikne energier for de samme konfigurasjonene. 
+ \end{enumerate}
+
  \centering
  \includegraphics[width = 0.7\linewidth]{../Figures/Results/multipleNNP.pdf}
 \end{block}
@@ -622,10 +619,8 @@ Eksperiementer / kvantemekanikk
 
 \begin{frame}
  
-\begin{block}{Tilpasse endelig treningssett}
- \begin{itemize}
-  \item Hyperparametre. 
-  \item Gridsøk: 1 lag, 10 nevroner. 
+\begin{block}{4. Tilpasse endelig treningssett}
+ \begin{itemize} 
   \item RMSE energi per atom: 0.864 meV
   \item RMSE krefter per atom: 41.2 meV
  \end{itemize}
@@ -640,11 +635,13 @@ Eksperiementer / kvantemekanikk
 \end{block}\end{comment}
 
 
-\begin{frame}{Radiell distribusjonsfunksjon $g(r)$}
+\begin{frame}{5. Anvende potensialet}
 
+Sammenlikner tidsmidlet radiell distribusjonsfunksjon $g(r)$ for SW og NNP.
+\begin{figure}
 \centering
- Sammenlikner tidsmidlet SW og NN.
-\includegraphics[width = 0.7\linewidth]{../Figures/Results/radialDist.pdf}
+\includegraphics[width = 0.75\linewidth]{../Figures/Results/radialDist.pdf}
+\end{figure}
 
 \end{frame}
 
@@ -672,13 +669,12 @@ Eksperiementer / kvantemekanikk
 \section{Konklusjon og fremtidig arbeid}
 
 
-\begin{frame}{NNP med Behler-Parrinello-metoden}
+\begin{frame}{Ab inito NNP med Behler-Parrinello-metoden}
 
 \begin{block}{Fordeler}
  \begin{itemize}
-  \item Multiskalafysikk: Ab inito nøyaktighet, men mye raskere enn kvantemekaniske metoder.  
-  \item Kan systematisk forbedres med iterativ sampling. 
-  \item Generelt og anvendbart på alle typer systemer (i teorien). 
+  \item Multiskalafysikk: Ab inito nøyaktighet, men flere størrelsesordener raskere enn kvantemekaniske metoder.  
+  \item Metoden er anvendbar på alle typer systemer (i teorien). 
   \item Høydimensjonalt. 
   \item Deler av konstruksjonen er automatisert. 
   \item Analytisk derivert tilgjengelig. 
@@ -688,7 +684,7 @@ Eksperiementer / kvantemekanikk
 \end{frame}
 
 
-\begin{frame}{NNP med Behler-Parrinello-metoden}
+\begin{frame}{Ab inito NNP med Behler-Parrinello-metoden}
 
 \begin{block}{Ulemper}
  \begin{itemize}
